@@ -1,0 +1,83 @@
+.my-form-control {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.4rem;
+  color: #495057;
+  background-color: #ce2323;
+  background-clip: padding-box;
+  border: 1px solid #d2d6da;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border-radius: 0.5rem;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease; }
+  @media (prefers-reduced-motion: reduce) {
+    .my-form-control {
+      transition: none; } }
+  .my-form-control[type="file"] {
+    overflow: hidden; }
+    .my-form-control[type="file"]:not(:disabled):not([readonly]) {
+      cursor: pointer; }
+  .my-form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #e293d3;
+    outline: 0;
+    box-shadow: 0 0 0 2px #e9aede; }
+  .my-form-control::-webkit-date-and-time-value {
+    height: 1.4rem; }
+  .my-form-control::-moz-placeholder {
+    color: #adb5bd;
+    opacity: 1; }
+  .my-form-control:-ms-input-placeholder {
+    color: #adb5bd;
+    opacity: 1; }
+  .my-form-control::placeholder {
+    color: #adb5bd;
+    opacity: 1; }
+  .my-form-control:disabled, .form-control[readonly] {
+    background-color: #e9ecef;
+    opacity: 1; }
+  .my-form-control::file-selector-button {
+    padding: 0.5rem 0.75rem;
+    margin: -0.5rem -0.75rem;
+    -webkit-margin-end: 0.75rem;
+            margin-inline-end: 0.75rem;
+    color: #495057;
+    background-color: #fff;
+    pointer-events: none;
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+    border-inline-end-width: 1px;
+    border-radius: 0;
+    transition: all 0.15s ease-in; }
+    @media (prefers-reduced-motion: reduce) {
+      .my-form-control::file-selector-button {
+        transition: none; } }
+  .my-form-control:hover:not(:disabled):not([readonly])::file-selector-button {
+    background-color: #f2f2f2; }
+  .my-form-control::-webkit-file-upload-button {
+    padding: 0.5rem 0.75rem;
+    margin: -0.5rem -0.75rem;
+    -webkit-margin-end: 0.75rem;
+            margin-inline-end: 0.75rem;
+    color: #495057;
+    background-color: #fff;
+    pointer-events: none;
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+    border-inline-end-width: 1px;
+    border-radius: 0;
+    -webkit-transition: all 0.15s ease-in;
+    transition: all 0.15s ease-in; }
+    @media (prefers-reduced-motion: reduce) {
+      .my-form-control::-webkit-file-upload-button {
+        -webkit-transition: none;
+        transition: none; } }
+  .my-form-control:hover:not(:disabled):not([readonly])::-webkit-file-upload-button {
+    background-color: #f2f2f2; }

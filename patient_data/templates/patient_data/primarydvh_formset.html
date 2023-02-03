@@ -1,0 +1,44 @@
+{% extends "patient_data/base.html" %}
+{% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheet %}
+
+{% block content %}
+    <div class="container">
+        <div class="query-container">
+            <div id="formset-container" hx-append="#formset-container">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="form-TOTAL_FORMS" value="{{ formset.total_form_count }}" hx-bind="value:form-TOTAL_FORMS">
+                    <input type="hidden" name="form-INITIAL_FORMS" value="{{ formset.initial_form_count }}" hx-bind="value:form-INITIAL_FORMS">
+                    <input type="hidden" name="form-MIN_NUM_FORMS" value="{{ formset.min_num }}" hx-bind="value:form-MIN_NUM_FORMS">
+                    <input type="hidden" name="form-MAX_NUM_FORMS" value="{{ formset.max_num }}" hx-bind="value:form-MAX_NUM_FORMS">
+                    {% for form in formset %}
+                        {{ form.as_table }}
+                    {% endfor %}
+                    <button hx-post="/patient_data/addform/" hx-target="#formset-container" hx-trigger="click" hx-bind:form-TOTAL_FORMS="form-TOTAL_FORMS+1">Add Another</button>
+                    <input type="submit" value="Save">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_form-0-str_name').select2();
+            $('#id_form-1-str_name').select2();
+            $('#id_form-2-str_name').select2();
+            $('#id_form-3-str_name').select2();
+            $('#id_form-4-str_name').select2();
+            $('#id_form-5-str_name').select2();
+            $('#id_form-6-str_name').select2();
+            $('#id_form-7-str_name').select2();
+            $('#id_form-8-str_name').select2();
+            $('#id_form-9-str_name').select2();
+        });
+    </script>
+{% endblock javascript %}

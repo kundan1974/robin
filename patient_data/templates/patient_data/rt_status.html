@@ -1,0 +1,9 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+    {% load plotly_dash %}
+
+    <div class="{% plotly_class name='rt_status' %} card mt-5" style="height: 100%; width: 100%">
+        {% plotly_app name='rt_status' ratio=1 %}
+    </div>
+
+{% endblock %}

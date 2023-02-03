@@ -1,0 +1,10 @@
+{% extends "patient_data/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="user-form">
+        <p>You have loged out</p>
+        <a class="ml-2" href="{% url 'login' %}">Sign In Again</a>
+    </div>
+</div>
+{% endblock content %}

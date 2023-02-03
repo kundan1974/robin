@@ -1,0 +1,20 @@
+{% extends "patient_data/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="user-form">
+        <h3>Welcome back!!!</h3>
+        <hr>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="mb-3">
+                <a href="{% url 'password_reset' %}">Forgot Password?</a>
+            </div>
+            <button type="submit" class="btn btn-dark">Login</button>
+            <hr>
+            Need An Account? <a class="ml-2" href="{% url 'user_register' %}">Sign Up Now</a>
+        </form>
+    </div>
+</div>
+{% endblock content %}

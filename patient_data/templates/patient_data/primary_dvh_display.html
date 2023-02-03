@@ -1,0 +1,78 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+    <div class="container">
+        <div class="query-container">
+            <div class="my-form">
+            {% if data.0.parent_id.gender == 'Male' %}
+                <div><h4>All DVH details for - Mr. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.pk }})</h4></div>
+            {% else %}
+                <div><h4>All DVH details for - Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.pk }})</h4></div>
+            {% endif %}
+            <div>
+                <h5><a  class="btn btn-dark" href="{% url 'radonc-database-home' data.0.parent_id.pk %}">Back</a></h5>
+            </div>
+            {% for content in data %}
+            <div>
+                <h5>RT ID: {{ content.s4_id.rtid }}</h5>
+                <h5>Diagnosis ID: {{ content.s4_id.s4_dx_id.dx_id }}</h5>
+                <h5>Management ID: {{ content.s4_id.s4_mx_id.mx_id }}</h5>
+                <div>
+                    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-primarydvh-update' content.pk%}">Update</a>
+                    <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
+                </div>
+                <small class="text-muted">
+                    <b>Simulation Date: </b>: {{ content.s4_id.simdate|date:"F d, Y" }}
+                    <b>RT Start Date: </b>: {{ content.s4_id.rtstartdate|date:"F d, Y" }}
+                    {% if content.s4_id.rtfinishdate %}
+                        <b>RT Finish Date: </b>: {{ content.s4_id.rtfinishdate|date:"F d, Y" }}
+                    {% else %}
+                        <b>RT Finish Date: </b>: Radiation ongoing
+                    {% endif %}
+                    {% if content.rtsitecode %}
+                        <small class="text-muted"><b>Site: </b>: {{ content.s4_id.rtsitecode }}</small><br>
+                    {% else %}
+                        <small class="text-muted"><b>Site: </b>: {{ content.s4_id.rtsite }}</small><br>
+                    {% endif %}
+                </small>
+                <small class="text-muted">
+                    <b>GTV1(Min): </b>: Dose: {{ content.gtv1Min }} Gy
+                    <b>GTV2(Min): </b>: Dose: {{ content.gtv2Min }} Gy
+                    <b>GTV3(Min): </b>: Dose: {{ content.gtv3Min }} Gy
+                    <b>GTV4(Min): </b>: Dose: {{ content.gtv4Min }} Gy
+                </small><br>
+                <small class="text-muted">
+                    <b>PTV1(Prescription):</b>: {{ content.ptv1PD }} Gy / {{ content.ptv1fxs }} fractions
+                    <b>PTV1(V95):</b>: {{ content.ptv1_V95 }} %
+                    <b>PTV1(V105):</b>: {{ content.ptv1_V105|floatformat:2 }} %
+                    <b>PTV1(Average):</b>: {{ content.ptv1_Avg }} %
+                </small><br>
+                {% if content.ptv1PD %}
+                    <small class="text-muted">
+                        <b>PTV2(Prescription):</b>: {{ content.ptv2PD }} Gy / {{ content.ptv2fxs }} fractions
+                        <b>PTV2(V95):</b>: {{ content.ptv2_V95 }} %
+                        <b>PTV2(V105):</b>: {{ content.ptv2_V105|floatformat:2 }} %
+                        <b>PTV2(Average):</b>: {{ content.ptv2_Avg }} %
+                    </small><br>
+                {% endif %}
+                {% if content.ptv1PD %}
+                    <small class="text-muted">
+                        <b>PTV3(Prescription):</b>: {{ content.ptv3PD }} Gy / {{ content.ptv3fxs }} fractions
+                        <b>PTV3(V95):</b>: {{ content.ptv3_V95 }} %
+                        <b>PTV3(V105):</b>: {{ content.ptv3_V105|floatformat:2 }} %
+                        <b>PTV3(Average):</b>: {{ content.ptv3_Avg }} %
+                    </small><br>
+                {% endif %}
+                {% if content.ptv1PD %}
+                    <small class="text-muted">
+                        <b>PTV4(Prescription):</b>: {{ content.ptv4PD }} Gy / {{ content.ptv4fxs }} fractions
+                        <b>PTV4(V95):</b>: {{ content.ptv4_V95 }} %
+                        <b>PTV4(V105):</b>: {{ content.ptv4_V105|floatformat:2 }} %
+                        <b>PTV4(Average):</b>: {{ content.ptv4_Avg }} %
+                    </small><br>
+                {% endif %}
+            </div>
+        {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

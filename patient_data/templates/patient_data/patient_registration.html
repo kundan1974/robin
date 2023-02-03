@@ -1,0 +1,166 @@
+{% extends "patient_data/base.html" %}
+{% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheet %}
+<!--{% load crispy_forms_tags %} -->
+{% block content %}
+    <!--suppress ALL -->
+<div class="container">
+    {# Left Space #}
+    <div class="col-md-1">
+    </div>
+    {# Middle Space #}
+    <div class="my-form">
+        <div>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="query-container justify-content-left g-3">
+                    {% if  request.GET.update_status %}
+                        <h2 class="mb-3">Patient Radonc Registration Update Form</h2>
+                    {% else %}
+                        <h2 class="mb-3">Patient Radonc Registration Form</h2>
+                    {% endif %}
+                    <hr>
+{#                    <h5><a class="btn btn-dark" href="#">Back</a></h5>#}
+                    {% if  request.GET.next %}
+                        <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                    {% elif request.GET.regcrn %}
+                        <h5><a class="btn btn-dark" href="{% url 'db_operations' request.GET.regcrn %}">Back</a></h5>
+                    {% else %}
+                        <h5><a class="btn btn-dark" href="#">Back</a></h5>
+                    {% endif %}
+                    <!-- First Section Demographics-->
+                    <div class="form-control mb-5">
+                        <div class="row g-2 mt-2">
+                            <div class="col-md-2">
+                                {{ form.crnumber.errors }}
+                                <label class="oncflow-labels" for="{{ form.crnumber.id_for_label }}">CR Number:</label>
+                                {{ form.crnumber }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.first_name.errors }}
+                                <label class="oncflow-labels" for="{{ form.first_name.id_for_label }}">First Name:</label>
+                                {{ form.first_name }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.last_name.errors }}
+                                <label class="oncflow-labels" for="{{ form.last_name.id_for_label }}">Last Name:</label>
+                                {{ form.last_name }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.age.errors }}
+                                <label class="oncflow-labels" for="{{ form.age.id_for_label }}">Age:</label>
+                                {{ form.age }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.gender.errors }}
+                                <label class="oncflow-labels" for="{{ form.gender.id_for_label }}">Gender:</label>
+                                {{ form.gender }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.weight.errors }}
+                                <label class="oncflow-labels" for="{{ form.weight.id_for_label }}">Weight(kg):</label>
+                                {{ form.weight }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.height.errors }}
+                                <label class="oncflow-labels" for="{{ form.height.id_for_label }}">Height(cm):</label>
+                                {{ form.height }}
+                            </div>
+                            <div class="col-md-8">
+                                {{ form.ecog.errors }}
+                                <label class="oncflow-labels" for="{{ form.ecog.id_for_label }}">ECOG:</label>
+                                {{ form.ecog }}
+                            </div>
+                            <div class="col-md-3">
+                                <label class="oncflow-labels" for="{{ form.reg_date.id_for_label }}">RegDate:</label>
+                                {{ form.reg_date }}
+                                <div class="text-danger">{{ form.reg_date.errors }}</div>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.mobile.errors }}
+                                <label class="oncflow-labels" for="{{ form.mobile.id_for_label }}">Mobile:</label>
+                                {{ form.mobile }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="oncflow-labels" for="{{ form.email.id_for_label }}">E-mail:</label>
+                                {{ form.email }}
+                                <div class="text-danger">{{ form.email.errors }}</div>
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.doc_type.errors }}
+                                <label class="oncflow-labels" for="{{ form.doc_type.id_for_label }}">ID Type:</label>
+                                {{ form.doc_type }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.doc_id.errors }}
+                                <label class="oncflow-labels" for="{{ form.doc_id.id_for_label }}">ID No:</label>
+                                {{ form.doc_id }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.city.errors }}
+                                <label class="oncflow-labels" for="{{ form.city.id_for_label }}">City:</label>
+                                {{ form.city }}
+                            </div>
+                        </div>
+                    </div>
+                     <!-- End Demographics-->
+                   <!-- Second Section -->
+                    <div class="form-control mb-5">
+                        <div class="row g-2 mt-2">
+                            <div class="col-md-2">
+                                {{ form.smoking.errors }}
+                                <label class="oncflow-labels" for="{{ form.smoking.id_for_label }}">Smoking:</label>
+                                {{ form.smoking }}
+                            </div>
+                            <div class="col-md-5">
+                                {{ form.smoking_status.errors }}
+                                <label class="oncflow-labels" for="{{ form.smoking_status.id_for_label }}">Smoking Status:</label>
+                                {{ form.smoking_status }}
+                            </div>
+                            <div class="col-md-5">
+                                {{ form.smoking_volume.errors }}
+                                <label class="oncflow-labels" for="{{ form.smoking_volume.id_for_label }}">Smoking Volume:</label>
+                                {{ form.smoking_volume }}
+                            </div>
+                            <div class="col-md-12">
+                                {{ form.comorbidity.errors }}
+                                <label class="oncflow-labels" for="{{ form.comorbidity.id_for_label }}">Comorbidity:</label>
+                                {{ form.comorbidity }}
+                            </div>
+                            <div class="col-md-12">
+                                {{ form.notes.errors }}
+                                <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                {{ form.notes }}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Second Section -->
+                </div>
+                <!-- Button Row -->
+                {% if  request.GET.update_status %}
+                    <button class="btn btn-dark" type="submit">Update</button>
+                {% else %}
+                    <button class="btn btn-dark" type="submit">Save</button>
+                {% endif %}
+                <div class="form-group mt-5">
+
+                </div>
+            </form>
+        </div>
+    </div>
+    {# Right Space #}
+    <div class="col-md-1">
+    </div>
+</div>
+{% endblock content %}
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_comorbidity').select2();
+            $('#id_city').select2();
+        });
+    </script>
+{% endblock javascript %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+      <div class="col">
+
+        {% if status == "Success" %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Holy guacamole!</strong> {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        <div class="my-form">
+          <h1>Model Training</h1>
+          <p>Uploaded data with labeled csv</p>
+          <hr>
+              <form action="{% url 'train_model' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="dicomzip" class="form-label">Model ID</label>
+                  <input type="text" class="form-control" id="exampleInputEmail1" name="model_id" aria-describedby="emailHelp" required>
+                  <div id="emailHelp" class="form-text"></div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                      <div class="mb-3">
+                          <label for="dicomzip" class="form-label">Epoch</label>
+                          <input type="text" class="form-control" id="exampleInputEmail1" name="epoch" value="100" aria-describedby="emailHelp" required>
+                          <div id="emailHelp" class="form-text"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="mb-3">
+                          <label for="dicomzip" class="form-label">Learning rate</label>
+                          <input type="text" class="form-control" id="exampleInputEmail1" name="lr" value="0.001" aria-describedby="emailHelp" required>
+                          <div id="emailHelp" class="form-text"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="mb-3">
+                          <label for="dicomzip" class="form-label">Test size</label>
+                          <input type="text" class="form-control" id="exampleInputEmail1" name="test_size" value="0.2" aria-describedby="emailHelp" required>
+                          <div id="emailHelp" class="form-text"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="mb-3">
+                          <label for="dicomzip" class="form-label">Batch size</label>
+                          <input type="text" class="form-control" id="exampleInputEmail1" name="batch_size" value="3"  aria-describedby="emailHelp" required>
+                          <div id="emailHelp" class="form-text"></div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="mb-3">
+                          <label for="dicomzip" class="form-label">Patience</label>
+                          <input type="text" class="form-control" id="exampleInputEmail1" name="patience" value="25"  aria-describedby="emailHelp" required>
+                          <div id="emailHelp" class="form-text"></div>
+                        </div>
+                    </div>
+                </div>
+                  <div class="mb-3">
+                    <label for="dicomzip" class="form-label">Upload your label csv</label>
+                    <input type="file" class="form-control" id="exampleInputEmail1" name="label_csv" aria-describedby="emailHelp" required>
+                    <div id="emailHelp" class="form-text">Note: CSV file must contain patient id and label (0,1) format.</div>
+                  </div>
+                  <button type="submit" class="btn btn-dark">Start training</button>
+                </form>
+          </div>
+      </div>
+      <div class="col">
+        
+      </div>
+    </div>
+</div>
+<div class="footer" >
+  <footer class="text-center text-lg-start text-white" style="background-color: #252627">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+      Crafted with <i class="fa-solid fa-heart"></i> by
+      <a class="text-white my-link" href="https://mdbootstrap.com/">MedPy Foundation powered by Dashamlav
+        Labs</a>
+    </div>
+  </footer>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+<div class="row">
+    {# Left Space #}
+    <div class="col-md-1"></div>
+    {# Middle Space #}
+    <div class="col-md-10">
+            {% load plotly_dash %}
+            <div class="{% plotly_class name='simulation_flow_zoom' %} card mt-5" style="height: 100%; width: 100%">
+                {% plotly_app name='simulation_flow_zoom' ratio=1 %}
+            </div>
+    </div>
+    {# Right Space #}
+    <div class="col-md-1"></div>
+</div>
+
+{% endblock %}

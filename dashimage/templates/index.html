@@ -1,0 +1,17 @@
+{% extends 'patient_data/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="main">
+                <h2 class="head">Customisable <br> Workflow Management <br> Using Structured Data & <br> AI-Ready Medical Images</h2>
+                <p class="sub-head">Experience the power of Structured Data & AI-Ready Medical Images using <br> OncflowCare™ (workflow and data management), <br> OncFlowBuild™, DashImage™ and BaseModel™.</p>
+                <a type="button" href="{% url 'database-index' %}" class="btn btn-dark">OncFlow</a>
+                <a type="button" href="{% url 'dashimage_home' %}" class="btn btn-light">DashImage</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

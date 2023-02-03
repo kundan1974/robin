@@ -1,0 +1,73 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+<div class="container">
+    <div class="query-container">
+        {# Left Space #}
+        <div class="col-md-1"></div>
+        {# Middle Space #}
+        <div class="col-md-10">
+            <div class="my-form">
+                {% if data.0.parent_id.gender == 'Male' %}
+                    <div><h4>All Assessment details for - Mr. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+                {% else %}
+                    <div><h4>All Assessment details for - Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+                {% endif %}
+                <div class="row">
+                    <div class="col-auto">
+                        {% if request.GET.next %}
+                            <h5><a  class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                        {% else %}
+                            <h5><a  class="btn btn-dark" href="{% url 'radonc-radiotherapy-list' data.0.parent_id.crnumber %}">Back</a></h5>
+                        {% endif %}
+                    </div>
+                    <div class="col-auto">
+                        <h5><a  class="btn btn-dark" href="{% url 'radonc-ass' data.0.s4_id.s4_id %}?next={{ request.path|urlencode }}">New Assessment</a></h5>
+                    </div>
+                </div>
+                {% for content in data %}
+                    <article class="media content-section section-odd mt-3 mb-5">
+                       <div class="media-body">
+                            <div class="article-title">
+                                <h5>Diagnosis: {{content.s4_id.s2_id.icd_topo_code|upper}} ({{ content.s4_id.s2_id.icd_path_code }})</h5>
+                                <h6>Assessment Date: {{ content.as_date|date:"F d, Y" }}</h6>
+                                <h6>Treatment Status: {{ content.txstatus }}, Planned Dose: {{ content.s4_id.rtdose1 }} Gy / {{ content.s4_id.rtdosefr1 }} fractions</h6>
+                                <h6>Boost Planned:
+                                    {% if content.s4_id.rtdose2 %}
+                                        Yes, Boost Dose: {{ content.s4_id.rtdose2 }} Gy / {{ content.s4_id.rtdosefr2 }} fractions
+                                    {% else %}
+                                        No
+                                    {% endif %}
+                                </h6>
+                                <h6>Fractions Completed: {{ content.fxdone }}</h6>
+                                <div>
+                                    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-ass-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
+                                    <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
+                                </div>
+                                <small class="text-muted"><b>Dermatitis: </b>: {{ content.dermatitis }}</small><br>
+                                <small class="text-muted"><b>Dermatitis Location: </b>:
+                                    Axilla: {{ content.skin_axilla }}, SCF: {{ content.skin_scf }}, IMF: {{ content.skin_imf }},
+                                    UOQ: {{ content.skin_uoq }}, LOQ: {{ content.skin_loq }}, UIQ: {{ content.skin_uiq }},
+                                    LIQ: {{ content.skin_liq }}
+                                </small><br>
+                                <small class="text-muted"><b>Esophagitis: </b>: {{ content.esophagitis }}</small>,
+                                <small class="text-muted"><b>Apetite</b> :{{ content.apetite }}</small>,
+                                <small class="text-muted"><b>Fatigue: </b>: {{ content.fatigue }}</small>,
+                                <small class="text-muted"><b>Pain: </b>: {{ content.pain }}</small><br>
+                                <small class="text-muted"><b>Symptoms: </b>: {{ content.symp1 }}, {{ content.symp2 }},
+                                    {{ content.symp3 }}
+                                </small><br>
+                                <small class="text-muted"><b>Prescription: </b>: {{ content.drugrx1 }}, {{ content.drugrx2 }},
+                                    {{ content.drugrx3 }}, {{ content.drugrx4 }}, {{ content.drugrx5 }}, {{ content.drugrx6 }}
+                                </small>
+                            </div>
+                       </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+        {# Right Space #}
+        <div class="col-md-1"></div>
+    </div>
+</div>
+</div>
+{% endblock content %}

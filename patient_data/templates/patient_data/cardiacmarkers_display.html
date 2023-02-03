@@ -1,0 +1,51 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+    <div class="container">
+        <div class="query-container">
+            <div class="my-form">
+            {% if data.0.parent_id.gender == 'Male' %}
+                <div><h4>Cardiac Marker details for - Mr. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+            {% else %}
+                <div><h4>Cardiac Marker details for - Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+            {% endif %}
+            <div>
+            {% if request.GET.next %}
+                <h5><a  class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+            {% else %}
+                {% if data.0.parent_id.crnumber %}
+                    <h5><a  class="btn btn-dark" href="{% url 'radonc-fup-list' data.0.parent_id.crnumber %}">Back</a></h5>
+                {% elif crnumber %}
+                    <h5><a  class="btn btn-dark" href="{% url 'radonc-fup-list' crnumber %}">Back</a></h5>
+                {% else %}
+                    {% with crnumber=123456 %}
+                        <h5><a  class="btn btn-dark" href="{% url 'radonc-fup-list' crnumber %}">Back</a></h5>
+                    {% endwith %}
+                {% endif %}
+            {% endif %}
+            </div>
+            {% for content in data %}
+            <div class="mt-3 mb-3">
+                <div class="article-title">
+                    <h5 class="text-muted">
+                        <b>Date: </b>: {{ content.date|date:"F d, Y" }}
+                    </h5>
+                    <div>
+                        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-cardiacmarkers-update' content.pk %}">Update</a>
+                        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'radonc-cardiacmarkers-delete' content.pk %}">Delete</a>
+                    </div>
+                    <small class="text-muted">
+                        <b>Trop-I: </b> {{ content.trop_i }}
+                        <b>hsCRP:</b> {{ content.hs_crp }}
+                        <b>NTproBNP:</b> {{ content.nt_probnp }}
+                    </small><br>
+                    <small class="text-muted">
+                        <b>RT Start Date: </b> {{ content.rtstartdate|date:"F d, Y" }}
+                        <b>Planned Fr:</b> {{ content.planned_fr }}
+                    </small>
+                </div><hr>
+            </div>
+        {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

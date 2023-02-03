@@ -1,0 +1,232 @@
+{% extends "patient_data/base.html" %}
+{% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheet %}
+{% block content %}
+<div class="container">
+    <div class="query-container">
+        {# Left Space #}
+        <div class="col-md-1"></div>
+        {# Middle Space #}
+        <div class="col-md-10">
+            <div class="my-form">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row justify-content-left g-3">
+                        {% if update %}
+                            <h1 class="mb-3">Chemotherapy Details Update Form</h1>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        {% if request.GET.next %}
+                                            <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                                        {% else %}
+                                            <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' updatecrn %}">Back</a></h5>
+                                        {% endif %}
+
+                                    </div>
+                                    <div class="col-auto">
+                                        <h5><a class="btn btn-dark" href="{% url 'db_operations' updatecrn %}">Database Operations</a></h5>
+                                    </div>
+                                </div>
+                        {% else %}
+                            <h1 class="mb-3">Chemotherapy Details Form</h1>
+                            {% with crnumber=123456 %}
+                                <div class="row">
+                                    <div class="col-auto">
+                                        {% if request.GET.next %}
+                                            <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                                        {% else %}
+                                            <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.crnumber %}">Back</a></h5>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-auto">
+                                        <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.crnumber %}">Database Operations</a></h5>
+                                    </div>
+                                </div>
+                            {% endwith %}
+                        {% endif %}
+                        <div class="form-control">
+                                <div class="row g-2 mt-2">
+                                    <div class="col-md-2">
+                                        {{ form.parent_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
+                                        {{ form.parent_id }}
+                                    </div>
+                                    <div class="col-md-2 d-none">
+                                        {{ form.s3_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.s3_id.id_for_label }}">Mx ID:</label>
+                                        {{ form.s3_id }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.cycleno.errors }}
+                                        <label class="oncflow-labels" for="{{ form.cycleno.id_for_label }}">Cycle No:</label>
+                                        {{ form.cycleno }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.chemo_day.errors }}
+                                        <label class="oncflow-labels" for="{{ form.chemo_day.id_for_label }}">Day:</label>
+                                        {{ form.chemo_day }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.chemodate.errors }}
+                                        <label class="oncflow-labels" for="{{ form.chemodate.id_for_label }}">Chemo Date:</label>
+                                        {{ form.chemodate }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        {{ form.unit.errors }}
+                                        <label class="oncflow-labels" for="{{ form.unit.id_for_label }}">Unit:</label>
+                                        {{ form.unit }}
+                                    </div>
+                                     <div class="col-md-12">
+                                        {{ form.chemo_protocol.errors }}
+                                        <label class="oncflow-labels" for="{{ form.chemo_protocol.id_for_label }}">Protocol:</label>
+                                        {{ form.chemo_protocol }}
+                                    </div>
+                                    <div class="row g-2 mt-2 mb-2" style="background-color: #d79d9d">
+                                        <h5 class="oncflow-labels">Protocol Drugs</h5><br>
+                                        <div class="col-md-3">
+                                            {{ form.drug1.errors }}
+                                            <label class="oncflow-labels" for="{{ form.drug1.id_for_label }}">Drug:</label>
+                                            {{ form.drug1 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.d1dose.errors }}
+                                            <label class="oncflow-labels" for="{{ form.d1dose.id_for_label }}">Dose:</label>
+                                            {{ form.d1dose }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.sdate1.errors }}
+                                            <label class="oncflow-labels" for="{{ form.sdate1.id_for_label }}">Start Date:</label>
+                                            {{ form.sdate1 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.fdate1.errors }}
+                                            <label class="oncflow-labels" for="{{ form.fdate1.id_for_label }}">Finish Date:</label>
+                                            {{ form.fdate1 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.drug2.errors }}
+                                            <label class="oncflow-labels" for="{{ form.drug2.id_for_label }}">Drug:</label>
+                                            {{ form.drug2 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.d2dose.errors }}
+                                            <label class="oncflow-labels" for="{{ form.d2dose.id_for_label }}">Dose:</label>
+                                            {{ form.d2dose }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.sdate2.errors }}
+                                            <label class="oncflow-labels" for="{{ form.sdate2.id_for_label }}">Start Date:</label>
+                                            {{ form.sdate2 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.fdate2.errors }}
+                                            <label class="oncflow-labels" for="{{ form.fdate2.id_for_label }}">Finish Date:</label>
+                                            {{ form.fdate2 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.drug3.errors }}
+                                            <label class="oncflow-labels" for="{{ form.drug3.id_for_label }}">Drug:</label>
+                                            {{ form.drug3 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.d3dose.errors }}
+                                            <label class="oncflow-labels" for="{{ form.d3dose.id_for_label }}">Dose:</label>
+                                            {{ form.d3dose }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.sdate3.errors }}
+                                            <label class="oncflow-labels" for="{{ form.sdate3.id_for_label }}">Start Date:</label>
+                                            {{ form.sdate3 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.fdate3.errors }}
+                                            <label class="oncflow-labels" for="{{ form.fdate3.id_for_label }}">Finish Date:</label>
+                                            {{ form.fdate3 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.drug4.errors }}
+                                            <label class="oncflow-labels" for="{{ form.drug4.id_for_label }}">Drug:</label>
+                                            {{ form.drug4 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.d4dose.errors }}
+                                            <label class="oncflow-labels" for="{{ form.d4dose.id_for_label }}">Dose:</label>
+                                            {{ form.d4dose }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.sdate4.errors }}
+                                            <label class="oncflow-labels" for="{{ form.sdate4.id_for_label }}">Start Date:</label>
+                                            {{ form.sdate4 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.fdate4.errors }}
+                                            <label class="oncflow-labels" for="{{ form.fdate4.id_for_label }}">Finish Date:</label>
+                                            {{ form.fdate4 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.drug5.errors }}
+                                            <label class="oncflow-labels" for="{{ form.drug5.id_for_label }}">Drug:</label>
+                                            {{ form.drug5 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.d5dose.errors }}
+                                            <label class="oncflow-labels" for="{{ form.d5dose.id_for_label }}">Dose:</label>
+                                            {{ form.d5dose }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.sdate5.errors }}
+                                            <label class="oncflow-labels" for="{{ form.sdate5.id_for_label }}">Start Date:</label>
+                                            {{ form.sdate5 }}
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            {{ form.fdate5.errors }}
+                                            <label class="oncflow-labels" for="{{ form.fdate5.id_for_label }}">Finish Date:</label>
+                                            {{ form.fdate5 }}
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-12">
+                                        {{ form.notes.errors }}
+                                        <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                        {{ form.notes }}
+                                    </div>
+                                </div>
+                            </div>
+                    <!-- Button Row -->
+                        {% if update %}
+                            <div class="form-group mt-2">
+                                <button class="btn btn-dark" type="submit">Update</button>
+                            </div>
+                        {% else %}
+                            <div class="form-group mt-2">
+                                <button class="btn-dark" type="submit">Save</button>
+                            </div>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+        {# Right Space #}
+        <div class="col-md-1"></div>
+    </div>
+</div>
+{% endblock content %}
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_chemo_protocol').select2();
+            $('#id_drug1').select2();
+            $('#id_drug2').select2();
+            $('#id_drug3').select2();
+            $('#id_drug4').select2();
+            $('#id_drug5').select2();
+        });
+    </script>
+{% endblock javascript %}

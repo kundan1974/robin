@@ -1,0 +1,133 @@
+{% extends 'patient_data/base.html' %}
+{% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheet %}
+{% block content %}
+    <div class="container">
+        <div class="query-container">
+
+            <h1>Query</h1>
+            <hr>
+            <div class="my-form">
+                <form class="row g-3" method="POST">
+                    {% csrf_token %}
+    {#                <div class="col-4">#}
+    {#                    <label for="id_main_site" class="form-label">MainSite</label>#}
+    {#                    {{ form.main_site }}#}
+    {#                </div>#}
+                    <div class="col-6">
+                    <select class="form-select form-select-lg mb-3" name="main_site"
+                            hx-post="{% url "get_second_field_options" %}" hx-target="#subsite_field" hx-trigger="change">
+                        <option value="">--Select Main Site--</option>
+                            {% for option in options1 %}
+                        <option value="{{ option.0 }}">{{ option.1 }}</option>
+                            {% endfor %}
+                    </select>
+                    </div>
+                    <div id="subsite_field" class="col-6">
+                        <select class="form-select form-select-lg mb-3" name="subsite">
+                            <option value="">--First select Main Site to Populate Subsite Options--</option>
+                        </select>
+
+                    </div>
+
+    {#                <div class="col-4">#}
+    {#                    <label for="id_subsite_site" class="form-label">SubSite</label>#}
+    {#                    {{ form.subsite_site }}#}
+    {#                </div>#}
+                    <div class="col-2">
+                        <label for="id_technique" class="form-label">Technique</label>
+                        {{ form.technique }}
+                    </div>
+                    <div class="col-2">
+                        <label for="id_intent" class="form-label">Intent</label>
+                        {{ form.intent }}
+                    </div>
+                    <div class="col-3">
+                        <label for="id_studygp" class="form-label">Study Group</label>
+                        {{ form.studygp }}
+                    </div>
+                    <div class="col-auto">
+                        <label for="id_s_date" class="form-label">Start date</label>
+                        <!-- <input type="date" class="form-control" id="start-date" placeholder="Start date"> -->
+                        {{ form.s_date }}
+                    </div>
+                    <div class="col-auto">
+                        <label for="id_f_date" class="form-label">End date</label>
+                        <!-- <input type="date" class="form-control" id="end-date" placeholder="End date"> -->
+                        {{ form.f_date }}
+                    </div>
+                    <div class="col-12">
+                    </div>
+                    <div class="col-auto">
+                        <label for="id_submit" class="form-label">.</label>
+                        <button type="submit" style="display: block;" class="btn btn-dark">Search</button>
+                    </div>
+                </form>
+            </div>
+            <div class="marker-status box-redius box-shadow mb-10" style="height: 550px;">
+                <h5 class="marker-status-heading">Query Results</span>
+                </h5>
+                <div class="col-auto m-lg-2">
+                        <a href="{% url 'filtered-download' %}"><button class="btn btn-dark">Download</button></a>
+                </div>
+                    <div class="status-table">
+                    <table class="table table-sm table-striped  table-hover p-1 g-1">
+                        <thead class="table">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th class="col-1" scope="col">ID</th>
+                                <th class="col-3" scope="col">Histopathology</th>
+                                <th class="col-1" scope="col">Ph1(Gy) Dose</th>
+                                <th class="col-1" scope="col">Ph2(Gy) Dose</th>
+                                <th class="col-2" scope="col">RT Technique</th>
+                                <th class="col-1" scope="col">Chemo Cycles</th>
+                                <th class="col-1" scope="col">Last Visit</th>
+                                <th class="col-1" scope="col">Local Recurrence</th>
+                                <th class="col-1" scope="col">Regional Recurrence</th>
+                                <th class="col-1" scope="col">Distant Metastasis</th>
+                                <th class="col-1" scope="col">Death</th>
+                                <th class="col-1">Summary</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            {% for d in data %}
+                            <tr class="table-info clickable-row"
+                                data-href="{% url 'summary' d.crnumber %}?next={{ request.path|urlencode }}">
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td class="col-1">{{ d.crnumber }}</td>
+                                <td class="col-3">{{ d.s2diagnosis_set.first.icd_path_code.hpe }}</td>
+                                <td class="col-1">{{ d.s4rt_set.first.rtdose1 }}</td>
+                                <td class="col-1">{{ d.s4rt_set.first.rtdose2 }}</td>
+                                <td class="col-2">{{ d.s4rt_set.first.tech1 }}</td>
+                                <td class="col-1">{{ d.s5chemo_set.last.cycleno }}</td>
+                                <td class="col-1">{{ d.s8fup_set.last.visitdate|date:"d-m-y" }}</td>
+                                <td class="col-1">{{ d.s8fup_set.last.LRstatus }}</td>
+                                <td class="col-1">{{ d.s8fup_set.last.RRstatus }}</td>
+                                <td class="col-1">{{ d.s8fup_set.last.DMstatus }}</td>
+                                <td class="col-1">{{ d.s8fup_set.last.Death }}</td>
+                                <td class="col-1"><a href="{% url 'summary' d.crnumber %}?next={{ request.path|urlencode }}" class="btn btn-dark btn-sm" role="button" aria-pressed="true">View</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content%}
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+       $(document).ready(function() {
+           $('#id_main_site').select2();
+           $('#id_subsite_site').select2();
+           $('#id_technique').select2();
+           $('#id_intent').select2();
+           $('#id_studygp').select2();
+        });
+
+    </script>
+{% endblock javascript %}

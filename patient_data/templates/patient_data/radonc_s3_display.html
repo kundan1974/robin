@@ -1,0 +1,128 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+    <div class="row">
+        {# Left Space #}
+        <div class="col-md-1"></div>
+        {# Middle Space #}
+        <div class="col-md-10">
+            <div class="my-form">
+            {% if data.0.parent_id.gender == 'Male' %}
+                <div><h6 class="font-monospace fs-2 lh-base">All CarePlan details for - <span class="text-light gradient-highlight p-2 box-redius">Mr. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</span></h6></div>
+            {% else %}
+                <div><h6 class="font-monospace fs-2 lh-base">All CarePlan details for - <span class="text-light gradient-highlight p-2 box-redius">Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</span></h6></div>
+            {% endif %}
+                <div>
+                    {% if data.0.parent_id.crnumber %}
+                        <h5><a  class="btn btn-dark" href="{% url 'db_operations' data.0.parent_id.crnumber %}">Back</a></h5>
+                    {% else %}
+                        <h5><a  class="btn btn-dark" href="{% url 'db_operations' %}">Back</a></h5>
+                    {% endif %}
+
+                        {% if presim_check %}
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-presimulation-list' data.0.parent_id.crnumber  %}?mx_display_crnumber={{ data.0.parent_id.crnumber }}">PreSimulation</a><!-- from simulation move to simulation list and then to RT -->
+                        {% else %}
+                            {% if sim_check %}
+                                <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-simulation-list' data.0.parent_id.crnumber %}">Simulation (update)</a><!-- from simulation move to simulation list and then to RT -->
+                            {% endif %}
+                        {% endif %}
+
+                        {% if rt_check %}
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-radiotherapy-list' data.0.parent_id.crnumber %}?mx_display={{ request.path|urlencode }}">RT Details</a>
+                        {% endif %}
+                        {% if dvh_check %}
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="#">DVH Details</a>
+                        {% endif %}
+                        {% if sx_check %}
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-surgery-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">Sx Details</a><!-- from Sx move to Sx list and then to relevant HPE -->
+                        {% endif %}
+                        {% if hpe_check %}
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-hpe-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">HPE Details</a><!-- HPE list with options of updating -->
+                        {% endif %}
+                        {% if chemo_check %}
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-chemotherapy-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">Chemo Details</a><!-- from Chemo move to Chemo List -->
+                        {% endif %}
+                        {% if ass_check %}
+                            {% for pat in data %}
+                                {% for pat_rt in data.0.rt_careplan_id.all %}
+                                    <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-ass-list' pat_rt.s4_id %}?next={{ request.path|urlencode }}">Assessment</a>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if fu_check %}
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-fup-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">FollowUp</a><!-- from Followup move to followup list -->
+                        {% endif %}
+                        {% if pft_check %}
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-pftdetails-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">PFT Details</a><!-- from Followup move to followup list -->
+                        {% endif %}
+                        {% if cm_check %}
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-cardiacmarkers-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">CardiacMarkers Details</a><!-- from Followup move to followup list -->
+                        {% endif %}
+                    </div>
+
+            <div class="mt-3 gradient-mini"
+                 style="background: #520202;
+                 background: -webkit-linear-gradient(to right, #cfb3f6, #e88fa1);
+                 background: linear-gradient(to right, #cfb3f6, #e88fa1);">
+
+                {% if not rt_check %}
+                    {% if not sim_check and presim_check %}
+                        <h6 class="text-sm-left text-dark p-1">For new Simulation details proceed via PreSimulation</h6>
+                    {% elif not sim_check and not presim_check %}
+                        <h6 class="text-sm-left text-dark p-1">There are no simulation/presimulation details.
+                            For Left sided Breast cancer patient Please enter simulation via Presimulation
+                            module if DIBH Technique is planned.</h6>
+                        <h6 class="text-sm-left text-dark p-1">Once Simulation module is completed, you can proceed for RT Details</h6>
+                    {% else %}
+                        <h6 class="text-sm-left text-dark p-1">For RT details proceed via simulation details</h6>
+                    {% endif %}
+                {% else %}
+                    {% if not ass_check %}
+                        <h6 class="text-sm-left text-dark p-1">For RT assessment proceed via RT Details</h6>
+                    {% endif %}
+                {% endif %}
+
+                {% if sx_check and not hpe_check %}
+                    <h6 class="text-sm-left text-dark p-1">For new HPE details proceed via Sx Details</h6>
+                {% endif %}
+            </div>
+                {% for content in data %}
+                    <div class="mt-3 lh-base">
+                        <h4 class="font-monospace"><span class="text-dark">Laterality: </span>{{ content.s2_id.laterality }}</h4>
+                        <h4 class="font-monospace"><span class="text-dark">Site(Main Site): </span>{{ content.s2_id.icd_main_topo }}</h4>
+                        <h4 class="font-monospace"><span class="text-dark">SubSite: </span>{{ content.s2_id.icd_topo_code }}</h4>
+                        <h4 class="font-monospace"><span class="text-dark">Histopathology: </span>{{ content.s2_id.icd_path_code }}</h4>
+                        <div>
+                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-careplan-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
+                            {% if content.s2_id.icd_main_topo.site == 'Breast' and content.s2_id.laterality == "Left" %}
+                                {% if presim_check %}
+                                    {% if oldpresim %}
+                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-presimulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New PreSimulation</a>
+                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-simulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Simulation</a>
+                                    {% else %}
+                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-presimulation-list' content.parent_id.crnumber %}?next={{ request.path|urlencode }}">Update PreSimulation</a>
+                                    {% endif %}
+                                {% else %}
+                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-presimulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New PreSimulation</a>
+                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-simulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Simulation</a>
+                                {% endif %}
+                            {% else %}
+                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-simulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Simulation</a>
+                            {% endif %}
+                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-surgery' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Sx</a>
+                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-chemotherapy' content.parent_id.crnumber content.s3_id %}">New Chemo</a>
+                            <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-fup1' content.parent_id.crnumber content.s2_id.s2_id content.s3_id %}?next={{ request.path|urlencode }}">Follow up</a></h5>
+                            <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
+                        </div>
+                        <small class="text-muted"><b>Mx Start Date: </b>: {{ content.startdate|date:"F d, Y" }}</small><br>
+                        <small class="text-muted"><b>Intent: </b>: {{ content.intent }}</small><br>
+                        <small class="text-muted"><b>Radiotherapy: </b>: {{ content.radiotherapy }}</small><br>
+                        <small class="text-muted"><b>Surgery: </b>: {{ content.surgery }}</small><br>
+                        <small class="text-muted"><b>Chemotherapy: </b>: {{ content.chemotherapy }}</small><br>
+                    </div><hr>
+                {% endfor %}
+            </div>
+        </div>
+        {# Right Space #}
+        <div class="col-md-1"></div>
+    </div>
+{% endblock content %}

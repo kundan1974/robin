@@ -1,0 +1,32 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+<div class="row dashboard">
+    <div class="col-md-3">
+        <div class="user-panel box-shadow box-redius" style="max-height: 87vh; overflow: auto">
+            <div class="user-details d-flex align-items-center">
+                <div class="profile-img">
+                    <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+                </div>
+                <div class="user-info">
+                    <h3>Hello {{ user.username }}</h3>
+                        <p>{{ user.email }}</p>
+                </div>
+            </div>
+            <hr>
+            <p class="panel-heading">Assignments: {{ assigned }} </p>
+            <p class="panel-heading">Completed: {{ assignment_completed }} </p>
+            <hr>
+        </div>
+
+
+    </div>
+    <div class="col-md-9">
+        <div class="dashboard-content">
+            <div class="status box-shadow box-redius">
+                <div class="row container">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

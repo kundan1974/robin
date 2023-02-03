@@ -1,0 +1,57 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+<div class="container">
+    <div class="query-container">
+        {# Left Space #}
+        <div class="col-md-1"></div>
+        {# Middle Space #}
+        <div class="col-md-10">
+            <div class="my-form">
+                {% if data.0.parent_id.gender == 'Male' %}
+                    <div><h4>All Chemotherapy details for - Mr. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+                {% else %}
+                    <div><h4>All Chemotherapy details for - Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+                {% endif %}
+                <div>
+                    {% if request.GET.next %}
+                        <h5><a  class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                    {% else %}
+                        <h5><a  class="btn btn-dark" href="{% url 'radonc-careplan-list' data.0.parent_id.crnumber %}">Back</a></h5>
+                    {% endif %}
+                </div>
+                {% for content in data %}
+                    <div>
+                        <h5>Diagnosis: {{content.s3_id.s2_id.icd_topo_code}} ({{ content.s3_id.s2_id.icd_path_code }})</h5>
+                        <h6>Unit: {{ content.unit }}, Chemo Protocol: {{ content.protocolcode }} Cycle No: {{ content.cycleno }}, Day: {{ content.chemo_day }}</h6>
+                        <h6>Date: {{ content.chemodate|date:"F d, Y" }}</h6>
+                        <div>
+                            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-chemotherapy-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
+                            <a class="btn btn-success btn-sm mt-1 mb-1"
+                               href="{% url 'radonc-chemotherapy' content.parent_id.crnumber content.s3_id.s3_id %}?next={{ request.path|urlencode }}">New Cycle</a>
+                            <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
+                        </div>
+                        <small class="text-muted"><b>Drug1: </b>: {{ content.drug1 }} {{ content.d1dose }} mg
+                            started on {{ content.sdate1|date:"F d, Y" }} and completed on {{ content.fdate1|date:"F d, Y" }}
+                        </small><br>
+                        <small class="text-muted"><b>Drug2: </b>: {{ content.drug2 }} {{ content.d2dose }} mg
+                            started on {{ content.sdate2|date:"F d, Y" }} and completed on {{ content.fdate2|date:"F d, Y" }}
+                        </small><br>
+                        <small class="text-muted"><b>Drug3: </b>: {{ content.drug3 }} {{ content.d3dose }} mg
+                            started on {{ content.sdate3|date:"F d, Y" }} and completed on {{ content.fdate3|date:"F d, Y" }}
+                        </small><br>
+                        <small class="text-muted"><b>Drug4: </b>: {{ content.drug4 }} {{ content.d4dose }} mg
+                            started on {{ content.sdate4|date:"F d, Y" }} and completed on {{ content.fdate4|date:"F d, Y" }}
+                        </small><br>
+                        <small class="text-muted"><b>Drug5: </b>: {{ content.drug5 }} {{ content.d5dose }} mg
+                            started on {{ content.sdate5|date:"F d, Y" }} and completed on {{ content.fdate5|date:"F d, Y" }}
+                        </small><br>
+                    </div><hr>
+                {% endfor %}
+            </div>
+        </div>
+        {# Right Space #}
+        <div class="col-md-1"></div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,65 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+<div class="container">
+    <div class="query-container">
+        {# Left Space #}
+        <div class="col-md-1"></div>
+        {# Middle Space #}
+        <div class="col-md-10">
+            <div class="my-form">
+                {% if data.0.parent_id.gender == 'Male' %}
+                <div><h4>All Diagnosis details for - Mr. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+                {% else %}
+                    <div><h4>All Diagnosis details for - Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+                {% endif %}
+                <div>
+                    {% if request.session.crnumber %}
+                        <h5><a  class="btn btn-dark" href="{% url 'db_operations' request.session.crnumber %}">Back</a></h5>
+                    {% else %}
+                        {% with crnumber=123456 %}
+                            <h5><a  class="btn btn-dark" href="{% url 'db_operations' request.session.crnumber %}">Back</a></h5>
+                        {% endwith %}
+                    {% endif %}
+                </div>
+                {% if data %}
+                    {% for content in data %}
+                        <article class="media content-section section-odd mt-3 mb-5">
+                           <div class="media-body">
+                                <div class="article-title">
+                                    <h4>{{ content.diagnosis }}</h4>
+                                    <div>
+                                        <a class="btn btn-dark" href="{% url 'radonc-diagnosis-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
+                                        {% if dx %}
+                                            {% if patient_mx %}
+                                                {% for pat in patient_mx %}
+                                                    {% if pat.s2_id.s2_id == content.pk %}
+                                                        <a class="btn btn-dark" href="{% url 'radonc-careplan-update' pat.s3_id %}?next={{ request.path|urlencode }}">Update Management {{ pat.mx_id }}</a>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endif %}
+                                            <a class="btn btn-success" href="{% url 'radonc-careplan' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">New Management</a>
+                                        {% endif %}
+                                         <a class="btn btn-danger" href="#">Delete</a>
+                                    </div>
+                                    <small class="text-dark"><b>Diagnosis Date: </b>: {{ content.dx_date|date:"F d, Y" }}</small><br>
+                                    <small class="text-dark"><b>HPE(ICD): </b>: {{ content.icd_path_code }}</small><br>
+                                    <small class="text-dark"><b>Site(ICD): </b>: {{ content.icd_topo_code }}</small><br>
+                                    <small class="text-dark"><b>TNM(ICD): </b>: T{{ content.c_t }}N{{ content.c_n }}M{{ content.c_m }}</small><br>
+                                    <small class="text-dark"><b>Stage(AJCC): </b>: {{ content.c_stage_group }}</small><br>
+                                </div>
+                           </div>
+                        </article>
+                    {% endfor %}
+                {% else %}
+                    <article class="media content-section section-odd mt-3 mb-5">
+                        <h5>No Diagnosis details. Please enter Diagnosis first to proceed further!</h5>
+                        <a class="btn btn-dark" href="{% url 'radonc-diagnosis' crnumber %}">Enter Diagnosis Details</a>
+                    </article>
+                {% endif %}
+            </div>
+        </div>
+        {# Right Space #}
+        <div class="col-md-1"></div>
+    </div>
+</div>
+{% endblock content %}

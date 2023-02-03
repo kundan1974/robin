@@ -1,0 +1,6 @@
+<select class="form-select form-select-lg mb-3" name="subsite">
+        <option value="">--Select SubSite--</option>
+        {% for option in options %}
+            <option value="{{ option.0 }}">{{ option.2 }}</option>
+        {% endfor %}
+</select>

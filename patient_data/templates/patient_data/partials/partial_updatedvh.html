@@ -1,0 +1,90 @@
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+    <div class="container">
+        <div class="my-form">
+            <h3>Update DVH Data!!!</h3>
+            <hr>
+            <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row justify-content-left g-3">
+                        <div class="form-control">
+                            <div class="row g-2 mt-2" style="align-content: center">
+                                <div class="col-md-2 d-none">
+                                    {{ form.s4_id.errors }}
+                                    <label class="oncflow-labels" for="{{ form.s4_id.id_for_label }}">RTID(PK):</label>
+                                    {{ form.s4_id }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.str_type.errors }}
+                                    <label class="oncflow-labels" for="{{ form.str_type.id_for_label }}">Structure Type:</label>
+                                    {{ form.str_type }}
+                                </div>
+                                <div class="col-md-5">
+                                    {{ form.str_name.errors }}
+                                    <label class="oncflow-labels" for="{{ form.str_name.id_for_label }}">Structure Name:</label>
+                                    {{ form.str_name }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.parameters.errors }}
+                                    <label class="oncflow-labels" for="{{ form.parameters.id_for_label }}">DVH Parameter:</label>
+                                    {{ form.parameters }}
+                                </div>
+                                <div class="col-md-1">
+                                    {{ form.vol.errors }}
+                                    <label class="oncflow-labels" for="{{ form.vol.id_for_label }}">Vol:</label>
+                                    {{ form.vol }}
+                                </div>
+                                <div class="col-md-1">
+                                    {{ form.value.errors }}
+                                    <label class="oncflow-labels" for="{{ form.value.id_for_label }}">Value:</label>
+                                    {{ form.value }}
+                                </div>
+                            </div>
+                            <div class="row g-2 mt-2 box-redius, box-shadow" style="align-content: center">
+                                <h5 class="text-dark">Structure Classifiers(Optional)</h5>
+                                <p class="lh-5"><b>Explanation:</b> <em><span class="red-highlight text-light g-2">Here you can use classifiers for structure especially if structure type is target.
+                                    eg GTV1 or GTV_CT2 or PTV_High or n: nodal (e.g., PTVn) or sb: surgical bed (e.g., CTVsb). Similarly for structure indicators
+                                    one can use it like e.g., CTV_A_Aorta, CTV_A_Celiac.</span></em></p>
+                                <div class="col-md-2">
+                                {{ form.target_class_base.errors }}
+                                <label class="oncflow-labels" for="{{ form.target_class_base.id_for_label }}">Base</label>
+                                {{ form.target_class_base }}
+                                </div>
+                                <div class="col-md-1">
+                                {{ form.target_class_number.errors }}
+                                <label class="oncflow-labels" for="{{ form.target_class_number.id_for_label }}">Num:</label>
+                                {{ form.target_class_number }}
+                                </div>
+                                <div class="col-md-1">
+                                {{ form.target_class_image.errors }}
+                                <label class="oncflow-labels" for="{{ form.target_class_image.id_for_label }}">Image:</label>
+                                {{ form.target_class_image }}
+                                </div>
+                                <div class="col-md-2">
+                                {{ form.target_class_dose.errors }}
+                                <label class="oncflow-labels" for="{{ form.target_class_dose.id_for_label }}">Dose:</label>
+                                {{ form.target_class_dose }}
+                                </div>
+                                <div class="col-md-2">
+                                {{ form.target_class_custom.errors }}
+                                <label class="oncflow-labels" for="{{ form.target_class_custom.id_for_label }}">Custom:</label>
+                                {{ form.target_class_custom }}
+                                </div>
+                                <div class="col-md-4 mb-2">
+                                {{ form.notes.errors }}
+                                <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Other Details:</label>
+                                {{ form.notes }}
+                                </div>
+                            </div>
+                            <div class="row g-2 mt-2" style="align-content: center">
+
+                            </div>
+                        </div>
+                    <!-- Button Row -->
+                        <div class="form-group mt-2">
+                            <button class="btn btn-dark" type="submit" hx-post="{% url 'updatedvh' dvhid %}" hx-target="#display-dvh">Update Structure</button>
+                        </div>
+                    </div>
+                </form>
+        </div>
+    </div>

@@ -1,0 +1,141 @@
+{% extends "patient_data/base.html" %}
+{% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheet %}
+{% block content %}
+<div class="row">
+    {# Left Space #}
+    <div class="col-md-1"></div>
+    {# Middle Space #}
+    <div class="col-md-10">
+        <div class="my-form">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-row justify-content-left g-3">
+                {% if update %}
+                    <h1 class="mb-3">Careplan Update Form</h1>
+                    <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                {% else %}
+                    <h1 class="mb-3">Careplan Form</h1>
+                    {% if request.GET.next %}
+                        <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                    {% else %}
+                        {% with crnumber=123456 %}
+                        <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.crnumber %}">Back</a></h5>
+                    {% endwith %}
+                    {% endif %}
+                {% endif %}
+                <h3 class="mb-3">Name: {{ patient.first_name }} {{ patient.last_name }}</h3>
+                <div class="form-control section-odd card mb-5">
+                    <div class="row g-2 mt-2">
+                        <div class="col-md-3">
+                            {{ form.parent_id.errors }}
+                            <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CR Number:</label>
+                            {{ form.parent_id }}
+                        </div>
+                        <div class="col-md-9">
+                            {{ form.s2_id.errors }}
+{#                            <label class="oncflow-labels" for="{{ form.s2_id.id_for_label }}">S2_ID:</label>#}
+                            {{ form.s2_id }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form.startdate.errors }}
+                            <label class="oncflow-labels" for="{{ form.startdate.id_for_label }}">Mx(Start Date):</label>
+                            {{ form.startdate }}
+                        </div>
+                        <div class="col-md-8" style="background: #e8c6c6">
+                            {{ form.enddate.errors }}
+                            <label class="oncflow-labels" for="{{ form.enddate.id_for_label }}">
+                                Mx(End Date):<em class="text-danger">Can be edited if event occurred(death or recurrence) as per follow up module</em>
+                            </label>
+                            {{ form.enddate }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form.intent.errors }}
+                            <label class="oncflow-labels" for="{{ form.intent.id_for_label }}">Intent:</label>
+                            {{ form.intent }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.radiotherapy.errors }}
+                            <label class="oncflow-labels" for="{{ form.radiotherapy.id_for_label }}">Radiotherapy:</label>
+                            {{ form.radiotherapy }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.surgery.errors }}
+                            <label class="oncflow-labels" for="{{ form.surgery.id_for_label }}">Surgery:</label>
+                            {{ form.surgery }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.chemotherapy.errors }}
+                            <label class="oncflow-labels" for="{{ form.chemotherapy.id_for_label }}">Chemo(Cytotoxic):</label>
+                            {{ form.chemotherapy }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.genetherapy.errors }}
+                            <label class="oncflow-labels" for="{{ form.genetherapy.id_for_label }}">Chemo(Targeted):</label>
+                            {{ form.targettherapy }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.brachytherapy.errors }}
+                            <label class="oncflow-labels" for="{{ form.brachytherapy.id_for_label }}">Brachytherapy:</label>
+                            {{ form.brachytherapy }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.hormone.errors }}
+                            <label class="oncflow-labels" for="{{ form.hormone.id_for_label }}">Hormone:</label>
+                            {{ form.hormone }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.immunotherapy.errors }}
+                            <label class="oncflow-labels" for="{{ form.immunotherapy.id_for_label }}">Immunotherapy:</label>
+                            {{ form.immunotherapy }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.bmt.errors }}
+                            <label class="oncflow-labels" for="{{ form.bmt.id_for_label }}">BMT:</label>
+                            {{ form.bmt }}
+                        </div>
+                        <div class="col-md-12">
+                            {{ form.studyprotocol.errors }}
+                            <label class="oncflow-labels" for="{{ form.studyprotocol.id_for_label }}">StudyProtocol:</label>
+                            {{ form.studyprotocol }}
+                        </div>
+                        <div class="col-md-12">
+                            {{ form.notes.errors }}
+                            <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                            {{ form.notes }}
+                        </div>
+                    </div>
+            </div>
+            <!-- Button Row -->
+            {% if update %}
+                <div class="row g-1">
+                    <div class="col-auto form-group mt-5">
+                        <button class="btn btn-dark" name="careplan" value="careplan" type="submit">Update and Proceed to Careplan</button>
+                    </div>
+                    <div class="col-auto form-group mt-5">
+                        <button class="btn btn-dark" name="database" value="careplan" type="submit">Update and Proceed to Database Operations</button>
+                    </div>
+                </div>
+            {% else %}
+                <div class="form-group mt-5">
+                    <button class="btn btn-dark" type="submit">Save</button>
+                </div>
+            {% endif %}
+            </div>
+            </form>
+        </div>
+    </div>
+    {# Right Space #}
+    <div class="col-md-1"></div>
+</div>
+{% endblock %}
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_studyprotocol').select2();
+        });
+    </script>
+{% endblock javascript %}

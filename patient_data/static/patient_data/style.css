@@ -1,0 +1,489 @@
+/* This css file is using everywhere!!!! */
+body {
+   margin:0;
+   padding:0;
+   height:100%;
+   position: relative;
+}
+
+main {
+  margin-bottom: 100px;
+}
+
+.main-container {
+   min-height:100%;
+   position:relative;
+}
+
+.body {
+  background-image: url('../../../media/Snapseed.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  /*padding: 0;*/
+  padding: 0 0 50px;
+
+}
+
+.gradient {
+  background: #654ea3;
+  background: -webkit-linear-gradient(to right, #eaafc8, #654ea3);
+  background: linear-gradient(to right, #eaafc8, #654ea3);
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  opacity: 1;
+}
+
+.gradient-mini {
+  background: #654ea3;
+  background: -webkit-linear-gradient(to right, #eaafc8, #654ea3);
+  background: linear-gradient(to right, #eaafc8, #654ea3);
+  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+}
+
+.gradient-highlight {
+  background: #798fe7;
+  background: -webkit-linear-gradient(to left, #ba55d3, #9370db);
+  background: linear-gradient(to left, #ba55d3, #9370db);
+  box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+  border-radius: 10px;
+  padding: 10px;
+
+}
+
+html,
+body {
+  margin: 0;
+  font-size: 16px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+}
+
+p,
+input,
+label,
+a,
+th,
+td {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.my-form {
+  width: 100%;
+  margin-top: 50px;
+  margin-bottom: 100px;
+  padding: 30px;
+  border-radius: 5px;
+  background: #ECE9E6;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #FFFFFF, #ECE9E6);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #FFFFFF, #ECE9E6);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+
+.data-container {
+  margin-top: 50px;
+  padding: 30px;
+  border-radius: 5px;
+  background: #ECE9E6;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #FFFFFF, #ECE9E6);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #FFFFFF, #ECE9E6);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+#plt-image {
+  width: 100%;
+  height: 100%;
+}
+
+.footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  /*margin-top: 100%;*/
+}
+
+.my-link {
+  text-decoration: none;
+}
+
+
+.main {
+  margin-top: 100px;
+}
+
+
+
+
+/* Perfect order */
+
+.bold {
+  font-weight: bold;
+}
+
+.head {
+  font-size: 3em;
+  font-weight: bold;
+}
+
+.sub-head {
+  font-size: 1.2em;
+}
+
+.box-shadow {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.box-redius {
+  border-radius: 5px;
+}
+
+.dashboard {
+  width: 95%;
+  margin: 50px auto;
+}
+
+.user-panel {
+  background: #ECE9E6;
+  padding: 20px;
+  min-height: 40%;
+  margin-bottom: 10px;
+}
+
+.dashboard-content {
+  height: 70%;
+}
+
+.workload-block {
+  background: #ECE9E6;
+  padding: 20px;
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 40%;
+}
+
+.user-details {}
+
+.profile-img {}
+
+.user-info {}
+
+.user-block {
+  background-color: #D6E4E5;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.user-block p {
+  margin-top: -5px;
+}
+
+.patient-name {
+  font-weight: bold;
+  padding-top: 10px;
+}
+
+.patient-id {
+  background-color: #eaafc8;
+  padding: 4px;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+
+
+.patient-details-head {
+  font-weight: bold;
+}
+
+.patient-details {
+  font-weight: normal;
+}
+
+.status {
+  background-color: #eaafc8;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+.task-count {
+  background-color: #ECE9E6;
+  font-size: 0.7em;
+  padding: 10px 10px;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.status .container {
+  margin: 20px auto;
+}
+
+.count {
+  padding: 4px;
+  color: black;
+  font-weight: normal;
+  border-radius: 5px;
+}
+
+.task-count p {
+  margin-top: 10px;
+  font-size: 1.2em;
+}
+
+.yellow {
+  background-color: #FED049;
+}
+
+.green {
+  background-color: #82CD47;
+}
+
+.red {
+  background-color: #DD5353;
+}
+
+.total-status {
+  background-color: #ECE9E6;
+  padding: 10px 20px;
+  margin: 10px;
+  width: 250px;
+}
+
+
+
+.total-status p {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding-top: 5px;
+  font-size: 0.8em;
+}
+
+.patient-status {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.simulations,
+.treatments {
+  background-color: #ECE9E6;
+  min-height: 100px;
+  width: 48%;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.inline {
+  display: inline-block;
+}
+
+.marker-status {
+  width: 100%;
+  min-height: 400px;
+  background-color: #ECE9E6;
+  margin-top: 10px;
+
+}
+
+.marker-status-heading {
+  text-align: center;
+  padding-top: 20px;
+  font-weight: bold;
+}
+
+.status-table {
+  margin: 20px;
+  margin-bottom: 10px;
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 80%;
+}
+
+.query-container{
+margin: 25px auto;
+}
+
+
+
+.page {
+  width: 21cm;
+  min-height: 29.7cm;
+  padding: 1.5cm;
+  margin: 5px auto;
+  border: 1px #D3D3D3 solid;
+  border-radius: 5px;
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.one {
+  display: flex;
+  justify-content: space-between;
+  width: 21cm;
+  margin: 1cm auto;
+}
+
+.sider-block {
+  display: flex;
+  justify-content: space-between;
+}
+
+.center {
+  text-align: center;
+}
+
+.page h3 {
+  padding-top: 15px;
+  font-weight: 700;
+  font-size: 16pt;
+}
+
+.content {
+  padding-top: 15px;
+}
+
+.page h4 {
+  font-weight: 700;
+  font-size: 12pt;
+}
+
+.content p {
+  text-align: justify;
+  font-size: 11pt;
+}
+
+.content li{
+  font-size: 11pt;
+}
+
+.dr-block{
+  margin-top: 40px;
+}
+
+.dr-block p{
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+
+
+.patientlist{
+  width: 100%;
+  min-height: 700px;
+  background-color: #ECE9E6;
+  margin-top: 10px;
+  
+}
+
+.patientlist-heading{
+   text-align: center;
+   padding-top: 20px;
+   font-weight: bold;
+}
+
+.patients-table{
+  margin: 20px;
+  margin-bottom: 10px;
+  height: 80%;
+}
+
+
+.user-form {
+  padding: 30px;
+  border-radius: 5px;
+  background: #ECE9E6;
+  background: -webkit-linear-gradient(to right, #FFFFFF, #ECE9E6);
+  background: linear-gradient(to right, #FFFFFF, #ECE9E6);
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  width: 30%;
+  height: 500px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+
+.user-signup-form {
+  margin: 50px;
+  padding: 30px;
+  border-radius: 5px;
+  background: #ECE9E6;
+  background: -webkit-linear-gradient(to right, #FFFFFF, #ECE9E6);
+  background: linear-gradient(to right, #FFFFFF, #ECE9E6);
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  width: 40%;
+}
+
+
+
+#data_operations {
+  margin-top: 50px;
+}
+
+.my-card{
+  background: #ECE9E6;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #FFFFFF, #ECE9E6);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #FFFFFF, #ECE9E6);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  padding: 20px;
+  height: auto;
+}
+
+.highlight {
+  background-color: yellowgreen;
+}
+
+.red-highlight {
+  background-color: #c45a5a;
+}
+
+.my-btn{
+  background: #654ea3;
+  border: none;
+  color: #FFFFFF;
+}
+
+.my-btn:hover{
+  background: #9180c0;
+  color: #FFFFFF;
+}
+
+.bar-gradient {
+  background: #090909;
+  background: -webkit-linear-gradient(to right, #c3dea8, #509d03);
+  background: linear-gradient(to right, #c3dea8, #509d03);
+  opacity: 1;
+}

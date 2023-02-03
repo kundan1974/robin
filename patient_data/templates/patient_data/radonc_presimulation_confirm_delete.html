@@ -1,0 +1,23 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+<div class="container">
+    <div class="query-container">
+        <div class="content-section">
+        <form class="my-form" method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Delete Post</legend>
+                <h2 style="color: crimson">Are you sure you want to delete <br>DIBH Assessment Details for :</h2><br><br>
+                    <p><b>Patient Detail</b>: {{ object.presimparent }} <br><b>PRESIMID</b>: {{object.pk}} <br>
+                        Dated: {{ object.last_updated|date:"F d, Y" }}<br><br>
+                    </p>
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-danger" type="submit">Yes, Delete</button>
+                <a class="btn btn-secondary" href="{% url 'radonc-presimulation-list' object.presimparent.crnumber %}">Cancel</a>
+            </div>
+        </form>
+    </div>
+    </div>
+</div>
+{% endblock content %}

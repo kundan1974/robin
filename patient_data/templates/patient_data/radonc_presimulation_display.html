@@ -1,0 +1,131 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+<div class="container">
+    <div class="query-container">
+        {# Left Space #}
+        <div class="col-md-1"></div>
+        {# Middle Space #}
+        <div class="col-md-10">
+            <div class="my-form">
+                    <div>
+                    {% if data.0.presimparent.gender == 'Male' %}
+                        <h4 class="mt-3">DIBH Assessment details for - Mr. {{ data.0.presimparent.first_name }} (CRNumber: {{ data.0.presimparent.crnumber }})</h4>
+                    {% else %}
+                        <h4 class="mt-3">DIBH Assessment details for - Mrs. {{ data.0.presimparent.first_name }} (CRNumber: {{ data.0.presimparent.crnumber }})</h4>
+                    {% endif %}
+                        {% if request.GET.mx_display_crnumber %}
+                        <a  class="btn btn-dark" href="{% url 'radonc-careplan-list' request.GET.mx_display_crnumber %}">Back</a>
+                        {% elif request.GET.next %}
+                        <a  class="btn btn-dark" href="{{ request.GET.next }}">Back</a>
+                        {% else %}
+                        <a  class="btn btn-dark" href="{% url 'radonc-careplan-list' data.0.presimparent.crnumber %}">Back</a>
+                        {% endif %}
+                    </div>
+            </div>
+                {% for content in data %}
+                <article class="media content-section section-odd mt-3">
+                   <div class="media-body">
+                        <div class="article-title">
+                            <h5>{{ content.presimparent.first_name }} {{ content.presimparent.last_name }}</h5>
+                            <div>
+                                <a class="btn btn-secondary btn-sm" href="{% url 'radonc-presimulation-update' content.pk %}">Update</a>
+{#                                {% if not content.simulation_set.all %}#}
+{#                                    <a class="btn btn-danger btn-sm" href="{% url 'radonc-simulation' content.presimparent.crnumber content.s3_id.s3_id content.pk  %}">New Simulation</a>#}
+{#                                {% else %}#}
+{#                                    <a class="btn btn-danger btn-sm" href="{% url 'radonc-simulation-update' content.simulation_set.first.simid  %}">Update Simulation</a>#}
+{#                                {% endif %}#}
+
+                                <a class="btn btn-danger btn-sm" href="{% url 'radonc-presimulation-delete' content.pk %}">Delete</a>
+                                {% if content.simulation_set.count > 0 %}
+                                    {% for sim in content.simulation_set.all %}
+                                    <a  class="btn btn-success btn-sm" href="{% url 'radonc-simulation-update' sim.simid %}?next={{ request.path|urlencode }}">Update Simulation for: {{ sim.icdmainsite.all.0.description }}</a>
+                                    {% endfor %}
+                                {% else %}
+                                    <a  class="btn btn-success btn-sm" href="{% url 'radonc-simulation' content.presimparent.crnumber content.s3_id.s3_id content.presimid %}?next={{ request.path|urlencode }}">New Simulation</a>
+                                {% endif %}
+
+                            </div>
+
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                    <th scope="col"><small>Days</small></th>
+                                    <th scope="col"><small>Date</small></th>
+                                    <th scope="col"><small>Amp(UL)</small></th>
+                                    <th scope="col"><small>Amp(LL)</small></th>
+                                    <th scope="col"><small>Amp(Avg)</small></th>
+                                    <th scope="col"><small>Hold(sec)</small></th>
+                                    <th scope="col"><small>Leak</small></th>
+                                    <th scope="col"><small>Remarks</small></th>
+                                    <th scope="col"><small>Status</small></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                    <th scope="row"><small>Day1</small></th>
+                                    <td><small>{{ content.day1date|date:"F d, Y" }}</small></td>
+                                    <td><small>{{ content.ul_amp_d1 }}</small></td>
+                                    <td><small>{{ content.ll_amp_d1 }}</small></td>
+                                    <td><small>{{ content.average_amp_d1 }}</small></td>
+                                    <td><small>{{ content.ahd_d1 }}</small></td>
+                                    <td><small>{{ content.al_d1 }}</small></td>
+                                    <td><small>{{ content.d1remarks }}</small></td>
+                                    <td><small>{{ content.day1status }}</small></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><small>Day2</small></th>
+                                    <td><small>{{ content.day2date|date:"F d, Y" }}</small></td>
+                                    <td><small>{{ content.ul_amp_d2 }}</small></td>
+                                    <td><small>{{ content.ll_amp_d2 }}</small></td>
+                                    <td><small>{{ content.average_amp_d2 }}</small></td>
+                                    <td><small>{{ content.ahd_d2 }}</small></td>
+                                    <td><small>{{ content.al_d2 }}</small></td>
+                                    <td><small>{{ content.d2remarks }}</small></td>
+                                    <td><small>{{ content.day2status }}</small></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><small>Day3</small></th>
+                                    <td><small>{{ content.day3date|date:"F d, Y" }}</small></td>
+                                    <td><small>{{ content.ul_amp_d3 }}</small></td>
+                                    <td><small>{{ content.ll_amp_d3 }}</small></td>
+                                    <td><small>{{ content.average_amp_d3 }}</small></td>
+                                    <td><small>{{ content.ahd_d3 }}</small></td>
+                                    <td><small>{{ content.al_d3 }}</small></td>
+                                    <td><small>{{ content.d3remarks }}</small></td>
+                                    <td><small>{{ content.day3status }}</small></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><small>Day4</small></th>
+                                    <td><small>{{ content.day4date|date:"F d, Y" }}</small></td>
+                                    <td><small>{{ content.ul_amp_d4 }}</small></td>
+                                    <td><small>{{ content.ll_amp_d4 }}</small></td>
+                                    <td><small>{{ content.average_amp_d4 }}</small></td>
+                                    <td><small>{{ content.ahd_d4 }}</small></td>
+                                    <td><small>{{ content.al_d4 }}</small></td>
+                                    <td><small>{{ content.d4remarks }}</small></td>
+                                    <td><small>{{ content.day4status }}</small></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"><small>Day5</small></th>
+                                    <td><small>{{ content.day5date|date:"F d, Y" }}</small></td>
+                                    <td><small>{{ content.ul_amp_d5 }}</small></td>
+                                    <td><small>{{ content.ll_amp_d5 }}</small></td>
+                                    <td><small>{{ content.average_amp_d5 }}</small></td>
+                                    <td><small>{{ content.ahd_d5 }}</small></td>
+                                    <td><small>{{ content.al_d5 }}</small></td>
+                                    <td><small>{{ content.d5remarks }}</small></td>
+                                    <td><small>{{ content.day5status }}</small></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                        </div>
+                   </div>
+                </article>
+            {% endfor %}
+            </div>
+        </div>
+        {# Right Space #}
+        <div class="col-md-1"></div>
+    </div>
+</div>
+{% endblock content %}

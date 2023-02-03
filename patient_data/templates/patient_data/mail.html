@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'formstyle.css' %}">
+    <title>New simulation details</title>
+  </head>
+  <body>
+    <h1 class="oncflow-labels">New Simulation details</h1>
+    <ul>
+      <li><b>Simulation Details entered by: </b>{{ user }}</li>
+      <li><b>Patient: </b>{{ crnumber }}</li>
+      <li><b>Simulation Date: </b>{{ simdate|date:"F d, Y" }}</li>
+      <li><b>Implementation Date: </b>{{ impdate|date:"F d, Y" }}</li>
+      <li><b>Technique: </b>{{ technique }}</li>
+      <li><b>Phase1: </b>{{ dosephase1 }}Gy over {{ fxphase1 }} fractions</li>
+      {% if dosephase2 %}
+        <li><b>Phase2: </b>{{ dosephase2 }}Gy over {{ fxphase2 }} fractions</li>
+      {% endif %}
+      {% if dosephase3 %}
+      <li><b>Phase3: </b>{{ dosephase3 }}Gy over {{ fxphase3 }} fractions</li>
+      {% endif %}
+      <li><b>Overall: </b>{{ totaldose }}Gy over {{ totalfractions }} fractions</li>
+      <li><b>Assigned to: </b>{{ assignedto }}</li>
+      <li><b>Tentative Completion date: </b>{{ tentativecompletiondate|date:"F d, Y" }}</li>
+      <li><b>remarks: </b>{{ remarks }}</li>
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="my-form2">
+            <h1>View DashImage</h1>
+            <p>Processed DICOM Image</p>
+            <hr>
+                <form action="/view_dashimage" method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+                    <div class="mb-3">
+                      <label for="dicomzip" class="form-label">Upload DashImage</label>
+                      <input type="file" class="form-control" id="exampleInputEmail1" name="dashimage" aria-describedby="emailHelp">
+                      <!-- <div id="emailHelp" class="form-text">Note: RT file must be present in DICOM zip folder.</div> -->
+                    </div>
+                    <button type="submit" class="btn btn-dark">Process</button>
+                  </form>
+            </div>
+        <div>
+        </div>
+        <div class="data-container">
+          {% if image_uri %}  
+          <img src="data:image/png;base64,{{ image_uri|safe }}">
+          {% else %}
+          <img src="https://images.unsplash.com/photo-1511300636408-a63a89df3482?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80" height="500" class="img-fluid" alt="...">
+          {% endif %}
+        </div>
+    </div>
+    
+</div>
+<div class="footer" style="position: absolute;">
+  <footer class="text-center text-lg-start text-white" style="background-color: #252627">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+      Crafted with <i class="fa-solid fa-heart"></i> by
+      <a class="text-white my-link" href="https://mdbootstrap.com/">MedPy Foundation powered by Dashamlav
+        Labs</a>
+    </div>
+  </footer>
+</div>
+{% endblock %}

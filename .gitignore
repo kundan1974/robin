@@ -1,0 +1,25 @@
+# Ignore Mac system files
+.ipynb_checkpoints
+__pycache__
+.DS_Store
+./utilities/.DS_Store
+./utilities/dcmrtstruct2nii/.DS_Store
+/qarc.log
+.idea/
+blog/__pycache__/**
+.idea/**
+blog/migrations/__pycache__/**
+dashimage/__pycache__/**
+dashimage/migrations/__pycache__/**
+dashimage/utils/__pycache__/**
+logs/**
+oncflow_rad/__pycache__/**
+patient_data/__pycache__/**
+patient_data/dash_apps/__pycache__/**
+patient_data/dash_apps/finished_apps/__pycache/**
+patient_data/migrations/__pycache__/**
+patient_data/templatetags/__pycache__/**
+users/__pycache__/**
+users/migrations/__pycache__/**
+download.csv
+venv/

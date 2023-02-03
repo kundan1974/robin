@@ -1,0 +1,59 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+    <div class="container">
+        <div class="query-container">
+            {% if request.GET.next %}
+                <h5><a  class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+            {% else %}
+                {% if data.0.parent_id.crnumber %}
+                    <h5><a  class="btn btn-dark" href="{% url 'radonc-fup-list' data.0.parent_id.crnumber %}">Back</a></h5>
+                {% elif crnumber %}
+                    <h5><a  class="btn btn-dark" href="{% url 'radonc-fup-list' crnumber %}">Back</a></h5>
+                {% else %}
+                    {% with crnumber=1234556 %}
+                        <h5><a  class="btn btn-dark" href="{% url 'radonc-fup-list' crnumber %}">Back</a></h5>
+                    {% endwith %}
+                {% endif %}
+            {% endif %}
+            {% if data.0.parent_id.gender == 'Male' %}
+                <div><h4>All PFT details for - Mr. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+            {% else %}
+                <div><h4>All PFT details for - Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+            {% endif %}
+            {% for content in data %}
+                <div class="my-form">
+                   <div class="media-body">
+                        <div class="article-title">
+                            {% if  content.s8_id.s2_id %}
+                                <h5>Diagnosis ID: {{ content.s8_id.s2_id.icd_topo_code.site }}({{ content.s8_id.s2_id.icd_path_code.hpe }})</h5>
+                            {% else %}
+                                <h5>No Diagnosis established yet!</h5>
+                            {% endif %}
+                            <div>
+                                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-pftdetails-update' content.pk %}">Update</a>
+                                <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'radonc-pftdetails-delete' content.pk %}">Delete</a>
+                            </div>
+                            <small class="text-muted">
+                                <b>PFT Date: </b>: {{ content.StudyDate|date:"M d, Y" }}
+                            </small><br>
+                            <small class="text-muted">
+                                <b>DLCO(Result): </b> {{ content.DLCO }}
+                                <b>DLCO(% Predicted):</b> {{ content.DLCOpred }} %
+                            </small><br><br>
+                            <small class="text-muted">
+                                <H6>Pre Intervention</H6>
+                                <b>FEV1(result): </b> {{ content.prFEV1 }}
+                                <b>FEVI(% Predicted):</b> {{ content.prFEV1pred }} %
+                            </small><br><br>
+                            <small class="text-muted">
+                                <H6>Post Intervention</H6>
+                                <b>FEV1(result): </b> {{ content.poFEV1 }}
+                                <b>FEVI(% Predicted):</b> {{ content.poFEV1pred }} %
+                            </small>
+                        </div>
+                   </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}

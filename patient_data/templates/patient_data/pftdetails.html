@@ -1,0 +1,154 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+<div class="container">
+    <div class="query-container">
+        <div class="my-form">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-row justify-content-left g-3">
+                    {% if update %}
+                        <h1 class="mb-3">PFT Update Form</h1>
+                        <h5><a class="btn btn-dark" href="{% url 'radonc-pftdetails-list' patient.crnumber %}">Back</a></h5>
+                    {% else %}
+                        <h1 class="mb-3">PFT Form</h1>
+                        {% with crnumber=123456 %}
+                            {% if request.GET.next %}
+                                <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                            {% else %}
+                                <h5><a class="btn btn-dark" href="{% url 'radonc-pftdetails-list' patient.crnumber %}">Back</a></h5>
+                            {% endif %}
+                        {% endwith %}
+                    {% endif %}
+                    <h3 class="mb-3">Name: {{ patient.first_name }} {{ patient.last_name }}</h3>
+                    <div class="form-control">
+                        <div class="row g-2 mt-2">
+                            <div class="col-md-2">
+                                {{ form.parent_id.errors }}
+                                <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CR Number:</label>
+                                {{ form.parent_id }}
+                            </div>
+                            <div class="col-md-2 d-none">
+                                {{ form.s8_id.errors }}
+                                <label class="oncflow-labels" for="{{ form.s8_id.id_for_label }}">FU ID:</label>
+                                {{ form.s8_id }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.StudyDate.errors }}
+                                <label class="oncflow-labels" for="{{ form.StudyDate.id_for_label }}">Date:</label>
+                                {{ form.StudyDate }}
+                            </div>
+
+                            <div class="col-md-6"></div><hr>
+                            <div class="col-md-12">
+                                <h4 style="color: #316bd0">Diffusing Capacity of Carbon Monooxide(DLCO)</h4>
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.DLCO.errors }}
+                                <label class="oncflow-labels" for="{{ form.DLCO.id_for_label }}">Result:</label>
+                                {{ form.DLCO }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.DLCOpred.errors }}
+                                <label class="oncflow-labels" for="{{ form.DLCOpred.id_for_label }}">% Predicted:</label>
+                                {{ form.DLCOpred }}
+                            </div>
+                            <div class="col-md-12">
+                                <h4 style="color: #316bd0"> Transfer Coefficient for the Diffusion of CO into the blood(DLCO/VA)</h4>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.DLCO_VA.errors }}
+                                <label class="oncflow-labels" for="{{ form.DLCO_VA.id_for_label }}">Result:</label>
+                                {{ form.DLCO_VA }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.DLCO_VApred.errors }}
+                                <label class="oncflow-labels" for="{{ form.DLCO_VApred.id_for_label }}">% Predicted:</label>
+                                {{ form.DLCO_VApred }}
+                            </div>
+
+                            <div class="col-md-1"></div><hr>
+                            <div class="col-md-12">
+                                <h4 style="color: #316bd0">Forced Expiratory Volume(FEV1)</h4>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.prFEV1.errors }}
+                                <label class="oncflow-labels" for="{{ form.prFEV1.id_for_label }}">Result(Pre Intervention):</label>
+                                {{ form.prFEV1 }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.prFEV1pred.errors }}
+                                <label class="oncflow-labels" for="{{ form.prFEV1pred.id_for_label }}">% Predicted(Pre Intervention):</label>
+                                {{ form.prFEV1pred }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.poFEV1.errors }}
+                                <label class="oncflow-labels" for="{{ form.poFEV1.id_for_label }}">Result(Post Intervention):</label>
+                                {{ form.poFEV1 }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.poFEV1pred.errors }}
+                                <label class="oncflow-labels" for="{{ form.poFEV1pred.id_for_label }}">% Predicted(Post Intervention):</label>
+                                {{ form.poFEV1pred }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.FEV1_change.errors }}
+                                <label class="oncflow-labels" for="{{ form.FEV1_change.id_for_label }}">Change(Pre vs Post):</label>
+                                {{ form.FEV1_change }}
+                            </div>
+
+                            <div class="col-md-9"></div><hr>
+
+                            <div class="col-md-12">
+                                <h4 style="color: #316bd0">Ratio of Forced Expiratory Volume & Forced Vital Capacity(FEV1/FVC)</h4>
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.prFEV1_FVC.errors }}
+                                <label class="oncflow-labels" for="{{ form.prFEV1_FVC.id_for_label }}">Result((Pre Intervention)):</label>
+                                {{ form.prFEV1_FVC }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.prFEV1_FVCpred.errors }}
+                                <label class="oncflow-labels" for="{{ form.prFEV1_FVCpred.id_for_label }}">% Predicted((Pre Intervention)):</label>
+                                {{ form.prFEV1_FVCpred }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.poFEV1_FVC.errors }}
+                                <label class="oncflow-labels" for="{{ form.poFEV1_FVC.id_for_label }}">Result(Post Intervention):</label>
+                                {{ form.poFEV1_FVC }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.poFEV1_FVCpred.errors }}
+                                <label class="oncflow-labels" for="{{ form.poFEV1_FVCpred.id_for_label }}">% Predicted(Post Intervention):</label>
+                                {{ form.poFEV1_FVCpred }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.FEV1_FVC_change.errors }}
+                                <label class="oncflow-labels" for="{{ form.FEV1_FVC_change.id_for_label }}">Change(Pre vs Post):</label>
+                                {{ form.FEV1_FVC_change }}
+                            </div>
+
+                            <div class="col-md-4"></div><hr>
+
+                            <div class="col-md-12">
+                                {{ form.Notes.errors }}
+                                <label class="oncflow-labels" for="{{ form.Notes.id_for_label }}">Notes:</label>
+                                {{ form.Notes }}
+                            </div>
+                        </div>
+                </div>
+                <!-- Button Row -->
+                {% if update %}
+                    <div class="form-group mt-3">
+                        <button class="btn btn-dark" type="submit">Update</button>
+                    </div>
+                {% else %}
+                    <div class="form-group mt-3">
+                        <button class="btn btn-dark" type="submit">Save</button>
+                    </div>
+                {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

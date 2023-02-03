@@ -1,0 +1,76 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+<div class="container">
+    <div class="query-container">
+        {# Left Space #}
+        <div class="col-md-1"></div>
+        {# Middle Space #}
+        <div class="col-md-10">
+            <div class="my-form">
+                {% if data.0.parent_id.gender == 'Male' %}
+                    <div><h4>All Radiotherapy details for - Mr. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+                {% else %}
+                    <div><h4>All Radiotherapy details for - Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+                {% endif %}
+                <div>
+                    {% if request.GET.next %}
+                        <h5><a href="{{ request.GET.next }}" class="btn btn-dark">Back</a></h5>
+                    {% elif request.GET.mx_display %}
+{#                        {% url 'radonc-careplan-list' data.0.parent_id.pk %}#}
+                        <h5><a  class="btn btn-dark" href="{{ request.GET.mx_display }}">Back</a></h5>
+                    {% else %}
+                        {% if request.GET.next_rt %}
+                            <h5><a  class="btn btn-dark" href="{% url 'radonc-careplan-list' crnumber %}">Back</a></h5>
+                        {% else %}
+                            <h5><a  class="btn btn-dark" href="{% url 'radonc-careplan-list' crnumber %}">Back</a></h5>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                {% for content in data %}
+                    <div>
+                        <h5>Diagnosis: {{ content.s2_id.icd_main_topo }} {{ content.s2_id.icd_path_code }}</h5>
+                        <h5>Management: {{ content.s3_id.surgery }} Surgery, {{ content.s3_id.chemotherapy }} Chemotherapy, {{ content.s3_id.radiotherapy }} Radiotherapy</h5>
+                        <div>
+                            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-radiotherapy-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
+                            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-ass' content.s4_id %}?next={{ request.path|urlencode }}">New Assessment</a>
+                            {% if ass %}
+                                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-ass-list' content.s4_id %}?next={{ request.path|urlencode }}">Assessment Details</a>
+                            {% endif %}
+                            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-primarydvh' content.s4_id %}">DVHEntry Module</a>
+{#                            {% if content.primarydvh_set.all %}#}
+{#                                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="#">Update-DVH</a>#}
+{#                            {% else %}#}
+{#                                <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-primarydvh' content.s4_id %}">New-DVH</a>#}
+{#                            {% endif %}#}
+                            <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
+                        </div>
+                        <small class="text-muted">
+                            <b>Simulation Date: </b>: {{ content.simdate|date:"F d, Y" }}
+                            <b>RT Start Date: </b>: {{ content.rtstartdate|date:"F d, Y" }}
+                            <b>RT Finish Date: </b>: {{ content.rtfinishdate|date:"F d, Y" }}
+                        </small><br>
+                        {% if content.rtsitecode %}
+                            <small class="text-muted"><b>Main Site:
+                            {% for mainsite in content.rtsite_main.all %}
+                                </b>: {{ mainsite.description }} </small><br>
+                            {% endfor %}
+                            <small class="text-muted"><b>SubSite: </b>: {{ content.rtsitecode }}</small><br>
+                        {% else %}
+                            <small class="text-muted"><b>Site: </b>: {{ content.rtsite }}</small><br>
+                        {% endif %}
+                        <small class="text-muted"><b>Phase1: </b>: Dose: {{ content.rtdose1 }} Gy / {{ content.rtdosefr1 }} fractions</small><br>
+                        <small class="text-muted"><b>Phase2: </b>: Dose: {{ content.rtdose2 }} Gy / {{ content.rtdosefr2 }} fractions</small><br>
+                        <small class="text-muted"><b>Phase3: </b>: Dose: {{ content.rtdose3 }} Gy / {{ content.rtdosefr3 }} fractions</small><br>
+                        <small class="text-muted"><b>Phase4: </b>: Dose: {{ content.rtdose4 }} Gy / {{ content.rtdosefr4 }} fractions</small><br>
+                        <small class="text-muted"><b>RT Machine: </b>: {{ content.rtmachine }}</small><br>
+                        <small class="text-muted"><b>RT Status: </b>: {{ content.rtstatus }}</small>
+                    </div>
+                    {% endfor %}
+            </div>
+        </div>
+        {# Right Space #}
+        <div class="col-md-1"></div>
+    </div>
+</div>
+
+{% endblock content %}

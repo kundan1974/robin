@@ -1,0 +1,110 @@
+{% extends 'patient_data/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="one">
+            <a href="{% url prev_url %}" class="btn btn-dark">Back</a>
+            <button id="doPrint" onclick="printCertificate()" class="btn btn-dark">Print</button>
+        </div>
+        <div id="summery" class="page">
+            <div class="sider-block">
+                <p><b>CR No.:</b> {{ data.pt.crnumber }}</p>
+                <p><b>Date: </b>{{ data.time }}</p>
+            </div>
+            <div class="center">
+                <h3>Radiation Treatment Summary</h3>
+                <p><b>DIAGNOSIS: </b>{{ data.dx_clin }}</p>
+            </div>
+            <div class="content">
+                <h4>Brief Case Summary:</h4>
+                <p>
+                    {{ data.name }}, {{ data.pt.age }} year old, {{ data.gender }} presented to
+                    RGCI on {{ data.reg_date|date:"F d, Y" }}. {{ data.fixed_text }} {{ data.hpe_text }}.
+                    {{ data.chemo_text }}.
+                    {% if data.gender == 'Male'%}
+                        He
+                    {% else %}
+                        She
+                    {% endif %}
+                    was referred to us for
+                    External Beam Radiotherapy. The patient and
+                    {% if data.gender == 'Male'%}
+                        his
+                    {% else %}
+                        her
+                    {% endif %}
+                    attendants were provided with a thorough explanation of the nature of the
+                    disease and its prognosis prior to the initiation of radiation therapy.
+                    Written informed consent was then obtained from the patient
+                    in accordance with the legal requirements for informed consent.
+                </p>
+            </div>
+
+            <div class="content">
+                <h4>Simulation:</h4>
+                <p>Supine position with both hands placed above the head on an AIO base plate and accessories with a 4-clip thoracoabdominal cast. After laser alignment, a 3 mm slice non-contrast CT scan was obtained from cricoid cartilage to L4 vertebrae.</p>
+            </div>
+
+            <div class="content">
+                <h4>RT Details</h4>
+                <ul>
+                    <li>Technique: <b>{{ data.rt_tech }}</b></li>
+                    <li>Modality: <b>{{ data.modality }}</b></li>
+                    <li>Target Volume: <b>{{ data.target }}</b></li>
+                    <li>Dose recevied: <b>{{ data.dose_text }}</b></li>
+                    <li>Duration: <b>{{ data.duration_text }}</b></li>
+                    <li>Remarks: <b>{% if data.gender == 'Male'%}
+                        He
+                    {% else %}
+                        She
+                    {% endif %} tolerated treatment well</b></li>
+                </ul>
+            </div>
+
+            <div class="content">
+                <h4>Advise on Discharge</h4>
+                <ul>
+                    <li>PLENTY OF FLUIDS ORALLY</li>
+                    <li>DO NOT RUB IRRADIATED AREA.</li>
+                    <li>CONTINUE PHYSIOTHERAPY OF UPPER LIMB</li>
+                    <li>PLENTY OF FLUIDS ORALLY</li>
+                </ul>
+            </div>
+
+            <div class="content">
+                <h4>Medication on Discharge</h4>
+                <ul>
+                    <li>RADIAGUARD LOTION FOR LOCAL APPLICATION OVER IRRADIATED AREA ONCE A DAY</li>
+                    <li>CAP UBIRISE TWICE A DAY FOR 15 DAYS</li>
+                    <li>TAB SIGNOFLAM TWICE A DAY FOR 5 DAYS</li>
+                    <li>TAB PAN 40MG ONCE A DAY (EMPTY STOMACH) FOR 7 DAYS</li>
+                </ul>
+            </div>
+            <div class="content">
+                <p><b>Review in RT OPD after 15 days for follow up.</b> <br> <b>Review with {{ data.ref_to_text }} and team for further management.</b></p>                
+            </div>
+            <div class="content">
+                <h4>In Case of Emergency:</h4>
+                <p>In case of emergency (fever, loose motion, vomiting, pain, bleeding from any site and any untoward symptoms) Report immediately in casualty or call in Ext No 011-47022012,47022400. For appointment : 011-47022281, 011-47022222 and Teleconsult Number 9319089903</p>
+            </div>
+            
+            <div class="content">
+                <h4>Treating Team</h4>
+                <div class="sider-block">
+                    <div class="dr-block">
+                        <h4>Dr. Kundan Singh Chufal</h4>
+                        <p>Senior Consultant</p>
+                        <p>Reg. No.DMC-21555</p>
+                        <p>Radiation Oncology C</p>
+                    </div>
+                    <div class="dr-block">
+                        <h4>Dr. Irfan Ahmad</h4>
+                        <p>Consultant</p>
+                        <p>Reg.No.DMC-04213</p>
+                        <p>Radiation Oncology C</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

@@ -1,0 +1,1096 @@
+{% extends "patient_data/base.html" %}
+{% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheet %}
+{% block content %}
+<style>
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+  font-family: sans-serif;
+}
+
+.tabs__label {
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.tabs__radio {
+  display: none;
+}
+
+.tabs__content {
+  order: 1;
+  width: 100%;
+  border-bottom: 3px solid #dddddd;
+  line-height: 1.5;
+  font-size: 0.9em;
+  font-weight: bold;
+  display: none;
+}
+
+.tabs__radio:checked + .tabs__label {
+  font-weight: bold;
+  color: #015b48;
+  border-bottom: 5px solid #009578;
+}
+
+.tabs__radio:checked + .tabs__label + .tabs__content {
+  display: initial;
+}
+</style>
+
+<div class="container">
+    {# Middle Space #}
+    <div class="col-auto">
+        <div class="my-form">
+                {% if update %}
+                    <h1 class="mb-3">Follow up Update Form</h1>
+                    <h5 class="mb-3">Follow up to be updated for patient: {{ patient.parent_id.first_name|upper }} with following Diagnosis Details:
+                        {% if diagnosis %}
+                        <h6 class="mb-3"><b>Laterality:</b>{{ patient.s2_id.laterality }} <b>Diagnosis:</b>{{ patient.s2_id.icd_topo_code.site }} ({{ patient.s2_id.icd_path_code.hpe }})
+                            <b>Dx Date:</b> {{ patient.s2_id.dx_date|date:"F d, Y" }}
+                        </h6>
+                        {% else %}
+                            <h6 class="mb-3"><span class="badge bg-danger text-light">No diagnosis established yet!</span></h6>
+                        {% endif %}
+                    </h5>
+                    <div class="row">
+                        <div class="col-auto">
+                        {% if request.GET.next %}
+                            <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                        {% else %}
+                            <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' updatecrn %}">Back</a></h5>
+                        {% endif %}
+                        </div>
+                        <div class="col-auto">
+                            <h5><a class="btn btn-dark" href="{% url 'db_operations' updatecrn %}">Database Operations</a></h5>
+                        </div>
+                    <div>
+                {% else %}
+                    <h1 class="mb-3">Follow up Form</h1>
+                    <h5 class="mb-3">New Follow up to be created for patient: {{ patient.first_name|upper }} with following Diagnosis Details:</h5>
+                    <div class="d-flex justify-content-center align-items-center">
+                        {% if patient_mx.s2_id %}
+                            <h6 class="mb-3"><b>Laterality:</b>{{ patient_mx.s2_id.laterality }} <b>Diagnosis:</b>{{ patient_mx.s2_id.icd_topo_code.site }} ({{ patient_mx.s2_id.icd_path_code.hpe }})
+                                <b>Dx Date:</b> {{ patient_mx.s2_id.dx_date|date:"F d, Y" }}
+                            </h6>
+                            {% else %}
+                                <h6 class="mb-3"><span class="badge bg-danger text-light">No diagnosis established yet!</span>
+                                </h6>
+                        {% endif %}
+                        <h6 class="mb-3 mx-3"><span class="badge bg-warning text-dark">If you want to enter investigation details (eg. cardiac markers, PFT, labtest) then please first create follow up anf the proceed via follow up detail module</span></h6>
+                    </div>
+                    {% with crnumber=123456 %}
+                        <div class="row">
+                            <div class="col-auto">
+                                {% if request.GET.next %}
+                                    <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                                {% else %}
+                                    <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.crnumber %}">Back</a></h5>
+                                {% endif %}
+                            </div>
+                            <div class="col-auto">
+                                <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.crnumber %}">Database Operations</a></h5>
+                            </div>
+                        </div>
+                    {% endwith %}
+                {% endif %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row justify-content-left g-3">
+                        <div class="form-control section-odd card mb-5">
+                            <div class="row g-2 mt-2">
+                                <div class="col-md-3">
+                                    {{ form.parent_id.errors }}
+                                    <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
+                                    {{ form.parent_id }}
+                                </div>
+                                <div class="col-md-2 d-none">
+                                    {{ form.s2_id.errors }}
+                                    <label class="oncflow-labels" for="{{ form.s2_id.id_for_label }}">DXID:</label>
+                                    {{ form.s2_id }}
+                                </div>
+                                <div class="col-md-2 d-none">
+                                    {{ form.s3_id.errors }}
+                                    <label class="oncflow-labels" for="{{ form.s3_id.id_for_label }}">MxID:</label>
+                                    {{ form.s3_id }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.visitdate.errors }}
+                                    <label class="oncflow-labels" for="{{ form.visitdate.id_for_label }}">Visit Date:</label>
+                                    {{ form.visitdate }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.Nextvisit.errors }}
+                                    <label class="oncflow-labels" for="{{ form.Nextvisit.id_for_label }}">Next Visit:</label>
+                                    {{ form.Nextvisit }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.Weight.errors }}
+                                    <label class="oncflow-labels" for="{{ form.Weight.id_for_label }}">Weight:</label>
+                                    {{ form.Weight }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.visittype.errors }}
+                                    <label class="oncflow-labels" for="{{ form.visittype.id_for_label }}">Visit Type:</label>
+                                    {{ form.visittype }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.visitaction.errors }}
+                                    <label class="oncflow-labels" for="{{ form.visitaction.id_for_label }}">Action:</label>
+                                    {{ form.visitaction }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.PerfStatus.errors }}
+                                    <label class="oncflow-labels" for="{{ form.PerfStatus.id_for_label }}">PS:</label>
+                                    {{ form.PerfStatus }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.RecordRecc.errors }}
+                                    <label class="oncflow-labels" for="{{ form.RecordRecc.id_for_label }}">Record Recurrence:</label>
+                                    {{ form.RecordRecc }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.LRstatus.errors }}
+                                    <label class="oncflow-labels" for="{{ form.LRstatus.id_for_label }}">Local Recurrence:</label>
+                                    {{ form.LRstatus }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.RRstatus.errors }}
+                                    <label class="oncflow-labels" for="{{ form.RRstatus.id_for_label }}">Regional Recurrence:</label>
+                                    {{ form.RRstatus }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.DMstatus.errors }}
+                                    <label class="oncflow-labels" for="{{ form.DMstatus.id_for_label }}">Distant Mets:</label>
+                                    {{ form.DMstatus }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.Death.errors }}
+                                    <label class="oncflow-labels" for="{{ form.Death.id_for_label }}">Death:</label>
+                                    {{ form.Death }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.CauseDeath.errors }}
+                                    <label class="oncflow-labels" for="{{ form.CauseDeath.id_for_label }}">Death(Cause):</label>
+                                    {{ form.CauseDeath }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.Datedeath.errors }}
+                                    <label class="oncflow-labels" for="{{ form.Datedeath.id_for_label }}">Death(Date):</label>
+                                    {{ form.Datedeath }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab content -->
+
+                        <div class="tabs section-even mb-5">
+                              <!-- Tab for late toxicities -->
+                              <input type="radio" class="tabs__radio" name="tabs-example" id="toxicity" checked>
+                              <label for="toxicity" class="tabs__label">Late Toxicity</label>
+                              <div class="tabs__content">
+                                  <div class="form-control card mb-5">
+                                      <div class="row g-2 mt-2">
+                                        <div class="col-md-12 p-3">
+                                            <h5>Late Toxicity Reporting Module </h5>
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.ToxType1.errors }}
+                                            <label class="oncflow-labels" for="{{ form.ToxType1.id_for_label }}">Toxicity Type1:</label>
+                                            {{ form.ToxType1 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.SeverityT1.errors }}
+                                            <label class="oncflow-labels" for="{{ form.SeverityT1.id_for_label }}">Severity:</label>
+                                            {{ form.SeverityT1 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.ToxType2.errors }}
+                                            <label class="oncflow-labels" for="{{ form.ToxType2.id_for_label }}">Toxicity Type2:</label>
+                                            {{ form.ToxType2 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.SeverityT2.errors }}
+                                            <label class="oncflow-labels" for="{{ form.SeverityT2.id_for_label }}">Severity:</label>
+                                            {{ form.SeverityT2 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.ToxType3.errors }}
+                                            <label class="oncflow-labels" for="{{ form.ToxType3.id_for_label }}">Toxicity Type3:</label>
+                                            {{ form.ToxType3 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.SeverityT3.errors }}
+                                            <label class="oncflow-labels" for="{{ form.SeverityT3.id_for_label }}">Severity:</label>
+                                            {{ form.SeverityT3 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.ToxType4.errors }}
+                                            <label class="oncflow-labels" for="{{ form.ToxType4.id_for_label }}">Toxicity Type4:</label>
+                                            {{ form.ToxType4 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.SeverityT4.errors }}
+                                            <label class="oncflow-labels" for="{{ form.SeverityT4.id_for_label }}">Severity:</label>
+                                            {{ form.SeverityT4 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.ToxType5.errors }}
+                                            <label class="oncflow-labels" for="{{ form.ToxType5.id_for_label }}">Toxicity Type5:</label>
+                                            {{ form.ToxType5 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.SeverityT5.errors }}
+                                            <label class="oncflow-labels" for="{{ form.SeverityT5.id_for_label }}">Severity:</label>
+                                            {{ form.SeverityT5 }}
+                                        </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <!-- Tab for Symptoms -->
+                              <input type="radio" class="tabs__radio" name="tabs-example" id="symp">
+                              <label for="symp" class="tabs__label">Symptoms</label>
+                              <div class="tabs__content">
+                                  <div class="form-control card mb-5">
+                                      <div class="row g-2 mt-2">
+                                        <div class="col-md-12 p-3">
+                                            <h5>Record any Clinical Symptoms</h5>
+                                        </div>
+                                        <div class="col-md-10" style="text-align: center">
+                                            <h5>Symptoms</h5>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <h5>Severity</h5>
+                                        </div>
+                                        <div class="col-md-1">
+                                          <label>1. </label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            {{ form.Symp1.errors }}
+                                            {{ form.Symp1 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.Symp1Type.errors }}
+                                            {{ form.Symp1Type }}
+                                        </div>
+                                        <div class="col-md-1">
+                                          <label>2. </label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            {{ form.Symp2.errors }}
+                                            {{ form.Symp2 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.Symp2Type.errors }}
+                                            {{ form.Symp2Type }}
+                                        </div>
+                                        <div class="col-md-1">
+                                          <label>3. </label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            {{ form.Symp3.errors }}
+                                            {{ form.Symp3 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.Symp3Type.errors }}
+                                            {{ form.Symp3Type }}
+                                        </div>
+                                        <div class="col-md-1">
+                                          <label>4. </label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            {{ form.Symp4.errors }}
+                                            {{ form.Symp4 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.Symp4Type.errors }}
+                                            {{ form.Symp4Type }}
+                                        </div>
+                                        <div class="col-md-1">
+                                          <label>5. </label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            {{ form.Symp5.errors }}
+                                            {{ form.Symp5 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.Symp5Type.errors }}
+                                            {{ form.Symp5Type }}
+                                        </div>
+                                        <div class="col-md-1">
+                                          <label>6. </label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            {{ form.Symp6.errors }}
+                                            {{ form.Symp6 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.Symp6Type.errors }}
+                                            {{ form.Symp6Type }}
+                                        </div>
+                                        <div class="col-md-1">
+                                          <label>7. </label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            {{ form.Symp7.errors }}
+                                            {{ form.Symp7 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.Symp7Type.errors }}
+                                            {{ form.Symp7Type }}
+                                        </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <!-- Tab for prescriptions -->
+                              <input type="radio" class="tabs__radio" name="tabs-example" id="presc">
+                              <label for="presc" class="tabs__label">Prescriptions</label>
+                              <div class="tabs__content">
+                                  <div class="form-control card mb-5">
+                                      <div class="row g-2 mt-2">
+                                        <div class="col-md-12 p-3">
+                                            <h5>Prescription</h5>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="oncflow-labels" for="{{ form.DrugRx1.id_for_label }}">Drug:</label>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label class="oncflow-labels" for="{{ form.RxDose1.id_for_label }}">Dose:</label>
+                                        </div>
+                                        <div class="col-md-1">
+                                           <label class="oncflow-labels" for="{{ form.Rx1Route.id_for_label }}">Route:</label>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label class="oncflow-labels" for="{{ form.RxUnit1.id_for_label }}">Unit:</label>
+                                        </div>
+                                        <div class="col-md-1">
+                                             <label class="oncflow-labels" for="{{ form.Rx1Fx.id_for_label }}">Frequency:</label>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <label class="oncflow-labels" for="{{ form.Rx1Dur.id_for_label }}">Days:</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="oncflow-labels" for="{{ form.Rx1Inst.id_for_label }}">Instructions:</label>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.DrugRx1.errors }}
+                                            {{ form.DrugRx1 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.RxDose1.errors }}
+                                            {{ form.RxDose1 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx1Route.errors }}
+                                            {{ form.Rx1Route }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.RxUnit1.errors }}
+                                            {{ form.RxUnit1 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx1Fx.errors }}
+                                            {{ form.Rx1Fx }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx1Dur.errors }}
+                                            {{ form.Rx1Dur }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.Rx1Inst.errors }}
+                                            {{ form.Rx1Inst }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.DrugRx2.errors }}
+                                            {{ form.DrugRx2 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.RxDose2.errors }}
+                                            {{ form.RxDose2 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx2Route.errors }}
+                                            {{ form.Rx2Route }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.RxUnit2.errors }}
+                                            {{ form.RxUnit2 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx2Fx.errors }}
+                                            {{ form.Rx2Fx }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx2Dur.errors }}
+                                            {{ form.Rx2Dur }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.Rx2Inst.errors }}
+                                            {{ form.Rx2Inst }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.DrugRx3.errors }}
+                                            {{ form.DrugRx3 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.RxDose3.errors }}
+                                            {{ form.RxDose3 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx3Route.errors }}
+                                            {{ form.Rx3Route }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.RxUnit3.errors }}
+                                            {{ form.RxUnit3 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx3Fx.errors }}
+                                            {{ form.Rx3Fx }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx3Dur.errors }}
+                                            {{ form.Rx3Dur }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.Rx3Inst.errors }}
+                                            {{ form.Rx3Inst }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.DrugRx4.errors }}
+                                            {{ form.DrugRx4 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.RxDose4.errors }}
+                                            {{ form.RxDose4 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx4Route.errors }}
+                                            {{ form.Rx4Route }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.RxUnit4.errors }}
+                                            {{ form.RxUnit4 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx4Fx.errors }}
+                                            {{ form.Rx4Fx }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx4Dur.errors }}
+                                            {{ form.Rx4Dur }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.Rx4Inst.errors }}
+                                            {{ form.Rx4Inst }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.DrugRx5.errors }}
+                                            {{ form.DrugRx5 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.RxDose5.errors }}
+                                            {{ form.RxDose5 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx5Route.errors }}
+                                            {{ form.Rx5Route }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.RxUnit5.errors }}
+                                            {{ form.RxUnit5 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx5Fx.errors }}
+                                            {{ form.Rx5Fx }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx5Dur.errors }}
+                                            {{ form.Rx5Dur }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.Rx5Inst.errors }}
+                                            {{ form.Rx5Inst }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.DrugRx6.errors }}
+                                            {{ form.DrugRx6 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.RxDose6.errors }}
+                                            {{ form.RxDose6 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx6Route.errors }}
+                                            {{ form.Rx6Route }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.RxUnit6.errors }}
+                                            {{ form.RxUnit6 }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx6Fx.errors }}
+                                            {{ form.Rx6Fx }}
+                                        </div>
+                                        <div class="col-md-1">
+                                            {{ form.Rx6Dur.errors }}
+                                            {{ form.Rx6Dur }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.Rx6Inst.errors }}
+                                            {{ form.Rx6Inst }}
+                                        </div>
+
+                                      </div>
+                                  </div>
+                              </div>
+                             <!-- INTERVENTIONS -->
+                              <input type="radio" class="tabs__radio" name="tabs-example" id="interven">
+                              <label for="interven" class="tabs__label">Interventions</label>
+                              <div class="tabs__content">
+                                  <div class="form-control card mb-5">
+                                      <div class="row g-2 mt-2">
+                                        <div class="col-md-12 p-3">
+                                            <h5>Any Interventions Planned </h5>
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.Intervention1.errors }}
+                                            <label class="oncflow-labels" for="{{ form.Intervention1.id_for_label }}">Intervention1:</label>
+                                            {{ form.Intervention1 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.Intervention2.errors }}
+                                            <label class="oncflow-labels" for="{{ form.Intervention2.id_for_label }}">Intervention2:</label>
+                                            {{ form.Intervention2 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.Intervention3.errors }}
+                                            <label class="oncflow-labels" for="{{ form.Intervention3.id_for_label }}">Intervention3:</label>
+                                            {{ form.Intervention3 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.Intervention4.errors }}
+                                            <label class="oncflow-labels" for="{{ form.Intervention4.id_for_label }}">Intervention4:</label>
+                                            {{ form.Intervention4 }}
+                                        </div>
+                                      </div>
+                                  </div>
+                              </div>
+                            <!-- PETCT -->
+                              <input type="radio" class="tabs__radio" name="tabs-example" id="petct">
+                              <label for="petct" class="tabs__label">PETCT</label>
+                              <div class="tabs__content">
+                                  <div class="form-control card mb-5">
+                                      <div class="row g-2 mt-2">
+                                        <div class="col-md-12 p-3">
+                                            <h5>Details of FDG PET Scan</h5>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="oncflow-labels" for="{{ form.PETCTSite.id_for_label }}">Site:</label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="oncflow-labels" for="{{ form.PETCT.id_for_label }}">Findings:</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                           <label class="oncflow-labels" for="{{ form.PETCTNotes.id_for_label }}">Remarks:</label>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.PETCTSite.errors }}
+                                            {{ form.PETCTSite }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.PETCT.errors }}
+                                            {{ form.PETCT }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.PETCTNotes.errors }}
+                                            {{ form.PETCTNotes }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.PETCTSite1.errors }}
+                                            {{ form.PETCTSite1 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.PETCT1.errors }}
+                                            {{ form.PETCT1 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.PETCTNotes1.errors }}
+                                            {{ form.PETCTNotes1 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.PETCTSite2.errors }}
+                                            {{ form.PETCTSite2 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.PETCT2.errors }}
+                                            {{ form.PETCT2 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.PETCTNotes2.errors }}
+                                            {{ form.PETCTNotes2 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.PETCTSite3.errors }}
+                                            {{ form.PETCTSite3 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.PETCT3.errors }}
+                                            {{ form.PETCT3 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.PETCTNotes3.errors }}
+                                            {{ form.PETCTNotes3 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.PETCTSite4.errors }}
+                                            {{ form.PETCTSite4 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.PETCT4.errors }}
+                                            {{ form.PETCT4 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.PETCTNotes4.errors }}
+                                            {{ form.PETCTNotes4 }}
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            {{ form.PETCTReport.errors }}
+                                            <label class="oncflow-labels" for="{{ form.PETCTReport.id_for_label }}">Final Impression:</label>
+                                            {{ form.PETCTReport }}
+                                        </div>
+
+                                      </div>
+                                  </div>
+                              </div>
+                            <!-- CTUGIE -->
+                              <input type="radio" class="tabs__radio" name="tabs-example" id="ct">
+                              <label for="ct" class="tabs__label">CT&UGIE</label>
+                              <div class="tabs__content">
+                                  <div class="form-control card mb-5">
+                                      <div class="row g-2 mt-2">
+                                        <div class="col-md-12 p-3">
+                                            <h5>Details of CECT and Upper GI Endoscopy</h5>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="oncflow-labels" for="{{ form.CTSite.id_for_label }}">Site:</label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="oncflow-labels" for="{{ form.CECT.id_for_label }}">Findings:</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                           <label class="oncflow-labels" for="{{ form.CECTNotes.id_for_label }}">Remarks:</label>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.CTSite.errors }}
+                                            {{ form.CTSite }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.CECT.errors }}
+                                            {{ form.CECT }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.CECTNotes.errors }}
+                                            {{ form.CECTNotes }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.CTSite1.errors }}
+                                            {{ form.CTSite1 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.CECT1.errors }}
+                                            {{ form.CECT1 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.CECTNotes1.errors }}
+                                            {{ form.CECTNotes1 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.CTSite2.errors }}
+                                            {{ form.CTSite2 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.CECT2.errors }}
+                                            {{ form.CECT2 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.CECTNotes2.errors }}
+                                            {{ form.CECTNotes2 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.CTSite3.errors }}
+                                            {{ form.CTSite3 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.CECT3.errors }}
+                                            {{ form.CECT3 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.CECTNotes3.errors }}
+                                            {{ form.CECTNotes3 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.CTSite4.errors }}
+                                            {{ form.CTSite4 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.CECT4.errors }}
+                                            {{ form.CECT4 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.CECTNotes4.errors }}
+                                            {{ form.CECTNotes4 }}
+                                        </div>
+
+                                        <div class="row g-1 mt-3" style="border-style: ridge">
+                                            <div class="col-md-6 mt-3">
+                                                {{ form.LDCT.errors }}
+                                                <label class="oncflow-labels" for="{{ form.LDCT.id_for_label }}">Low Dose CT-Scan Findings:</label>
+                                                {{ form.LDCT }}
+                                            </div>
+                                            <div class="col-md-6 mt-3">
+                                                {{ form.LDCTNotes.errors }}
+                                                <label class="oncflow-labels" for="{{ form.LDCTNotes.id_for_label }}">Low Dose CT-Scan Remarks:</label>
+                                                {{ form.LDCTNotes }}
+                                            </div>
+
+                                            <div class="col-md-6 mt-3 mb-3">
+                                                {{ form.UGIE.errors }}
+                                                <label class="oncflow-labels" for="{{ form.UGIE.id_for_label }}">UGIE Findings:</label>
+                                                {{ form.UGIE }}
+                                            </div>
+                                            <div class="col-md-6 mt-3 mb-3">
+                                                {{ form.UGIENotes.errors }}
+                                                <label class="oncflow-labels" for="{{ form.UGIENotes.id_for_label }}">UGIE Remarks:</label>
+                                                {{ form.UGIENotes }}
+                                            </div>
+                                        </div>
+
+                                      </div>
+                                  </div>
+                              </div>
+                            <!-- XRay -->
+                              <input type="radio" class="tabs__radio" name="tabs-example" id="xray">
+                              <label for="xray" class="tabs__label">XRAY</label>
+                              <div class="tabs__content">
+                                  <div class="form-control card mb-5">
+                                      <div class="row g-2 mt-2">
+                                        <div class="col-md-12 p-3">
+                                            <h5>Details of XRAY</h5>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="oncflow-labels" for="{{ form.XRaySite.id_for_label }}">Site:</label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="oncflow-labels" for="{{ form.XRay.id_for_label }}">Findings:</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                           <label class="oncflow-labels" for="{{ form.XRayNotes.id_for_label }}">Remarks:</label>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.XRaySite.errors }}
+                                            {{ form.XRaySite }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.XRay.errors }}
+                                            {{ form.XRay }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.XRayNotes.errors }}
+                                            {{ form.XRayNotes }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.XRaySite1.errors }}
+                                            {{ form.XRaySite1 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.XRay1.errors }}
+                                            {{ form.XRay1 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.XRayNotes1.errors }}
+                                            {{ form.XRayNotes1 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.XRaySite2.errors }}
+                                            {{ form.XRaySite2 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.XRay2.errors }}
+                                            {{ form.XRay2 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.XRayNotes2.errors }}
+                                            {{ form.XRayNotes2 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.XRaySite3.errors }}
+                                            {{ form.XRaySite3 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.XRay3.errors }}
+                                            {{ form.XRay3 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.XRayNotes3.errors }}
+                                            {{ form.XRayNotes3 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.XRaySite4.errors }}
+                                            {{ form.XRaySite4 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.XRay4.errors }}
+                                            {{ form.XRay4 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.XRayNotes4.errors }}
+                                            {{ form.XRayNotes4 }}
+                                        </div>
+
+                                      </div>
+                                  </div>
+                              </div>
+                            <!-- MRI -->
+                              <input type="radio" class="tabs__radio" name="tabs-example" id="mri">
+                              <label for="mri" class="tabs__label">MRI</label>
+                              <div class="tabs__content">
+                                  <div class="form-control card mb-5">
+                                      <div class="row g-2 mt-2">
+                                        <div class="col-md-12 p-3">
+                                            <h5>Details of MRI</h5>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="oncflow-labels" for="{{ form.MRSite.id_for_label }}">Site:</label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="oncflow-labels" for="{{ form.MR.id_for_label }}">Findings:</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                           <label class="oncflow-labels" for="{{ form.MRNotes.id_for_label }}">Remarks:</label>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.MRSite.errors }}
+                                            {{ form.MRSite }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.MR.errors }}
+                                            {{ form.MR }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.MRNotes.errors }}
+                                            {{ form.MRNotes }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.MRSite1.errors }}
+                                            {{ form.MRSite1 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.MR1.errors }}
+                                            {{ form.MR1 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.MRNotes1.errors }}
+                                            {{ form.MRNotes1 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.MRSite2.errors }}
+                                            {{ form.MRSite2 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.MR2.errors }}
+                                            {{ form.MR2 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.MRNotes2.errors }}
+                                            {{ form.MRNotes2 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.MRSite3.errors }}
+                                            {{ form.MRSite3 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.MR3.errors }}
+                                            {{ form.MR3 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.MRNotes3.errors }}
+                                            {{ form.MRNotes3 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.MRSite4.errors }}
+                                            {{ form.MRSite4 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.MR4.errors }}
+                                            {{ form.MR4 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.MRNotes4.errors }}
+                                            {{ form.MRNotes4 }}
+                                        </div>
+
+                                      </div>
+                                  </div>
+                              </div>
+                            <!-- Biopsy -->
+                              <input type="radio" class="tabs__radio" name="tabs-example" id="biopsy">
+                              <label for="biopsy" class="tabs__label">Biopsy</label>
+                              <div class="tabs__content">
+                                  <div class="form-control card mb-5">
+                                      <div class="row g-2 mt-2">
+                                        <div class="col-md-12 p-3">
+                                            <h5>Details of Biopsy</h5>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="oncflow-labels" for="{{ form.BiopsySite.id_for_label }}">Biopsy Site:</label>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="oncflow-labels" for="{{ form.BiopsyResult.id_for_label }}">Details:</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                           <label class="oncflow-labels" for="{{ form.BiopsyNotes.id_for_label }}">Impression:</label>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.BiopsySite.errors }}
+                                            {{ form.BiopsySite }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.BiopsyResult.errors }}
+                                            {{ form.BiopsyResult }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.BiopsyNotes.errors }}
+                                            {{ form.BiopsyNotes }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.BiopsySite1.errors }}
+                                            {{ form.BiopsySite1 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.BiopsyResult1.errors }}
+                                            {{ form.BiopsyResult1 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.BiopsyNotes1.errors }}
+                                            {{ form.BiopsyNotes1 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.BiopsySite2.errors }}
+                                            {{ form.BiopsySite2 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.BiopsyResult2.errors }}
+                                            {{ form.BiopsyResult2 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.BiopsyNotes2.errors }}
+                                            {{ form.BiopsyNotes2 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.BiopsySite3.errors }}
+                                            {{ form.BiopsySite3 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.BiopsyResult3.errors }}
+                                            {{ form.BiopsyResult3 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.BiopsyNotes3.errors }}
+                                            {{ form.BiopsyNotes3 }}
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            {{ form.BiopsySite4.errors }}
+                                            {{ form.BiopsySite4 }}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {{ form.BiopsyResult4.errors }}
+                                            {{ form.BiopsyResult4 }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.BiopsyNotes4.errors }}
+                                            {{ form.BiopsyNotes4 }}
+                                        </div>
+
+                                      </div>
+                                  </div>
+                              </div>
+                        </div>
+
+                        <!-- Notes -->
+
+                        <div class="form-control section-odd card mb-5">
+                            <div class="row">
+                                <div class="col-md-12 mt-2">
+                                        {{ form.Notes.errors }}
+                                        <label class="oncflow-labels mb-3" for="{{ form.Notes.id_for_label }}">Clinical Notes:</label>
+                                        {{ form.Notes }}
+                                </div>
+                            </div>
+                        </div>
+
+                    <!-- Button Row -->
+                        {% if update %}
+                            <div class="form-group mt-5">
+                                <button class="btn btn-dark" type="submit">Update</button>
+                            </div>
+                        {% else %}
+                            <div class="form-group mt-5">
+                                <button class="btn btn-dark" type="submit">Save</button>
+                            </div>
+                        {% endif %}
+                    </div>
+                </form>
+                {% load static %}
+                    <script src="{% static 'patient_data/tab.js' %}"></script>
+                </div>
+                </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_visittype').select2();
+            $('#id_visitaction').select2();
+        });
+    </script>
+{% endblock javascript %}

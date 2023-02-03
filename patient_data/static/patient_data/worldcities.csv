@@ -1,0 +1,1601 @@
+Cities,lat,lng,admin_name
+Delhi,28.6667,77.2167,Delhi
+Mumbai,19.0758,72.8775,Mahārāshtra
+Kolkata,22.5727,88.3639,West Bengal
+Bangalore,12.9791,77.5913,Karnātaka
+Chennai,13.0825,80.2750,Tamil Nādu
+Hyderabad,17.3617,78.4747,Telangana
+Pune,18.5196,73.8553,Mahārāshtra
+Ahmedabad,23.0300,72.5800,Gujarāt
+Allahabad,25.4500,81.8500,Uttar Pradesh
+Surat,21.1700,72.8300,Gujarāt
+Lucknow,26.8470,80.9470,Uttar Pradesh
+Jaipur,26.9167,75.8667,Rājasthān
+Cawnpore,26.4725,80.3311,Uttar Pradesh
+Mirzapur,25.1500,82.5800,Uttar Pradesh
+Nagpur,21.1539,79.0831,Mahārāshtra
+Ghaziabad,28.6667,77.4167,Uttar Pradesh
+Vadodara,22.3000,73.2000,Gujarāt
+Vishakhapatnam,17.7333,83.3167,Andhra Pradesh
+Indore,22.7206,75.8472,Madhya Pradesh
+Thane,19.1800,72.9633,Mahārāshtra
+Bhopal,23.2500,77.4167,Madhya Pradesh
+Patna,25.6100,85.1414,Bihār
+Bilaspur,22.1500,82.0167,Chhattīsgarh
+Ludhiana,30.9083,75.8486,Punjab
+Agra,27.1724,78.0131,Uttar Pradesh
+Kalyan,19.2502,73.1602,Mahārāshtra
+Madurai,9.9197,78.1194,Tamil Nādu
+Jamshedpur,22.8000,86.1833,Jharkhand
+Nasik,20.0000,73.7833,Mahārāshtra
+Faridabad,28.4353,77.3147,Haryāna
+Aurangabad,19.8800,75.3200,Mahārāshtra
+Rajkot,22.2969,70.7984,Gujarāt
+Meerut,28.9900,77.7000,Uttar Pradesh
+Jabalpur,23.1667,79.9333,Madhya Pradesh
+Dhanbad,23.7928,86.4350,Jharkhand
+Varanasi,25.3189,83.0128,Uttar Pradesh
+Srinagar,34.0911,74.8061,Jammu and Kashmīr
+Amritsar,31.6269,74.8770,Punjab
+Aligarh,27.8800,78.0800,Uttar Pradesh
+Guwahati,26.1722,91.7458,Assam
+Bhilai,21.2186,81.4314,Chhattīsgarh
+Haora,22.5736,88.3251,West Bengal
+Ranchi,23.3556,85.3347,Jharkhand
+Gwalior,26.2150,78.1931,Madhya Pradesh
+Bezwada,16.5167,80.6167,Andhra Pradesh
+Chandigarh,30.7353,76.7911,Chandīgarh
+Jodhpur,26.2944,73.0278,Rājasthān
+Mysore,12.3086,76.6531,Karnātaka
+Raipur,21.2379,81.6337,Chhattīsgarh
+Kota,25.1800,75.8300,Rājasthān
+New Delhi,28.6139,77.2090,Delhi
+Bareilly,28.3640,79.4150,Uttar Pradesh
+Coimbatore,11.0000,76.9667,Tamil Nādu
+Solapur,17.6715,75.9104,Mahārāshtra
+Trichinopoly,10.8269,78.6928,Tamil Nādu
+Hubli,15.3619,75.1231,Karnātaka
+Jalandhar,31.3256,75.5792,Punjab
+Bhubaneshwar,20.2644,85.8281,Odisha
+Moradabad,28.8437,78.7548,Uttar Pradesh
+Kolhapur,16.7000,74.2333,Mahārāshtra
+Thiruvananthapuram,8.5000,76.8997,Kerala
+Bhiwandi,19.3000,73.0667,Mahārāshtra
+Saharanpur,29.9640,77.5460,Uttar Pradesh
+Warangal,17.9756,79.6011,Telangana
+Salem,11.6500,78.1667,Tamil Nādu
+Malegaon,20.5500,74.5500,Mahārāshtra
+Kochi,9.9667,76.2833,Kerala
+Gorakhpur,26.7611,83.3667,Uttar Pradesh
+Shimoga,13.9167,75.5667,Karnātaka
+Guntur,16.3000,80.4500,Andhra Pradesh
+Tiruppur,11.1075,77.3398,Tamil Nādu
+Raurkela,22.2492,84.8828,Odisha
+Mangalore,12.8703,74.8806,Karnātaka
+Nanded,19.1700,77.3000,Mahārāshtra
+Cuttack,20.4650,85.8793,Odisha
+Tumkur,13.3422,77.1017,Karnātaka
+Chanda,19.9500,79.3000,Mahārāshtra
+Dehra Dun,30.3180,78.0290,Uttarakhand
+Durgapur,23.5500,87.3200,West Bengal
+Asansol,23.6833,86.9667,West Bengal
+Bhavnagar,21.7650,72.1369,Gujarāt
+Nellore,14.4333,79.9667,Andhra Pradesh
+Amravati,20.9333,77.7500,Mahārāshtra
+Ajmer,26.4680,74.6390,Rājasthān
+Tinnevelly,8.7289,77.7081,Tamil Nādu
+Bikaner,28.0181,73.3169,Rājasthān
+Agartala,23.8333,91.2667,Tripura
+Ujjain,23.1828,75.7772,Madhya Pradesh
+Ulhasnagar,19.2167,73.1500,Mahārāshtra
+Jhansi,25.4486,78.5696,Uttar Pradesh
+Davangere,14.4667,75.9167,Karnātaka
+Jammu,32.7333,74.8500,Jammu and Kashmīr
+Belgaum,15.8667,74.5000,Karnātaka
+Gulbarga,17.3333,76.8333,Karnātaka
+Jamnagar,22.4700,70.0700,Gujarāt
+Dhulia,20.9000,74.7833,Mahārāshtra
+Gaya,24.7500,85.0167,Bihār
+Jalgaon,21.0167,75.5667,Mahārāshtra
+Kurnool,15.8222,78.0350,Andhra Pradesh
+Udaipur,24.5833,73.6833,Rājasthān
+Bellary,15.1500,76.9150,Karnātaka
+Sangli,16.8667,74.5667,Mahārāshtra
+Tuticorin,8.7833,78.1333,Tamil Nādu
+Calicut,11.2500,75.7667,Kerala
+Akola,20.7333,77.0000,Mahārāshtra
+Bhagalpur,25.2500,87.0167,Bihār
+Quilon,8.8853,76.5864,Kerala
+Sikar,27.6119,75.1397,Rājasthān
+Bhatpara,22.8667,88.4167,West Bengal
+Kakinada,16.9333,82.2167,Andhra Pradesh
+Bhilwara,25.3500,74.6333,Rājasthān
+Nizamabad,18.6704,78.1000,Telangana
+Panihati,22.6900,88.3700,West Bengal
+Parbhani,19.2704,76.7600,Mahārāshtra
+Rohtak,28.9000,76.5667,Haryāna
+Latur,18.4004,76.5700,Mahārāshtra
+Rajapalaiyam,9.4204,77.5800,Tamil Nādu
+Ahmadnagar,19.0833,74.7333,Mahārāshtra
+Rajahmundry,16.9833,81.7833,Andhra Pradesh
+Cuddapah,14.4667,78.8167,Andhra Pradesh
+Muzaffarpur,26.1200,85.3833,Bihār
+Alwar,27.5667,76.6167,Rājasthān
+Brahmapur,19.3200,84.8000,Odisha
+Kamarhati,22.6700,88.3700,West Bengal
+Mathura,27.5035,77.6722,Uttar Pradesh
+Patiala,30.3204,76.3850,Punjab
+Saugor,23.8300,78.7100,Madhya Pradesh
+Bijapur,16.8244,75.7154,Karnātaka
+Shahjanpur,27.8804,79.9050,Uttar Pradesh
+Junagadh,21.5200,70.4700,Gujarāt
+Trichur,10.5200,76.2100,Kerala
+Barddhaman,23.2500,87.8500,West Bengal
+Purnea,25.7800,87.4700,Bihār
+Sambalpur,21.4704,83.9701,Odisha
+Firozabad,27.1500,78.3949,Uttar Pradesh
+Hisar,29.1489,75.7367,Haryāna
+Rampur,28.7880,79.0190,Uttar Pradesh
+Bali,22.6500,88.3400,West Bengal
+Panipat,29.3833,76.9667,Haryāna
+Aizawl,23.7333,92.7167,Mizoram
+Karimnagar,18.4333,79.1500,Telangana
+Bhuj,23.2504,69.8100,Gujarāt
+Ichalkaranji,16.7000,74.4700,Mahārāshtra
+Hospet,15.2667,76.4000,Karnātaka
+Bhatinda,30.2133,74.9519,Punjab
+Sannai,24.1600,80.8300,Madhya Pradesh
+Barasat,22.7200,88.4800,West Bengal
+Ratlam,23.3167,75.0667,Madhya Pradesh
+Drug,21.1900,81.2800,Chhattīsgarh
+Handwara,34.4000,74.2800,Jammu and Kashmīr
+Imphal,24.8200,93.9500,Manipur
+Anantapur,14.6833,77.6000,Andhra Pradesh
+Etawah,26.7855,79.0150,Uttar Pradesh
+Raichur,16.2000,77.3667,Karnātaka
+Bharatpur,27.2172,77.4900,Rājasthān
+Begusarai,25.4200,86.1300,Bihār
+Sonipat,28.9958,77.0114,Haryāna
+Shrirampur,22.7500,88.3400,West Bengal
+Hapur,28.7437,77.7628,Uttar Pradesh
+Ramgundam,18.8000,79.4500,Telangana
+Uluberiya,22.4700,88.1100,West Bengal
+Puducherry,11.9300,79.8300,Puducherry
+Porbandar,21.6425,69.6047,Gujarāt
+Vizianagaram,18.1167,83.4167,Andhra Pradesh
+Pali,25.7725,73.3233,Rājasthān
+Nadiad,22.7000,72.8700,Gujarāt
+Nagercoil,8.1700,77.4300,Tamil Nādu
+Karnal,29.6804,76.9700,Haryāna
+Puri,19.8000,85.8167,Odisha
+Tanjore,10.8000,79.1500,Tamil Nādu
+Secunderabad,17.4500,78.5000,Telangana
+Sambhal,28.5800,78.5500,Uttar Pradesh
+Shiliguri,26.7200,88.4200,West Bengal
+Naihati,22.9000,88.4200,West Bengal
+Shimla,31.1033,77.1722,Himāchal Pradesh
+Kharagpur,22.3302,87.3237,West Bengal
+Dindigul,10.3690,77.9804,Tamil Nādu
+Ingraj Bazar,25.0000,88.1500,West Bengal
+Ongole,15.5000,80.0500,Andhra Pradesh
+Ellore,16.7117,81.1031,Andhra Pradesh
+Haldia,22.0300,88.0600,West Bengal
+Gurgaon,28.4500,77.0200,Haryāna
+Bulandshahr,28.4000,77.8500,Uttar Pradesh
+Baharampur,24.1000,88.2500,West Bengal
+Chakradharpur,22.7000,85.6300,Jharkhand
+Madhyamgram,22.7000,88.4500,West Bengal
+Burhanpur,21.3000,76.2267,Madhya Pradesh
+Khammam,17.2500,80.1500,Telangana
+Bhiwani,28.7833,76.1333,Haryāna
+Ghandinagar,23.2200,72.6800,Gujarāt
+Hugli,22.9000,88.3900,West Bengal
+Mahbubnagar,16.7333,77.9833,Telangana
+Nandyal,15.5204,78.4800,Andhra Pradesh
+Raiganj,25.6167,88.1167,West Bengal
+Barakpur,22.7500,88.3667,West Bengal
+Mahesana,23.6000,72.4000,Gujarāt
+Batala,31.8186,75.2028,Punjab
+Bhusaval,21.0200,75.8300,Mahārāshtra
+Bahraigh,27.5742,81.5958,Uttar Pradesh
+Tonk,26.1505,75.7900,Rājasthān
+Sirsa,29.4904,75.0300,Haryāna
+Jaunpur,25.7333,82.6833,Uttar Pradesh
+Dam Dam,22.6200,88.4200,West Bengal
+Madanapalle,13.5500,78.5000,Andhra Pradesh
+Alleppey,9.5004,76.3700,Kerala
+Vellore,12.9204,79.1500,Tamil Nādu
+Titagarh,22.7400,88.3700,West Bengal
+Chandannagar,22.8667,88.3833,West Bengal
+Cuddalore,11.7500,79.7500,Tamil Nādu
+Chirala,15.8200,80.3500,Andhra Pradesh
+Deo,24.6561,84.4356,Bihār
+Bidar,17.9000,77.5500,Karnātaka
+Machilipatnam,16.1875,81.1389,Andhra Pradesh
+Medinipur,22.4333,87.3333,West Bengal
+Baramula,34.2000,74.3400,Jammu and Kashmīr
+Fatehpur,25.8804,80.8000,Uttar Pradesh
+Tenali,16.2430,80.6400,Andhra Pradesh
+Udipi,13.3322,74.7461,Karnātaka
+Sitalpur,27.6300,80.7500,Uttar Pradesh
+Conjeeveram,12.8308,79.7078,Tamil Nādu
+Proddatur,14.7300,78.5500,Andhra Pradesh
+Navsari,20.8504,72.9200,Gujarāt
+Godhra,22.7772,73.6203,Gujarāt
+Budaun,28.0300,79.0900,Uttar Pradesh
+Chittoor,13.2000,79.1167,Andhra Pradesh
+Krishnanagar,23.4000,88.5000,West Bengal
+Bharuch,21.6948,72.9805,Gujarāt
+Saharsa,25.8800,86.6000,Bihār
+Haripur,31.5200,75.9800,Punjab
+Pathankot,32.2689,75.6497,Punjab
+Vidisha,23.5239,77.8061,Madhya Pradesh
+Nalgonda,17.0500,79.2700,Telangana
+Balurghat,25.2167,88.7667,West Bengal
+Dibrugarh,27.4833,95.0000,Assam
+Veraval,20.9000,70.3700,Gujarāt
+Fyzabad,26.7504,82.1700,Uttar Pradesh
+Silchar,24.7904,92.7900,Assam
+Shantipur,23.2500,88.4300,West Bengal
+Hindupur,13.8300,77.4900,Andhra Pradesh
+Erode,11.3428,77.7274,Tamil Nādu
+Beawar,26.1011,74.3203,Rājasthān
+Mauli,30.7194,76.7181,Punjab
+Habra,22.8300,88.6300,West Bengal
+Ambala,30.3786,76.7725,Haryāna
+Etah,27.6300,78.6700,Uttar Pradesh
+Shillong,25.5744,91.8789,Meghālaya
+Kolar,13.1333,78.1333,Karnātaka
+Bhimavaram,16.5333,81.5333,Andhra Pradesh
+Mandsaur,24.0300,75.0800,Madhya Pradesh
+Kumbakonam,10.9805,79.4000,Tamil Nādu
+Chicacole,18.3000,83.9000,Andhra Pradesh
+Tiruvannamalai,12.2604,79.1000,Tamil Nādu
+Mandya,12.5242,76.8958,Karnātaka
+Bankura,23.2500,87.0667,West Bengal
+Gondia,21.4500,80.2000,Mahārāshtra
+Hassan,13.0050,76.1028,Karnātaka
+Pilibhit,28.6333,79.7667,Uttar Pradesh
+Palghat,10.7792,76.6547,Kerala
+Palakollu,16.5333,81.7333,Andhra Pradesh
+Abohar,30.1204,74.2900,Punjab
+Kanchrapara,22.9700,88.4300,West Bengal
+Hanumangarh,29.5833,74.3167,Rājasthān
+Hathras,27.6000,78.0500,Uttar Pradesh
+Basirhat,22.6572,88.8942,West Bengal
+Navadwip,23.4088,88.3657,West Bengal
+Guntakal,15.1700,77.3800,Andhra Pradesh
+Halisahar,22.9500,88.4200,West Bengal
+Rishra,22.7100,88.3500,West Bengal
+Baidyabati,22.7900,88.3200,West Bengal
+Dharmavaram,14.4142,77.7150,Andhra Pradesh
+Ghazipur,25.5833,83.5667,Uttar Pradesh
+Puruliya,23.3333,86.3667,West Bengal
+Darjeeling,27.0375,88.2631,West Bengal
+Gudivada,16.4300,80.9900,Andhra Pradesh
+Sopur,34.3000,74.4700,Jammu and Kashmīr
+Adilabad,19.6667,78.5333,Telangana
+Narasaraopet,16.2360,80.0540,Andhra Pradesh
+Yavatmal,20.4000,78.1333,Mahārāshtra
+Chittaurgarh,24.8894,74.6239,Rājasthān
+Bansbaria,22.9700,88.4000,West Bengal
+Siddipet,18.1000,78.8500,Telangana
+Valparai,10.3204,76.9700,Tamil Nādu
+Osmanabad,18.1667,76.0500,Mahārāshtra
+Champdani,22.8000,88.3700,West Bengal
+Khardah,22.7200,88.3800,West Bengal
+Bangaon,23.0700,88.8200,West Bengal
+Tadpatri,14.9097,78.0083,Andhra Pradesh
+Islamabad,33.7300,75.1500,Jammu and Kashmīr
+Jalpaiguri,26.5167,88.7333,West Bengal
+Suriapet,17.1500,79.6167,Telangana
+Tadepallegudem,16.8333,81.5000,Andhra Pradesh
+Kalyani,22.9750,88.4344,West Bengal
+Negapatam,10.7667,79.8333,Tamil Nādu
+Bundi,25.4383,75.6372,Rājasthān
+Bhadreswar,22.8200,88.3500,West Bengal
+Chilakalurupet,16.0892,80.1672,Andhra Pradesh
+Port Blair,11.6667,92.7500,Andaman and Nicobar Islands
+Gangtok,27.3300,88.6200,Sikkim
+Dhulian,24.6800,87.9700,West Bengal
+Kohima,25.6667,94.1194,Nāgāland
+Marmagao,15.4020,73.8000,Goa
+Jangipur,24.4700,88.0700,West Bengal
+Baj Baj,22.4828,88.1818,West Bengal
+Tanuku,16.7500,81.7000,Andhra Pradesh
+Siuri,23.9167,87.5333,West Bengal
+Tamluk,22.3000,87.9167,West Bengal
+Bankra,22.6300,88.3000,West Bengal
+Nagari,13.3300,79.5800,Andhra Pradesh
+Chakapara,22.6300,88.3500,West Bengal
+Itanagar,27.1000,93.6200,Arunāchal Pradesh
+Mundka,28.6794,77.0284,Delhi
+Baruipur,22.3654,88.4325,West Bengal
+Mandapeta,16.8700,81.9300,Andhra Pradesh
+Bhimunipatnam,17.8864,83.4471,Andhra Pradesh
+Pithapuram,17.1167,82.2667,Andhra Pradesh
+Amalapuram,16.5833,82.0167,Andhra Pradesh
+Bodupal,17.4139,78.5783,Telangana
+Gobardanga,22.8700,88.7600,West Bengal
+Diamond Harbour,22.1910,88.1905,West Bengal
+Daman,20.4169,72.8340,Damān and Diu
+Amudalavalasa,18.4167,83.9000,Andhra Pradesh
+Kankuria,24.6580,87.9794,West Bengal
+Pujali,22.4679,88.1452,West Bengal
+Chittaranjan,23.8700,86.8700,West Bengal
+Panaji,15.4800,73.8300,Goa
+Kaippakancheri,10.9380,75.9870,Kerala
+Sankrail,22.5700,88.2400,West Bengal
+Elesvaram,17.2833,82.1000,Andhra Pradesh
+Tarakeswar,22.8900,88.0200,West Bengal
+Nibria,22.6100,88.2500,West Bengal
+Kuli,24.7366,87.9426,West Bengal
+Beldanga,23.9300,88.2500,West Bengal
+Saranga,22.5400,88.2100,West Bengal
+Jaynagar-Majilpur,22.1745,88.4184,West Bengal
+Panchla,22.5400,88.1400,West Bengal
+Mamidalapadu,15.8310,78.0500,Andhra Pradesh
+Jalhalli,13.0333,77.5500,Karnātaka
+Poranki,16.4743,80.7128,Andhra Pradesh
+Sundararaopeta,16.8031,81.6419,Andhra Pradesh
+Bauria,22.4521,88.1853,West Bengal
+Dumjor,22.6400,88.2200,West Bengal
+Mahiari,22.5900,88.2400,West Bengal
+Mayahaura,22.1834,88.4998,West Bengal
+Dispur,26.1500,91.7700,Assam
+Malancha,24.6660,87.9220,West Bengal
+Raghudebbati,22.5300,88.2000,West Bengal
+Nahazari,22.4347,88.2487,West Bengal
+Giria,24.5167,88.0667,West Bengal
+Baharu,22.2040,88.4283,West Bengal
+Jagdispur,22.6500,88.2900,West Bengal
+Ramnagar,22.3245,88.4940,West Bengal
+Jaypul,22.7833,88.5695,West Bengal
+Dogachi,24.6195,87.9221,West Bengal
+Janai,22.7157,88.2426,West Bengal
+Bahagalpur,24.5934,87.9536,West Bengal
+Muragacha,22.6900,88.4200,West Bengal
+Chandi,22.3503,88.2828,West Bengal
+Saktipur,23.8640,88.1987,West Bengal
+Bhabanipur,24.7153,87.9227,West Bengal
+Bandlaguda,17.3543,78.3853,Telangana
+Begampur,22.3705,88.4940,West Bengal
+Amtala,22.2200,88.1700,West Bengal
+Velivennu,16.8443,81.6895,Andhra Pradesh
+Begampur,22.7400,88.2400,West Bengal
+Kalinagar,22.4383,88.1150,West Bengal
+Natshal,22.1957,88.0272,West Bengal
+Chaital,22.5106,88.7996,West Bengal
+Dhamua,22.2875,88.3962,West Bengal
+Multi,22.2847,88.4053,West Bengal
+Chandpur,22.4368,88.1711,West Bengal
+Sahapur,22.5200,88.1700,West Bengal
+Amgachia,22.4156,88.3051,West Bengal
+Laskarpar,22.5833,88.1036,West Bengal
+Nimpot,22.1500,88.4300,West Bengal
+Harua,24.5249,87.9931,West Bengal
+Nazira,22.2180,88.2757,West Bengal
+Krishnapur,22.6700,88.2600,West Bengal
+Nalpur,22.5300,88.1900,West Bengal
+Mahadipur,24.8566,88.1248,West Bengal
+Iarpur,22.2998,88.2994,West Bengal
+Raspunji,22.4367,88.2705,West Bengal
+Nijgaon Paranpur,25.1559,87.9732,West Bengal
+Ballalpur,24.7386,87.9083,West Bengal
+Kavaratti,10.5626,72.6369,Lakshadweep
+Patra,22.2194,88.2142,West Bengal
+Chandnidaha,24.6342,87.9510,West Bengal
+Nabagram,22.2935,88.5183,West Bengal
+Hilora,24.5055,87.9661,West Bengal
+Imamnagar,24.7450,87.9247,West Bengal
+Serpur,22.3204,88.3117,West Bengal
+Dignagar,23.3283,88.4469,West Bengal
+Palta,22.8083,88.3943,West Bengal
+Beonta,22.5242,88.5049,West Bengal
+Andharmanik,22.3715,88.3517,West Bengal
+Balbalpara,24.6234,87.9594,West Bengal
+Bhandardaha,22.6200,88.2100,West Bengal
+Jajigram,24.4724,87.9589,West Bengal
+Alipur,22.1936,88.4295,West Bengal
+Burul,22.3685,88.1065,West Bengal
+Purbba Ramnagar,22.8541,88.0193,West Bengal
+Bansabati,24.5064,87.9985,West Bengal
+Bodai,22.7994,88.4874,West Bengal
+Uttarbhag,22.3465,88.4976,West Bengal
+Gacha,22.7063,88.9198,West Bengal
+Gotra,22.6216,88.8792,West Bengal
+Bamanpukur,22.5119,88.7001,West Bengal
+Padmarha,22.2474,88.4464,West Bengal
+Ramkrishnapur,22.3574,88.2583,West Bengal
+Iswaripur,22.7324,88.4106,West Bengal
+Nadabhanga,22.4049,88.2340,West Bengal
+Bishnupur,22.3800,88.2700,West Bengal
+Bhasa,22.4145,88.2838,West Bengal
+Bodra,22.4453,88.6157,West Bengal
+Tinsukia,27.4892,95.3600,Assam
+Khambhat,22.3131,72.6194,Gujarāt
+Aurangabad,24.7704,84.3800,Bihār
+Chakdaha,23.0800,88.5200,West Bengal
+Contai,21.7800,87.7500,West Bengal
+Rayachoti,14.0500,78.7500,Andhra Pradesh
+Kavali,14.9123,79.9944,Andhra Pradesh
+Mancheral,18.8679,79.4639,Telangana
+Kairana,29.3953,77.2053,Uttar Pradesh
+Kadiri,14.1200,78.1700,Andhra Pradesh
+Madgaon,15.2719,73.9583,Goa
+Ootacamund,11.4086,76.6939,Tamil Nādu
+Faridkot,30.6700,74.7600,Punjab
+Anakapalle,17.6800,83.0200,Andhra Pradesh
+Garulia,22.8200,88.3700,West Bengal
+Sirsilla,18.3800,78.8300,Telangana
+Katoya,23.6500,88.1300,West Bengal
+Kamareddipet,18.3167,78.3500,Telangana
+Bolpur,23.6700,87.7200,West Bengal
+Gumla,23.0444,84.5417,Jharkhand
+Simdega,22.6200,84.5200,Jharkhand
+Kottagudem,17.5500,80.6300,Telangana
+Koch Bihar,26.3167,89.4333,West Bengal
+Bodhan,18.6700,77.9000,Telangana
+Karur,10.9504,78.0833,Tamil Nādu
+Mangalagiri,16.4300,80.5500,Andhra Pradesh
+Bapatla,15.8889,80.4700,Andhra Pradesh
+Markapur,15.7350,79.2700,Andhra Pradesh
+Malaut,30.1900,74.4990,Punjab
+Badvel,14.7500,79.0500,Andhra Pradesh
+Jorhat,26.7500,94.2167,Assam
+Basavakalyan,17.8700,76.9500,Karnātaka
+Beypore,11.1800,75.8200,Kerala
+Bishnupur,23.0833,87.3167,West Bengal
+Koratla,18.8200,78.7200,Telangana
+Pulivendla,14.4167,78.2333,Andhra Pradesh
+Alipur Duar,26.5000,89.5200,West Bengal
+Jaisalmer,26.9167,70.9167,Rājasthān
+Tadepalle,16.4667,80.6000,Andhra Pradesh
+Gadwal,16.2300,77.8000,Telangana
+Jatani,20.1700,85.7000,Odisha
+Kodad,16.9978,79.9653,Telangana
+Nawalgarh,27.8500,75.2700,Rājasthān
+Armur,18.7900,78.2900,Telangana
+Jhargram,22.4500,86.9800,West Bengal
+Wanparti,16.3610,78.0627,Telangana
+Chamrajnagar,11.9236,76.9400,Karnātaka
+Ponnuru,16.0667,80.5667,Andhra Pradesh
+Chandralapadu,16.7150,80.2089,Andhra Pradesh
+Vinukonda,16.0500,79.7500,Andhra Pradesh
+Tezpur,26.6338,92.8000,Assam
+Narasapur,16.4333,81.6833,Andhra Pradesh
+Panskura,22.4200,87.7000,West Bengal
+Rampur Hat,24.1700,87.7800,West Bengal
+Lonavale,18.7481,73.4072,Mahārāshtra
+Samalkot,17.0531,82.1695,Andhra Pradesh
+Kalna,23.2200,88.3700,West Bengal
+Kothapet,19.3333,79.4833,Telangana
+Macherla,16.4800,79.4300,Andhra Pradesh
+Kandukur,15.2165,79.9042,Andhra Pradesh
+Sattenapalle,16.3962,80.1497,Andhra Pradesh
+Bobbili,18.5729,83.3587,Andhra Pradesh
+Vrindavan,27.5728,77.6933,Uttar Pradesh
+Gangarampur,25.4000,88.5200,West Bengal
+Kandi,23.9500,88.0300,West Bengal
+Belampalli,19.0558,79.4931,Telangana
+Pithoragarh,29.5800,80.2200,Uttarakhand
+Puttur,13.4500,79.5500,Andhra Pradesh
+Islampur,26.2700,88.2000,West Bengal
+Punganuru,13.3667,78.5833,Andhra Pradesh
+Nandod,21.8704,73.5026,Gujarāt
+Palmaner,13.2000,78.7500,Andhra Pradesh
+Jalor,25.3500,72.6167,Rājasthān
+Kaliyaganj,25.6300,88.3200,West Bengal
+Vikarabad,17.3300,77.9000,Telangana
+Baduria,22.7400,88.7900,West Bengal
+Dholka,22.7200,72.4700,Gujarāt
+Tuni,17.3500,82.5500,Andhra Pradesh
+Jaggayyapeta,16.8920,80.0976,Andhra Pradesh
+Venkatagiri,13.9667,79.5833,Andhra Pradesh
+Sihor,21.7000,71.9700,Gujarāt
+Jangaon,17.7200,79.1800,Telangana
+Mandamari,18.9822,79.4811,Telangana
+Diu,20.7150,70.9844,Damān and Diu
+Metpalli,18.8297,78.5878,Telangana
+Repalle,16.0200,80.8500,Andhra Pradesh
+Peddapuram,17.0800,82.1300,Andhra Pradesh
+Bhadrachalam,17.6700,80.8800,Telangana
+Ajodhya,26.8036,82.2006,Uttar Pradesh
+Bhainsa,19.1000,77.9667,Telangana
+Prattipadu,16.1878,80.3392,Andhra Pradesh
+Jasdan,22.0300,71.2000,Gujarāt
+Vuyyuru,16.3667,80.8500,Andhra Pradesh
+Nandikotkur,15.8670,78.2670,Andhra Pradesh
+Dhupgari,26.6000,89.0200,West Bengal
+Jammalamadugu,14.8500,78.3800,Andhra Pradesh
+Rameswaram,9.2800,79.3000,Tamil Nādu
+Murshidabad,24.1800,88.2700,West Bengal
+Sainthia,23.9500,87.6700,West Bengal
+Charkhi Dadri,28.5900,76.2700,Haryāna
+Nandigama,16.7833,80.3000,Andhra Pradesh
+Nidadavole,16.9200,81.6700,Andhra Pradesh
+Addanki,15.8110,79.9738,Andhra Pradesh
+Nilothi,28.8167,76.8667,Haryāna
+Mahbubabad,17.6167,80.0167,Telangana
+Berubari,26.3603,88.7152,West Bengal
+Akbarpur,26.5200,82.6200,Uttar Pradesh
+Karsiyang,26.8800,88.2800,West Bengal
+Rajgir,25.0300,85.4200,Bihār
+Nalhati,24.3000,87.8200,West Bengal
+Memari,23.2000,88.1200,West Bengal
+Rajaori,33.3800,74.3000,Jammu and Kashmīr
+Pileru,13.6500,78.9333,Andhra Pradesh
+Peddapalli,18.6162,79.3832,Telangana
+Naini Tal,29.3919,79.4542,Uttarakhand
+Kovvur,17.0167,81.7333,Andhra Pradesh
+Channarayapatna,12.9000,76.3900,Karnātaka
+Maihar,24.2700,80.7500,Madhya Pradesh
+Junnar,19.2000,73.8800,Mahārāshtra
+Kalimpong,27.0600,88.4700,West Bengal
+Atmakur,15.8779,78.5884,Andhra Pradesh
+Solan,30.9200,77.1200,Himāchal Pradesh
+Vetapalem,15.7800,80.3200,Andhra Pradesh
+Taki,22.5900,88.9200,West Bengal
+Betamcherla,15.4667,78.1667,Andhra Pradesh
+Penumur,13.3667,79.1833,Andhra Pradesh
+Dwarka,22.2403,68.9686,Gujarāt
+Kadiyam,16.9167,81.8333,Andhra Pradesh
+Dubrajpur,23.8000,87.3800,West Bengal
+Pathanamthitta,9.2647,76.7872,Kerala
+Sitalkuchi,26.1697,89.1914,West Bengal
+Dalkola,25.8758,87.8401,West Bengal
+Ichchapuram,19.1200,84.7000,Andhra Pradesh
+Mahe,11.7011,75.5367,Kerala
+Kanigiri,15.4000,79.5166,Andhra Pradesh
+Dinhata,26.1300,89.4700,West Bengal
+Huzurnagar,16.9000,79.8833,Telangana
+Kodaikanal,10.2300,77.4800,Tamil Nādu
+Udhampur,32.9300,75.1300,Jammu and Kashmīr
+Vempalle,14.3667,78.4667,Andhra Pradesh
+Medchal,17.6297,78.4814,Telangana
+Uravakonda,14.9500,77.2700,Andhra Pradesh
+Guskhara,23.4928,87.7347,West Bengal
+Yellandu,17.6000,80.3300,Telangana
+Giddalur,15.3784,78.9265,Andhra Pradesh
+Balarampur,26.2432,89.5863,West Bengal
+Angamali,10.1960,76.3860,Kerala
+Vemalwada,18.4667,78.8833,Telangana
+Narsipatnam,17.6700,82.6200,Andhra Pradesh
+Shrirangapattana,12.4181,76.6947,Karnātaka
+Shamsabad,17.2603,78.3969,Telangana
+Almora,29.6200,79.6700,Uttarakhand
+Kondapalle,16.6167,80.5333,Andhra Pradesh
+Debagram,23.6833,88.2833,West Bengal
+Fatehpur Sikri,27.0911,77.6611,Uttar Pradesh
+Jamikunta,18.2864,79.4761,Telangana
+Darsi,15.7667,79.6833,Andhra Pradesh
+Umaria,23.5245,80.8365,Madhya Pradesh
+Kovur,14.4833,79.9833,Andhra Pradesh
+Erraguntla,14.6333,78.5333,Andhra Pradesh
+Naspur,18.8300,79.4500,Telangana
+Kalyandrug,14.5500,77.1000,Andhra Pradesh
+Mangur,17.9373,80.8185,Telangana
+Tummapala,17.7166,82.9965,Andhra Pradesh
+Pedana,16.2667,81.1667,Andhra Pradesh
+Pandua,23.0800,88.2800,West Bengal
+Lalgola,24.4200,88.2500,West Bengal
+Mussoorie,30.4561,78.0781,Uttarakhand
+Margram,24.1516,87.8442,West Bengal
+Podili,15.6040,79.6080,Andhra Pradesh
+Uran,18.8900,72.9500,Mahārāshtra
+Mainaguri,26.5700,88.8200,West Bengal
+Egra,21.9000,87.5300,West Bengal
+Leh,34.1667,77.5833,Jammu and Kashmīr
+Chimakurti,15.5819,79.8680,Andhra Pradesh
+Koratgi,15.6081,76.6597,Karnātaka
+Garaimari,24.0217,88.6263,West Bengal
+Devarkonda,16.7000,78.9333,Telangana
+Pattikonda,15.4000,77.5167,Andhra Pradesh
+Atmakur,14.6167,79.6167,Andhra Pradesh
+Sonamukhi,23.3000,87.4200,West Bengal
+Khunti,23.0140,85.2724,Jharkhand
+Nakrekal,17.1667,79.4333,Telangana
+Kodumur,15.6833,77.7833,Andhra Pradesh
+Srungavarapukota,18.1167,83.1667,Andhra Pradesh
+Kalwakurti,16.6500,78.4800,Telangana
+Banswada,18.3833,77.8833,Telangana
+Silvassa,20.2667,73.0167,Dādra and Nagar Haveli
+Kotagiri,11.4167,76.8667,Tamil Nādu
+Ramanayyapeta,17.3203,82.1014,Andhra Pradesh
+Tanguturu,15.3400,80.0390,Andhra Pradesh
+Varandarapilli,10.4167,76.3333,Kerala
+Payakaraopeta,17.4161,82.6144,Andhra Pradesh
+Penukonda,14.0847,77.5967,Andhra Pradesh
+Bandipura,34.4225,74.6375,Jammu and Kashmīr
+Suluru,13.7000,80.0167,Andhra Pradesh
+Panchanandapur,24.9339,87.9761,West Bengal
+Pamidi,14.9500,77.5833,Andhra Pradesh
+Gilarchat,22.0703,88.4455,West Bengal
+Guruzala,16.5800,79.5700,Andhra Pradesh
+Narasannapeta,18.4151,84.0447,Andhra Pradesh
+Chintalapudi,17.0667,80.9833,Andhra Pradesh
+Renigunta,13.6500,79.5200,Andhra Pradesh
+Kottapeta,16.7167,81.9000,Andhra Pradesh
+Raghunathpur,23.5500,86.6700,West Bengal
+Attili,16.7000,81.6000,Andhra Pradesh
+Gajwel,17.8517,78.6828,Telangana
+Singarayakonda,15.2500,80.0300,Andhra Pradesh
+Avanigadda,16.0197,80.9200,Andhra Pradesh
+Khed Brahma,24.0299,73.0463,Gujarāt
+Aklvidu,16.6000,81.3833,Andhra Pradesh
+Mogalturru,16.4167,81.6000,Andhra Pradesh
+Balarampur,23.1200,86.2200,West Bengal
+Gorantla,13.9892,77.7703,Andhra Pradesh
+Mummidivaram,16.6500,82.1167,Andhra Pradesh
+Khajuraho,24.8500,79.9333,Madhya Pradesh
+Ashwaraopeta,17.2500,81.1333,Telangana
+Yadiki,15.0500,77.8800,Andhra Pradesh
+Kosigi,15.8542,77.2430,Andhra Pradesh
+Chandrakona,22.7300,87.5200,West Bengal
+Gauripur,26.0800,89.9700,Assam
+Koilkuntla,15.2333,78.3167,Andhra Pradesh
+Bagula,23.3350,88.6440,West Bengal
+Kulgam,33.6400,75.0200,Jammu and Kashmīr
+Velugodu,15.7817,78.6892,Andhra Pradesh
+Asafabad,19.3650,79.2740,Telangana
+Abu,24.5925,72.7083,Rājasthān
+Singur,22.8100,88.2300,West Bengal
+Curchorem,15.2500,74.1000,Goa
+Pushkar,26.4903,74.5542,Rājasthān
+Bukkarayasamudram,14.6944,77.6381,Andhra Pradesh
+Ganapavaram,16.1233,80.1721,Andhra Pradesh
+Pamarru,16.3270,80.9610,Andhra Pradesh
+Chagallu,16.9833,81.6667,Andhra Pradesh
+Sarapaka,17.6922,80.8614,Telangana
+Pakala,13.4667,79.1167,Andhra Pradesh
+Maruturu,15.9862,80.1051,Andhra Pradesh
+Husnabad,17.0667,77.6500,Telangana
+Kuppam,12.7500,78.3700,Andhra Pradesh
+Madakasira,13.9369,77.2694,Andhra Pradesh
+Mailavaram,16.7833,80.6333,Andhra Pradesh
+Tufanganj,26.3200,89.6700,West Bengal
+Nellimarla,18.1667,83.4333,Andhra Pradesh
+Kosgi,16.9839,77.7193,Telangana
+Kaikalur,16.5667,81.2000,Andhra Pradesh
+Tehata,23.7274,88.5331,West Bengal
+Parkal,18.2000,79.7167,Telangana
+Chagalamarri,14.9667,78.5833,Andhra Pradesh
+Umrapur,24.5863,87.9294,West Bengal
+Krishnapur,24.4123,88.2582,West Bengal
+Kattanam,9.1833,76.5500,Kerala
+Nizampatam,15.9000,80.6667,Andhra Pradesh
+Gannavaram,16.5333,80.8000,Andhra Pradesh
+Ghatkesar,17.4494,78.6853,Telangana
+Palashi,23.7898,88.2583,West Bengal
+Palkonda,18.6000,83.7500,Andhra Pradesh
+Andal,23.6000,87.2000,West Bengal
+Achampet,16.6299,80.1213,Andhra Pradesh
+Banganapalle,15.3167,78.2331,Andhra Pradesh
+Kamalapuram,14.5833,78.6500,Andhra Pradesh
+Vinjamur,14.8330,79.5830,Andhra Pradesh
+Karlapalem,15.9333,80.5500,Andhra Pradesh
+Nalua,22.1051,88.4619,West Bengal
+Mundra,22.8500,69.7300,Gujarāt
+Chandragiri,13.5833,79.3167,Andhra Pradesh
+Marahra,27.7500,78.5667,Uttar Pradesh
+Sompeta,18.9300,84.6000,Andhra Pradesh
+Belur,13.1642,75.8647,Karnātaka
+Kanniyakumari,8.0911,77.5417,Tamil Nādu
+Namburu,16.3600,80.5200,Andhra Pradesh
+Ramjibanpur,22.8300,87.6200,West Bengal
+Kakdwip,21.8791,88.1913,West Bengal
+Kanekallu,14.8864,77.0317,Andhra Pradesh
+Jhalida,23.3700,85.9700,West Bengal
+Jaggampeta,17.1833,82.0500,Andhra Pradesh
+Dharmsala,32.2167,76.3167,Himāchal Pradesh
+Somandepalle,14.0078,77.6086,Andhra Pradesh
+Sirvar,16.1739,77.0225,Karnātaka
+Chinna Ganjam,15.6930,80.2405,Andhra Pradesh
+Srikhanda,23.5984,88.0871,West Bengal
+Narapala,14.7206,77.8106,Andhra Pradesh
+Badkulla,23.2800,88.5300,West Bengal
+Chilkuru,16.9611,79.9125,Telangana
+Chautapal,17.2508,78.8972,Telangana
+Rampur,26.4424,89.8038,West Bengal
+Tiruvur,17.1000,80.6000,Andhra Pradesh
+Bhagabanpur,24.7765,88.0217,West Bengal
+Jadcherla,16.7667,78.1500,Telangana
+Mellacheruvu,16.8173,79.9331,Telangana
+Tadikonda,16.4167,80.4542,Andhra Pradesh
+Rajmahal,25.0500,87.8400,West Bengal
+Debipur,24.2272,88.6472,West Bengal
+Kulu,31.9600,77.1000,Himāchal Pradesh
+Vissannapeta,16.9500,80.7833,Andhra Pradesh
+Kotta Kalidindi,16.5032,81.2877,Andhra Pradesh
+Vayalpad,13.6500,78.6333,Andhra Pradesh
+Veldurti,15.5667,77.9167,Andhra Pradesh
+Maripad,17.4031,79.8567,Telangana
+Belakoba,26.5744,88.6052,West Bengal
+Panchgram,24.1996,88.0077,West Bengal
+Inkollu,15.8281,80.1929,Andhra Pradesh
+Manthani,18.6500,79.6667,Telangana
+Pernamitta,15.5333,80.0000,Andhra Pradesh
+Gokavaram,17.2667,81.8500,Andhra Pradesh
+Kembhavi,16.6500,76.5333,Karnātaka
+Phirangipuram,16.3000,80.2667,Andhra Pradesh
+Kasimkota,17.6736,82.9634,Andhra Pradesh
+Dighirpar,22.3034,88.6678,West Bengal
+Dharmapuri,18.9475,79.0940,Telangana
+Challapalle,16.1167,80.9333,Andhra Pradesh
+Kottapeta,15.7913,80.3770,Andhra Pradesh
+Bahutal,24.5600,87.8900,West Bengal
+Penugonda,16.6569,81.7461,Andhra Pradesh
+Mahalandi,24.0738,88.1214,West Bengal
+Gonegandla,15.7170,77.6000,Andhra Pradesh
+Gokarna,24.0306,88.1181,West Bengal
+Rentachintala,16.5524,79.5529,Andhra Pradesh
+Kamavarapukota,17.0033,81.1953,Andhra Pradesh
+Barnia,23.7311,88.4329,West Bengal
+Ramayampet,18.1166,78.4298,Telangana
+Podalakur,14.3667,79.7333,Andhra Pradesh
+Chopadandi,18.5833,79.1667,Telangana
+Khed,17.7200,73.3800,Mahārāshtra
+Kompalle,17.4993,78.4583,Telangana
+Khirpai,22.7110,87.6174,West Bengal
+Kolluru,16.1833,80.8000,Andhra Pradesh
+Mitrapur,24.4371,87.9666,West Bengal
+Islampur,24.1513,88.4671,West Bengal
+Bhagwangola,24.3485,88.3243,West Bengal
+Galivedu,14.0333,78.5000,Andhra Pradesh
+Raikal,18.9000,78.8000,Telangana
+Kota,14.0333,80.0500,Andhra Pradesh
+Chennur,14.5667,78.8000,Andhra Pradesh
+Sultanabad,18.5333,79.3333,Telangana
+Sanatikri,22.0198,88.5026,West Bengal
+Tadikalapudi,16.8991,81.1764,Andhra Pradesh
+Patapatnam,18.7500,84.0833,Andhra Pradesh
+Balkonda,18.8667,78.3500,Telangana
+Porumamilla,15.0167,78.9833,Andhra Pradesh
+Kallur,17.2000,80.5500,Telangana
+Udayagiri,14.8667,79.3167,Andhra Pradesh
+Kolakaluru,16.3036,80.6172,Andhra Pradesh
+Vontimitta,14.3833,79.0333,Andhra Pradesh
+Seven Pagodas,12.6208,80.1933,Tamil Nādu
+Utnur,19.3667,78.7667,Telangana
+Undi,16.6000,81.4667,Andhra Pradesh
+Hariharpara,24.0468,88.4244,West Bengal
+Vijayapuri North,16.6028,79.3075,Telangana
+Antarvedi,16.3333,81.7333,Andhra Pradesh
+Viraghattam,18.6833,83.6000,Andhra Pradesh
+Chilamatturu,13.8394,77.7039,Andhra Pradesh
+Maddikera,15.2500,77.4170,Andhra Pradesh
+Tondangi,17.2500,82.4667,Andhra Pradesh
+Kambaduru,14.3575,77.2186,Andhra Pradesh
+Kohir,17.6000,77.7167,Telangana
+Pyapali,15.2669,77.7611,Andhra Pradesh
+Haldibari,26.3300,88.7700,West Bengal
+Muttukuru,14.2667,80.1000,Andhra Pradesh
+Cumbum,15.5767,79.1055,Andhra Pradesh
+Relangi,16.7050,81.6470,Andhra Pradesh
+Konarka,19.8878,86.0948,Odisha
+Putaparti,14.1652,77.8117,Andhra Pradesh
+Dattapulia,23.2404,88.7115,West Bengal
+Bara,24.3146,87.9643,West Bengal
+Antarvedipalem,16.3319,81.7320,Andhra Pradesh
+Chipurupalle,18.3000,83.5667,Andhra Pradesh
+Kankipadu,16.4500,80.7833,Andhra Pradesh
+Sindhnur,15.7833,76.7667,Karnātaka
+Yellareddi,18.1859,78.0212,Telangana
+Hanamsagar,15.8722,76.0431,Karnātaka
+Cherrapunji,25.3009,91.6962,Meghālaya
+Bikkavolu,16.9624,82.0490,Andhra Pradesh
+Madanpur,23.0200,88.4800,West Bengal
+Holalagondi,15.4873,77.0464,Andhra Pradesh
+Odlabari,26.8364,88.6294,West Bengal
+Kottavalasa,17.9000,83.2000,Andhra Pradesh
+Penuganchiprolu,16.9167,80.2500,Andhra Pradesh
+Bhanukumari,26.3395,89.7697,West Bengal
+Kottacheruvu,14.1886,77.7658,Andhra Pradesh
+Lingal,16.2833,78.5167,Telangana
+Korangal,17.1070,77.6270,Telangana
+Dornakal,17.4447,80.1492,Telangana
+Barjora,23.4333,87.2833,West Bengal
+Unguturu,16.8230,81.4238,Andhra Pradesh
+Domkonda,18.2536,78.4378,Telangana
+Karempudi,16.4333,79.7167,Andhra Pradesh
+Amaravati,16.5730,80.3580,Andhra Pradesh
+Belpukur,21.9851,88.2125,West Bengal
+Undrajavaram,16.7866,81.6997,Andhra Pradesh
+Daulatnagar,25.3216,87.8443,West Bengal
+Peddavadlapudi,16.4098,80.6114,Andhra Pradesh
+Yedapalli,18.6789,77.9505,Telangana
+Tezu,27.9167,96.1667,Arunāchal Pradesh
+Duvva,16.7792,81.6242,Andhra Pradesh
+Bhimadolu,16.8144,81.2617,Andhra Pradesh
+Rajnagar,23.9500,87.3200,West Bengal
+Dundigal,17.5781,78.4288,Telangana
+Sabang,22.1830,87.5990,West Bengal
+Kumirimora,22.6969,88.2267,West Bengal
+Chityal,17.2333,79.1333,Telangana
+Kathevaram,16.2608,80.6368,Andhra Pradesh
+Polavaram,17.2500,81.6333,Andhra Pradesh
+Champadanga,22.8275,87.9844,West Bengal
+Kaladgi,16.2040,75.5000,Karnātaka
+Paruchuru,15.9667,80.2667,Andhra Pradesh
+Ghoradal,22.0519,88.3594,West Bengal
+Uppada,17.0883,82.3333,Andhra Pradesh
+Nallajerla,16.9500,81.4000,Andhra Pradesh
+Amrabad,16.3833,78.8333,Telangana
+Ponduru,18.3508,83.7567,Andhra Pradesh
+Sabbavaram,17.7900,83.1230,Andhra Pradesh
+Kollipara,16.2877,80.7519,Andhra Pradesh
+Patiram,25.3167,88.7500,West Bengal
+Gopalnagar,22.8289,88.2139,West Bengal
+Kankandighi,21.9744,88.4659,West Bengal
+Cossimbazar,24.1200,88.2800,West Bengal
+Panchgani,17.9200,73.8200,Mahārāshtra
+Tirmaigiri,16.7230,79.3374,Telangana
+Bichkunda,18.4000,77.7167,Telangana
+Kalikiri,13.6333,78.8000,Andhra Pradesh
+Peddakurapadu,16.4833,80.2667,Andhra Pradesh
+Turbihal,15.7614,76.5964,Karnātaka
+Panjipara,26.1369,88.0132,West Bengal
+Jami,18.0458,83.2664,Andhra Pradesh
+Duvvuru,14.8333,78.6500,Andhra Pradesh
+Venkatagirikota,13.0000,78.5000,Andhra Pradesh
+Kumarkhali,22.3598,88.7990,West Bengal
+Domahani,23.7569,87.0256,West Bengal
+Gurgunta,16.2875,76.6319,Karnātaka
+Lokapur,16.1656,75.3660,Karnātaka
+Kharar,22.7000,87.6800,West Bengal
+Battulapalle,14.5167,77.7833,Andhra Pradesh
+Parigi,13.8929,77.4598,Andhra Pradesh
+Kotra,22.7062,88.5411,West Bengal
+Mudhol,18.9667,77.9167,Telangana
+Sirur,16.0965,75.7858,Karnātaka
+Kesabpur,22.9700,88.2600,West Bengal
+Nagar,24.0914,87.9888,West Bengal
+Motkur,17.4500,79.2667,Telangana
+Damarcherla,16.7269,79.6369,Telangana
+Kaviti,19.0167,84.6833,Andhra Pradesh
+Madugula,17.9167,82.8000,Andhra Pradesh
+Karvetnagar,13.4167,79.4500,Andhra Pradesh
+Pebberu,16.2167,77.9833,Telangana
+Pittalavanipalem,15.9806,80.6347,Andhra Pradesh
+Betma,22.6800,75.6200,Madhya Pradesh
+Karedu,15.1833,80.0667,Andhra Pradesh
+Dubak,18.1914,78.6783,Telangana
+Savalgi,16.6710,75.3515,Karnātaka
+Gundugolanu,16.7833,81.2333,Andhra Pradesh
+Kankon,15.0109,74.0363,Goa
+Chamarru,16.6500,80.1333,Andhra Pradesh
+Namchi,27.1700,88.3500,Sikkim
+Ichora,19.4333,78.4667,Telangana
+Gopalpur,22.6161,88.7467,West Bengal
+Nandipeta,18.9622,78.1772,Telangana
+Buttayagudem,17.2089,81.3014,Andhra Pradesh
+Doddanahalli,12.3892,76.9672,Karnātaka
+Duggirala,16.3281,80.6243,Andhra Pradesh
+Sher Muhammadpuram,18.2997,83.8331,Andhra Pradesh
+Ghambiraopet,18.3000,78.5833,Telangana
+Mangalkot,23.5213,87.9119,West Bengal
+Khem Karan,31.1600,74.6600,Punjab
+Sonada,27.0000,88.1400,West Bengal
+Bukkapatnam,14.1997,77.8012,Andhra Pradesh
+Khargram,24.0232,87.9878,West Bengal
+Fakirtaki,22.3815,88.7901,West Bengal
+Prattipadu,17.2333,82.2000,Andhra Pradesh
+Chennur,14.1554,79.8186,Andhra Pradesh
+Antardipa,24.6442,87.9213,West Bengal
+Tetagunta,17.3140,82.4430,Andhra Pradesh
+Amarapuuram,14.1333,76.9833,Karnātaka
+Mirik,26.8870,88.1870,West Bengal
+Kalipatnam,16.3904,81.5295,Andhra Pradesh
+Biknur,18.2150,78.4367,Telangana
+Denduluru,16.7606,81.1642,Andhra Pradesh
+Pedda Adsarlapalli,16.7086,79.0286,Telangana
+Tanakallu,13.9198,78.1950,Andhra Pradesh
+Chebrolu,16.1967,80.5250,Andhra Pradesh
+Allur,14.6800,80.0600,Andhra Pradesh
+Ganapavaram,16.7000,81.4667,Andhra Pradesh
+Lakhipur,26.3281,88.3863,West Bengal
+Pedda Vegi,16.8095,81.1068,Andhra Pradesh
+Falimari,26.3856,89.8233,West Bengal
+Edlapadu,16.1686,80.2275,Andhra Pradesh
+Doranala,15.9076,79.0941,Andhra Pradesh
+Balupur,25.2611,87.8947,West Bengal
+Krosuru,16.5500,80.1333,Andhra Pradesh
+Bara Belun,23.4007,87.9733,West Bengal
+Ambhua,24.5568,87.8651,West Bengal
+Rudra Nagar,24.3841,87.8840,West Bengal
+Kautalam,15.7710,77.1240,Andhra Pradesh
+Karanchedu,15.8823,80.3170,Andhra Pradesh
+Meghraj,23.5000,73.5000,Gujarāt
+Nagalapuram,13.4000,79.7833,Andhra Pradesh
+Mayureswar,23.9851,87.7728,West Bengal
+Narayanavanam,13.4200,79.5800,Andhra Pradesh
+Talsur,25.3667,87.8512,West Bengal
+Dammapeta,17.2667,81.0167,Telangana
+Kushmanchi,17.2263,79.9668,Telangana
+Owk,15.2167,78.1167,Andhra Pradesh
+Kurabalakota,13.6500,78.4833,Andhra Pradesh
+Nandavaram,16.0170,77.5310,Andhra Pradesh
+Rajanagaram,17.0833,81.9000,Andhra Pradesh
+Amarchinta,16.3740,77.7729,Telangana
+Kundurpi,14.2833,77.0333,Andhra Pradesh
+Srikrishnapur,22.9717,88.0351,West Bengal
+Kalakada,13.8167,78.8000,Andhra Pradesh
+Orchha,25.3500,78.6400,Madhya Pradesh
+Satyavedu,13.4370,79.9560,Andhra Pradesh
+Muzaffarnagar,29.4708,77.7033,Uttar Pradesh
+Fatehpur,25.3032,87.8623,West Bengal
+Rambilli,17.4644,82.9314,Andhra Pradesh
+Mortad,18.8167,78.4833,Telangana
+Ramchandrapur,22.9000,88.4800,West Bengal
+Bhagirathpur,24.0912,88.4947,West Bengal
+Konakondla,15.1053,77.3640,Andhra Pradesh
+Kodmial,18.6333,78.9000,Telangana
+Kadur Sahib,31.4239,75.0978,Punjab
+Bhattiprolu,16.1000,80.7800,Andhra Pradesh
+Sonakhal,22.2213,88.6939,West Bengal
+Nekarikallu,16.3833,79.9500,Andhra Pradesh
+Naliya,23.2611,68.8267,Gujarāt
+Ravutulapudi,17.3833,82.3833,Andhra Pradesh
+Patrasaer,23.1968,87.5272,West Bengal
+Perali,15.8860,80.5470,Andhra Pradesh
+Galsi,23.3427,87.6885,West Bengal
+Nalgora,22.0346,88.4743,West Bengal
+Sankhavaram,17.2704,82.3445,Andhra Pradesh
+Allahdurg,17.9667,77.9167,Telangana
+Kasba,25.5856,88.1122,Bihār
+Talupula,14.2500,78.2667,Andhra Pradesh
+Rolla,13.8331,77.1000,Andhra Pradesh
+Chota Mollakhali,22.2177,88.8957,West Bengal
+Ganga Sagar,21.6571,88.0800,West Bengal
+Kamargani,22.5475,88.6606,West Bengal
+Draksharama,16.7928,82.0635,Andhra Pradesh
+Pudimadaka,17.5000,83.0167,Andhra Pradesh
+Nallamada,14.2164,77.9944,Andhra Pradesh
+Ramabhadrapuram,18.5000,83.2833,Andhra Pradesh
+Kamalapuram,18.1600,79.5406,Telangana
+Sangam,14.5956,79.7428,Andhra Pradesh
+Nadendla,16.2186,80.1972,Andhra Pradesh
+Petua,22.4143,88.4489,West Bengal
+Besagarahalli,12.6333,77.0000,Karnātaka
+Chandur,16.9800,79.0600,Telangana
+Karapa,16.9000,82.1667,Andhra Pradesh
+Akhnur,32.9000,74.7353,Jammu and Kashmīr
+Janapul,22.8615,88.6868,West Bengal
+Karimpur,23.9667,88.6167,West Bengal
+Pragadavaram,17.0167,81.0167,Andhra Pradesh
+Tripurantakam,16.0007,79.4563,Andhra Pradesh
+Munagapaka,17.6390,82.9920,Andhra Pradesh
+Chinnamandem,13.9419,78.6814,Andhra Pradesh
+Kattipudi,17.2500,82.3333,Andhra Pradesh
+Daulatpur,25.3682,87.8983,West Bengal
+Ketugram,23.6957,88.0414,West Bengal
+Koppaka,16.7494,81.0311,Andhra Pradesh
+Gok,27.1065,88.2459,West Bengal
+Gudlavalleru,16.3500,81.0500,Andhra Pradesh
+Kotur,17.1447,78.2886,Telangana
+Komarolu,15.2667,79.0000,Andhra Pradesh
+Valaparla,15.9167,80.0500,Andhra Pradesh
+Jaipur,23.4313,86.1493,West Bengal
+Paikpara,24.3149,87.8503,West Bengal
+Narkatpalli,17.2030,79.1950,Telangana
+Lakkireddipalle,14.1667,78.7000,Andhra Pradesh
+Khasbalanda,22.5881,88.6887,West Bengal
+Telkapalli,16.4500,78.4667,Telangana
+Devanakonda,15.5333,77.5500,Andhra Pradesh
+Potavaram,17.0194,81.4128,Andhra Pradesh
+Para,23.5142,86.4980,West Bengal
+Borgampad,17.6500,80.8667,Telangana
+Lepakshi,13.8032,77.6097,Andhra Pradesh
+Kirlampudi,17.1919,82.1825,Andhra Pradesh
+Samalpur,25.1961,88.0419,West Bengal
+Somireddipalle,14.8365,78.9062,Andhra Pradesh
+Mungod,17.0667,79.0667,Telangana
+Kottapalem,16.5787,79.8756,Andhra Pradesh
+Ramannapeta,17.2833,79.1000,Telangana
+Dhantola,26.2016,88.1095,West Bengal
+Lingampet,18.2383,78.1303,Telangana
+Reddigudem,16.8939,80.6917,Andhra Pradesh
+Kanakpur,24.4976,88.0361,West Bengal
+Datian,25.4379,87.8378,Bihār
+Srisailain,16.0740,78.8680,Andhra Pradesh
+Panasapadu,17.0185,82.2349,Andhra Pradesh
+Roddam,14.1000,77.4300,Andhra Pradesh
+Kalinagar,22.4206,88.8655,West Bengal
+Ganapavaram,16.4314,80.0515,Andhra Pradesh
+Belagola,13.3833,75.5833,Karnātaka
+Manteswar,23.4197,88.1104,West Bengal
+Bellamkonda,16.4923,80.0089,Andhra Pradesh
+Bomareddipalli,18.7044,79.1568,Telangana
+Kilkunda,11.2569,76.6697,Tamil Nādu
+Tulin,23.3700,85.9000,West Bengal
+Manubolu,14.1833,79.8833,Andhra Pradesh
+Hadiaya,30.3413,75.5117,Punjab
+Honwada,16.7333,77.9333,Telangana
+Satgachia,23.2641,88.1600,West Bengal
+Basudebpur,21.8256,87.6190,West Bengal
+Elurupadu,16.5167,81.3500,Andhra Pradesh
+Malior,25.3900,87.8473,West Bengal
+Chunakhali,22.3010,88.7951,West Bengal
+Muragacha,23.5314,88.4104,West Bengal
+Panchgara,22.7356,88.2675,West Bengal
+Gopalpur,22.2006,87.9692,West Bengal
+Dhanwada,16.6500,77.6667,Telangana
+Kinhalu,15.4431,76.1397,Karnātaka
+Bilaspur,30.3044,77.3028,Haryāna
+Chilakhana,26.2990,89.5892,West Bengal
+Lakhya,22.1515,88.0388,West Bengal
+Kalaikunda,22.3392,87.2264,West Bengal
+Nutakki,16.4139,80.6506,Andhra Pradesh
+Ahmadpur,23.8301,87.6866,West Bengal
+Barwan,23.9409,87.9350,West Bengal
+Santamaguluru,16.1303,79.9486,Andhra Pradesh
+Dodarasinakere,12.5083,77.0200,Karnātaka
+Pagidyala,15.9330,78.3330,Andhra Pradesh
+Zafargarh,17.7686,79.4859,Telangana
+Kathia,24.4663,87.9022,West Bengal
+Kattamuru,17.0800,82.1300,Andhra Pradesh
+Kaikaram,16.8120,81.3660,Andhra Pradesh
+Konidena,16.0156,80.0570,Andhra Pradesh
+Dunigram,24.2215,87.9162,West Bengal
+Uppalaguptam,16.5667,82.1000,Andhra Pradesh
+Muddanuru,14.6667,78.4000,Andhra Pradesh
+Gandlapenta,14.0500,78.3089,Andhra Pradesh
+Dumargram,24.4453,87.8317,West Bengal
+Mashat,22.7370,88.1918,West Bengal
+Uppugunduru,15.6730,80.1670,Andhra Pradesh
+Udburu,23.0333,85.3667,Jharkhand
+Dattapara,22.8491,88.9023,West Bengal
+Jujharpur,25.7514,87.9634,West Bengal
+Bhogapuram,18.0667,83.5000,Andhra Pradesh
+Kaliganj,23.7348,88.2293,West Bengal
+Nirna,17.7700,77.1400,Karnātaka
+Damargidda,16.8189,77.5031,Telangana
+Ayas,24.2508,87.7784,West Bengal
+Rajapudi,17.1830,82.0500,Andhra Pradesh
+Durgi,16.4242,79.4928,Andhra Pradesh
+Molagavalli,15.3567,77.3301,Andhra Pradesh
+Bahira,22.4421,88.0934,West Bengal
+Penaballi,17.2103,80.6978,Telangana
+Gorsa,24.5493,87.8808,West Bengal
+Jajireddigudem,17.3278,79.5711,Telangana
+Nagayalanka,15.9500,80.9167,Andhra Pradesh
+Maddur,16.8667,77.6167,Telangana
+Bishnupur,24.1312,87.8902,West Bengal
+Saktigarh,23.2041,87.9677,West Bengal
+Munagala,17.0500,79.8333,Telangana
+Kurichedu,15.9026,79.5773,Andhra Pradesh
+Belakvadi,12.2550,77.1225,Karnātaka
+Nurpur,22.2138,88.0747,West Bengal
+Bhaluka,25.2886,87.8804,West Bengal
+Alipukur,22.2939,88.0750,West Bengal
+Chaubaria,22.9809,88.6748,West Bengal
+Kotabommali,18.5333,84.1667,Andhra Pradesh
+Guttikonda,16.4300,79.8340,Andhra Pradesh
+Dirusumarru,16.4722,81.5295,Andhra Pradesh
+Kotalpur,23.0125,87.5936,West Bengal
+Jigarhati,24.0317,87.8838,West Bengal
+Tummalacheruvu,17.7667,80.8000,Telangana
+Dharmajigudem,16.9000,81.0000,Andhra Pradesh
+Kovvali,16.7333,81.1667,Andhra Pradesh
+Bhogalt,22.5550,88.6138,West Bengal
+Maisaram,17.1329,78.4367,Telangana
+Hingalganj,22.4708,88.9833,West Bengal
+Gudluru,15.0729,79.9012,Andhra Pradesh
+Bandamurlanka,16.5170,81.9880,Andhra Pradesh
+Kalicherla,13.8833,78.5333,Andhra Pradesh
+Mustafabad,18.2787,78.7108,Telangana
+Channubanda,17.0331,80.8056,Andhra Pradesh
+Islampur,22.5643,88.0680,West Bengal
+Ranjal,18.7458,77.9483,Telangana
+Keregodu,12.6333,76.9167,Karnātaka
+Gampalagudem,16.9833,80.5167,Andhra Pradesh
+Pullalacheruvu,16.1584,79.4321,Andhra Pradesh
+Makkuva,18.6667,83.2667,Andhra Pradesh
+Madnur,18.5000,77.6333,Telangana
+Harike,31.1661,74.9417,Punjab
+Adigoppula,16.4402,79.6235,Andhra Pradesh
+Panuria,23.8229,86.9839,West Bengal
+Chitvel,14.1667,79.3333,Andhra Pradesh
+Talgachhi,25.3383,87.8929,West Bengal
+Jagatballabhpur,22.6864,88.1069,West Bengal
+Kismatpur,17.3333,78.4000,Telangana
+Kalkuni,14.6000,74.8333,Karnātaka
+Barasat,22.9187,88.8301,West Bengal
+Teranikallu,15.6392,77.5303,Andhra Pradesh
+Virapalle,14.1500,78.8667,Andhra Pradesh
+Vidapanakallu,15.0667,77.1833,Andhra Pradesh
+Navipet,18.8022,77.9836,Telangana
+Jasaikati,22.7657,88.7974,West Bengal
+Bhagabatipur,22.6938,88.1936,West Bengal
+Manipur,22.2799,88.9267,West Bengal
+Raiparthi,17.7042,79.6081,Telangana
+Bagalvad,16.0528,76.8877,Karnātaka
+Bontapalli,17.6625,78.3667,Telangana
+Devarkadra,16.6167,77.8500,Telangana
+Garbham,18.3667,83.4500,Andhra Pradesh
+Churulia,23.7800,87.0800,West Bengal
+Anantasagaram,14.5715,79.4075,Andhra Pradesh
+Yaragol,16.9047,77.0661,Karnātaka
+Penumaka,16.4832,80.5749,Andhra Pradesh
+Chintakommadinne,14.4267,78.7618,Andhra Pradesh
+Korukollu,16.4808,81.2433,Andhra Pradesh
+Ginigera,15.3483,76.2473,Karnātaka
+Udramsar,27.9355,73.2942,Rājasthān
+Nakkapalle,17.4106,82.7161,Andhra Pradesh
+Gangajalghati,23.4200,87.1200,West Bengal
+Tungaturti,17.4567,79.6258,Telangana
+Majlispur,26.0978,87.9976,West Bengal
+Peddapudi,16.9667,82.1667,Andhra Pradesh
+Chikhli,20.7500,73.0700,Gujarāt
+Madnakal,16.1230,77.6960,Telangana
+Galgali,16.4160,75.4376,Karnātaka
+Kodakandla,17.5280,79.5052,Telangana
+Chandpur,22.1623,88.3602,West Bengal
+Vidavaluru,14.5942,80.0297,Andhra Pradesh
+Gummadidola,17.6830,78.3700,Telangana
+Khajuri,21.8611,87.9480,West Bengal
+Tamballapalle,13.8994,78.4203,Andhra Pradesh
+Ravinutala,15.7390,80.0800,Andhra Pradesh
+Tekmal,17.9700,78.0400,Telangana
+Berghom,22.8687,88.7088,West Bengal
+Vijayapuri South,16.5580,79.3090,Andhra Pradesh
+Konada,18.0167,83.5667,Andhra Pradesh
+Dignagar,23.4283,87.6976,West Bengal
+Jagannathpur,25.3159,87.8785,West Bengal
+Bibinagar,17.4708,78.7946,Telangana
+Venavanka,18.3975,79.3878,Telangana
+Rangampeta,17.0820,81.9880,Andhra Pradesh
+Rodalkundi,15.6774,76.7754,Karnātaka
+Kotturu,18.7667,83.8833,Andhra Pradesh
+Kethepalli,17.1907,79.4468,Telangana
+Dupadu,15.9167,79.3667,Andhra Pradesh
+Chandipur,22.0528,88.2911,West Bengal
+Maliara,23.4750,87.2230,West Bengal
+Khandaghosh,23.2091,87.6983,West Bengal
+Kirugavalu,12.3667,76.9500,Karnātaka
+Karatber,22.4977,88.0649,West Bengal
+Kolleti Kota,16.6260,81.2890,Andhra Pradesh
+Chiwemla,17.1528,79.6861,Telangana
+Takkellapadu,16.3111,80.4910,Andhra Pradesh
+Dhanbela,22.9113,88.5345,West Bengal
+Dommaranandyala,14.8644,78.3658,Andhra Pradesh
+Anigandlapadu,16.8920,80.2870,Andhra Pradesh
+Kavuluru,16.6303,80.5828,Andhra Pradesh
+Danagalli,12.2228,76.5714,Karnātaka
+Naushahra Panwan,31.3399,74.9537,Punjab
+Nallacheruvu,14.0061,78.1758,Andhra Pradesh
+Peddakadaburu,15.7660,77.3260,Andhra Pradesh
+Palakurti,17.6588,79.4325,Telangana
+Timmapuram,17.0313,82.2462,Andhra Pradesh
+Ravipadu,16.2598,80.0106,Andhra Pradesh
+Lakhanpur,24.6185,87.9484,Jharkhand
+Pippara,16.7167,81.5500,Andhra Pradesh
+Chiluvuru,16.3785,80.6146,Andhra Pradesh
+Kaligiri,14.8333,79.7000,Andhra Pradesh
+Mulakalacheruvu,13.8408,78.3056,Andhra Pradesh
+Birkur,18.4836,77.8003,Telangana
+Gopalganj,22.0572,88.6182,West Bengal
+Rebala,14.5333,79.9000,Andhra Pradesh
+Nandivelugu,16.2924,80.6426,Andhra Pradesh
+Bhatumra,18.0300,77.2200,Karnātaka
+Bhandarhati,22.9227,88.0996,West Bengal
+Tulluru,16.5275,80.4681,Andhra Pradesh
+Narayanpur,17.1622,78.8817,Telangana
+Niala Kondapalle,17.1000,80.0506,Telangana
+Yazali,15.9709,80.5616,Andhra Pradesh
+Beraberi,22.8461,88.2047,West Bengal
+Gopalpur,25.8738,87.9637,West Bengal
+Mahishkuchi,26.3866,89.7646,West Bengal
+Pedda Ganjam,15.6428,80.2324,Andhra Pradesh
+Uchalon,23.0333,87.7833,West Bengal
+Huliyurdurga,12.8167,77.0333,Karnātaka
+Nekunapuram,15.2267,79.9267,Andhra Pradesh
+Pokuru,15.1667,79.8167,Andhra Pradesh
+Bhadrapur,24.2624,87.9520,West Bengal
+Manali,32.2044,77.1700,Himāchal Pradesh
+Mallepalli,18.5833,80.9000,Chhattīsgarh
+Baruipara,22.7574,88.2429,West Bengal
+Natavaram,17.6050,82.4080,Andhra Pradesh
+Agali,13.7842,77.0544,Andhra Pradesh
+Barua Gopalpur,24.5618,87.8121,West Bengal
+Surampalle,16.5847,80.7186,Andhra Pradesh
+Bara Bakra,22.7621,88.8899,West Bengal
+Dhalpal,26.3941,89.6536,West Bengal
+Bajanki,18.2556,79.0165,Telangana
+Garladinne,14.8333,77.6000,Andhra Pradesh
+Hire Kotankal,15.9628,76.9511,Karnātaka
+Datura,24.4038,87.9579,West Bengal
+Wajrakarur,15.0167,77.3833,Andhra Pradesh
+Indrani,24.1381,88.0217,West Bengal
+Pata Pandillapalle,15.7565,80.2831,Andhra Pradesh
+Rajavommangi,17.5010,82.2530,Andhra Pradesh
+Sante Kasalgere,12.4972,76.8878,Karnātaka
+Mundlapadu,15.3330,78.9000,Andhra Pradesh
+Haripur,22.5912,88.6342,West Bengal
+Bujang,24.2593,87.9187,West Bengal
+Hatinda,25.4157,87.9879,West Bengal
+Mantur,16.3809,75.3774,Karnātaka
+Kirnahar,23.7569,87.8768,West Bengal
+Baireddipalle,13.0833,78.6167,Andhra Pradesh
+Mathampalli,16.8558,79.8936,Telangana
+Pachipenta,18.4600,83.1100,Andhra Pradesh
+Radhangar,22.4488,88.4719,West Bengal
+Meliyaputtu,18.7667,84.1667,Andhra Pradesh
+Baishata,22.1329,88.4670,West Bengal
+Damaramadugu,14.5016,79.9319,Andhra Pradesh
+Kruttivennu,16.3774,81.3670,Andhra Pradesh
+Bestavarapeta,15.5511,79.1000,Andhra Pradesh
+Namkhana,21.7667,88.2333,West Bengal
+Muglispur,24.4443,87.8936,West Bengal
+Sheakhala,22.7636,88.1781,West Bengal
+Ramasamudram,13.3667,78.4333,Andhra Pradesh
+Bargari,30.5188,74.9578,Punjab
+Chelyama,23.6199,86.5496,West Bengal
+Palagara,18.6167,83.5333,Andhra Pradesh
+Gura,24.1926,88.0652,West Bengal
+Adwitnagar,24.6296,87.8986,West Bengal
+Ponnaluru,15.2719,79.7992,Andhra Pradesh
+Khatra,22.9800,86.8500,West Bengal
+Belsur,25.3727,87.8300,West Bengal
+Polaki,18.3667,84.1000,Andhra Pradesh
+Yadamari,13.1422,78.9847,Andhra Pradesh
+Chataparru,16.6970,81.1670,Andhra Pradesh
+Mulaguntapadu,15.2980,80.0340,Andhra Pradesh
+Nirmanvi,16.0433,77.0991,Karnātaka
+Raniganj,25.8564,87.9124,West Bengal
+Krishnaranpur,22.0561,88.3326,West Bengal
+Upputuru,15.9510,80.2890,Andhra Pradesh
+Annaram,17.6288,78.3759,Telangana
+Simlapal,22.9227,87.0734,West Bengal
+Gosanimari Bandar,26.1519,89.3335,West Bengal
+Chinnakakani,16.4046,80.5579,Andhra Pradesh
+Chilakapalem,18.2710,83.8040,Andhra Pradesh
+Nigan,23.5045,87.9871,West Bengal
+Bijnapalli,16.5500,78.2000,Telangana
+Pipa,22.6018,88.8364,West Bengal
+Chandrasekharapuram,15.1833,79.2833,Andhra Pradesh
+Chennekottapalle,14.3175,77.6072,Andhra Pradesh
+Fatehpor,33.6500,75.1500,Jammu and Kashmīr
+Mogallu,16.6000,81.5667,Andhra Pradesh
+Beluguppa,14.7167,77.1333,Andhra Pradesh
+Rajbari,22.4019,88.8059,West Bengal
+Parakaram,25.2703,87.9846,West Bengal
+Chevella,17.3067,78.1353,Telangana
+Karumanchi,16.0549,79.8903,Andhra Pradesh
+Belluru,12.9833,76.7500,Karnātaka
+Bandi Atmakuru,15.5810,78.5241,Andhra Pradesh
+Khanta,25.8468,88.0525,West Bengal
+Kotauratla,17.5658,82.6877,Andhra Pradesh
+Havaligi,15.0167,77.1167,Andhra Pradesh
+Chintalavalasa,18.0675,83.4094,Andhra Pradesh
+Polba,22.9615,88.3066,West Bengal
+Mudinepalle,16.4000,81.1167,Andhra Pradesh
+Kurupam,18.8667,83.5667,Andhra Pradesh
+Hire Padsalgi,16.5940,75.3867,Karnātaka
+Valigonda,17.3667,79.0500,Telangana
+Sayampet,18.1167,79.7375,Telangana
+Sibkalinagar,21.9288,88.1780,West Bengal
+Pedda Bhogila,18.6612,83.3784,Andhra Pradesh
+Kodekal,16.3522,76.4025,Karnātaka
+Bagdaha,23.2178,88.8857,West Bengal
+Umarpur,24.6109,87.8952,Jharkhand
+Battili,19.0167,83.7833,Odisha
+Katangur,17.1600,79.3130,Telangana
+Kunchanapalle,16.4500,80.6167,Andhra Pradesh
+Kalingapatnam,18.3389,84.1205,Andhra Pradesh
+Aspari,15.4833,77.3833,Andhra Pradesh
+Nekkonda,16.7833,78.2333,Telangana
+Karalapadu,16.5070,79.8000,Andhra Pradesh
+Rudravaram,15.8310,78.0500,Andhra Pradesh
+Rangaipur,25.3884,87.9124,West Bengal
+Cherukuru,15.9940,80.3780,Andhra Pradesh
+Ramapur,22.3102,88.9599,West Bengal
+Ramthenga,26.4724,89.2121,West Bengal
+Devaruppal,17.6511,79.3556,Telangana
+Morta,16.8094,81.7016,Andhra Pradesh
+Kennalu,12.4667,76.6667,Karnātaka
+Dhola,22.0385,88.2979,West Bengal
+Bharatgarh,22.1474,88.6802,West Bengal
+Digambarpur,21.9343,88.3876,West Bengal
+Annavaram,17.2820,82.4055,Andhra Pradesh
+Topla,22.2333,80.8833,Madhya Pradesh
+Holavanhalli,13.5333,77.3000,Karnātaka
+Arakeri,16.2746,76.9494,Karnātaka
+Bagchara,22.9574,88.7706,West Bengal
+Dornipadu,15.2372,78.4483,Andhra Pradesh
+Kamarpalli,18.9219,78.5081,Telangana
+Lingasamudram,15.0950,79.7007,Andhra Pradesh
+Mallarpur,24.0814,87.7093,West Bengal
+Muppalla,16.2372,79.8464,Andhra Pradesh
+Badampudi,16.8200,81.4700,Andhra Pradesh
+Maipadu,14.5000,80.1667,Andhra Pradesh
+Bagela,25.8723,87.8978,West Bengal
+Kandrakota,17.1451,82.1306,Andhra Pradesh
+Khopakati,25.3848,87.7796,West Bengal
+Dwarapudi,16.9500,81.9333,Andhra Pradesh
+Malkapuram,15.4170,77.8830,Andhra Pradesh
+Mohanpur,21.8425,87.4214,West Bengal
+Chaudepalle,13.4831,78.7664,Andhra Pradesh
+Sasan,22.6622,88.5823,West Bengal
+Madhura,24.3298,87.8793,West Bengal
+Katak Chincholi,18.0300,77.2200,Karnātaka
+Amarkantak,22.6751,81.7596,Madhya Pradesh
+Kalla,16.5374,81.4087,Andhra Pradesh
+Salgundi,15.6677,76.8286,Karnātaka
+Kongal,16.9440,79.2160,Telangana
+Mohanpur,25.3206,87.9400,West Bengal
+Lakkavaram,15.6983,79.7945,Andhra Pradesh
+Vempa,16.4500,81.5833,Andhra Pradesh
+Bantumilli,16.3500,81.2833,Andhra Pradesh
+Kantalia,22.7219,88.5415,West Bengal
+Rimbik,27.1271,88.0993,West Bengal
+Morgim,15.6294,73.7358,Goa
+Palhalli,12.4139,76.6528,Karnātaka
+Bondapalle,18.2418,83.3489,Andhra Pradesh
+Pulipadu,16.6070,79.6520,Andhra Pradesh
+Beliator,23.3333,87.2167,West Bengal
+Paidipadu,15.7117,80.1111,Andhra Pradesh
+Mandirtala,21.8130,88.1103,West Bengal
+Kanaganapalle,14.4500,77.5167,Andhra Pradesh
+Tipparti,17.0167,79.4167,Telangana
+Etikoppaka,17.5000,82.7300,Andhra Pradesh
+Gadivemula,15.7069,78.4169,Andhra Pradesh
+Tarachua,24.1472,87.6107,West Bengal
+Kandlagunta,16.3500,79.3670,Andhra Pradesh
+Mudivarti,14.5550,80.1079,Andhra Pradesh
+Obuladevarcheruvu,14.0263,78.0009,Andhra Pradesh
+Dariapur,22.8697,88.5002,West Bengal
+Murarai,24.4428,87.8575,West Bengal
+Maddipadu,15.6222,80.0230,Andhra Pradesh
+Amadaguru,13.8886,78.0217,Andhra Pradesh
+Kondavidu,16.2597,80.2653,Andhra Pradesh
+Matsyapuri,16.4814,81.6267,Andhra Pradesh
+Moragudi,14.8625,78.3772,Andhra Pradesh
+Karimnagar,22.1158,88.2455,West Bengal
+Timmapuram,18.3597,79.0875,Telangana
+Brahmanagudem,16.9275,81.6736,Andhra Pradesh
+Hebbur,13.1500,77.0333,Karnātaka
+Elangi,25.2986,87.9054,West Bengal
+Palsa,24.4721,87.8637,West Bengal
+Ventrapragada,16.4425,80.9086,Andhra Pradesh
+Mandadam,16.5194,80.5139,Andhra Pradesh
+Kotananduru,17.4667,82.4667,Andhra Pradesh
+Ellanuru,14.7000,78.0800,Andhra Pradesh
+Sidhar,24.5484,87.9332,West Bengal
+Baswa,24.1472,87.8802,West Bengal
+Digalgram,24.0474,87.6432,West Bengal
+Kandaran,25.2828,87.9904,West Bengal
+Kavuru,16.1333,80.1167,Andhra Pradesh
+Kasimpur,22.7650,88.5136,West Bengal
+Balatgi,16.1114,76.9487,Karnātaka
+Banpur,23.4484,88.7511,West Bengal
+Dumpagadapa,16.5989,81.3688,Andhra Pradesh
+Racherla,15.4667,78.9667,Andhra Pradesh
+Galaga,16.2667,76.8333,Karnātaka
+Mahurapur,24.5079,87.8231,West Bengal
+Andimatam,11.3353,79.3758,Tamil Nādu
+Begunkudar,23.3528,86.0566,West Bengal
+Kottapalle,16.3150,79.9120,Andhra Pradesh
+Gobindapur,22.8801,88.8942,West Bengal
+Kandgal,15.9568,76.2734,Karnātaka
+Tallacheruvu,16.6500,80.0970,Andhra Pradesh
+Ramchandrapur,24.4227,87.8573,West Bengal
+Manoharpur,22.1210,88.2333,West Bengal
+Ratua,25.2001,87.9274,West Bengal
+Raipur,22.8000,86.9500,West Bengal
+Kodur,16.2667,78.3000,Telangana
+Natabari Hat,26.4064,89.5975,West Bengal
+Bhelian,24.2954,87.8958,West Bengal
+Nizampur,26.0148,87.8942,West Bengal
+Baruva,18.8824,84.5829,Andhra Pradesh
+Khulna,22.3465,88.9167,West Bengal
+Kariali,25.3263,87.9074,West Bengal
+Kyadgeri,16.2319,76.9553,Karnātaka
+Narathali,26.5204,89.7669,West Bengal
+Jakranpalli,18.7183,78.2775,Telangana
+Nangli,13.1833,78.5167,Karnātaka
+Algur,16.7000,76.3499,Karnātaka
+Dodharye,12.3939,75.9549,Karnātaka
+Bandhkhola,24.2542,87.9880,West Bengal
+Gavunipalli,13.5140,78.2270,Karnātaka
+Phulbari,21.7969,88.0997,West Bengal
+Kanamarlapudi,16.1000,79.8000,Andhra Pradesh
+Harispur,24.5121,87.9425,West Bengal
+Peravali,16.7525,81.7417,Andhra Pradesh
+Rentapalla,16.4721,80.1342,Andhra Pradesh
+Kochcherla,16.1493,79.7608,Andhra Pradesh
+Narendranagar,30.1700,78.3000,Uttarakhand
+Ardavidu,15.6833,78.9667,Andhra Pradesh
+Elakkurichchi,10.9600,79.1630,Tamil Nādu
+Mirkal,17.8600,76.9500,Karnātaka
+Sathaur,26.0340,87.9212,West Bengal
+Varadayyapalaiyam,13.6000,79.9333,Andhra Pradesh
+Jejur,22.8804,88.1235,West Bengal
+Venkatakrishnarayapuram,17.0530,82.1700,Andhra Pradesh
+Jhikra,22.6236,87.9195,West Bengal
+Duttaluru,14.8526,79.4046,Andhra Pradesh
+Durgapur,25.2461,87.9046,West Bengal
+Khanta,25.4265,87.8575,West Bengal
+Karavadi,15.5490,80.1136,Andhra Pradesh
+Jagdeopur,17.7680,78.8080,Telangana
+Chapirevula,15.4800,78.4800,Andhra Pradesh
+Somala,13.4667,78.8167,Andhra Pradesh
+Mehegram,24.2463,87.8509,West Bengal
+Khedra,25.2987,88.1873,West Bengal
+Uppalapadu,16.3061,80.5163,Andhra Pradesh
+Kukunuru,17.5667,81.1833,Telangana
+Onda,23.1420,87.2020,West Bengal
+Muratpur,23.0014,88.4507,West Bengal
+Pedda Nandipadu,16.0728,80.3294,Andhra Pradesh
+Bhujabalapatnam,16.5800,81.2700,Andhra Pradesh
+Chopra,26.3675,88.3076,West Bengal
+Sandhwan,30.6167,74.8000,Punjab
+Talgram,25.4271,87.8029,West Bengal
+Chinna Chintakunta,17.7797,78.2744,Telangana
+Bhastara,23.0223,88.1493,West Bengal
+Ramakuppam,12.9003,78.4867,Andhra Pradesh
+Kottakki,18.5149,83.2353,Andhra Pradesh
+Nandigram,22.0100,87.9900,West Bengal
+Harvi,16.0628,77.0642,Karnātaka
+Loutolim,15.3300,73.9800,Goa
+Kuderu,14.7333,77.4333,Andhra Pradesh
+Kalavalapalle,16.9300,81.6300,Andhra Pradesh
+Kondramutla,16.1167,79.7500,Andhra Pradesh
+Bajargaon,25.8932,87.9989,West Bengal
+Pusapatirega,18.0920,83.5523,Andhra Pradesh
+Kyalanur,13.2667,77.9833,Karnātaka
+Attota,16.2910,80.6816,Andhra Pradesh
+Bisor,24.3846,87.9670,West Bengal
+Sarenga,22.7534,87.0170,West Bengal
+Kochara,25.8523,87.9653,West Bengal
+Murikipudi,16.0400,80.1040,Andhra Pradesh
+Medpalli,18.8003,78.8042,Telangana
+Khata,26.0280,87.9465,Bihār
+Musunuru,16.8428,80.9622,Andhra Pradesh
+Timmasamudram,15.7833,80.2333,Andhra Pradesh
+Chejerla,14.5167,79.5667,Andhra Pradesh
+Nirman,22.8430,88.8809,West Bengal
+Mirle,12.5333,76.3167,Karnātaka
+Radhanagar,21.6906,88.2374,West Bengal
+Fatehpur,22.9375,88.5864,West Bengal
+Bhulki,25.8628,87.9346,West Bengal
+Ankapuram,18.7700,78.2500,Telangana
+Tarapur,24.1023,87.8055,West Bengal
+Hatgacha,24.1036,87.5938,West Bengal
+Kerimeri,19.4333,79.0500,Telangana
+Terlam,18.4847,83.5014,Andhra Pradesh
+Sakkarepatna,13.5600,76.0100,Karnātaka
+Mungonda,16.5982,81.9187,Andhra Pradesh
+Bandarlapalli,13.3308,79.0989,Andhra Pradesh
+Bevur,16.2084,75.8941,Karnātaka
+Konanki,16.5350,79.8870,Andhra Pradesh
+Ranasthalam,18.1979,83.7039,Andhra Pradesh
+Birajnagar,22.1436,88.7849,West Bengal
+Labpur,23.8300,87.8200,West Bengal
+Tummurukota,16.5860,79.4900,Andhra Pradesh
+Tondapi,16.3913,80.0612,Andhra Pradesh
+Kothakota,16.3667,77.9667,Telangana
+Benior,24.3292,87.8157,West Bengal
+Nandalur,14.2672,79.1176,Andhra Pradesh
+Valluru,14.5530,78.7100,Andhra Pradesh
+Kakumanu,16.0544,80.3989,Andhra Pradesh
+Churakuti,26.0740,87.9971,West Bengal
+Panagarh,23.4538,87.4378,West Bengal
+Natalapadu,15.9370,80.2280,Andhra Pradesh
+Ambarpeta,16.7930,81.3014,Andhra Pradesh
+Majiyara,23.7249,87.0176,West Bengal
+Goyamara,21.9133,88.1300,West Bengal
+Pullampet,14.1167,79.2167,Andhra Pradesh
+Masarkal,16.3694,77.0172,Karnātaka
+Sitarampuram,15.0160,79.1370,Andhra Pradesh
+Gajapatinagaram,18.3000,83.3333,Andhra Pradesh
+Hattikuni,16.8506,77.1542,Karnātaka
+Putalapattu,13.3856,79.0753,Andhra Pradesh
+Kuvagam,11.2826,79.2852,Tamil Nādu
+Rhenok,27.1772,88.6490,Sikkim
+Kondamanjuluru,15.8190,80.0920,Andhra Pradesh
+Addatigala,17.4833,82.0167,Andhra Pradesh
+Yelmanaid,17.2900,79.0260,Telangana
+Chillakur,14.1333,79.8667,Andhra Pradesh
+Kotipalle,16.7014,82.0394,Andhra Pradesh
+Kaldhari,16.8362,81.6744,Andhra Pradesh
+Lingadahalli,13.6000,75.8300,Karnātaka
+Golugonda,17.6793,82.4678,Andhra Pradesh
+Budhakhali,21.8243,88.2087,West Bengal
+Kosuvaripalle,13.7611,78.4250,Andhra Pradesh
+Pedda Orampadu,14.1000,79.2833,Andhra Pradesh
+Jaldhoa,26.3995,89.7894,West Bengal
+Kalmali,16.1978,77.2061,Karnātaka
+Gottipadu,16.1648,80.2982,Andhra Pradesh
+Putluru,14.8167,77.9667,Andhra Pradesh
+Kapileswarapuram,16.3333,80.8667,Andhra Pradesh
+Utukur,14.1833,79.1833,Andhra Pradesh
+Sabakpur,24.0117,87.8543,West Bengal
+Piridi,18.5667,83.4167,Andhra Pradesh
+Goli,16.5860,79.4900,Andhra Pradesh
+Pogiri,18.4000,83.7000,Andhra Pradesh
+Indiri,15.4406,76.3244,Karnātaka
+Barabari,22.0994,88.0692,West Bengal
+Lingareddipalem,15.9900,81.0000,Andhra Pradesh
+Singareni,17.5000,80.2667,Telangana
+Mejia,23.5533,87.1267,West Bengal
+Tarlupadu,15.6579,79.2243,Andhra Pradesh
+Gopavaram,16.8167,80.9000,Andhra Pradesh
+Rayna,23.0728,87.8902,West Bengal
+Tadimarri,14.5667,77.8667,Andhra Pradesh
+Kistnapatam,14.2830,80.1170,Andhra Pradesh
+Karepalli,17.4539,80.2682,Telangana
+Harirampur,25.3786,88.2677,West Bengal
+Fatehgarh Panjtur,31.0525,75.1109,Punjab
+Pegadpalli,18.7293,77.9042,Telangana
+Chinna Pandraka,16.3570,81.2920,Andhra Pradesh
+Matmari,16.0299,77.2959,Karnātaka
+Lakshmisagar,22.9267,87.0157,West Bengal
+Kundapak,17.9700,78.8500,Telangana
+Kallankurichchi,11.1504,79.1199,Tamil Nādu
+Peddaravidu,15.8144,79.2230,Andhra Pradesh
+Puncha,23.1534,86.6527,West Bengal
+Gudipudi,16.4204,80.2161,Andhra Pradesh
+Cherlagudipadu,16.5039,79.6431,Andhra Pradesh
+Ramadugu,18.5869,79.0617,Telangana
+Gote,16.7225,75.4326,Karnātaka
+Vellalacheruvu,16.1333,79.8833,Andhra Pradesh
+Komarada,18.8751,83.4994,Andhra Pradesh
+Nujendla,15.9931,79.7081,Andhra Pradesh
+Lansdowne,29.8300,78.6800,Uttarakhand
+Dagadarti,14.6703,79.9321,Andhra Pradesh
+Bhrigubanda,16.4519,80.0942,Andhra Pradesh
+Kumargram,26.6128,89.8250,West Bengal
+Basudha,23.6028,87.5226,West Bengal
+Jukal,18.3689,77.6169,Telangana
+Mantada,16.3549,80.8731,Andhra Pradesh
+Nambulapulikunta,14.0552,78.4122,Andhra Pradesh
+Kunaparajuparva,16.9110,80.7234,Andhra Pradesh
+Dandepalii,19.0151,79.1002,Telangana
+Dammalapadu,16.3568,80.0633,Andhra Pradesh
+Vanamaladinne,13.3167,78.5167,Andhra Pradesh
+Kalavakuru,15.8720,79.9808,Andhra Pradesh
+Ramasamudram,16.7725,77.2353,Karnātaka
+Virannapalem,15.9583,80.3208,Andhra Pradesh
+Sitampeta,18.7178,83.7789,Andhra Pradesh
+Gudivakalanka,16.6365,81.2126,Andhra Pradesh
+Hamidi,30.4672,75.6074,Punjab
+Gazulmandiyam,13.6000,79.5200,Andhra Pradesh
+Burda,23.2623,86.0076,West Bengal
+Gosaba,22.1691,88.8163,West Bengal
+Mustur,13.4500,77.7167,Karnātaka
+Korukonda,18.2833,81.9833,Odisha
+Aripanthan,34.0610,74.5750,Jammu and Kashmīr
+Maddikera Agraharam,15.2667,77.4333,Andhra Pradesh
+Kolavennu,16.4500,80.7833,Andhra Pradesh
+Chingarali,12.5394,76.6039,Karnātaka
+Veguru,14.5375,80.0544,Andhra Pradesh
+Nandavaram,15.3750,78.2800,Andhra Pradesh
+Nagareddipet,18.1439,78.1292,Telangana
+Chandragudem,16.8010,80.6300,Andhra Pradesh
+Gorubathan,26.9721,88.7147,West Bengal
+Thode,27.1113,88.8203,West Bengal
+Rolugunta,17.7170,82.6670,Andhra Pradesh
+Velagaleru,16.6500,80.6167,Andhra Pradesh
+Sayipeta,15.0322,79.7578,Andhra Pradesh
+Byadanur,14.0833,77.2167,Karnātaka
+Kulumur,11.3167,79.1500,Tamil Nādu
+Talamarla,14.2142,77.7245,Andhra Pradesh
+Bandarupalle,16.3833,80.3667,Andhra Pradesh
+Machareddi,18.3597,78.4147,Telangana
+Peddapasupula,14.8833,78.4500,Andhra Pradesh
+Reddicherla,15.2333,78.9833,Andhra Pradesh
+Manyapadu,15.9639,77.9411,Telangana
+Samse,13.1300,75.6400,Karnātaka
+Virapapur,16.6500,76.8000,Karnātaka
+Kasipet,19.0333,79.4667,Telangana
+Gundrevula,15.8550,77.7070,Andhra Pradesh
+Rebna,19.1414,79.7181,Telangana
+Atluru,14.5583,79.0547,Andhra Pradesh
+Tirupati,13.6500,79.4167,Andhra Pradesh
+Rudravaram,15.2660,78.6280,Andhra Pradesh
+Tuggali,15.3667,77.5833,Andhra Pradesh
+Mulakalapalle,17.5758,80.9247,Telangana
+Somapalle,13.8500,78.2667,Andhra Pradesh
+Mallavaram,17.2670,81.8500,Andhra Pradesh
+Venkatapuram,18.3000,80.5500,Telangana

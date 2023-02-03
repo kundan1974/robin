@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="my-form">
+        <h1>Upload Data</h1>
+        <p>For model training</p>
+        <hr>
+            <form action="/upload_batch_files" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="mb-3">
+              <label for="dicomzip" class="form-label">Collection Type</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                <label class="form-check-label" for="flexRadioDefault1">
+                  DashImage
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                <label class="form-check-label" for="flexRadioDefault2">
+                  DICOM
+                </label>
+              </div>
+            </div>        
+              <div class="mb-3">
+                <label for="dicomzip" class="form-label">Request ID</label>
+                <input type="text" class="form-control" id="exampleInputEmail1" name="request_id" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">Same data can feed for model training</div>
+              </div>
+                <div class="mb-3">
+                  <label for="dicomzip" class="form-label">Upload your Zip</label>
+                  <input type="file" class="form-control" id="exampleInputEmail1" name="data_file" aria-describedby="emailHelp">
+                  <div id="emailHelp" class="form-text">Note: RT file must be present in DICOM zip folder.</div>
+                </div>
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                      Override existing images
+                    </label>
+                  </div>
+                </div>            
+                <button type="submit" class="btn btn-dark">Upload</button>
+              </form>
+        </div>
+    </div>
+    <div class="col"></div>
+  </div>
+</div>
+<div class="footer" style="position: absolute;">
+  <footer class="text-center text-lg-start text-white" style="background-color: #252627">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+      Crafted with <i class="fa-solid fa-heart"></i> by
+      <a class="text-white my-link" href="https://mdbootstrap.com/">MedPy Foundation powered by Dashamlav
+        Labs</a>
+    </div>
+  </footer>
+</div>
+{% endblock %}

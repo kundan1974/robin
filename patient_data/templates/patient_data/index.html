@@ -1,0 +1,354 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+
+<div class="row dashboard">
+    <div class="col-md-3">
+        <div class="user-panel box-shadow box-redius" style="max-height: 87vh; overflow: auto">
+            <div class="user-details">
+                <div class="profile-img">
+                    <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+                </div>
+                <div class="user-info">
+                    <h3>Hello {{ user.username }}</h3>
+                        <p>{{ user.email }}</p>
+                </div>
+            </div>
+
+            <hr>
+            <p class="panel-heading">Assignments: {{ assigned }} </p>
+            <p class="panel-heading">Completed: {{ assignment_completed }} </p>
+            <hr>
+            <h5>My Statistics</h5>
+            <div class="user-block box-shadow box-redius">
+            <h6>Total Assignments<span class = "count red">{{ user_site_freq_count }}</span></h6>
+                <p><em>Below are the statistics for top 5 sites:</em></p>
+            <div class="status-table" style="max-height: 40vh;">
+                        <table class="table table-striped  table-hover">
+                            <thead class="table">
+                                <tr>
+                                    <th scope="col">Site</th>
+                                    <th scope="col">No</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                {% for site, count in user_data.items %}
+                                      <tr>
+                                        <td>{{ site }}</td>
+                                        <td>{{ count }}</td>
+                                      </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+            </div>
+            </div>
+            <hr>
+            <!-- Add from index1.html ln 41 to  -->
+            {% if user_simulations %}
+                {% for data in user_simulations %}
+                <div class="user-block box-redius box-shadow">
+                    <p class="patient-name">{{ data.name }}<span class="patient-id">{{ data.simparent.crnumber }}</span></p>
+                    <hr>
+                    <p class="patient-details-head">Area: <span class="patient-details">{{ data.site }}</span></p>
+                    <p class="patient-details-head">Planned Dose: <span class="patient-details">{{ data.totaldose }}/{{ data.totalfractions }}Fx</span>
+                    </p>
+                    <p class="patient-details-head">Volumes: <span class="patient-details">{{ data.volumes }}</span></p>
+                    <p class="patient-details-head">Implemntation Date: <span class="patient-details">{{ data.impdate|date:"M d, Y" }}</span></p>
+                    <p class="patient-details-head">Status: <span class="patient-details">{{ data.initialstatus }}</span></p>
+                </div>
+                {% endfor %}
+            {% else %}
+            <p>- No Data!</p>
+            {% endif %}
+
+        </div>
+
+        <!-- Workload block -->
+        <div class="workload-block box-shadow box-redius" style="max-height: 90vh; overflow: auto">
+            <p class="panel-heading mt-2">SIMULATIONS</p>
+            <hr>
+            {%  if user_profile is None %}
+            <p class="panel-heading"> Workload</p>
+            {% for data in simulations %}
+            <div class="user-block box-redius box-shadow">
+                <p class="patient-name">{{ data.name }}<span class="patient-id">{{ data.simparent.crnumber }}</span></p>
+                <hr>
+                <p class="patient-details-head">Area: <span class="patient-details">{{ data.site }}</span></p>
+                <p class="patient-details-head">Planned Dose: <span class="patient-details">{{ data.totaldose }}/{{ data.totalfractions }}Fx</span>
+                </p>
+                <p class="patient-details-head">Simulation Date: <span class="patient-details">{{ data.simdate|date:"M d, Y" }}</span></p>
+                <p class="patient-details-head">Implemntation Date: <span class="patient-details">{{ data.impdate|date:"M d, Y" }}</span></p>
+                <p class="patient-details-head">Status: <span class="patient-details">{{ data.initialstatus }}</span></p>
+                <p class="patient-details-head">Assigned To: <span class="patient-details">{{ data.assignedto1.username }}</span></p>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="dashboard-content">
+            <div class="status box-shadow box-redius">
+                <div class="row container">
+                    <div class="col-md-4">
+                        <div class="task-count box-shadow box-redius">
+                            <p>Todays Implementations: <span class="count yellow">{{ today_imp_no }}</span></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="task-count box-shadow box-redius">
+                            <p>Completing Today: <span class="count green">{{ completing_today_no }}</span></p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="task-count box-shadow box-redius">
+                            <p>Near Completion: <span class="count red">{{ near_completion_no }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="status box-redius box-redius" style="margin-top: 10px;">
+                <div class="total-status box-redius box-shadow">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="bold">Lt Breast</p>
+                            <p><span class="count yellow">{{ lt_breast_no }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="bold">Rt Breast</p>
+                            <p><span class="count yellow">{{ rt_breast_no }}</span></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>DIBH: <span>{{ breast_dibh_no }}</span></p>
+                            <p>IMRT-FiF: <span>{{ breast_imrt_fif_no }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>IMRT-Inv: <span>{{ breast_imrt_inv_no }}</span></p>
+                            <p>Tomotherapy: <span>{{ breast_tomo_no }}</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="total-status box-redius box-shadow">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="bold">NSCLC</p>
+                            <p><span class="yellow">{{ nsclc_no }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="bold">SCLC</p>
+                            <p><span class="yellow">{{ sclc_no }}</span></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>IGRT: <span>{{ lung_igrt_no }}</span></p>
+                            <p>IMRT: <span>{{ lung_imrt_no }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>Pall IMRT: <span>{{ lung_pall_imrt_no }}</span></p>
+                            <p>2DRT <span>{{ lung_2drt_no }}</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="total-status box-redius box-shadow">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="bold">Esophagus</p>
+                            <p><span class="yellow">{{ eso_igrt_no }}</span></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>IGRT: <span>{{ eso_imrt_no }}</span></p>
+                            <p>Brachytherapy: <span>{{ eso_ilrt_no }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>IMRT: <span>{{ eso_imrt_no }}</span></p>
+                            <p>2DRT: <span>{{ eso_2drt_no }}</span></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p>Pall IMRT: <span>{{ eso_pall_imrt_no }}</span></p>
+                    </div>
+                </div>
+                <div class="total-status box-redius box-shadow">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="bold">Brain</p>
+                            <p><span class="yellow">{{ brain_no }}</span></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>Total: <span>{{ brain_no }}</span></p>
+                            <p>SRS/SRT: <span>{{ brain_srs_no }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p>2DRT: <span>{{ brain_2drt_no }}</span></p>
+                            <p>Pall IMRT: <span>{{ brain_pall_imrt_no }}</span></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- <p>Pall IMRT: <span>2</span></p> -->
+                    </div>
+                </div>
+            </div>
+            <div class="patient-status">
+                <div class="simulations box-redius box-shadow">
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <p class="bold">SIMULATIONS (Total) <span class="count green">{{ sim_no }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="bold">SIMULATIONS (30 days) <span class="count green">{{ sim_last30days }}</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <p class="inline">STATUS OF SIMULATED PATIENTS: </p> <a href="{% url 'simflowzoom' %}"
+                        class="btn btn-dark" role="button">View</a>
+
+                </div>
+                <div class="treatments box-redius box-shadow">
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <p class="bold">ON RADIOTHERAPY<span class="count green">{{ onrt_no }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="bold">RT NEAR COMPLETION<span class="count green">{{ near_completion_no }}</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <p class="inline">STATUS OF PATIENTS ON TREATMENT: </p> <a href="{% url 'rtstatuszoom' %}"
+                        class="btn btn-dark" role="button">View</a>
+
+                </div>
+            </div>
+
+            <div class="accordion mt-3" id="cardiacmarker">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingcardiac">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsecardiac" aria-expanded="false" aria-controls="collapsecardiac">
+                            Cardiac Marker Status
+                        </button>
+                    </h2>
+                    <div id="collapsecardiac" class="accordion-collapse collapse" aria-labelledby="headingcardiac" data-bs-parent="#cardiacmarker">
+                        <div class="accordion-body">
+                            <div class="marker-status box-redius box-shadow">
+                                <h5 class="marker-status-heading">Cardiac Markers Status <span class="count yellow">{{ cmdata_no }}</span></h5>
+                                <div class="status-table" style="max-height: 40vh;">
+                                    <table class="table table-striped  table-hover">
+                                        <thead class="table">
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">CR Number</th>
+                                                <th scope="col">Sim Date</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Marker Date</th>
+                                                <th scope="col">Tropl</th>
+                                                <th scope="col">hsCRP</th>
+                                                <th scope="col">NTproBNP</th>
+                                                <th scope="col">Due2date</th>
+                                                <th scope="col">Due3date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="table-group-divider">
+
+                                            {% for data in cm_data %}
+                                            <tr>
+                                              <th scope="row">{{ pt.0 }}</th>
+                                              <td>{{ data.simpk.name }}</td>
+                                              <td>{{ data.parent_id.crnumber }}</td>
+                                              <td>{{ data.simpk.simdate|date:"M d, Y" }}</td>
+                                              <td>{{ data.simpk.initialstatus }}</td>
+                                              <td>{{ data.date|date:"M d, Y" }}</td>
+                                              <td>{{ data.trop_i }}</td>
+                                              <td>{{ data.hs_crp }}</td>
+                                              <td>{{ data.nt_probnp }}</td>
+                                              <td>{{ data.simpk.tentativecompletiondate|date:"M d, Y" }}</td>
+                                              <td>{{ data.date3|date:"M d, Y" }}</td>
+                                            </tr>
+                                          {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion mt-1" id="dibhstatus">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingdibh">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsedibh" aria-expanded="false" aria-controls="collapsedibh">
+                            DIBH Assessment Details
+                        </button>
+                    </h2>
+                    <div id="collapsedibh" class="accordion-collapse collapse" aria-labelledby="headingdibh" data-bs-parent="#dibhstatus">
+                        <div class="accordion-body">
+                            <div class="marker-status box-redius box-shadow">
+                    <h5 class="marker-status-heading">DIBH Assessment Details <span class="count green">{{ presimdata_no }}</span>
+                    </h5>
+                    <div class="status-table" style="max-height: 40vh;">
+                        <table class="table table-striped  table-hover">
+                            <thead class="table">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">CR Number</th>
+                                    <th scope="col">Assess Date</th>
+                                    <th scope="col">Day</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                {% for data in presim_data %}
+                                      <tr>
+                                        <th scope="row">{{ pt.0 }}</th>
+                                        <td>{{ data.presimparent.first_name }}</td>
+                                        <td>{{ data.presimparent.crnumber }}</td>
+                                          {% if data.day5date %}
+                                              <td>{{ data.day5date|date:"M d, Y" }}</td>
+                                              <td>Day 5</td>
+                                              <td>{{ data.final_status }}</td>
+                                              <td>{{ data.final_remarks }}</td>
+                                          {% elif data.day4date %}
+                                              <td>{{ data.day4date|date:"M d, Y" }}</td>
+                                              <td>Day 4</td>
+                                              <td>{{ data.final_status }}</td>
+                                              <td>{{ data.final_remarks }}</td>
+                                          {% elif data.day3date %}
+                                              <td>{{ data.day3date|date:"M d, Y" }}</td>
+                                              <td>Day 3</td>
+                                              <td>{{ data.final_status }}</td>
+                                              <td>{{ data.final_remarks }}</td>
+                                          {% elif data.day2date %}
+                                              <td>{{ data.day2date|date:"M d, Y" }}</td>
+                                              <td>Day 2</td>
+                                              <td>{{ data.day2status }}</td>
+                                              <td>{{ data.d2remarks }}</td>
+                                          {% elif data.day1date %}
+                                              <td>{{ data.day1date|date:"M d, Y" }}</td>
+                                              <td>Day 1</td>
+                                              <td>{{ data.day1status }}</td>
+                                              <td>{{ data.d1remarks }}</td>
+                                          {% endif %}
+                                      </tr>
+                                    {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

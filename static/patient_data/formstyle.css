@@ -1,0 +1,46 @@
+.section-odd {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: #cfb3f6;
+}
+.section-even {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: #efd4da;
+}
+
+.form-btn {
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #3c4848;
+  padding: 14px 28px;
+  font-size: 18px;
+  cursor: pointer;
+  display: inline-block;
+  box-shadow: 5px 8px 20px 10px #5f788a;
+}
+
+/* On mouse-over */
+.form-btn:hover {
+  background: #eee;
+  color: #070707;
+}
+
+.input-field-important {
+  background-color: cadetblue;
+}
+
+.title-color {
+  color: #280000;
+  background-color: #dddddd;
+  padding: 14px 28px;
+}
+
+.form-background {
+  background-color: #dddddd;
+  padding: 14px 28px;
+}
+
+.summary-style-main {
+  box-shadow: 1px 1px 2px 1px #070707;
+  background-color: #d9eaea;
+  padding: 15px 15px;
+}

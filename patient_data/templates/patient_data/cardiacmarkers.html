@@ -1,0 +1,93 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+    <div class="container">
+        <div class="query-container">
+            <div class="my-form">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-row justify-content-left g-3">
+                    {% if update %}
+                        <h1 class="mb-3">Cardiac Markers Update Form</h1>
+                        <h5><a class="btn btn-dark" href="{% url 'radonc-cardiacmarkers-list' updatecrn %}">Back</a></h5>
+                    {% else %}
+                        <h1 class="mb-3">Cardiac Markers Form</h1>
+                        {% with crnumber=123456 %}
+                            <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.crnumber %}">Back</a></h5>
+                        {% endwith %}
+                    {% endif %}
+                    <h3 class="mb-3">Name: {{ patient.first_name }} {{ patient.last_name }}</h3>
+                    <div class="form-control">
+                        <div class="row g-2 mt-2">
+                            <div class="col-md-2">
+                                {{ form.parent_id.errors }}
+                                <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CR Number:</label>
+                                {{ form.parent_id }}
+                            </div>
+                            <div class="col-md-2 d-none">
+                                {{ form.s8_id.errors }}
+                                <label class="oncflow-labels" for="{{ form.s8_id.id_for_label }}">FU ID:</label>
+                                {{ form.s8_id }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.date.errors }}
+                                <label class="oncflow-labels" for="{{ form.date.id_for_label }}">Date:</label>
+                                {{ form.date }}
+                            </div>
+
+                            <div class="col-md-6"></div><hr>
+
+                            <div class="col-md-12">
+                                <h4 style="color: #316bd0">Markers</h4>
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.trop_i.errors }}
+                                <label class="oncflow-labels" for="{{ form.trop_i.id_for_label }}">Trop-I:</label>
+                                {{ form.trop_i }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.hs_crp.errors }}
+                                <label class="oncflow-labels" for="{{ form.hs_crp.id_for_label }}">hsCRP:</label>
+                                {{ form.hs_crp }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.nt_probnp.errors }}
+                                <label class="oncflow-labels" for="{{ form.nt_probnp.id_for_label }}">NT-ProBNP:</label>
+                                {{ form.nt_probnp }}
+                            </div>
+
+                             <div class="col-md-6"></div><hr>
+
+                            <div class="col-md-3">
+                                {{ form.rtstartdate.errors }}
+                                <label class="oncflow-labels" for="{{ form.rtstartdate.id_for_label }}">RT Start Date:</label>
+                                {{ form.rtstartdate }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.planned_fr.errors }}
+                                <label class="oncflow-labels" for="{{ form.planned_fr.id_for_label }}">Fraction Planned:</label>
+                                {{ form.planned_fr }}
+                            </div>
+
+                            <div class="col-md-12">
+                                {{ form.notes.errors }}
+                                <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                {{ form.notes }}
+                            </div>
+                        </div>
+                </div>
+                <!-- Button Row -->
+                {% if update %}
+                    <div class="form-group">
+                        <button class="btn btn-dark mt-2" type="submit">Update</button>
+                    </div>
+                {% else %}
+                    <div class="form-group">
+                        <button class="btn btn-dark mt-2" type="submit">Save</button>
+                    </div>
+                {% endif %}
+                </div>
+            </form>
+    </div>
+        </div>
+    </div>
+{% endblock content %}

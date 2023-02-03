@@ -1,0 +1,1384 @@
+from django.db import models
+from django.utils import timezone
+from django.contrib.auth.models import User
+
+
+# Section1 - Models for option data
+
+class City(models.Model):
+    city = models.CharField(max_length=250, unique=True)
+
+    def __str__(self):
+        return f'{self.city}'
+
+
+class Comorbidity(models.Model):
+    code = models.CharField(max_length=250, primary_key=True, unique=True)
+    comorbidity = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.comorbidity}'
+
+
+class Referredby(models.Model):
+    refby = models.CharField(max_length=250, unique=True)
+
+    def __str__(self):
+        return f'{self.refby}'
+
+
+class OurDiagnosis(models.Model):  # used for reg_diagnosis field in PatientRegistration Model
+    our_diagnosis = models.CharField(max_length=250, unique=True)
+
+    def __str__(self):
+        return f'{self.our_diagnosis}'
+
+
+class HPE(models.Model):
+    code = models.CharField(max_length=250)
+    hpe = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.hpe}'
+
+
+class Site(models.Model):
+    code = models.CharField(max_length=250)
+    site = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.site}'
+
+
+class ChemoProtocolNew(models.Model):
+    code = models.CharField(max_length=250, unique=True)
+    protocol = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.protocol}'
+
+
+class FollowupVisitsType(models.Model):
+    code = models.CharField(max_length=250, unique=True)
+    visittype = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.visittype}'
+
+
+class FollowupActions(models.Model):
+    code = models.CharField(max_length=250, unique=True)
+    actions = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.actions}'
+
+
+class StrType(models.Model):
+    code = models.CharField(max_length=250, unique=True)
+    strtype = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.strtype}'
+
+
+class StrName(models.Model):
+    code = models.CharField(max_length=250, unique=True)
+    strname = models.CharField(max_length=250)  # As Per FMAID
+
+    def __str__(self):
+        return f'{self.strname}'
+
+
+class StrNameClassifierBase(models.Model):
+    code = models.CharField(max_length=250, unique=True)
+    classifier = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.classifier}'
+
+
+class StrNameClassifierNumber(models.Model):
+    code = models.CharField(max_length=250, unique=True)
+    classifier = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.classifier}'
+
+
+class StrNameClassifierImage(models.Model):
+    code = models.CharField(max_length=250, unique=True)
+    classifier = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.classifier}'
+
+
+class StrNameClassifierDose(models.Model):
+    code = models.CharField(max_length=250, unique=True)
+    classifier = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.classifier}'
+
+
+class StrNameClassifierCustom(models.Model):
+    code = models.CharField(max_length=250, unique=True)
+    classifier = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.classifier}'
+
+
+class DVHParameters(models.Model):
+    code = models.CharField(max_length=250, unique=True)
+    Description = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+# Models for radiation oncology SIMULATION TABLE CHOICES
+
+
+class RTSites(models.Model):
+    code = models.CharField(max_length=250, primary_key=True)
+    site = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class ICDMainSites(models.Model):
+    code = models.CharField(max_length=250, primary_key=True)
+    site = models.CharField(max_length=250)
+    icd_code = models.CharField(max_length=250, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class RTTech(models.Model):
+    code = models.CharField(max_length=250, primary_key=True)
+    tech = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class RTIntent(models.Model):
+    code = models.CharField(max_length=250, primary_key=True)
+    intent = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class RTVolumes(models.Model):
+    code = models.CharField(max_length=250, primary_key=True)
+    volume = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class PreSimStatus(models.Model):
+    code = models.CharField(max_length=250, primary_key=True)
+    status = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class SimStatus(models.Model):
+    code = models.CharField(max_length=250, primary_key=True)
+    status = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class DxType(models.Model):
+    code = models.CharField(max_length=250, primary_key=True)
+    type = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class BiopsyGrade(models.Model):
+    code = models.CharField(max_length=250, primary_key=True)
+    grade = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class ClinT(models.Model):
+    code = models.CharField(max_length=250, primary_key=True)
+    c_t = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class ClinN(models.Model):
+    code = models.CharField(max_length=250, primary_key=True)
+    c_n = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class ClinM(models.Model):
+    code = models.CharField(max_length=250, primary_key=True)
+    c_m = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class StageGroup(models.Model):
+    code = models.CharField(max_length=250, primary_key=True)
+    stage_group = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class AjccEdition(models.Model):
+    code = models.CharField(max_length=250, primary_key=True)
+    ajcc_edition = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class StudyGroup(models.Model):
+    id = models.CharField(max_length=45, primary_key=True)
+    code = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class RTMachines(models.Model):
+    code = models.CharField(max_length=250, primary_key=True)
+    rtmachines = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class RTStatus(models.Model):
+    id = models.CharField(max_length=250, primary_key=True)
+    code = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class ChemoDrugs(models.Model):
+    id = models.CharField(max_length=200, primary_key=True)
+    code = models.CharField(max_length=200)
+
+    class Meta:
+        db_table = 'patient_data_drugs'
+
+    def __str__(self):
+        return f'{self.code}'
+
+
+class SxCodes(models.Model):
+    code = models.CharField(max_length=45, primary_key=True)
+    surgery = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'patient_data_sxcode'
+
+    def __str__(self):
+        return f'{self.surgery}'
+
+
+class FMAID(models.Model):
+    fma_id = models.IntegerField(primary_key=True)
+    description = models.CharField(max_length=255)
+    shortname = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'patient_data_fmaid'
+
+    def __str__(self):
+        return f'{self.shortname}--{self.description}'
+
+
+# Models for Radiation Oncology Database
+
+class S1ParentMain(models.Model):
+    s1_id = models.AutoField(primary_key=True, blank=False, null=False)
+    crnumber = models.CharField(max_length=16, blank=False, null=False, unique=True)
+    first_name = models.CharField(max_length=100, blank=True, null=True)
+    last_name = models.CharField(max_length=100, blank=True, null=True)
+    age = models.SmallIntegerField(blank=True, null=True)
+    weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    height = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
+    ecog = models.CharField(max_length=250, blank=True, null=True)
+    doc_type = models.CharField(max_length=45, blank=True, null=True)
+    doc_id = models.CharField(max_length=45, blank=True, null=True)
+    city = models.ForeignKey(City, on_delete=models.DO_NOTHING, null=True, blank=True)
+    smoking = models.CharField(max_length=45, blank=True, null=True)
+    smoking_status = models.CharField(max_length=45, blank=True, null=True)
+    smoking_volume = models.CharField(max_length=45, blank=True, null=True)
+    comorbidity = models.ManyToManyField(Comorbidity, blank=True)
+    email = models.EmailField()
+    mobile = models.CharField(max_length=15, blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
+    user = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)
+    last_updated = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        managed = True
+        db_table = 's1_parent_main'
+
+    def __str__(self):
+        return f'CRN: {self.crnumber} -- Name: {self.first_name} {self.last_name} -- Mobile: {self.mobile}'
+
+
+class S2Diagnosis(models.Model):
+    s2_id = models.AutoField(primary_key=True)
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, to_field='crnumber', blank=False, null=True)
+    # dx_id = models.CharField(max_length=45, blank=False, null=False, unique=True)
+    # dx = models.CharField(max_length=100, blank=True, null=True)
+    diagnosis = models.ForeignKey(OurDiagnosis, blank=True, null=True, on_delete=models.DO_NOTHING)  # FK
+    laterality = models.CharField(max_length=45, blank=True, null=True)
+    dx_type = models.ForeignKey(DxType, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
+    icd_main_topo = models.ForeignKey(ICDMainSites, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
+    icd_topo_code = models.ForeignKey(Site, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
+    icd_path_code = models.ForeignKey(HPE, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
+    # icd_topo = models.CharField(max_length=254, blank=True, null=True)
+    # icd_topo_code = models.CharField(max_length=254, blank=True, null=True)
+    # icd_path = models.CharField(max_length=254, blank=True, null=True)
+    # icd_path_code = models.CharField(max_length=254, blank=True, null=True)
+    dx_date = models.DateTimeField(blank=True, null=True)
+    biopsy_no = models.CharField(max_length=45, blank=True, null=True)
+    biopsy = models.CharField(max_length=254, blank=True, null=True)
+    biopsy_date = models.DateTimeField(blank=True, null=True)
+    biopsy_grade = models.ForeignKey(BiopsyGrade, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
+    confirmed_by = models.CharField(max_length=45, blank=True, null=True)
+    c_t = models.ForeignKey(ClinT, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
+    c_n = models.ForeignKey(ClinN, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
+    c_m = models.ForeignKey(ClinM, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
+    c_stage_group = models.ForeignKey(StageGroup, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
+    c_ajcc_edition = models.ForeignKey(AjccEdition, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
+    er = models.CharField(max_length=45, blank=True, null=True)
+    pr = models.CharField(max_length=45, blank=True, null=True)
+    her2neu = models.CharField(max_length=45, blank=True, null=True)
+    braca1 = models.CharField(max_length=45, blank=True, null=True)
+    braca2 = models.CharField(max_length=45, blank=True, null=True)
+    egfr = models.CharField(max_length=45, blank=True, null=True)
+    alk = models.CharField(max_length=45, blank=True, null=True)
+    ros = models.CharField(max_length=45, blank=True, null=True)
+    pdl_1 = models.CharField(max_length=45, blank=True, null=True)
+    pdl_1_levels = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    braf = models.CharField(max_length=45, blank=True, null=True)
+    met = models.CharField(max_length=45, blank=True, null=True)
+    ret = models.CharField(max_length=45, blank=True, null=True)
+    hpv = models.CharField(max_length=45, blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
+    user = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True)
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)
+
+    class Meta:
+        db_table = 's2_child_dx'
+
+    def __str__(self):
+        return f'CRN: {self.parent_id} -- Diagnosis: {self.diagnosis} --Site: {self.icd_topo_code} --HPE: {self.icd_path_code}'
+
+
+class S3CarePlan(models.Model):
+    s3_id = models.AutoField(primary_key=True)
+    s2_id = models.ForeignKey(S2Diagnosis, models.CASCADE, blank=False, db_column='s2_id', null=True,
+                              to_field='s2_id')
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, to_field='crnumber', blank=False, null=True,
+                                  db_column='parent_id')
+    # s3_dx_id = models.ForeignKey(S2Diagnosis, models.CASCADE, to_field='dx_id',
+    #                              db_column='s3_dx_id', blank=True, null=True, )
+    # mx_id = models.CharField(max_length=40, blank=False, null=False, unique=True)
+    # mcourse = models.CharField(max_length=40, blank=True, null=True)
+    startdate = models.DateTimeField(blank=True, null=True)
+    enddate = models.DateTimeField(blank=True, null=True)
+    intent = models.CharField(max_length=45, blank=True, null=True)
+    radiotherapy = models.CharField(max_length=45, blank=True, null=True)
+    surgery = models.CharField(max_length=45, blank=True, null=True)
+    chemotherapy = models.CharField(max_length=45, blank=True, null=True)
+    brachytherapy = models.CharField(max_length=45, blank=True, null=True)
+    hormone = models.CharField(max_length=45, blank=True, null=True)
+    immunotherapy = models.CharField(max_length=45, blank=True, null=True)
+    bmt = models.CharField(max_length=45, blank=True, null=True)
+    targettherapy = models.CharField(max_length=45, blank=True, null=True)
+    studyprotocol = models.ManyToManyField(StudyGroup, blank=True)
+    notes = models.TextField(blank=True, null=True)
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)
+
+    class Meta:
+        db_table = 's3_child_cp'
+
+    def __str__(self):
+        return f'CRN: {self.parent_id} -- DxID: {self.s3_id} -- Startdate: {self.startdate}'
+
+
+class PreSimulation(models.Model):
+    presimid = models.AutoField(db_column='presimID', primary_key=True)
+    presimparent = models.ForeignKey(S1ParentMain, models.CASCADE, to_field='crnumber', blank=False, null=True)
+    s3_id = models.ForeignKey(S3CarePlan, models.CASCADE, blank=True, db_column='s3_id', to_field='s3_id', null=True)
+    # Day 1
+    day1date = models.DateTimeField(blank=True, null=True)
+    ul_amp_d1 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Upper limit of amplitude
+    ll_amp_d1 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Lower limit of amplitude
+    average_amp_d1 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Average Amp
+    ahd_d1 = models.IntegerField(blank=True, null=True)  # Average hold duration
+    al_d1 = models.BooleanField()  # Air leak
+    d1remarks = models.TextField(blank=True, null=True)
+    # DIBH Assessment done by
+    assessedby_day1 = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name="assessedby_day1")
+    day1status = models.ForeignKey(PreSimStatus, models.DO_NOTHING, blank=True, null=True,
+                                   related_name='day1status')  # Status on Day 1
+    # Day2
+    day2date = models.DateTimeField(blank=True, null=True)
+    ul_amp_d2 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Upper limit of amplitude
+    ll_amp_d2 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Lower limit of amplitude
+    average_amp_d2 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Average Amp
+    ahd_d2 = models.IntegerField(blank=True, null=True)  # Average hold duration
+    al_d2 = models.BooleanField()  # Air leak
+    d2remarks = models.TextField(blank=True, null=True)
+    # DIBH Assessment done by
+    assessedby_day2 = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name="assessedby_day2")
+    day2status = models.ForeignKey(PreSimStatus, models.DO_NOTHING, blank=True, null=True,
+                                   related_name='day2status')  # Status on Day 2
+    # Day3
+    day3date = models.DateTimeField(blank=True, null=True)
+    ul_amp_d3 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Upper limit of amplitude
+    ll_amp_d3 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Lower limit of amplitude
+    average_amp_d3 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Average Amp
+    ahd_d3 = models.IntegerField(blank=True, null=True)  # Average hold duration
+    al_d3 = models.BooleanField()  # Air leak
+    d3remarks = models.TextField(blank=True, null=True)
+    # DIBH Assessment done by
+    assessedby_day3 = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name="assessedby_day3")
+    day3status = models.ForeignKey(PreSimStatus, models.DO_NOTHING, blank=True, null=True,
+                                   related_name='day3status')  # Status on Day 3
+    # Day4
+    day4date = models.DateTimeField(blank=True, null=True)
+    ul_amp_d4 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Upper limit of amplitude
+    ll_amp_d4 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Lower limit of amplitude
+    average_amp_d4 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Average Amp
+    ahd_d4 = models.IntegerField(blank=True, null=True)  # Average hold duration
+    al_d4 = models.BooleanField()  # Air leak
+    d4remarks = models.TextField(blank=True, null=True)
+    # DIBH Assessment done by
+    assessedby_day4 = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name="assessedby_day4")
+    day4status = models.ForeignKey(PreSimStatus, models.DO_NOTHING, blank=True, null=True,
+                                   related_name='day4status')  # Status on Day 4
+    # Day5
+    day5date = models.DateTimeField(blank=True, null=True)
+    ul_amp_d5 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Upper limit of amplitude
+    ll_amp_d5 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Lower limit of amplitude
+    average_amp_d5 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Average Amp
+    ahd_d5 = models.IntegerField(blank=True, null=True)  # Average hold duration
+    al_d5 = models.BooleanField()  # Air leak
+    d5remarks = models.TextField(blank=True, null=True)
+    # DIBH Assessment done by
+    assessedby_day5 = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name="assessedby_day5")
+    day5status = models.ForeignKey(PreSimStatus, models.DO_NOTHING, blank=True, null=True,
+                                   related_name='day5status')  # Status on Day 5
+    xray_status = models.BooleanField()  # Pre RT Xray Chest done at RGCIRC or not
+    final_status = models.ForeignKey(RTTech, models.DO_NOTHING, blank=True, null=True,
+                                     related_name="final_status")  # Final Status on Day 3/4/5.
+    final_remarks = models.TextField(blank=True, null=True)
+    # Options same as technique field in Simulation table
+    user = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)
+    last_updated = models.DateTimeField(default=timezone.now, blank=True, null=True)
+
+    class Meta:
+        db_table = 'presimulation'
+
+    def __str__(self):
+        return f'{self.presimparent} -- {self.presimid} -- {self.day1status} -- {self.day2status}-- {self.day3status}'
+
+
+class Simulation(models.Model):
+    simid = models.AutoField(db_column='simID', primary_key=True)  # Field name made lowercase.
+    presimid = models.ForeignKey(PreSimulation, models.DO_NOTHING, blank=True, null=True)
+    simparent = models.ForeignKey(S1ParentMain, models.CASCADE, db_column='simParent_ID', to_field='crnumber',
+                                  blank=False, null=True)  # Field name made lowercase.
+    s2_id = models.ForeignKey(S2Diagnosis, models.CASCADE, blank=False, null=True,
+                              db_column='s2_id', to_field='s2_id', related_name="sim_diagnosis_id")
+    s3_id = models.ForeignKey(S3CarePlan, models.CASCADE, blank=True, null=True,
+                              db_column="s3_id", to_field="s3_id", related_name="sim_careplan_id")
+    name = models.CharField(db_column='Name', max_length=45)  # Field name made lowercase.
+    simdate = models.DateTimeField(db_column='SimDate')  # Field name made lowercase.
+    simnotes = models.TextField(db_column='SimNotes', blank=True, null=True)  # Field name made lowercase.
+    impdate = models.DateTimeField(db_column='ImpDate')  # Field name made lowercase.
+    impnotes = models.TextField(db_column='ImpNotes', blank=True, null=True)  # Field name made lowercase.
+    initialstatus = models.ForeignKey(SimStatus, models.DO_NOTHING, blank=True, null=True)  # Field name made lowercase.
+    futureplan = models.TextField(db_column='FuturePlan', blank=True, null=True)  # Field name made lowercase.
+    site = models.ForeignKey(RTSites, models.DO_NOTHING, blank=True, null=True)  # Field name made lowercase.
+    icdmainsite = models.ManyToManyField(FMAID, blank=True)
+    technique = models.ForeignKey(RTTech, models.DO_NOTHING, blank=True, null=True)  # Field name made lowercase.
+    intent = models.ForeignKey(RTIntent, models.DO_NOTHING, blank=True, null=True)  # Field name made lowercase.
+    volumes = models.ForeignKey(RTVolumes, models.DO_NOTHING, blank=True, null=True)  # Field name made lowercase.
+    dosephase1 = models.DecimalField(db_column='DosePhase1', max_digits=5, decimal_places=2, blank=True,
+                                     null=True)  # Field name made lowercase.
+    fxphase1 = models.IntegerField(db_column='FxPhase1', blank=True, null=True)  # Field name made lowercase.
+    dosephase2 = models.DecimalField(db_column='DosePhase2', max_digits=5, decimal_places=2, blank=True,
+                                     null=True)  # Field name made lowercase.
+    fxphase2 = models.IntegerField(db_column='FxPhase2', blank=True, null=True)  # Field name made lowercase.
+    dosephase3 = models.DecimalField(db_column='DosePhase3', max_digits=5, decimal_places=2, blank=True,
+                                     null=True)  # Field name made lowercase.
+    fxphase3 = models.IntegerField(db_column='FxPhase3', blank=True, null=True)  # Field name made lowercase.
+
+    dosephase4 = models.DecimalField(db_column='DosePhase4', max_digits=5, decimal_places=2, blank=True,
+                                     null=True)  # Field name made lowercase.
+    fxphase4 = models.IntegerField(db_column='FxPhase4', blank=True, null=True)  # Field name made lowercase.
+
+    totaldose = models.DecimalField(db_column='TotalDose', max_digits=5, decimal_places=2, blank=True,
+                                    null=True)  # Field name made lowercase.
+    totalfractions = models.IntegerField(db_column='TotalFractions', blank=True,
+                                         null=True)  # Field name made lowercase.
+    assignedto = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name="AssignedTo")
+    send_mail = models.BooleanField(default=0)
+    remarks = models.TextField(blank=True, null=True)
+    tentativecompletiondate = models.DateTimeField(db_column='TentativeCompletionDate', blank=True,
+                                                   null=True)  # Field name made lowercase.
+    actualcompletiondate = models.DateTimeField(db_column='ActualCompletionDate', blank=True,
+                                                null=True)  # Field name made lowercase.
+    as_date = models.DateTimeField(db_column='As_Date', blank=True, null=True)  # Field name made lowercase.
+    donefr = models.IntegerField(db_column='DoneFr', blank=True, null=True)  # Field name made lowercase.
+    user = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)
+    last_updated = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        managed = True
+        db_table = 'simulation'
+
+    def __str__(self):
+        return f'{self.simparent} -- {self.simid} -- {self.name} -- {self.site}'
+
+
+class S4RT(models.Model):
+    s4_id = models.AutoField(primary_key=True)
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, to_field='crnumber', null=True,
+                                  db_column='parent_id')
+    s2_id = models.ForeignKey(S2Diagnosis, models.CASCADE, blank=False, null=True,
+                              db_column='s2_id', to_field='s2_id', related_name="rt_diagnosis_id")
+    s3_id = models.ForeignKey(S3CarePlan, models.CASCADE, blank=False, null=True,
+                              db_column="s3_id", to_field="s3_id", related_name="rt_careplan_id")
+
+    simid = models.ForeignKey(Simulation, models.CASCADE, blank=False, unique=False, db_column='simid', null=True, )
+    # rtcourse = models.CharField(max_length=40, blank=False, null=False)
+    rtindication = models.ForeignKey(RTIntent, models.CASCADE, db_column='rtindication', blank=True, null=True, )
+    simdate = models.DateTimeField(blank=True, null=True)
+    rtsite_main = models.ManyToManyField(FMAID, blank=True)  # FK
+
+    rtsitecode = models.ForeignKey(Site, null=True, blank=True, on_delete=models.DO_NOTHING, db_column='rtsitecode')
+    rtdose1 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    rtdosefr1 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    modality1 = models.CharField(max_length=45, blank=True, null=True)
+    tech1 = models.ForeignKey(RTTech, models.DO_NOTHING, blank=True, null=True, db_column='tech1', related_name='tech1')
+    rtdose2 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    rtdosefr2 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    modality2 = models.CharField(max_length=45, blank=True, null=True)
+    tech2 = models.ForeignKey(RTTech, models.DO_NOTHING, blank=True, null=True, db_column='tech2', related_name='tech2')
+    rtdose3 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    rtdosefr3 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    modality3 = models.CharField(max_length=45, blank=True, null=True)
+    tech3 = models.ForeignKey(RTTech, models.DO_NOTHING, blank=True, null=True, db_column='tech3', related_name='tech3')
+    rtdose4 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    rtdosefr4 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    modality4 = models.CharField(max_length=45, blank=True, null=True)
+    tech4 = models.ForeignKey(RTTech, models.DO_NOTHING, blank=True, null=True, db_column='tech4', related_name='tech4')
+    rtstartdate = models.DateTimeField(blank=True, null=True)
+    rtfinishdate = models.DateTimeField(blank=True, null=True)
+    rtmachine = models.ForeignKey(RTMachines, models.DO_NOTHING, blank=True, null=True, db_column='rtmachine',
+                                  related_name='rtmachine')
+    rtstatus = models.ForeignKey(RTStatus, models.DO_NOTHING, blank=True, null=True, db_column='rtstatus',
+                                 related_name='rtstatus')
+    institution = models.CharField(max_length=100, blank=True, null=True)
+    studygp = models.ManyToManyField(StudyGroup, blank=True)
+    # studygp2 = models.ForeignKey(StudyGroup, models.DO_NOTHING, blank=True, null=True, db_column='studygp2',
+    #                              related_name='studygp2')
+    # studygp3 = models.ForeignKey(StudyGroup, models.DO_NOTHING, blank=True, null=True, db_column='studygp3',
+    #                              related_name='studygp3')
+    # studygp4 = models.ForeignKey(StudyGroup, models.DO_NOTHING, blank=True, null=True, db_column='studygp4',
+    #                              related_name='studygp4')
+    notes = models.TextField(blank=True, null=True)
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)
+
+    class Meta:
+        db_table = 's4_child_cp_rt'
+
+    def __str__(self):
+        return f'CRN: {self.parent_id} -- DxID: {self.s4_id}-- SIMID: {self.simid} -- RT Dose: {self.rtsitecode}'
+
+
+class PrimaryDVH(models.Model):
+    s4_dvh_id = models.AutoField(primary_key=True)
+    s4_id = models.ForeignKey(S4RT, models.CASCADE, blank=False, null=False, db_column='s4_id', to_field='s4_id')
+    str_type = models.ForeignKey(StrType, models.CASCADE, blank=False, null=True, db_column='str_type', to_field='code')
+    str_name = models.ForeignKey(StrName, models.CASCADE, blank=False, null=True, db_column='str_name',
+                                 to_field='code')  # As per AAPM report no 263 (Task Group 263) if taget otherwise as per FMAID
+    target_class_base = models.ForeignKey(StrNameClassifierBase, models.CASCADE, blank=True, null=True,
+                                          db_column='target_class_base',
+                                          to_field='code')  # If structure is target. Use calssifier as per AAPM report no. 263 (Task Group 263)
+    target_class_number = models.ForeignKey(StrNameClassifierNumber, models.CASCADE, blank=True, null=True,
+                                            db_column='target_class_number',
+                                            to_field='code')  # If structure is target. Use calssifier as per AAPM report no. 263 (Task Group 263)
+    target_class_image = models.ForeignKey(StrNameClassifierImage, models.CASCADE, blank=True, null=True,
+                                           db_column='target_class_image',
+                                           to_field='code')  # If structure is target. Use calssifier as per AAPM report no. 263 (Task Group 263)
+    target_class_dose = models.ForeignKey(StrNameClassifierDose, models.CASCADE, blank=True, null=True,
+                                          db_column='target_class_dose',
+                                          to_field='code')  # If structure is target. Use calssifier as per AAPM report no. 263 (Task Group 263)
+    target_class_custom = models.ForeignKey(StrNameClassifierCustom, models.CASCADE, blank=True, null=True,
+                                            db_column='target_class_custom',
+                                            to_field='code')  # If structure is target. Use calssifier as per AAPM report no. 263 (Task Group 263)
+
+    vol = models.DecimalField(max_digits=9, decimal_places=2, blank=True, null=True)
+    parameters = models.ForeignKey(DVHParameters, models.CASCADE, blank=False, null=True,
+                                   db_column='parameters',
+                                   to_field='code')  # As per AAPM report no 263 (Task Group 263)
+    value = models.DecimalField(max_digits=15, decimal_places=5, blank=False, null=True)
+
+    notes = models.TextField(blank=True, null=True)
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)  # New
+
+    class Meta:
+        db_table = 'primarydvh'
+
+    def __str__(self):
+        return f'CRN: {self.s4_id} -- StrType: {self.str_type}-- StrName: {self.str_name} -- Value: {self.value}'
+
+
+class S7Assessment(models.Model):
+    s7_id = models.AutoField(primary_key=True)
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, to_field='crnumber',
+                                  db_column='parent_id')
+    s4_id = models.ForeignKey(S4RT, models.CASCADE, to_field='s4_id',
+                              db_column='s4_id', blank=False, null=False)
+    as_date = models.DateTimeField(blank=False, null=False)
+    txstatus = models.CharField(max_length=45, blank=True, null=True)
+    ecog = models.CharField(max_length=45, blank=True, null=True)
+    weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    fatigue = models.CharField(max_length=45, blank=True, null=True)
+    apetite = models.CharField(max_length=45, blank=True, null=True)
+    pain = models.CharField(max_length=45, blank=True, null=True)
+    dermatitis = models.CharField(max_length=45, blank=True, null=True)
+    skin_axilla = models.CharField(max_length=45, blank=True, null=True)
+    skin_scf = models.CharField(max_length=45, blank=True, null=True)
+    skin_imf = models.CharField(max_length=45, blank=True, null=True)
+    skin_uoq = models.CharField(max_length=45, blank=True, null=True)
+    skin_loq = models.CharField(max_length=45, blank=True, null=True)
+    skin_uiq = models.CharField(max_length=45, blank=True, null=True)
+    skin_liq = models.CharField(max_length=45, blank=True, null=True)
+    mucositis = models.CharField(max_length=45, blank=True, null=True)
+    esophagitis = models.CharField(max_length=45, blank=True, null=True)
+    naus_vom = models.CharField(max_length=45, blank=True, null=True)
+    cough = models.CharField(max_length=45, blank=True, null=True)
+    pruritis = models.CharField(max_length=45, blank=True, null=True)
+    dysphagia = models.CharField(max_length=45, blank=True, null=True)
+    hiccups = models.CharField(max_length=45, blank=True, null=True)
+    hoarseness = models.CharField(max_length=45, blank=True, null=True)
+    vertigo = models.CharField(max_length=45, blank=True, null=True)
+    conjunctivitis = models.CharField(max_length=45, blank=True, null=True)
+    dryeye = models.CharField(max_length=45, blank=True, null=True)
+    constipation = models.CharField(max_length=45, blank=True, null=True)
+    diarrhea = models.CharField(max_length=45, blank=True, null=True)
+    vomiting = models.CharField(max_length=45, blank=True, null=True)
+    edemaLimbs = models.CharField(max_length=45, blank=True, null=True)
+    fever = models.CharField(max_length=45, blank=True, null=True)
+    gaitDisturbance = models.CharField(max_length=45, blank=True, null=True)
+    localizedEdema = models.CharField(max_length=45, blank=True, null=True)
+    malaise = models.CharField(max_length=45, blank=True, null=True)
+    otitisexterna = models.CharField(max_length=45, blank=True, null=True)
+    otitismedia = models.CharField(max_length=45, blank=True, null=True)
+    papulopustularrash = models.CharField(max_length=45, blank=True, null=True)
+    rashacneiform = models.CharField(max_length=45, blank=True, null=True)
+    rashmaculpapular = models.CharField(max_length=45, blank=True, null=True)
+    rashpustular = models.CharField(max_length=45, blank=True, null=True)
+    pharyngitis = models.CharField(max_length=45, blank=True, null=True)
+    tracheitis = models.CharField(max_length=45, blank=True, null=True)
+    hypercalcemia = models.CharField(max_length=45, blank=True, null=True)
+    hyperkalemia = models.CharField(max_length=45, blank=True, null=True)
+    hypokalemia = models.CharField(max_length=45, blank=True, null=True)
+    hypernatremia = models.CharField(max_length=45, blank=True, null=True)
+    hypoalbuminemia = models.CharField(max_length=45, blank=True, null=True)
+    hypocalcemia = models.CharField(max_length=45, blank=True, null=True)
+    hyponatremia = models.CharField(max_length=45, blank=True, null=True)
+    tls = models.CharField(max_length=45, blank=True, null=True)
+    arthralgia = models.CharField(max_length=45, blank=True, null=True)
+    bonepain = models.CharField(max_length=45, blank=True, null=True)
+    trismus = models.CharField(max_length=45, blank=True, null=True)
+    ataxia = models.CharField(max_length=45, blank=True, null=True)
+    cognitivedisturbance = models.CharField(max_length=45, blank=True, null=True)
+    concentration = models.CharField(max_length=45, blank=True, null=True)
+    consciousness = models.CharField(max_length=45, blank=True, null=True)
+    dysgeusia = models.CharField(max_length=45, blank=True, null=True)
+    headache = models.CharField(max_length=45, blank=True, null=True)
+    somnolence = models.CharField(max_length=45, blank=True, null=True)
+    lethargy = models.CharField(max_length=45, blank=True, null=True)
+    memoryimpairment = models.CharField(max_length=45, blank=True, null=True)
+    radiculitis = models.CharField(max_length=45, blank=True, null=True)
+    anxiety = models.CharField(max_length=45, blank=True, null=True)
+    confusion = models.CharField(max_length=45, blank=True, null=True)
+    depression = models.CharField(max_length=45, blank=True, null=True)
+    insomnia = models.CharField(max_length=45, blank=True, null=True)
+    hematuria = models.CharField(max_length=45, blank=True, null=True)
+    aspiration = models.CharField(max_length=45, blank=True, null=True)
+    epistaxis = models.CharField(max_length=45, blank=True, null=True)
+    dyspnea = models.CharField(max_length=45, blank=True, null=True)
+    laryngealedema = models.CharField(max_length=45, blank=True, null=True)
+    pneumonitis = models.CharField(max_length=45, blank=True, null=True)
+    pulmonaryfibrosis = models.CharField(max_length=45, blank=True, null=True)
+    alopecia = models.CharField(max_length=45, blank=True, null=True)
+    hotflashes = models.CharField(max_length=45, blank=True, null=True)
+    anemia = models.CharField(max_length=45, blank=True, null=True)
+    platelet = models.CharField(max_length=45, blank=True, null=True)
+    leukopenia = models.CharField(max_length=45, blank=True, null=True)
+    neutropenia = models.CharField(max_length=45, blank=True, null=True)
+
+    symp1 = models.CharField(max_length=100, blank=True, null=True)
+    symp2 = models.CharField(max_length=100, blank=True, null=True)
+    symp3 = models.CharField(max_length=100, blank=True, null=True)
+    symp4 = models.CharField(max_length=100, blank=True, null=True)
+    symp5 = models.CharField(max_length=100, blank=True, null=True)
+    symp6 = models.CharField(max_length=100, blank=True, null=True)
+    symp7 = models.CharField(max_length=100, blank=True, null=True)
+
+    symp1type = models.CharField(max_length=15, blank=True, null=True)
+    symp2type = models.CharField(max_length=15, blank=True, null=True)
+    symp3type = models.CharField(max_length=15, blank=True, null=True)
+    symp4type = models.CharField(max_length=15, blank=True, null=True)
+    symp5type = models.CharField(max_length=15, blank=True, null=True)
+    symp6type = models.CharField(max_length=15, blank=True, null=True)
+    symp7type = models.CharField(max_length=15, blank=True, null=True)
+
+    drugrx1 = models.CharField(max_length=45, blank=True, null=True)
+    drugrx2 = models.CharField(max_length=45, blank=True, null=True)
+    drugrx3 = models.CharField(max_length=45, blank=True, null=True)
+    drugrx4 = models.CharField(max_length=45, blank=True, null=True)
+    drugrx5 = models.CharField(max_length=45, blank=True, null=True)
+    drugrx6 = models.CharField(max_length=45, blank=True, null=True)
+
+    rx1fx = models.CharField(max_length=15, blank=True, null=True)
+    rx2fx = models.CharField(max_length=15, blank=True, null=True)
+    rx3fx = models.CharField(max_length=15, blank=True, null=True)
+    rx4fx = models.CharField(max_length=15, blank=True, null=True)
+    rx5fx = models.CharField(max_length=15, blank=True, null=True)
+    rx6fx = models.CharField(max_length=15, blank=True, null=True)
+
+    rx1route = models.CharField(max_length=15, blank=True, null=True)
+    rx2route = models.CharField(max_length=15, blank=True, null=True)
+    rx3route = models.CharField(max_length=15, blank=True, null=True)
+    rx4route = models.CharField(max_length=15, blank=True, null=True)
+    rx5route = models.CharField(max_length=15, blank=True, null=True)
+    rx6route = models.CharField(max_length=15, blank=True, null=True)
+
+    rx1dur = models.IntegerField(blank=True, null=True)
+    rx2dur = models.IntegerField(blank=True, null=True)
+    rx3dur = models.IntegerField(blank=True, null=True)
+    rx4dur = models.IntegerField(blank=True, null=True)
+    rx5dur = models.IntegerField(blank=True, null=True)
+    rx6dur = models.IntegerField(blank=True, null=True)
+
+    rx1inst = models.CharField(max_length=100, blank=True, null=True)
+    rx2inst = models.CharField(max_length=100, blank=True, null=True)
+    rx3inst = models.CharField(max_length=100, blank=True, null=True)
+    rx4inst = models.CharField(max_length=100, blank=True, null=True)
+    rx5inst = models.CharField(max_length=100, blank=True, null=True)
+    rx6inst = models.CharField(max_length=100, blank=True, null=True)
+
+    rxdose1 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    rxdose2 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    rxdose3 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    rxdose4 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    rxdose5 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    rxdose6 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+
+    rxunit1 = models.CharField(max_length=10, blank=True, null=True)
+    rxunit2 = models.CharField(max_length=10, blank=True, null=True)
+    rxunit3 = models.CharField(max_length=10, blank=True, null=True)
+    rxunit4 = models.CharField(max_length=10, blank=True, null=True)
+    rxunit5 = models.CharField(max_length=10, blank=True, null=True)
+    rxunit6 = models.CharField(max_length=10, blank=True, null=True)
+
+    fxdone = models.IntegerField(blank=True, null=True)
+    intervention1 = models.CharField(max_length=45, blank=True, null=True)
+    intervention2 = models.CharField(max_length=45, blank=True, null=True)
+    intervention3 = models.CharField(max_length=45, blank=True, null=True)
+    intervention4 = models.CharField(max_length=45, blank=True, null=True)
+
+    notes = models.TextField(blank=True, null=True)
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)  # New
+
+    class Meta:
+        db_table = 's7_child_as'
+
+    def __str__(self):
+        return f'CRN: {self.parent_id} -- RTID: {self.s4_id} -- RTPK: {self.s7_id} -- RT ' \
+               f'Dose: {self.as_date} -- Status: {self.txstatus}'
+
+
+class S6Surgery(models.Model):
+    s6_id = models.AutoField(primary_key=True)
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+                                  to_field='crnumber')
+    s3_id = models.ForeignKey(S3CarePlan, models.CASCADE, blank=False, null=False,
+                              db_column="s3_id", to_field="s3_id")
+    sxunit = models.ForeignKey(Referredby, models.CASCADE, db_column='sxunit', blank=True, null=True, to_field='refby')
+    admissiondate = models.DateTimeField(blank=True, null=True)
+    sxdate = models.DateTimeField(blank=True, null=True)
+    dischargedate = models.DateTimeField(blank=True, null=True)
+
+    sxtype = models.ManyToManyField(SxCodes, blank=False)
+
+    notes = models.TextField(blank=True, null=True)
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)
+
+    class Meta:
+        db_table = 's6_child_cp_sx'
+
+    def __str__(self):
+        return f'CRN: {self.parent_id} -- Name: {self.sxdate} {self.sxtype} -- Mobile: {self.sxunit}'
+
+
+class S6HPE(models.Model):
+    s6hpe_id = models.AutoField(primary_key=True)
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+                                  to_field='crnumber')
+    s6_id = models.ForeignKey(S6Surgery, models.CASCADE, blank=False, null=False,
+                              db_column="s6_id")
+    hpedate = models.DateTimeField(blank=True, null=True)
+    hpeno = models.CharField(max_length=45, blank=True, null=True)
+    hpegrade = models.ForeignKey(BiopsyGrade, null=True, blank=True, on_delete=models.DO_NOTHING,
+                                 db_column='hpegrade')
+    icd_path_code = models.ForeignKey(HPE, null=True, blank=True, on_delete=models.DO_NOTHING,
+                                      db_column='icd_path_code')
+
+    pt = models.ForeignKey(ClinT, null=True, blank=True, on_delete=models.DO_NOTHING, db_column="pt")  # FK
+    pn = models.ForeignKey(ClinN, null=True, blank=True, on_delete=models.DO_NOTHING, db_column="pn")  # FK
+    pm = models.ForeignKey(ClinM, null=True, blank=True, on_delete=models.DO_NOTHING, db_column="pm")  # FK
+    pstagegroup = models.ForeignKey(StageGroup, null=True, blank=True, on_delete=models.DO_NOTHING,
+                                    db_column='pstagegroup')  # FK
+    pajccedition = models.ForeignKey(AjccEdition, null=True, blank=True, on_delete=models.DO_NOTHING,
+                                     db_column='pajccedition')  # FK
+
+    gleasonsp = models.IntegerField(blank=True, null=True)
+    gleasonss = models.IntegerField(blank=True, null=True)
+    gleasonst = models.IntegerField(blank=True, null=True)
+    gleasons = models.IntegerField(blank=True, null=True)
+    psa_level = models.DecimalField(max_digits=10, decimal_places=6, blank=True, null=True)
+    psa_date = models.DateTimeField(blank=True, null=True)
+
+    tumorsized1 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    tumorsized2 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    tumorsized3 = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+
+    nrl1 = models.IntegerField(blank=True, null=True)
+    npl1 = models.IntegerField(blank=True, null=True)
+    nrl2 = models.IntegerField(blank=True, null=True)
+    npl2 = models.IntegerField(blank=True, null=True)
+    nrl3 = models.IntegerField(blank=True, null=True)
+    npl3 = models.IntegerField(blank=True, null=True)
+    nrl4 = models.IntegerField(blank=True, null=True)
+    npl4 = models.IntegerField(blank=True, null=True)
+    nrl5 = models.IntegerField(blank=True, null=True)
+    npl5 = models.IntegerField(blank=True, null=True)
+    nrl6 = models.IntegerField(blank=True, null=True)
+    npl6 = models.IntegerField(blank=True, null=True)
+    nrl7 = models.IntegerField(blank=True, null=True)
+    npl7 = models.IntegerField(blank=True, null=True)
+    nrl8 = models.IntegerField(blank=True, null=True)
+    npl8 = models.IntegerField(blank=True, null=True)
+    nrl9 = models.IntegerField(blank=True, null=True)
+    npl9 = models.IntegerField(blank=True, null=True)
+    nrl10 = models.IntegerField(blank=True, null=True)
+    npl10 = models.IntegerField(blank=True, null=True)
+    nrl11 = models.IntegerField(blank=True, null=True)
+    npl11 = models.IntegerField(blank=True, null=True)
+    nrl12 = models.IntegerField(blank=True, null=True)
+    npl12 = models.IntegerField(blank=True, null=True)
+    nodesr = models.IntegerField(blank=True, null=True)
+    nodesp = models.IntegerField(blank=True, null=True)
+
+    textension = models.CharField(max_length=100, blank=True, null=True)
+    lvi_vi = models.CharField(max_length=45, blank=True, null=True)
+    pni = models.CharField(max_length=45, blank=True, null=True)
+    ene = models.CharField(max_length=45, blank=True, null=True)
+    margins = models.CharField(max_length=45, blank=True, null=True)
+    marginb = models.CharField(max_length=45, blank=True, null=True)
+    marginv = models.CharField(max_length=45, blank=True, null=True)
+    marginp = models.CharField(max_length=45, blank=True, null=True)
+    marginpp = models.CharField(max_length=45, blank=True, null=True)
+    marginvp = models.CharField(max_length=45, blank=True, null=True)
+    marginprox = models.CharField(max_length=45, blank=True, null=True)
+    margindist = models.CharField(max_length=45, blank=True, null=True)
+    margincircum = models.CharField(max_length=45, blank=True, null=True)
+    marginmedial = models.CharField(max_length=45, blank=True, null=True)
+    marginlateral = models.CharField(max_length=45, blank=True, null=True)
+
+    er = models.CharField(max_length=45, blank=True, null=True)
+    pr = models.CharField(max_length=45, blank=True, null=True)
+    her2neu = models.CharField(max_length=45, blank=True, null=True)
+    braca1 = models.CharField(max_length=45, blank=True, null=True)
+    braca2 = models.CharField(max_length=45, blank=True, null=True)
+    egfr = models.CharField(max_length=45, blank=True, null=True)
+    alk = models.CharField(max_length=45, blank=True, null=True)
+    ros = models.CharField(max_length=45, blank=True, null=True)
+    pdl1 = models.CharField(max_length=45, blank=True, null=True)
+    pdl1_val = models.IntegerField(blank=True, null=True)
+    braf = models.CharField(max_length=45, blank=True, null=True)
+    met = models.CharField(max_length=45, blank=True, null=True)
+    ret = models.CharField(max_length=45, blank=True, null=True)
+    hpv = models.CharField(max_length=45, blank=True, null=True)
+
+    notes = models.TextField(blank=True, null=True)
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)  # New
+
+    class Meta:
+        db_table = 's6_child_cp_sxhpe'
+
+    def __str__(self):
+        return f'CRN: {self.parent_id} -- Sx ID: {self.s6_id} -- Histopath: {self.icd_path_code} -- Date: {self.hpedate}'
+
+
+class S5Chemo(models.Model):
+    s5_id = models.AutoField(primary_key=True)
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+                                  to_field='crnumber')
+    s3_id = models.ForeignKey(S3CarePlan, models.CASCADE, blank=False, null=False,
+                              db_column="s3_id", to_field="s3_id", related_name="ch_careplan_id")
+
+    chemo_protocol = models.ForeignKey(ChemoProtocolNew, models.DO_NOTHING, blank=True, null=True,
+                                       db_column='chemo_protocol_id', to_field='id')
+    cycleno = models.IntegerField(blank=True, null=True)
+    chemo_day = models.CharField(max_length=45, blank=True, null=True)
+    chemodate = models.DateTimeField(blank=True, null=True)
+    unit = models.ForeignKey(Referredby, models.CASCADE, db_column='unit', blank=True, null=True, to_field='refby')
+
+    drug1 = models.ForeignKey(ChemoDrugs, models.CASCADE, db_column='drug1', blank=True, null=True,
+                              related_name='drug1')
+    d1dose = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    sdate1 = models.DateTimeField(blank=True, null=True)
+    fdate1 = models.DateTimeField(blank=True, null=True)
+
+    drug2 = models.ForeignKey(ChemoDrugs, models.CASCADE, db_column='drug2', blank=True, null=True,
+                              related_name='drug2')
+    d2dose = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    sdate2 = models.DateTimeField(blank=True, null=True)
+    fdate2 = models.DateTimeField(blank=True, null=True)
+
+    drug3 = models.ForeignKey(ChemoDrugs, models.CASCADE, db_column='drug3', blank=True, null=True,
+                              related_name='drug3')
+    d3dose = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    sdate3 = models.DateTimeField(blank=True, null=True)
+    fdate3 = models.DateTimeField(blank=True, null=True)
+
+    drug4 = models.ForeignKey(ChemoDrugs, models.CASCADE, db_column='drug4', blank=True, null=True,
+                              related_name='drug4')
+    d4dose = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    sdate4 = models.DateTimeField(blank=True, null=True)
+    fdate4 = models.DateTimeField(blank=True, null=True)
+
+    drug5 = models.ForeignKey(ChemoDrugs, models.CASCADE, db_column='drug5', blank=True, null=True,
+                              related_name='drug5')
+    d5dose = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    sdate5 = models.DateTimeField(blank=True, null=True)
+    fdate5 = models.DateTimeField(blank=True, null=True)
+
+    notes = models.TextField(blank=True, null=True)
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)
+
+    class Meta:
+        db_table = 's5_child_cp_ch'
+
+
+class S8FUP(models.Model):
+    s8_id = models.AutoField(primary_key=True)
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+                                  to_field='crnumber')
+    s2_id = models.ForeignKey(S2Diagnosis, models.CASCADE, blank=True, null=True,
+                              db_column='s2_id', to_field='s2_id')
+    s3_id = models.ForeignKey(S3CarePlan, models.CASCADE, blank=True, null=True,
+                              db_column="s3_id", to_field="s3_id")
+    visitdate = models.DateTimeField(blank=False, null=False)
+    visittype = models.ManyToManyField(FollowupVisitsType, blank=False)
+    visitaction = models.ForeignKey(FollowupActions, models.CASCADE, blank=False, null=False, db_column='visitactions',
+                                    to_field='code')
+    Weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+    PerfStatus = models.CharField(max_length=45, blank=True, null=True)
+    Nextvisit = models.DateTimeField(blank=True, null=True)
+    RecordRecc = models.CharField(max_length=45, blank=True, null=True)
+    LRstatus = models.CharField(max_length=45, blank=True, null=True)
+    RRstatus = models.CharField(max_length=45, blank=True, null=True)
+    DMstatus = models.CharField(max_length=45, blank=True, null=True)
+    Death = models.CharField(max_length=45, blank=True, null=True)
+    CauseDeath = models.CharField(max_length=45, blank=True, null=True)
+    Datedeath = models.DateTimeField(blank=True, null=True)
+    # Record Late Toxicity
+    ToxType1 = models.CharField(max_length=45, blank=True, null=True)
+    SeverityT1 = models.CharField(max_length=45, blank=True, null=True)
+    ToxType2 = models.CharField(max_length=45, blank=True, null=True)
+    SeverityT2 = models.CharField(max_length=45, blank=True, null=True)
+    ToxType3 = models.CharField(max_length=45, blank=True, null=True)
+    SeverityT3 = models.CharField(max_length=45, blank=True, null=True)
+    ToxType4 = models.CharField(max_length=45, blank=True, null=True)
+    SeverityT4 = models.CharField(max_length=45, blank=True, null=True)
+    ToxType5 = models.CharField(max_length=45, blank=True, null=True)
+    SeverityT5 = models.CharField(max_length=45, blank=True, null=True)
+    # Prescription
+    Symp1 = models.CharField(max_length=100, blank=True, null=True)
+    Symp2 = models.CharField(max_length=100, blank=True, null=True)
+    Symp3 = models.CharField(max_length=100, blank=True, null=True)
+    Symp4 = models.CharField(max_length=100, blank=True, null=True)
+    Symp5 = models.CharField(max_length=100, blank=True, null=True)
+    Symp6 = models.CharField(max_length=100, blank=True, null=True)
+    Symp7 = models.CharField(max_length=100, blank=True, null=True)
+    Symp1Type = models.CharField(max_length=15, blank=True, null=True)
+    Symp2Type = models.CharField(max_length=15, blank=True, null=True)
+    Symp3Type = models.CharField(max_length=15, blank=True, null=True)
+    Symp4Type = models.CharField(max_length=15, blank=True, null=True)
+    Symp5Type = models.CharField(max_length=15, blank=True, null=True)
+    Symp6Type = models.CharField(max_length=15, blank=True, null=True)
+    Symp7Type = models.CharField(max_length=15, blank=True, null=True)
+    DrugRx1 = models.CharField(max_length=45, blank=True, null=True)
+    DrugRx2 = models.CharField(max_length=45, blank=True, null=True)
+    DrugRx3 = models.CharField(max_length=45, blank=True, null=True)
+    DrugRx4 = models.CharField(max_length=45, blank=True, null=True)
+    DrugRx5 = models.CharField(max_length=45, blank=True, null=True)
+    DrugRx6 = models.CharField(max_length=45, blank=True, null=True)
+    Rx1Fx = models.CharField(max_length=15, blank=True, null=True)
+    Rx2Fx = models.CharField(max_length=15, blank=True, null=True)
+    Rx3Fx = models.CharField(max_length=15, blank=True, null=True)
+    Rx4Fx = models.CharField(max_length=15, blank=True, null=True)
+    Rx5Fx = models.CharField(max_length=15, blank=True, null=True)
+    Rx6Fx = models.CharField(max_length=15, blank=True, null=True)
+    Rx1Route = models.CharField(max_length=15, blank=True, null=True)
+    Rx2Route = models.CharField(max_length=15, blank=True, null=True)
+    Rx3Route = models.CharField(max_length=15, blank=True, null=True)
+    Rx4Route = models.CharField(max_length=15, blank=True, null=True)
+    Rx5Route = models.CharField(max_length=15, blank=True, null=True)
+    Rx6Route = models.CharField(max_length=15, blank=True, null=True)
+    Rx1Dur = models.IntegerField(blank=True, null=True)
+    Rx2Dur = models.IntegerField(blank=True, null=True)
+    Rx3Dur = models.IntegerField(blank=True, null=True)
+    Rx4Dur = models.IntegerField(blank=True, null=True)
+    Rx5Dur = models.IntegerField(blank=True, null=True)
+    Rx6Dur = models.IntegerField(blank=True, null=True)
+    Rx1Inst = models.CharField(max_length=100, blank=True, null=True)
+    Rx2Inst = models.CharField(max_length=100, blank=True, null=True)
+    Rx3Inst = models.CharField(max_length=100, blank=True, null=True)
+    Rx4Inst = models.CharField(max_length=100, blank=True, null=True)
+    Rx5Inst = models.CharField(max_length=100, blank=True, null=True)
+    Rx6Inst = models.CharField(max_length=100, blank=True, null=True)
+    RxDose1 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    RxDose2 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    RxDose3 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    RxDose4 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    RxDose5 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    RxDose6 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
+    RxUnit1 = models.CharField(max_length=10, blank=True, null=True)
+    RxUnit2 = models.CharField(max_length=10, blank=True, null=True)
+    RxUnit3 = models.CharField(max_length=10, blank=True, null=True)
+    RxUnit4 = models.CharField(max_length=10, blank=True, null=True)
+    RxUnit5 = models.CharField(max_length=10, blank=True, null=True)
+    RxUnit6 = models.CharField(max_length=10, blank=True, null=True)
+    # Any Intervention
+    Intervention1 = models.CharField(max_length=45, blank=True, null=True)
+    Intervention2 = models.CharField(max_length=45, blank=True, null=True)
+    Intervention3 = models.CharField(max_length=45, blank=True, null=True)
+    Intervention4 = models.CharField(max_length=45, blank=True, null=True)
+    # Investigations - Imaging
+    PETCTSite = models.CharField(max_length=45, blank=True, null=True)
+    PETCTSite1 = models.CharField(max_length=45, blank=True, null=True)
+    PETCTSite2 = models.CharField(max_length=45, blank=True, null=True)
+    PETCTSite3 = models.CharField(max_length=45, blank=True, null=True)
+    PETCTSite4 = models.CharField(max_length=45, blank=True, null=True)
+    PETCT = models.CharField(max_length=45, blank=True, null=True)
+    PETCT1 = models.CharField(max_length=45, blank=True, null=True)
+    PETCT2 = models.CharField(max_length=45, blank=True, null=True)
+    PETCT3 = models.CharField(max_length=45, blank=True, null=True)
+    PETCT4 = models.CharField(max_length=45, blank=True, null=True)
+    PETCTNotes = models.CharField(max_length=255, blank=True, null=True)
+    PETCTNotes1 = models.CharField(max_length=255, blank=True, null=True)
+    PETCTNotes2 = models.CharField(max_length=255, blank=True, null=True)
+    PETCTNotes3 = models.CharField(max_length=255, blank=True, null=True)
+    PETCTNotes4 = models.CharField(max_length=255, blank=True, null=True)
+    PETCTReport = models.CharField(max_length=255, blank=True, null=True)
+    CTSite = models.CharField(max_length=45, blank=True, null=True)
+    CTSite1 = models.CharField(max_length=45, blank=True, null=True)
+    CTSite2 = models.CharField(max_length=45, blank=True, null=True)
+    CTSite3 = models.CharField(max_length=45, blank=True, null=True)
+    CTSite4 = models.CharField(max_length=45, blank=True, null=True)
+    CECT = models.CharField(max_length=45, blank=True, null=True)
+    CECT1 = models.CharField(max_length=45, blank=True, null=True)
+    CECT2 = models.CharField(max_length=45, blank=True, null=True)
+    CECT3 = models.CharField(max_length=45, blank=True, null=True)
+    CECT4 = models.CharField(max_length=45, blank=True, null=True)
+    CECTNotes = models.CharField(max_length=255, blank=True, null=True)
+    CECTNotes1 = models.CharField(max_length=255, blank=True, null=True)
+    CECTNotes2 = models.CharField(max_length=255, blank=True, null=True)
+    CECTNotes3 = models.CharField(max_length=255, blank=True, null=True)
+    CECTNotes4 = models.CharField(max_length=255, blank=True, null=True)
+    LDCT = models.CharField(max_length=45, blank=True, null=True)
+    LDCTNotes = models.CharField(max_length=255, blank=True, null=True)
+    UGIE = models.CharField(max_length=45, blank=True, null=True)
+    UGIENotes = models.CharField(max_length=255, blank=True, null=True)
+    XRaySite = models.CharField(max_length=45, blank=True, null=True)
+    XRaySite1 = models.CharField(max_length=45, blank=True, null=True)
+    XRaySite2 = models.CharField(max_length=45, blank=True, null=True)
+    XRaySite3 = models.CharField(max_length=45, blank=True, null=True)
+    XRaySite4 = models.CharField(max_length=45, blank=True, null=True)
+    XRay = models.CharField(max_length=45, blank=True, null=True)
+    XRay1 = models.CharField(max_length=45, blank=True, null=True)
+    XRay2 = models.CharField(max_length=45, blank=True, null=True)
+    XRay3 = models.CharField(max_length=45, blank=True, null=True)
+    XRay4 = models.CharField(max_length=45, blank=True, null=True)
+    XRayNotes = models.CharField(max_length=255, blank=True, null=True)
+    XRayNotes1 = models.CharField(max_length=255, blank=True, null=True)
+    XRayNotes2 = models.CharField(max_length=255, blank=True, null=True)
+    XRayNotes3 = models.CharField(max_length=255, blank=True, null=True)
+    XRayNotes4 = models.CharField(max_length=255, blank=True, null=True)
+    MRSite = models.CharField(max_length=45, blank=True, null=True)
+    MRSite1 = models.CharField(max_length=45, blank=True, null=True)
+    MRSite2 = models.CharField(max_length=45, blank=True, null=True)
+    MRSite3 = models.CharField(max_length=45, blank=True, null=True)
+    MRSite4 = models.CharField(max_length=45, blank=True, null=True)
+    MR = models.CharField(max_length=45, blank=True, null=True)
+    MR1 = models.CharField(max_length=45, blank=True, null=True)
+    MR2 = models.CharField(max_length=45, blank=True, null=True)
+    MR3 = models.CharField(max_length=45, blank=True, null=True)
+    MR4 = models.CharField(max_length=45, blank=True, null=True)
+    MRNotes = models.CharField(max_length=255, blank=True, null=True)
+    MRNotes1 = models.CharField(max_length=255, blank=True, null=True)
+    MRNotes2 = models.CharField(max_length=255, blank=True, null=True)
+    MRNotes3 = models.CharField(max_length=255, blank=True, null=True)
+    MRNotes4 = models.CharField(max_length=255, blank=True, null=True)
+    # Investigations - PathLabs
+    BiopsySite = models.CharField(max_length=45, blank=True, null=True)
+    BiopsySite1 = models.CharField(max_length=45, blank=True, null=True)
+    BiopsySite2 = models.CharField(max_length=45, blank=True, null=True)
+    BiopsySite3 = models.CharField(max_length=45, blank=True, null=True)
+    BiopsySite4 = models.CharField(max_length=45, blank=True, null=True)
+    BiopsyResult = models.CharField(max_length=45, blank=True, null=True)
+    BiopsyResult1 = models.CharField(max_length=45, blank=True, null=True)
+    BiopsyResult2 = models.CharField(max_length=45, blank=True, null=True)
+    BiopsyResult3 = models.CharField(max_length=45, blank=True, null=True)
+    BiopsyResult4 = models.CharField(max_length=45, blank=True, null=True)
+    BiopsyNotes = models.CharField(max_length=255, blank=True, null=True)
+    BiopsyNotes1 = models.CharField(max_length=255, blank=True, null=True)
+    BiopsyNotes2 = models.CharField(max_length=255, blank=True, null=True)
+    BiopsyNotes3 = models.CharField(max_length=255, blank=True, null=True)
+    BiopsyNotes4 = models.CharField(max_length=255, blank=True, null=True)
+
+    # Investigations - Hematology and biochemistry to be added
+
+    Notes = models.TextField(blank=True, null=True)
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)  # New
+
+    class Meta:
+        db_table = 's8_child_fup'
+
+    def __str__(self):
+        return f'CRN: {self.parent_id} -- DxID: {self.s2_id} -- Mx_ID: {self.s3_id} -- Date: {self.visitdate}'
+
+
+class Prescription(models.Model):
+    s8_prescription_id = models.AutoField(primary_key=True)
+    s8_id = models.ForeignKey(S8FUP, models.CASCADE, blank=False, null=False,
+                              db_column='s8_id', to_field='s8_id')
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+                                  to_field='crnumber')
+    symptoms = models.CharField(max_length=255, blank=True, null=True)
+    symptoms_type = models.CharField(max_length=255, blank=True, null=True)
+    symp_duration = models.IntegerField()  # duration in days
+    drug_name = models.CharField(max_length=255, blank=True, null=True)
+    dosage = models.CharField(max_length=255, blank=True, null=True)
+    unit = models.CharField(max_length=255, blank=True, null=True)
+    route = models.CharField(max_length=255, blank=True, null=True)
+    frequency = models.CharField(max_length=255, blank=True, null=True)
+    duration = models.IntegerField(blank=True, null=True)  # duration in days
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)  # New
+
+    class Meta:
+        db_table = 'prescription'
+
+    def __str__(self):
+        return f'CRN: {self.parent_id} -- FU_ID: {self.s8_id} -- Symp: {self.symptoms} -- SympDur: {self.symp_duration}'
+
+
+class InvestigationsImaging(models.Model):
+    s8_imaging_id = models.AutoField(primary_key=True)
+    s8_id = models.ForeignKey(S8FUP, models.CASCADE, blank=False, null=False,
+                              db_column='s8_id', to_field='s8_id')
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+                                  to_field='crnumber')
+    imaging_date = models.DateTimeField(blank=False, null=False)
+    imaging_type = models.CharField(max_length=255, blank=True, null=True)  # CT, MRI, X-Ray, Ultrasound, etc
+    imaging_location = models.CharField(max_length=255, blank=True, null=True)
+    imaging_result = models.CharField(max_length=255, blank=True, null=True)
+    imaging_result_details = models.TextField(blank=True, null=True)
+    lab_name = models.CharField(max_length=255, blank=True, null=True)
+    lab_contact = models.CharField(max_length=255, blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
+    # image = models.FileField(upload_to='images/') # In future we have to provide options for storing images
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)  # New
+
+    class Meta:
+        db_table = 'inv_img'
+
+    def __str__(self):
+        return f'CRN: {self.parent_id} -- FUID: {self.s8_id} -- Date: {self.imaging_date} -- Type: {self.imaging_type}'
+
+
+class InvestigationsLabs(models.Model):
+    s8_labs_id = models.AutoField(primary_key=True)
+    s8_id = models.ForeignKey(S8FUP, models.CASCADE, blank=False, null=False,
+                              db_column='s8_id', to_field='s8_id')
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+                                  to_field='crnumber')
+    test_name = models.CharField(max_length=255, blank=True, null=True)  # CBC, ESR, CRP, Tumor markers, etc
+    test_date = models.DateField(blank=True, null=True)
+    test_result = models.CharField(max_length=255, blank=True, null=True)
+    test_result_details = models.TextField(blank=True, null=True)
+    test_unit = models.CharField(max_length=255, blank=True, null=True)
+    normal_range = models.TextField(blank=True, null=True)
+    lab_name = models.CharField(max_length=255, blank=True, null=True)
+    lab_contact = models.CharField(max_length=255, blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
+    cancer_related = models.BooleanField(
+        default=False)  # if its true then fill further fields like tumor marker and biopsy
+    tumor_marker_name = models.CharField(max_length=255, blank=True, null=True)
+    tumor_marker_level = models.FloatField(blank=True, null=True)
+    tumor_marker_level_unit = models.CharField(max_length=255, blank=True, null=True)
+    tumor_marker_normal_range = models.CharField(max_length=255, blank=True, null=True)
+    # image = models.FileField(upload_to='images/')
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)  # New
+
+    class Meta:
+        db_table = 'inv_labs'
+
+    def __str__(self):
+        return f'CRN: {self.parent_id} -- FUID: {self.s8_id} -- Date: {self.test_date} -- Type: {self.test_name}'
+
+
+class InvestigationsPath(models.Model):
+    s8_path_id = models.AutoField(primary_key=True)
+    s8_id = models.ForeignKey(S8FUP, models.CASCADE, blank=False, null=False,
+                              db_column='s8_id', to_field='s8_id')
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+                                  to_field='crnumber')
+    biopsy_type = models.CharField(max_length=255, blank=True,
+                                   null=True)  # Fine needle aspiration, core needle biopsy, excisional biopsy, etc
+    biopsy_date = models.DateField(blank=True, null=True)
+    biopsy_location = models.ForeignKey(FMAID, models.CASCADE, blank=True, null=True, db_column='biopsy_location',
+                                        to_field='fma_id')
+    biopsy_result = models.ForeignKey(HPE, models.CASCADE, blank=True, null=True, db_column='biopsy_result')
+    biopsy_result_details = models.TextField(blank=True, null=True)
+    lab_name = models.CharField(max_length=255, blank=True, null=True)
+    lab_contact = models.CharField(max_length=255, blank=True, null=True)
+    notes = models.TextField()
+    # image = models.FileField(upload_to='images/')
+    molecular_profile = models.TextField(blank=True, null=True)
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)  # New
+
+    class Meta:
+        db_table = 'inv_path'
+
+    def __str__(self):
+        return f'CRN: {self.parent_id} -- FUID: {self.s8_id} -- Date: {self.biopsy_date} -- Result: {self.biopsy_result}'
+
+
+# PFT Model
+class PFTDetails(models.Model):
+    pft_id = models.AutoField(primary_key=True)
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+                                  to_field='crnumber')
+    s8_id = models.ForeignKey(S8FUP, models.CASCADE, blank=False, null=False,
+                              db_column='s8_id', to_field='s8_id')
+    StudyDate = models.DateTimeField(blank=False, null=False)
+    DLCO = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    DLCOpred = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    DLCO_VA = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    DLCO_VApred = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    prFEV1 = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    prFEV1pred = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    poFEV1 = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    poFEV1pred = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    FEV1_change = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    prFEV1_FVC = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, db_column='prFEV1/FVC')
+    prFEV1_FVCpred = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True,
+                                         db_column='prFEV1/FVCpred')
+    poFEV1_FVC = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True, db_column='poFEV1/FVC')
+    poFEV1_FVCpred = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True,
+                                         db_column='poFEV1/FVCpred')
+    FEV1_FVC_change = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True,
+                                          db_column='FEV1/FVC_change')
+    Notes = models.TextField(blank=True, null=True)
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)  # New
+
+    class Meta:
+        db_table = 'pftdetails'
+
+
+# Cardiac Markers
+class CardiacMarkers(models.Model):
+    cm_id = models.AutoField(primary_key=True)
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+                                  to_field='crnumber')
+    s8_id = models.ForeignKey(S8FUP, models.CASCADE, to_field='s8_id',
+                              db_column='s8_id', blank=False, null=False)
+    date = models.DateTimeField(blank=False, null=False)
+    trop_i = models.DecimalField(max_digits=7, decimal_places=3, blank=True, null=True)
+    hs_crp = models.DecimalField(max_digits=7, decimal_places=3, blank=True, null=True)
+    nt_probnp = models.DecimalField(max_digits=7, decimal_places=3, blank=True, null=True)
+    rtstartdate = models.DateTimeField(blank=True, null=True)
+    planned_fr = models.IntegerField(blank=True, null=True)
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)  # New
+    notes = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'cardiacmarkers'

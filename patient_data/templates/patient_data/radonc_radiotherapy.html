@@ -1,0 +1,435 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+{% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheet %}
+<div class="container">
+    <div class="query-container">
+        {# Left Space #}
+        <div class="col-md-1"></div>
+        {# Middle Space #}
+        <div class="col-md-10">
+            <div class="my-form">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row justify-content-left g-3">
+                        {% if update %}
+                            <h1 class="mb-3">Radiotherapy Details Update Form</h1>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <h5><a class="btn btn-dark" href="{{ request.GET.next }}?next_rt={{ "rtdetails" }}">Back</a></h5>
+                                </div>
+                                <div class="col-auto">
+                                    <h5><a class="btn btn-dark" href="{% url 'db_operations' updatecrn %}">Database Operations</a></h5>
+                                </div>
+                            </div>
+                        {% else %}
+                            <h1 class="mb-3">Radiotherapy Details Form</h1>
+                            {% with crnumber=123456 %}
+                            <div class="row">
+                                <div class="col-auto">
+                                    <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.crnumber %}">Back</a></h5>
+                                </div>
+                                <div class="col-auto">
+                                    <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.crnumber %}">Database Operations</a></h5>
+                                </div>
+                            </div>
+                            {% endwith %}
+                        {% endif %}
+                        {% if not update %}
+                            <div class="p-2" style="background-color: #eaafc8">
+                                <h6 style="background-color: red; color: white; text-align: center">
+                                    RT details to be filled as per these simulation details</h6>
+                                <h6>Simulation Details for {{ patient.first_name }} {{ patient.last_name }}</h6>
+                                <p>
+                                    <small style="font-weight: bold">Patient was simulated on {{ patient_sim.simdate|date:"F d, Y" }}
+                                for radiation to {{ patient_sim.site}} and associated technique was
+                                {{ patient_sim.technique }}</small><br>
+                                <small style="font-weight: bold">Dose Prescription was: <br>Phase1: {{ patient_sim.dosephase1 }} Gy
+                                in {{ patient_sim.fxphase1 }} fractions<br>
+                                Phase2: {{ patient_sim.dosephase2 }} Gy
+                                in {{ patient_sim.fxphase2 }} fractions<br>
+                                Phase3: {{ patient_sim.dosephase3 }} Gy
+                                in {{ patient_sim.fxphase3 }} fractions</small>
+                                </p>
+                            </div>
+                            <div class="form-control">
+                                <div class="row g-2 mt-2">
+                                    <div class="col-md-2">
+                                        {{ form.parent_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
+                                        {{ form.parent_id }}
+                                    </div>
+                                    <div class="col-md-2 d-none">
+                                        {{ form.s2_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.s2_id.id_for_label }}">Dx ID:</label>
+                                        {{ form.s2_id }}
+                                    </div>
+                                    <div class="col-md-3 d-none">
+                                        {{ form.s3_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.s3_id.id_for_label }}">Mx ID:</label>
+                                        {{ form.s3_id }}
+                                    </div>
+                                    <div class="col-md-3 d-none">
+                                        {{ form.simid.errors }}
+                                        <label class="oncflow-labels disabled" for="{{ form.simid.id_for_label }}">Sim ID:</label>
+                                        {{ form.simid }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.rtindication.errors }}
+                                        <label class="oncflow-labels" for="{{ form.rtindication.id_for_label }}">RT(Role):</label>
+                                        {{ form.rtindication }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.simdate.errors }}
+                                        <label class="oncflow-labels" for="{{ form.simdate.id_for_label }}">Sim Date:</label>
+                                        {{ form.simdate }}
+                                    </div>
+                                    <div class="row my-card box-shadow box-redius mt-3 mb-2 mx-0">
+                                        <div>
+                                            <p>Please enter the treated site details. <em class="red-highlight text-light p-1">Primary diagnosis site may be different</em></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form.rtsite_main.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtsite_main.id_for_label }}">Anatomical Site (Standardized):</label>
+                                            {{ form.rtsite_main }}
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            {{ form.rtsitecode.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtsitecode.id_for_label }}">Anatomical Site (ICD-10):</label>
+                                            {{ form.rtsitecode }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-2 mt-2 mb-2" style="background-color: #cfb3f6">
+                                        <h5 class="oncflow-labels">Phase1</h5><br>
+                                        <div class="col-md-2">
+                                        {{ form.rtdose1.errors }}
+                                        <label class="oncflow-labels" for="{{ form.rtdose1.id_for_label }}">RT Dose:</label>
+                                        {{ form.rtdose1 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.rtdosefr1.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtdosefr1.id_for_label }}">RT Fr:</label>
+                                            {{ form.rtdosefr1 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.modality1.errors }}
+                                            <label class="oncflow-labels" for="{{ form.modality1.id_for_label }}">Modality:</label>
+                                            {{ form.modality1 }}
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            {{ form.tech1.errors }}
+                                            <label class="oncflow-labels" for="{{ form.tech1.id_for_label }}">Technique:</label>
+                                            {{ form.tech1 }}
+                                        </div>
+
+                                        <h5 class="oncflow-labels">Phase2</h5><br>
+                                        <div class="col-md-2">
+                                            {{ form.rtdose2.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtdose2.id_for_label }}">RT Dose:</label>
+                                            {{ form.rtdose2 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.rtdosefr2.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtdosefr2.id_for_label }}">RT Fr:</label>
+                                            {{ form.rtdosefr2 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.modality2.errors }}
+                                            <label class="oncflow-labels" for="{{ form.modality2.id_for_label }}">Modality:</label>
+                                            {{ form.modality2 }}
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            {{ form.tech2.errors }}
+                                            <label class="oncflow-labels" for="{{ form.tech2.id_for_label }}">Technique:</label>
+                                            {{ form.tech2 }}
+                                        </div>
+
+                                        <h5 class="oncflow-labels">Phase3</h5><br>
+                                        <div class="col-md-2">
+                                            {{ form.rtdose3.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtdose3.id_for_label }}">RT Dose:</label>
+                                            {{ form.rtdose3 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.rtdosefr3.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtdosefr3.id_for_label }}">RT Fr:</label>
+                                            {{ form.rtdosefr3 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.modality3.errors }}
+                                            <label class="oncflow-labels" for="{{ form.modality3.id_for_label }}">Modality:</label>
+                                            {{ form.modality3 }}
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            {{ form.tech3.errors }}
+                                            <label class="oncflow-labels" for="{{ form.tech3.id_for_label }}">Technique:</label>
+                                            {{ form.tech3 }}
+                                        </div>
+
+                                        <h5 class="oncflow-labels">Phase4</h5><br>
+                                        <div class="col-md-2">
+                                            {{ form.rtdose4.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtdose4.id_for_label }}">RT Dose:</label>
+                                            {{ form.rtdose4 }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.rtdosefr4.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtdosefr4.id_for_label }}">RT Fr:</label>
+                                            {{ form.rtdosefr4 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.modality4.errors }}
+                                            <label class="oncflow-labels" for="{{ form.modality4.id_for_label }}">Modality:</label>
+                                            {{ form.modality4 }}
+                                        </div>
+                                        <div class="col-md-4 mb-4">
+                                            {{ form.tech4.errors }}
+                                            <label class="oncflow-labels" for="{{ form.tech4.id_for_label }}">Technique:</label>
+                                            {{ form.tech4 }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        {{ form.rtstartdate.errors }}
+                                        <label class="oncflow-labels" for="{{ form.rtstartdate.id_for_label }}">RT(Start Date):</label>
+                                        {{ form.rtstartdate }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.rtfinishdate.errors }}
+                                        <label class="oncflow-labels" for="{{ form.rtfinishdate.id_for_label }}">RT(End Date):</label>
+                                        {{ form.rtfinishdate }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.rtmachine.errors }}
+                                        <label class="oncflow-labels" for="{{ form.rtmachine.id_for_label }}">RT Machine:</label>
+                                        {{ form.rtmachine }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.rtstatus.errors }}
+                                        <label class="oncflow-labels" for="{{ form.rtstatus.id_for_label }}">RT Status:</label>
+                                        {{ form.rtstatus }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        {{ form.studygp.errors }}
+                                        <label class="oncflow-labels" for="{{ form.studygp.id_for_label }}">Study Group:</label>
+                                        {{ form.studygp }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        {{ form.notes.errors }}
+                                        <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                        {{ form.notes }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="form-control section-odd card mb-5">
+                                <div class="row g-2 mt-2">
+                                    <div class="col-md-2">
+                                        {{ form.parent_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
+                                        {{ form.parent_id }}
+                                    </div>
+                                    <div class="col-md-2 d-none">
+                                        {{ form.s2_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.s2_id.id_for_label }}">Dx ID:</label>
+                                        {{ form.s2_id }}
+                                    </div>
+                                    <div class="col-md-3 d-none">
+                                        {{ form.s3_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.s3_id.id_for_label }}">Mx ID:</label>
+                                        {{ form.s3_id }}
+                                    </div>
+                                    <div class="col-md-3 d-none">
+                                        {{ form.simid.errors }}
+                                        <label class="oncflow-labels" for="{{ form.simid.id_for_label }}">Sim ID:</label>
+                                        {{ form.simid }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.rtindication.errors }}
+                                        <label class="oncflow-labels" for="{{ form.rtindication.id_for_label }}">RT(Role):</label>
+                                        {{ form.rtindication }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.simdate.errors }}
+                                        <label class="oncflow-labels" for="{{ form.simdate.id_for_label }}">SimDate:</label>
+                                        {{ form.simdate }}
+                                    </div>
+                                    <div class="row my-card box-shadow box-redius mt-3 mb-2 mx-0">
+                                        <div>
+                                            <p>Please enter the treated site details. <em class="red-highlight text-light p-1">Primary diagnosis site may be different</em></p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ form.rtsite_main.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtsite_main.id_for_label }}">Anatomical Site (Standardized):</label>
+                                            {{ form.rtsite_main }}
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            {{ form.rtsitecode.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtsitecode.id_for_label }}">Anatomical Site (ICD-10):</label>
+                                            {{ form.rtsitecode }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-2 mt-2 mb-2" style="background-color: #d79d9d">
+                                        <h5 class="oncflow-labels">Phase1</h5><br>
+                                        <div class="col-md-3">
+                                        {{ form.rtdose1.errors }}
+                                        <label class="oncflow-labels" for="{{ form.rtdose1.id_for_label }}">RT Dose:</label>
+                                        {{ form.rtdose1 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.rtdosefr1.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtdosefr1.id_for_label }}">RT Fr:</label>
+                                            {{ form.rtdosefr1 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.modality1.errors }}
+                                            <label class="oncflow-labels" for="{{ form.modality1.id_for_label }}">Modality:</label>
+                                            {{ form.modality1 }}
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            {{ form.tech1.errors }}
+                                            <label class="oncflow-labels" for="{{ form.tech1.id_for_label }}">Technique:</label>
+                                            {{ form.tech1 }}
+                                        </div>
+
+                                        <h5 class="oncflow-labels">Phase2</h5><br>
+                                        <div class="col-md-3">
+                                            {{ form.rtdose2.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtdose2.id_for_label }}">RT Dose:</label>
+                                            {{ form.rtdose2 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.rtdosefr2.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtdosefr2.id_for_label }}">RT Fr:</label>
+                                            {{ form.rtdosefr2 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.modality2.errors }}
+                                            <label class="oncflow-labels" for="{{ form.modality2.id_for_label }}">Modality:</label>
+                                            {{ form.modality2 }}
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            {{ form.tech2.errors }}
+                                            <label class="oncflow-labels" for="{{ form.tech2.id_for_label }}">Technique:</label>
+                                            {{ form.tech2 }}
+                                        </div>
+
+                                        <h5 class="oncflow-labels">Phase3</h5><br>
+                                        <div class="col-md-3">
+                                            {{ form.rtdose3.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtdose3.id_for_label }}">RT Dose:</label>
+                                            {{ form.rtdose3 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.rtdosefr3.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtdosefr3.id_for_label }}">RT Fr:</label>
+                                            {{ form.rtdosefr3 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.modality3.errors }}
+                                            <label class="oncflow-labels" for="{{ form.modality3.id_for_label }}">Modality:</label>
+                                            {{ form.modality3 }}
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            {{ form.tech3.errors }}
+                                            <label class="oncflow-labels" for="{{ form.tech3.id_for_label }}">Technique:</label>
+                                            {{ form.tech3 }}
+                                        </div>
+
+                                        <h5 class="oncflow-labels">Phase4</h5><br>
+                                        <div class="col-md-3">
+                                            {{ form.rtdose4.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtdose4.id_for_label }}">RT Dose:</label>
+                                            {{ form.rtdose4 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.rtdosefr4.errors }}
+                                            <label class="oncflow-labels" for="{{ form.rtdosefr4.id_for_label }}">RT Fr:</label>
+                                            {{ form.rtdosefr4 }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.modality4.errors }}
+                                            <label class="oncflow-labels" for="{{ form.modality4.id_for_label }}">Modality:</label>
+                                            {{ form.modality4 }}
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            {{ form.tech4.errors }}
+                                            <label class="oncflow-labels" for="{{ form.tech4.id_for_label }}">Technique:</label>
+                                            {{ form.tech4 }}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        {{ form.rtstartdate.errors }}
+                                        <label class="oncflow-labels" for="{{ form.rtstartdate.id_for_label }}">RT(Start Date):</label>
+                                        {{ form.rtstartdate }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.rtfinishdate.errors }}
+                                        <label class="oncflow-labels" for="{{ form.rtfinishdate.id_for_label }}">RT(End Date):</label>
+                                        {{ form.rtfinishdate }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.rtmachine.errors }}
+                                        <label class="oncflow-labels" for="{{ form.rtmachine.id_for_label }}">RT Machine:</label>
+                                        {{ form.rtmachine }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.rtstatus.errors }}
+                                        <label class="oncflow-labels" for="{{ form.rtstatus.id_for_label }}">RT Status:</label>
+                                        {{ form.rtstatus }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        {{ form.studygp.errors }}
+                                        <label class="oncflow-labels" for="{{ form.studygp.id_for_label }}">Study Group:</label>
+                                        {{ form.studygp }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        {{ form.notes.errors }}
+                                        <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                        {{ form.notes }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    <!-- Button Row -->
+
+                    {% if update %}
+                        <div class="row g-1">
+                            <div class="col-auto form-group mt-5">
+                                <button class="btn btn-dark" name="careplan" value="careplan" type="submit">Update and Proceed to Careplan</button>
+                            </div>
+                            <div class="col-auto form-group mt-5">
+                                <button class="btn btn-dark" name="database" value="careplan" type="submit">Update and Proceed to Database Operations</button>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="form-group mt-2">
+                            <button class="btn btn-dark" type="submit">Save</button>
+                        </div>
+                    {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+        {# Right Space #}
+        <div class="col-md-1"></div>
+    </div>
+</div>
+{% endblock content %}
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_rtsitecode').select2();
+            $('#id_rtsite_main').select2();
+            $('#id_studygp').select2();
+        });
+    </script>
+{% endblock javascript %}

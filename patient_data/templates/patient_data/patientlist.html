@@ -1,0 +1,127 @@
+{% extends 'patient_data/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1 style="margin-top: 30px;">Patients list</h1>
+        <hr>
+        <div class="patientlist box-redius box-shadow">
+            <h4 class="patientlist-heading">List of all Registered Patients
+            </h4>
+            <div class="status-table">
+                <table class="table table-striped  table-hover">
+                    <thead class="table">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">CRN</th>
+                            <th scope="col">Reg Date</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Gender</th>
+                            <th scope="col">Mobile</th>
+                            <th scope="col">Summary</th>
+                            <th scope="col">Edit/Create</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        {% for patient in data %}
+                            <tr>
+                                {% if page_no == 1 %}
+                                    <th scope="row">{{ forloop.counter }}</th>
+                                {% elif page_no > 1 %}
+                                    <th scope="row">{{ forloop.counter|add:serial_num }}</th></th>
+                                {% else %}
+                                    <th scope="row">{{ forloop.counter }}
+                            {% endif %}
+
+                                <td>{{ patient.first_name }} {{ patient.last_name }}</td>
+                                <td><span class="count yellow">{{ patient.crnumber }}</span></td>
+                                <td>{{ patient.reg_date|date:'M d, Y' }}</td>
+                                <td>{{ patient.age }}</td>
+                                <td>{{ patient.gender }}</td>
+                                <td><span class="count green">{{ patient.mobile }}</span></td>
+                                {% if patient.s4rt_set.count > 0 %}
+                                    <td><a href="{% url 'summary' patient.crnumber %}?next={{ request.path|urlencode }}"
+                                       class="btn btn-dark btn-sm" role="button" aria-pressed="true">View</a></td>
+                                {% else %}
+                                    <td><span class="red text-light p-1">No RT Details</span></td>
+                                {% endif %}
+                                <td>
+                                    <a href="{% url 'registration-update' patient.s1_id %}?next={{ request.path|urlencode }}"
+                                       class="btn btn-outline-success btn-sm" role="button" aria-pressed="true">Registration</a>
+                                    {% if patient.simulation_set.count > 0 %}
+                                        {% if patient.presimulation_set.count > 0 %}
+                                            <a href="{% url 'radonc-presimulation-list' patient.crnumber %}?next={{ request.path|urlencode }}"
+                                                   class="btn btn-outline-success btn-sm" role="button" aria-pressed="true">Create/Edit(Sim/PreSim)</a>
+                                        {% else %}
+                                            <a href="{% url 'radonc-simulation-list' patient.crnumber %}?next={{ request.path|urlencode }}"
+                                               class="btn btn-success btn-sm" role="button" aria-pressed="true">Edit Sim (No PreSim)</a>
+                                        {% endif %}
+
+                                    {% endif %}
+                                    {% if patient.s4rt_set.count > 0 %}
+                                        <a href="{% url 'radonc-radiotherapy-list' patient.crnumber %}?next={{ request.path|urlencode }}"
+                                               class="btn btn-outline-success btn-sm" role="button" aria-pressed="true">Edit RT</a>
+                                    {% else %}
+                                        {% if patient.simulation_set.count > 0 %}
+                                            <a href="{% url 'radonc-simulation-list' patient.crnumber %}?next={{ request.path|urlencode }}"
+                                           class="btn btn-outline-danger btn-sm" role="button" aria-pressed="true">Create RT</a>
+                                        {% else %}
+                                            <a href="#"
+                                               class="btn btn-outline-danger disabled btn-sm" role="button" aria-pressed="true">No Simulation Details</a>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if patient.s2diagnosis_set.count < 1 %}
+                                         <a href="{% url 'radonc-diagnosis' patient.crnumber %}?next={{ request.path|urlencode }}"
+                                               class="btn btn-outline-danger btn-sm" role="button" aria-pressed="true">Enter Dx</a>
+                                    {% endif %}
+                                    {% if patient.s3careplan_set.count < 1 and patient.s2diagnosis_set.count == 1 %}
+                                         <a href="{% url 'radonc-careplan' patient.crnumber patient.s2diagnosis_set.all.first.s2_id %}?next={{ request.path|urlencode }}"
+                                               class="btn btn-outline-danger btn-sm" role="button" aria-pressed="true">Enter Mx</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+   <!-- Pagination block -->
+        <div class="sider-block mt-4">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    {% if is_paginated %}
+
+                        {% if page_obj.has_previous %}
+
+                                <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item"><a class="page-link link-light bg-dark" href="?page={{ num }}">{{ num }}</a></li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    {% endblock %}
+{% block javascript %}
+    <script>
+        $(document).ready(function(){
+            setTimeout(function() {
+                $('.messages').fadeOut('slow');
+            }, 3000); // 3 secs
+        });
+    </script>
+{% endblock %}

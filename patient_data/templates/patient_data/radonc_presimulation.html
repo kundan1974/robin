@@ -1,0 +1,370 @@
+{% extends "patient_data/base.html" %}
+<!--{% load crispy_forms_tags %} -->
+{% block content %}
+<!-- Tab links -->
+<div class="container">
+    <div class="query-container">
+        {# Left Space #}
+        <div class="col-md-1">
+        </div>
+        {# Middle Space #}
+        <div class="col-md-10">
+            <div class="my-form mb-5">
+                {% if update %}
+                    <div><h2 class="border-bottom mb-3">Pre-Simulation DIBH Assessment Update Form</h2></div>
+                {% else %}
+                    <div><h2 class="border-bottom mb-3">Pre-Simulation DIBH Assessment Form</h2></div>
+                {% endif %}
+                {% if request.GET.next %}
+                    <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                {% elif crnumber %}
+                    <h5><a class="btn btn-dark" href="{% url 'db_operations' crnumber %}">Back</a></h5>
+                {% else %}
+                    {% with crnumber=123456 %}
+                     <h5><a class="btn btn-dark" href="{% url 'db_operations' crnumber %}">Back</a></h5>
+                    {% endwith %}
+                {% endif %}
+            </div>
+            <ul class="nav nav-pills bg-light bg-opacity-75 box-redius box-shadow mb-3" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active tab-btn me-3" id="day1-tab" data-bs-toggle="pill" data-bs-target="#day1" type="button" role="tab" aria-controls="day1" aria-selected="true">D1</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link tab-btn me-3" id="day2-tab" data-bs-toggle="pill" data-bs-target="#day2" type="button" role="tab" aria-controls="day2" aria-selected="false">D2</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link tab-btn me-3" id="day3-tab" data-bs-toggle="pill" data-bs-target="#day3" type="button" role="tab" aria-controls="day3" aria-selected="false">D3</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link tab-btn me-3" id="day4-tab" data-bs-toggle="pill" data-bs-target="#day4" type="button" role="tab" aria-controls="day4" aria-selected="false">D4</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link tab-btn me-3" id="day5-tab" data-bs-toggle="pill" data-bs-target="#day5" type="button" role="tab" aria-controls="day5" aria-selected="false">D5</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link tab-btn me-3" id="final-tab" data-bs-toggle="pill" data-bs-target="#final" type="button" role="tab" aria-controls="final" aria-selected="false">Final Status</button>
+              </li>
+            </ul>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="tab-content" id="myTabContent">
+                    <div class="form-row justify-content-left g-3">
+                        <div class="col-md-6 mb-3">
+                            {{ form.presimparent.errors }}
+                            <label class="oncflow-labels" for="{{ form.presimparent.id_for_label }}">CR Number:</label>
+                            {{ form.presimparent }}
+                        </div>
+                        <div class="col-md-6 mb-3 d-none">
+                            {{ form.s3_id.errors }}
+                            <label class="oncflow-labels" for="{{ form.s3_id.id_for_label }}">Mx_ID:</label>
+                            {{ form.s3_id }}
+                        </div>
+                    </div>
+                    <!--Day1 tab -->
+                    <div class="tab-pane fade show active" id="day1" role="tabpanel" aria-labelledby="day1-tab">
+                          <div class="form-control section-odd card mb-5">
+                            <div class="mt-3">
+                                <h4 class="oncflow-labels">Day 1</h4>
+                            </div>
+                            <div class="row g-2 mt-2">
+                                <div class="col-md-3">
+                                    {{ form.day1date.errors }}
+                                    <label class="oncflow-labels" for="{{ form.day1date.id_for_label }}">Date(Day1):</label>
+                                    {{ form.day1date }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.ul_amp_d1.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ul_amp_d1.id_for_label }}">UL Amp(mm):</label>
+                                    {{ form.ul_amp_d1 }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.ll_amp_d1.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ll_amp_d1.id_for_label }}">LL Amp(mm):</label>
+                                    {{ form.ll_amp_d1 }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.average_amp_d1.errors }}
+                                    <label class="oncflow-labels" for="{{ form.average_amp_d1.id_for_label }}">Average Amp(mm):</label>
+                                    {{ form.average_amp_d1 }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.ahd_d1.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ahd_d1.id_for_label }}">Average Hold(Sec):</label>
+                                    {{ form.ahd_d1 }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.assessedby_day1.errors }}
+                                    <label class="oncflow-labels" for="{{ form.assessedby_day1.id_for_label }}">Assessed by:</label>
+                                    {{ form.assessedby_day1 }}
+                                </div>
+                                <div class="col-md-5">
+                                    {{ form.day1status.errors }}
+                                    <label class="oncflow-labels" for="{{ form.day1status.id_for_label }}">Status(Day1):</label>
+                                    {{ form.day1status }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.d1remarks.errors }}
+                                    <label class="oncflow-labels" for="{{ form.d1remarks.id_for_label }}">Remarks(Day1):</label>
+                                    {{ form.d1remarks }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.al_d1.errors }}
+                                    <label class="oncflow-labels" for="{{ form.al_d1.id_for_label }}">Airleak:</label>
+                                    {{ form.al_d1 }}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--Day2 tab -->
+                    <div class="tab-pane fade" id="day2" role="tabpanel" aria-labelledby="day2-tab">
+                          <div class="form-control section-even card mb-5">
+                            <div class="mt-3">
+                                <h4 class="oncflow-labels">Day 2</h4>
+                            </div>
+                            <div class="row g-2 mt-2">
+                                <div class="col-md-3">
+                                    {{ form.day2date.errors }}
+                                    <label class="oncflow-labels" for="{{ form.day2date.id_for_label }}">Date(Day2):</label>
+                                    {{ form.day2date }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.ul_amp_d2.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ul_amp_d2.id_for_label }}">UL Amp(mm):</label>
+                                    {{ form.ul_amp_d2 }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.ll_amp_d2.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ll_amp_d2.id_for_label }}">LL Amp(mm):</label>
+                                    {{ form.ll_amp_d2 }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.average_amp_d2.errors }}
+                                    <label class="oncflow-labels" for="{{ form.average_amp_d2.id_for_label }}">Average Amp(mm):</label>
+                                    {{ form.average_amp_d2 }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.ahd_d2.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ahd_d2.id_for_label }}">Average Hold(Sec):</label>
+                                    {{ form.ahd_d2 }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.assessedby_day2.errors }}
+                                    <label class="oncflow-labels" for="{{ form.assessedby_day2.id_for_label }}">Assessed by:</label>
+                                    {{ form.assessedby_day2 }}
+                                </div>
+                                <div class="col-md-5">
+                                    {{ form.day2status.errors }}
+                                    <label class="oncflow-labels" for="{{ form.day2status.id_for_label }}">Status(Day2):</label>
+                                    {{ form.day2status }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.d2remarks.errors }}
+                                    <label class="oncflow-labels" for="{{ form.d2remarks.id_for_label }}">Remarks(Day2):</label>
+                                    {{ form.d2remarks }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.al_d2.errors }}
+                                    <label class="oncflow-labels" for="{{ form.al_d2.id_for_label }}">Airleak:</label>
+                                    {{ form.al_d2 }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Day3 tab -->
+                    <div class="tab-pane fade" id="day3" role="tabpanel" aria-labelledby="day3-tab">
+                         <div class="form-control section-odd card mb-5">
+                            <div class="mt-3">
+                                <h4 class="oncflow-labels">Day 3</h4>
+                            </div>
+                            <div class="row g-2 mt-2">
+                                <div class="col-md-3">
+                                    {{ form.day3date.errors }}
+                                    <label class="oncflow-labels" for="{{ form.day3date.id_for_label }}">Date(Day3):</label>
+                                    {{ form.day3date }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.ul_amp_d3.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ul_amp_d3.id_for_label }}">UL Amp(mm):</label>
+                                    {{ form.ul_amp_d3 }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.ll_amp_d3.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ll_amp_d3.id_for_label }}">LL Amp(mm):</label>
+                                    {{ form.ll_amp_d3 }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.average_amp_d3.errors }}
+                                    <label class="oncflow-labels" for="{{ form.average_amp_d3.id_for_label }}">Average Amp(mm):</label>
+                                    {{ form.average_amp_d3 }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.ahd_d3.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ahd_d3.id_for_label }}">Average Hold(Sec):</label>
+                                    {{ form.ahd_d3 }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.assessedby_day3.errors }}
+                                    <label class="oncflow-labels" for="{{ form.assessedby_day3.id_for_label }}">Assessed by:</label>
+                                    {{ form.assessedby_day3 }}
+                                </div>
+                                <div class="col-md-5">
+                                    {{ form.day3status.errors }}
+                                    <label class="oncflow-labels" for="{{ form.day3status.id_for_label }}">Status(Day3):</label>
+                                    {{ form.day3status }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.d3remarks.errors }}
+                                    <label class="oncflow-labels" for="{{ form.d3remarks.id_for_label }}">Remarks(Day3):</label>
+                                    {{ form.d3remarks }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.al_d3.errors }}
+                                    <label class="oncflow-labels" for="{{ form.al_d3.id_for_label }}">Airleak:</label>
+                                    {{ form.al_d3 }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Day4 tab -->
+                    <div class="tab-pane fade" id="day4" role="tabpanel" aria-labelledby="day4-tab">
+                        <div class="form-control section-even card mb-5">
+                            <div class="mt-3">
+                                <h4 class="oncflow-labels">Day 4</h4>
+                            </div>
+                            <div class="row g-2 mt-2">
+                                <div class="col-md-3">
+                                    {{ form.day4date.errors }}
+                                    <label class="oncflow-labels" for="{{ form.day4date.id_for_label }}">Date(Day4):</label>
+                                    {{ form.day4date }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.ul_amp_d4.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ul_amp_d4.id_for_label }}">UL Amp(mm):</label>
+                                    {{ form.ul_amp_d4 }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.ll_amp_d4.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ll_amp_d4.id_for_label }}">LL Amp(mm):</label>
+                                    {{ form.ll_amp_d4 }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.average_amp_d4.errors }}
+                                    <label class="oncflow-labels" for="{{ form.average_amp_d4.id_for_label }}">Average Amp(mm):</label>
+                                    {{ form.average_amp_d4 }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.ahd_d4.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ahd_d4.id_for_label }}">Average Hold(Sec):</label>
+                                    {{ form.ahd_d4 }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.assessedby_day4.errors }}
+                                    <label class="oncflow-labels" for="{{ form.assessedby_day4.id_for_label }}">Assessed by:</label>
+                                    {{ form.assessedby_day4 }}
+                                </div>
+                                <div class="col-md-5">
+                                    {{ form.day4status.errors }}
+                                    <label class="oncflow-labels" for="{{ form.day4status.id_for_label }}">Status(Day4):</label>
+                                    {{ form.day4status }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.d4remarks.errors }}
+                                    <label class="oncflow-labels" for="{{ form.d4remarks.id_for_label }}">Remarks(Day4):</label>
+                                    {{ form.d4remarks }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.al_d4.errors }}
+                                    <label class="oncflow-labels" for="{{ form.al_d4.id_for_label }}">Airleak:</label>
+                                    {{ form.al_d4 }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Day5 tab -->
+                    <div class="tab-pane fade" id="day5" role="tabpanel" aria-labelledby="day5-tab">
+                        <div class="form-control section-odd card mb-5">
+                            <div class="mt-3">
+                                <h4 class="oncflow-labels">Day 5</h4>
+                            </div>
+                            <div class="row g-2 mt-2">
+                                <div class="col-md-3">
+                                    {{ form.day5date.errors }}
+                                    <label class="oncflow-labels" for="{{ form.day5date.id_for_label }}">Date(Day5):</label>
+                                    {{ form.day5date }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.ul_amp_d5.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ul_amp_d5.id_for_label }}">UL Amp(mm):</label>
+                                    {{ form.ul_amp_d5 }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.ll_amp_d5.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ll_amp_d5.id_for_label }}">LL Amp(mm):</label>
+                                    {{ form.ll_amp_d5 }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.average_amp_d5.errors }}
+                                    <label class="oncflow-labels" for="{{ form.average_amp_d5.id_for_label }}">Average Amp(mm):</label>
+                                    {{ form.average_amp_d5 }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.ahd_d5.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ahd_d5.id_for_label }}">Average Hold(Sec):</label>
+                                    {{ form.ahd_d5 }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.assessedby_day5.errors }}
+                                    <label class="oncflow-labels" for="{{ form.assessedby_day5.id_for_label }}">Assessed by:</label>
+                                    {{ form.assessedby_day5 }}
+                                </div>
+                                <div class="col-md-5">
+                                    {{ form.day5status.errors }}
+                                    <label class="oncflow-labels" for="{{ form.day5status.id_for_label }}">Status(Day5):</label>
+                                    {{ form.day5status }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.d5remarks.errors }}
+                                    <label class="oncflow-labels" for="{{ form.d5remarks.id_for_label }}">Remarks(Day5):</label>
+                                    {{ form.d5remarks }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.al_d5.errors }}
+                                    <label class="oncflow-labels" for="{{ form.al_d5.id_for_label }}">Airleak:</label>
+                                    {{ form.al_d5 }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Final tab -->
+                    <div class="tab-pane fade" id="final" role="tabpanel" aria-labelledby="final-tab">
+                        <div class="form-control section-odd card mb-5">
+                            <div class="mt-3">
+                                <h4 class="oncflow-labels">FINAL STATUS</h4>
+                            </div>
+                            <div class="row g-2 mt-2">
+                                <div class="col-md-6">
+                                    {{ form.final_status.errors }}
+                                    <label class="oncflow-labels mb-3" for="{{ form.final_status.id_for_label }}">Status:</label>
+                                    {{ form.final_status }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Button Row -->
+                    {% if update %}
+                        <button class="btn btn-dark" type="submit">Update</button>
+                    {% else %}
+                        <button class="btn btn-dark" type="submit">Save</button>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+        {# Right Space #}
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

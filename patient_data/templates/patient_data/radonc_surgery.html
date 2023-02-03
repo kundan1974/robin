@@ -1,0 +1,118 @@
+{% extends "patient_data/base.html" %}
+{% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheet %}
+{% block content %}
+    <div class="container">
+        <div class="query-container">
+            {# Left Space #}
+            <div class="col-md-1"></div>
+            {# Middle Space #}
+            <div class="col-md-10">
+                <div class="my-form">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-row justify-content-left g-3">
+                            {% if update %}
+                                <h1 class="mb-3">Surgery Details Update Form</h1>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        {% if request.GET.next %}
+                                            <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                                        {% else %}
+                                            <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' updatecrn %}">Back</a></h5>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-auto">
+                                        <h5><a class="btn btn-dark" href="{% url 'db_operations' updatecrn %}">Database Operations</a></h5>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <h1 class="mb-3">Surgery Details Form</h1>
+                                {% with crnumber=123456 %}
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            {% if request.GET.next %}
+                                                <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                                            {% else %}
+                                                <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' crnumber %}">Back</a></h5>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-auto">
+                                            <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.crnumber %}">Database Operations</a></h5>
+                                        </div>
+                                    </div>
+                                {% endwith %}
+                            {% endif %}
+                            <div class="form-control">
+                                    <div class="row g-2 mt-2">
+                                        <div class="col-md-2">
+                                            {{ form.parent_id.errors }}
+                                            <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
+                                            {{ form.parent_id }}
+                                        </div>
+                                        <div class="col-md-3 d-none">
+                                            {{ form.s3_id.errors }}
+                                            <label class="oncflow-labels" for="{{ form.s3_id.id_for_label }}">Dx ID:</label>
+                                            {{ form.s3_id }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.sxunit.errors }}
+                                            <label class="oncflow-labels" for="{{ form.sxunit.id_for_label }}">Unit:</label>
+                                            {{ form.sxunit }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.admissiondate.errors }}
+                                            <label class="oncflow-labels" for="{{ form.admissiondate.id_for_label }}">Admission Date:</label>
+                                            {{ form.admissiondate }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            {{ form.sxdate.errors }}
+                                            <label class="oncflow-labels" for="{{ form.sxdate.id_for_label }}">Sx Date:</label>
+                                            {{ form.sxdate }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.dischargedate.errors }}
+                                            <label class="oncflow-labels" for="{{ form.dischargedate.id_for_label }}">Discharge Date:</label>
+                                            {{ form.dischargedate }}
+                                        </div>
+                                        <div class="col-md-12">
+                                            {{ form.sxtype.errors }}
+                                            <label class="oncflow-labels" for="{{ form.sxtype.id_for_label }}">Surgery:</label>
+                                            {{ form.sxtype }}
+                                        </div>
+                                        <div class="col-md-12">
+                                            {{ form.notes.errors }}
+                                            <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                            {{ form.notes }}
+                                        </div>
+                                    </div>
+                                </div>
+                        <!-- Button Row -->
+                            {% if update %}
+                                <div class="form-group mt-2">
+                                    <button class="btn btn-dark" type="submit">Update</button>
+                                </div>
+                            {% else %}
+                                <div class="form-group mt-2">
+                                    <button class="btn btn-dark" type="submit">Save</button>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {# Right Space #}
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+{% endblock content %}
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_sxtype').select2();
+        });
+    </script>
+{% endblock javascript %}
