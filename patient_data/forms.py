@@ -3,7 +3,8 @@ from django import forms
 from django.utils import timezone
 from django.forms.formsets import formset_factory
 from .models import S1ParentMain, Comorbidity, PreSimulation, S2Diagnosis, S3CarePlan, Simulation, S4RT, S7Assessment, \
-    S6Surgery, S6HPE, S5Chemo, S8FUP, PrimaryDVH, PFTDetails, CardiacMarkers, Site, RTTech, StudyGroup, ICDMainSites
+    S6Surgery, S6HPE, S5Chemo, S8FUP, PrimaryDVH, PFTDetails, CardiacMarkers, Site, RTTech, StudyGroup, ICDMainSites, \
+    InvestigationsImaging, Prescription
 
 from .options import (GENDER, YES_NO, SMOKE_FREQ, SMOKE_DUR, PS, INTENT_CHOICES, CP_CHOICES,
                       DOC_TYPE_CHOICES, RT_LATE_TOXICITY, visit_choices, deathcause_choices,
@@ -423,7 +424,7 @@ class S5ChemoForm(ModelForm):
         fields = "__all__"
         exclude = ["s4_id", "last_updated"]
         widgets = {
-            'parent_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
             's3_id': forms.NumberInput(attrs={'class': 'form-control'}),
             'chemo_protocol': forms.Select(attrs={'class': 'form-control'}),
             'cycleno': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -625,7 +626,7 @@ class S8FUPForm(ModelForm):
             'Weight': forms.NumberInput(attrs={'class': 'form-control'}),
             'PerfStatus': forms.Select(attrs={'class': 'form-control'}, choices=PS),
             'Nextvisit': DateInput(attrs={'class': 'form-control'}),
-            'RecordRecc': forms.Select(attrs={'class': 'form-control'}, choices=YES_NO),
+            'RecordRecc': forms.Select(attrs={'class': 'form-control', 'readonly': 'readonly'}, choices=YES_NO),
             'LRstatus': forms.Select(attrs={'class': 'form-control'}, choices=YES_NO),
             'RRstatus': forms.Select(attrs={'class': 'form-control'}, choices=YES_NO),
             'DMstatus': forms.Select(attrs={'class': 'form-control'}, choices=YES_NO),
@@ -797,6 +798,71 @@ class S8FUPForm(ModelForm):
         }
 
 
+class InvestigationsImagingForm(ModelForm):
+    class Meta:
+        model = InvestigationsImaging
+        fields = "__all__"
+        exclude = ["s8_imaging_id", "last_updated"]
+
+
+        widgets = {
+            'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
+            's8_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
+            "imaging_date": DateInput(attrs={'class': 'form-control'}),
+            "imaging_type": forms.Select(attrs={'class': 'form-control'}),
+            "imaging_location": forms.Select(attrs={'class': 'form-control'}),
+            "imaging_result": forms.Select(attrs={'class': 'form-control'}),
+            "imaging_result_details": forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            "lab_name": forms.Select(attrs={'class': 'form-control'}),
+            "lab_contact": forms.TextInput(attrs={'class': 'form-control'}),
+            "notes": forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+        }
+
+
+class PrescriptionForm(ModelForm):
+    class Meta:
+        model = Prescription
+        fields = "__all__"
+        exclude = ["s8_prescription_id", "last_updated"]
+
+        widgets = {
+            'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
+            's8_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
+            "symptoms": forms.TextInput(attrs={'class': 'form-control'}),
+            "symptoms_type": forms.Select(attrs={'class': 'form-control'}, choices=symp_type_choices),
+            "symp_duration": forms.NumberInput(attrs={'class': 'form-control'}),
+            "drug_name": forms.Select(attrs={'class': 'form-control'}, choices=drugs_choices),
+            "dosage": forms.TextInput(attrs={'class': 'form-control'}),
+            "unit": forms.Select(attrs={'class': 'form-control'}, choices=unit_choices),
+            "route": forms.Select(attrs={'class': 'form-control'}, choices=route_choices),
+            "frequency": forms.Select(attrs={'class': 'form-control'}, choices=frequency_choices),
+            "duration": forms.TextInput(attrs={'class': 'form-control'}),
+            "notes": forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+        }
+
+
+class InvestigationsPathForm(ModelForm):
+    class Meta:
+        model = Prescription
+        fields = "__all__"
+        exclude = ["s8_path_id", "last_updated"]
+
+        widgets = {
+            'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
+            's8_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
+            "path_type": forms.TextInput(attrs={'class': 'form-control'}),
+            "guided_by": forms.Select(attrs={'class': 'form-control'}, choices=symp_type_choices),
+            "biopsy_date": forms.NumberInput(attrs={'class': 'form-control'}),
+            "biopsy_location": forms.Select(attrs={'class': 'form-control'}, choices=drugs_choices),
+            "biopsy_result": forms.TextInput(attrs={'class': 'form-control'}),
+            "biopsy_result_details": forms.Select(attrs={'class': 'form-control'}, choices=unit_choices),
+            "lab_name": forms.Select(attrs={'class': 'form-control'}, choices=route_choices),
+            "lab_contact": forms.Select(attrs={'class': 'form-control'}, choices=frequency_choices),
+            "molecular_profile": forms.TextInput(attrs={'class': 'form-control'}),
+            "molecular_profile_status": forms.TextInput(attrs={'class': 'form-control'}),
+            "notes": forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+        }
+
 class PrimaryDVHForm(ModelForm):
     class Meta:
         model = PrimaryDVH
@@ -884,8 +950,10 @@ studygp_choices.insert(0, ('', ''))
 
 
 class FilterRTStarted(forms.Form):
-    s_date = forms.DateField(required=False, widget=DateInput(attrs={'class': 'form-control form-control-lg', 'readonly': True}))
-    f_date = forms.DateField(required=False, widget=DateInput(attrs={'class': 'form-control form-control-lg', 'readonly': True}))
+    s_date = forms.DateField(required=False,
+                             widget=DateInput(attrs={'class': 'form-control form-control-lg', 'readonly': True}))
+    f_date = forms.DateField(required=False,
+                             widget=DateInput(attrs={'class': 'form-control form-control-lg', 'readonly': True}))
     # main_site = forms.ChoiceField(required=False,
     #                               widget=forms.Select(attrs={'class': 'form-control form-control-lg'}),
     #                               choices=main_site_choices)

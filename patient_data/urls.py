@@ -14,7 +14,8 @@ from .views import S1RegUpdateView, S1ListView, PreSimulationUpdateView, PreSimu
     SurgeryUpdateView, HPECreateView, HPEListView, HPEUpdateView, ChemotherapyCreateView, ChemotherapyListView, \
     ChemotherapyUpdateView, FUPCreateView, FUPListView, FUPUpdateView, PrimaryDVHCreateView, PFTDetailsCreateView, \
     PFTDetailsListView, PFTDetailsUpdateView, PFTDetailsDeleteView, CardiacMarkersCreateView, CardiacMarkersListView, \
-    CardiacMarkersUpdateView, CardiacMarkersDeleteView
+    CardiacMarkersUpdateView, CardiacMarkersDeleteView, ChemotherapyDeleteView, InvImgCreateView, InvImgUpdateView, \
+    InvImgDeleteView, PrescriptionCreateView, PrescriptionUpdateView, PrescriptionDeleteView
 
 urlpatterns = [
     path('', views.index, name='database-index'),
@@ -73,6 +74,8 @@ urlpatterns = [
     path('radonc-chemotherapy/', ChemotherapyCreateView.as_view(), name="radonc-chemotherapy"),
     path('radonc-chemotherapy/<str:crnumber>/<int:s3_id>/', ChemotherapyCreateView.as_view(),
          name="radonc-chemotherapy"),
+    path('radonc-chemotherapy/<int:pk>/delete/', ChemotherapyDeleteView.as_view(),
+         name="radonc-chemotherapy-delete"),
 
     # ASSESSMENT
     path('radonc-ass/<int:s4_id>/', AssCreateView.as_view(), name="radonc-ass"),
@@ -84,6 +87,18 @@ urlpatterns = [
     path('radonc-fup/<str:crnumber>/', FUPCreateView.as_view(), name="radonc-fup2"),
     path('radonc-fup/<str:crnumber>/list/', FUPListView.as_view(), name="radonc-fup-list"),
     path('radonc-fup/<int:pk>/update/', FUPUpdateView.as_view(), name="radonc-fup-update"),
+
+    # INVESTIGATION IMAGING
+    path('inv-imaging/<str:crnumber>/', InvImgCreateView.as_view(), name="inv-imaging1"),
+    path('inv-imaging/<str:crnumber>/<int:s8_id>/', InvImgCreateView.as_view(), name="inv-imaging2"),
+    path('inv-imaging/<int:pk>/update/', InvImgUpdateView.as_view(), name="inv-imaging-update"),
+    path('inv-imaging/<int:pk>/delete/', InvImgDeleteView.as_view(), name="inv-imaging-delete"),
+
+    # PRESCRIPTION
+    path('prescription/<str:crnumber>/', PrescriptionCreateView.as_view(), name="prescription1"),
+    path('prescription/<str:crnumber>/<int:s8_id>/', PrescriptionCreateView.as_view(), name="prescription2"),
+    path('prescription/<int:pk>/update/', PrescriptionUpdateView.as_view(), name="prescription-update"),
+    path('prescription/<int:pk>/delete/', PrescriptionDeleteView.as_view(), name="prescription-delete"),
 
     # PRIMARY-DVH
     path('radonc-primarydvh/<int:s4_id>/', PrimaryDVHCreateView.as_view(), name="radonc-primarydvh"),
@@ -123,6 +138,10 @@ htmx_urlpatterns = [
     path('deletedvh/<int:pk>', views.deletedvh, name="deletedvh"),
     path('updatedvh/<int:pk>', views.updatedvh, name="updatedvh"),
     path('get_second_field_options/', views.get_second_field_options, name='get_second_field_options'),
+
+    path('showprescription/<int:s8_id>', views.showprescription, name="showprescription"),
+    path('updateprescription/<int:pk>', views.updateprescription, name="updateprescription"),
+    path('deleteprescription/<int:pk>', views.deleteprescription, name="deleteprescription"),
 ]
 
 urlpatterns += htmx_urlpatterns

@@ -28,20 +28,32 @@
                         <h4><span class="count red text-light me-1">1</span>Register</h4>
                       <hr>
                       <p style="color: #ff6d00"><b>MANDATORY</b></p>
-                      <p>Here you can register a new patient or update a registration details. <span class="highlight"> This module
+                      <p><span class="highlight"> This module
                       is mandatory - without this you cannot proceed to other modules</span></p>
                       {% if res %}
-                          <div class="d-flex">
+                          <div class="row">
+                            <div class="col-12">
                               <a href="{% url 'registration-update' res.0.pk %}?regcrn={{ crnumber }}&update_status={{ True }}" class="btn my-btn">Update:
                                   <span class="badge rounded-pill bg-danger">{{ res.0.crnumber }}</span></a>
+                            </div>
+                            <div class="col-12 mt-3">
                               {% if fu %}
-                                  <a href="{% url 'radonc-fup-list' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mx-1">FU Details</a>
+                                  {% if mx %}
+                                    <a href="{% url 'radonc-fup-list' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mx-1">All Visits</a>
+                                      <p class="red-highlight text-light mt-1"><span class="badge">Record New Visit via CarePlan</span></p>
+                                  {% else %}
+                                    <a href="{% url 'radonc-fup-list' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mx-1">All Visits</a>
+                                    <a href="{% url 'radonc-fup2' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mx-1">New Visit</a>
+                                    <p class="mt-1"><span class="red-highlight text-light"> This Patient has no CarePlan</span></p>
+                                  {% endif %}
                               {% else %}
-                                <a href="{% url 'radonc-fup2' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mx-1">Follow Up</a>
+                                <a href="{% url 'radonc-fup2' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mx-1">New Visit</a>
                               {% endif %}
+                            </div>
                           </div>
                       {% else %}
-                      <a href="{% url 'registration' crnumber %}?regcrn={{ crnumber }}" class="btn btn-dark">New Registration</a>
+                      <p><span class="red-highlight text-light"> This Patient is not Registered - Registration is mandatory</span></p>
+                      <a href="{% url 'registration' crnumber %}?regcrn={{ crnumber }}" class="btn btn-dark mt-4">New Registration</a>
                       {% endif %}
                     </div>
                 </div>
@@ -58,14 +70,14 @@
                         <p style="color: #ff6d00"><b>MANDATORY</b></p>
                         <p>Here Details regarding diagnosis and clinical stage are filled.<span class="highlight"> Workup for initial diagnosis prior to any treatment
                         is required here. Can have multiple diagnosis</span></p>
-                        {% if res and dx %}
-                        <a href="{% url 'radonc-diagnosis' crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn">New</a>
-                        <a href="{% url 'radonc-diagnosis-list' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn">Previous</a>
-                        {% elif res %}
-                        <a href="{% url 'radonc-diagnosis' crnumber %}?next={{ request.path|urlencode }}" class="btn btn-dark">New</a>
-                        {% else %}
-                        <a href="{% url 'registration' crnumber %}?next={{ request.path|urlencode }}" class="btn btn-dark">Please Register</a>
-                        {% endif %}
+                            {% if res and dx %}
+                            <a href="{% url 'radonc-diagnosis' crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mt-5">New</a>
+                            <a href="{% url 'radonc-diagnosis-list' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mt-5">Previous</a>
+                            {% elif res %}
+                            <a href="{% url 'radonc-diagnosis' crnumber %}?next={{ request.path|urlencode }}" class="btn btn-dark mt-5">New</a>
+                            {% else %}
+                            <a href="{% url 'registration' crnumber %}?next={{ request.path|urlencode }}" class="btn btn-dark mt-5">Please Register</a>
+                            {% endif %}
                     </div>
                 </div>
 
@@ -82,14 +94,14 @@
                         <p>Careplan Details: Diagnosis is a dynamic state and accordingly it is updated<span class="highlight"> New CarePlan details, are linked to the
                           specific state of diagnosis.  </span></p>
                         {% if res and mx %}
-                            <a href="{% url 'radonc-diagnosis-list' res.0.crnumber %}" class="btn my-btn mt-1">New</a>
-                            <a href="{% url 'radonc-careplan-list' res.0.crnumber %}" class="btn my-btn mt-1">Mx Details</a>
+                            <a href="{% url 'radonc-diagnosis-list' res.0.crnumber %}" class="btn my-btn mt-5">New</a>
+                            <a href="{% url 'radonc-careplan-list' res.0.crnumber %}" class="btn my-btn mt-5">Mx Details</a>
                         {% elif res and dx %}
-                            <a href="{% url 'radonc-diagnosis-list' res.0.crnumber %}" class="btn my-btn mt-1">New</a>
+                            <a href="{% url 'radonc-diagnosis-list' res.0.crnumber %}" class="btn my-btn mt-5">New</a>
                         {% elif res %}
-                            <a href="#" class="btn btn-dark mt-1 disabled">No Diagnosis</a>
+                            <a href="#" class="btn btn-dark mt-5 disabled">No Diagnosis</a>
                         {% else %}
-                        <a href="{% url 'registration' %}" class="btn btn-dark">Please Register</a>
+                        <a href="{% url 'registration' %}" class="btn btn-dark mt-5">Please Register</a>
                         {% endif %}
                     </div>
                 </div>
@@ -112,7 +124,7 @@
                         <a href="{% url 'radonc-careplan-list' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mt-1">NewSim(via Careplan)</a>
 
                         {% elif res and mx and sim  %}
-                        <a href="{% url 'radonc-careplan-list' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mt-1">New/Update</a>
+                        <a href="{% url 'radonc-careplan-list' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mt-5">New/Update</a>
 
                         {% elif res and mx and presim %}
                         <a href="{% url 'radonc-careplan-list' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mt-1">New</a>
@@ -120,14 +132,14 @@
 {#                        {% elif res and mx %}#}
 {#                        <a href="{% url 'radonc-careplan-list' res.0.crnumber %}" class="btn my-btn">New(via Careplan3)</a>#}
                         {% elif res and mx and dx %}
-                        <a href="" class="btn btn-dark disabled">Proceed Via CarePlan</a>
+                        <a href="" class="btn btn-dark disabled mt-5">Proceed Via CarePlan</a>
 
                         {% elif res and dx %}
-                        <a href="#" class="btn btn-dark disabled">Complete Carepan</a>
+                        <a href="#" class="btn btn-dark disabled mt-5">Complete Carepan</a>
                         {% elif res %}
-                        <a href="#" class="btn btn-dark disabled">Complete Diagnosis</a>
+                        <a href="#" class="btn btn-dark disabled mt-5">Complete Diagnosis</a>
                         {% else %}
-                        <a href="{% url 'registration' crnumber %}" class="btn btn-dark">Please Register</a>
+                        <a href="{% url 'registration' crnumber %}" class="btn btn-dark mt-5">Please Register</a>
                         {% endif %}
                     </div>
                 </div>

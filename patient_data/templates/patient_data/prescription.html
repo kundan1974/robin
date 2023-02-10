@@ -1,0 +1,189 @@
+{% extends "patient_data/base.html" %}
+{% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheet %}
+{% block content %}
+    <div class="container">
+
+    <div class="query-container">
+        <div class="col-md-12">
+            <div class="my-form">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row justify-content-left g-3">
+                        {% if update %}
+                            <h1 class="mb-3">Prescription Update Form ({{ patient.parent_id.crnumber }})</h1>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        {% if request.GET.next %}
+                                            <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                                        {% else %}
+                                            <h5><a class="btn btn-dark" href="#">Back</a></h5>
+                                        {% endif %}
+
+                                    </div>
+                                    <div class="col-auto">
+{#                                        <h5><a class="btn btn-dark" href="{% url 'db_operations' updatecrn %}">Database Operations</a></h5>#}
+                                    </div>
+                                </div>
+                        {% else %}
+                            <div class="query-container">
+                                <div class="my-card">
+                                    <h6>To Check Existing Prescription ----- Click HERE<span class="badge bg-info text-dark me-2 mx-2"
+                                                                                        hx-get="{% url 'showprescription' s8_id %}"
+                                                                                        hx-target="#display-prescription"
+                                                                                        style="cursor: pointer">Show Full Prescription</span></h6>
+                        {#                <a class="btn btn-secondary btn-sm mt-1 mb-1"hx-get="{% url 'showdvh' s4_id %}" hx-target="#display-dvh">Show DVHData</a>#}
+                                    <div id="display-prescription">
+                                        {% include 'patient_data/partials/partial_prescription.html' with s8_id=view.kwargs.s8_id %}
+                                    </div>
+                                </div>
+                            </div>
+                            <h1 class="mb-3">Prescription Form ({{ patient.crnumber }})</h1>
+                            {% with crnumber=123456 %}
+                                <div class="row">
+                                    <div class="col-auto">
+                                        {% if request.GET.next %}
+                                            <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                                        {% else %}
+                                            <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.crnumber %}">Back</a></h5>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-auto">
+                                        <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.crnumber %}">Database Operations</a></h5>
+                                    </div>
+                                </div>
+                            {% endwith %}
+                        {% endif %}
+                        <div class="form-control">
+                                <div class="row g-2 mt-2">
+                                    <div class="col-md-2 d-none">
+                                        {{ form.parent_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
+                                        {{ form.parent_id }}
+                                    </div>
+                                    <div class="col-md-2 d-none">
+                                        {{ form.s8_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.s8_id.id_for_label }}">FU ID:</label>
+                                        {{ form.s8_id }}
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.symptoms.errors }}
+                                        <label class="oncflow-labels" for="{{ form.symptoms.id_for_label }}">Symptom:</label>
+                                        {{ form.symptoms }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.symptoms_type.errors }}
+                                        <label class="oncflow-labels" for="{{ form.symptoms_type.id_for_label }}">Severity:</label>
+                                        {{ form.symptoms_type }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.symp_duration.errors }}
+                                        <label class="oncflow-labels" for="{{ form.symp_duration.id_for_label }}">Duration(Days):</label>
+                                        {{ form.symp_duration }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.drug_name.errors }}
+                                        <label class="oncflow-labels" for="{{ form.drug_name.id_for_label }}">Drug:</label>
+                                        {{ form.drug_name }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.dosage.errors }}
+                                        <label class="oncflow-labels" for="{{ form.dosage.id_for_label }}">Dosage:</label>
+                                        {{ form.dosage }}
+                                    </div>
+                                     <div class="col-md-1">
+                                        {{ form.unit.errors }}
+                                        <label class="oncflow-labels" for="{{ form.unit.id_for_label }}">Unit:</label>
+                                        {{ form.unit }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.route.errors }}
+                                        <label class="oncflow-labels" for="{{ form.route.id_for_label }}">Route:</label>
+                                        {{ form.route }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.frequency.errors }}
+                                        <label class="oncflow-labels" for="{{ form.frequency.id_for_label }}">Frequency:</label>
+                                        {{ form.frequency }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.duration.errors }}
+                                        <label class="oncflow-labels" for="{{ form.duration.id_for_label }}">Duration(Days):</label>
+                                        {{ form.duration }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        {{ form.notes.errors }}
+                                        <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                        {{ form.notes }}
+                                    </div>
+                                </div>
+                            </div>
+                    <!-- Button Row -->
+                        {% if update %}
+                            <div class="d-flex form-group justify-content-between mt-2">
+                                <button class="btn btn-dark" type="submit">Update</button>
+                            </div>
+                        {% else %}
+                            <div class="d-flex form-group justify-content-between mt-2">
+                                <button class="btn btn-dark" type="submit">Save</button>
+                                <button class="btn btn-dark" type="submit"
+                                        hx-post="{% url 'showprescription' s8_id %}"
+                                        hx-target="#display-prescription">Save & Continue Rx
+                                </button>
+                                <button class="btn btn-warning" type="submit" onclick="return resetForm(this.form);">Clear Form
+                                </button>
+                                <button class="btn btn-dark" type="submit" name="to_fup">Save -> Follow up</button>
+                                <button class="btn btn-dark" type="submit" name="to_cp">Save -> CarePlan</button>
+                            </div>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_imaging_type1').select2();
+        });
+    </script>
+    <script>
+        function resetForm(form) {
+        // clearing inputs
+        var inputs = form.getElementsByTagName('input');
+        for (var i = 0; i<inputs.length; i++) {
+            switch (inputs[i].type) {
+                // case 'hidden':
+                case 'text':
+                    inputs[i].value = '';
+                    break;
+                case 'number':
+                    inputs[i].value = '';
+                    break;
+                case 'radio':
+                case 'checkbox':
+                    inputs[i].checked = false;
+            }
+        }
+
+        // clearing selects
+        var selects = form.getElementsByTagName('select');
+        var special_select = form.getElementsByTagName('select2');
+        for (var i = 0; i<selects.length; i++)
+            selects[i].selectedIndex = 0;
+        for (var i = 0; i<special_select.length; i++)
+            special_select[i].selectedIndex = 0;
+
+        // clearing textarea
+        var text= document.getElementById('id_notes');
+        text.value = ""
+        return false;
+    }
+    </script>
+{% endblock javascript %}

@@ -487,3 +487,10 @@ margin: 25px auto;
   background: linear-gradient(to right, #c3dea8, #509d03);
   opacity: 1;
 }
+
+.accordian-bg {
+  background: #090909;
+  background: -webkit-linear-gradient(to right, #cf91e8, #e3cdf5);
+  background: linear-gradient(to right, #cf91e8, #e3cdf5);
+  opacity: 1;
+}

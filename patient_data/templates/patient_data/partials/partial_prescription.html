@@ -1,0 +1,63 @@
+{% if data %}
+    <div class="my-card">
+        <h6><span class="gradient-highlight text-light">{{ data }}</span></h6>
+    </div>
+{% endif %}
+{% if prescriptiondata %}
+    <h4>Prescription for CRN: {{ prescriptiondata.all.first.parent_id.crnumber }}</h4><br>
+    <div class="d-flex justify-content-start">
+        <h5 class="m-2">Follow Up Date:
+            <span class="badge text-dark bg-warning">
+                {{ fudata.visitdate|date:"d-m-Y" }}
+            </span>
+        </h5>
+        <h5 class="m-2">Visit Type:
+            <span class="badge text-dark bg-warning">
+                {% for type in fudata.visittype.all %}
+                {{ type }},
+                {% endfor %}
+            </span>
+        </h5>
+        <h5 class="m-2">Visit Purpose:
+            <span class="badge text-dark bg-warning">
+                {{ fudata.visitaction.actions }}
+            </span>
+        </h5>
+    </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Symptoms</th>
+                    <th scope="col">Severity</th>
+                    <th scope="col">Drug</th>
+                    <th scope="col">Route</th>
+                    <th scope="col">frequency</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for data in prescriptiondata %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ data.symptoms }}</td>
+                    <td>{{ data.symptoms_type }}</td>
+                    <td>{{ data.drug_name }} {{ data.dosage }} {{ data.unit }}</td>
+                    <td>{{ data.route }}</td>
+                    <td>{{ data.frequency }}</td>
+                    <td>{{ data.duration }}</td>
+                    <td class="justify-content-between align-items-center">
+                        <span class="badge bg-danger" style="cursor: pointer"
+                              hx-delete="{% url 'deleteprescription' data.pk %}"
+                              hx-target="#display-prescription"
+                              hx-confirm="Are you sure you want to delete?">X</span>
+                        <span class="badge bg-danger" style="cursor: pointer"
+                              hx-get="{% url 'updateprescription' data.pk %}"
+                              hx-target="#display-prescription"
+                        >E</span>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+{% endif %}

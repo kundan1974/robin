@@ -42,6 +42,13 @@
                                     <div class="col-auto">
                                         <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.crnumber %}">Database Operations</a></h5>
                                     </div>
+                                    <div class="col-12">
+                                        {% if previous_chemo %}
+                                            <p><span class="red-highlight text-light">Chemotherapy details have been copied from last chemo cycle. Edit it accordigly</span></p>
+                                        {% else %}
+                                            <p><span class="red-highlight text-light">No Previous Chemotherapy Details Present. Enter First Cycle</span></p>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             {% endwith %}
                         {% endif %}
@@ -215,6 +222,8 @@
         <div class="col-md-1"></div>
     </div>
 </div>
+{% load static %}
+<script src="{% static 'patient_data/chemoform.js' %}"></script>
 {% endblock content %}
 {% block javascript %}
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>

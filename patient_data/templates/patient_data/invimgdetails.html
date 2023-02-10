@@ -1,0 +1,132 @@
+{% extends "patient_data/base.html" %}
+{% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheet %}
+{% block content %}
+    <div class="container">
+    <div class="query-container">
+        {# Left Space #}
+        <div class="col-md-1"></div>
+        {# Middle Space #}
+        <div class="col-md-10">
+            <div class="my-form">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row justify-content-left g-3">
+                        {% if update %}
+                            <h1 class="mb-3">Investigations Imaging Update Form</h1>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        {% if request.GET.next %}
+                                            <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                                        {% else %}
+                                            <h5><a class="btn btn-dark" href="#">Back</a></h5>
+                                        {% endif %}
+
+                                    </div>
+                                    <div class="col-auto">
+{#                                        <h5><a class="btn btn-dark" href="{% url 'db_operations' updatecrn %}">Database Operations</a></h5>#}
+                                    </div>
+                                </div>
+                        {% else %}
+                            <h1 class="mb-3">Investigation Imaging Details Form</h1>
+                            {% with crnumber=123456 %}
+                                <div class="row">
+                                    <div class="col-auto">
+                                        {% if request.GET.next %}
+                                            <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                                        {% else %}
+                                            <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.crnumber %}">Back</a></h5>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-auto">
+                                        <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.crnumber %}">Database Operations</a></h5>
+                                    </div>
+                                </div>
+                            {% endwith %}
+                        {% endif %}
+                        <div class="form-control">
+                                <div class="row g-2 mt-2">
+                                    <div class="col-md-2">
+                                        {{ form.parent_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
+                                        {{ form.parent_id }}
+                                    </div>
+                                    <div class="col-md-2 d-none">
+                                        {{ form.s8_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.s8_id.id_for_label }}">FU ID:</label>
+                                        {{ form.s8_id }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.imaging_date.errors }}
+                                        <label class="oncflow-labels" for="{{ form.imaging_date.id_for_label }}">Date:</label>
+                                        {{ form.imaging_date }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.imaging_type.errors }}
+                                        <label class="oncflow-labels" for="{{ form.imaging_type.id_for_label }}">Imaging Type:</label>
+                                        {{ form.imaging_type }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.imaging_location.errors }}
+                                        <label class="oncflow-labels" for="{{ form.imaging_location.id_for_label }}">Location:</label>
+                                        {{ form.imaging_location }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.lab_name.errors }}
+                                        <label class="oncflow-labels" for="{{ form.lab_name.id_for_label }}">Lab Name:</label>
+                                        {{ form.lab_name }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.lab_contact.errors }}
+                                        <label class="oncflow-labels" for="{{ form.lab_contact.id_for_label }}">Lab Contact:</label>
+                                        {{ form.lab_contact }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form.imaging_result.errors }}
+                                        <label class="oncflow-labels" for="{{ form.imaging_result.id_for_label }}">Impression:</label>
+                                        {{ form.imaging_result }}
+                                    </div>
+                                     <div class="col-md-8">
+                                        {{ form.imaging_result_details.errors }}
+                                        <label class="oncflow-labels" for="{{ form.imaging_result_details.id_for_label }}">Details:</label>
+                                        {{ form.imaging_result_details }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        {{ form.notes.errors }}
+                                        <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                        {{ form.notes }}
+                                    </div>
+                                </div>
+                            </div>
+                    <!-- Button Row -->
+                        {% if update %}
+                            <div class="d-flex form-group justify-content-between mt-2">
+                                <button class="btn btn-dark" type="submit">Update</button>
+                            </div>
+                        {% else %}
+                            <div class="d-flex form-group justify-content-between mt-2">
+                                <button class="btn btn-dark" type="submit">Save</button>
+                                <button class="btn btn-dark" type="submit" name="to_fup">Save -> Follow up</button>
+                                <button class="btn btn-dark" type="submit" name="to_cp">Save -> CarePlan</button>
+                            </div>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+        {# Right Space #}
+        <div class="col-md-1"></div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_imaging_type1').select2();
+        });
+    </script>
+{% endblock javascript %}

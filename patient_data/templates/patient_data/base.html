@@ -166,6 +166,14 @@
         document.body.innerHTML = originalContents;
     }
   </script>
+    <script>
+        let message_tag = document.getElementById("page-content");
+
+        setTimeout(function(){
+           message_tag.style.display = "none";
+        }, 3000);
+
+    </script>
 {% block javascript %}{% endblock %}
 
 </html>

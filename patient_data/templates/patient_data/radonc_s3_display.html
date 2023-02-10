@@ -11,6 +11,7 @@
             {% else %}
                 <div><h6 class="font-monospace fs-2 lh-base">All CarePlan details for - <span class="text-light gradient-highlight p-2 box-redius">Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</span></h6></div>
             {% endif %}
+{#            TOP LEVEL BUTTONS#}
                 <div>
                     {% if data.0.parent_id.crnumber %}
                         <h5><a  class="btn btn-dark" href="{% url 'db_operations' data.0.parent_id.crnumber %}">Back</a></h5>
@@ -49,7 +50,7 @@
                             {% endfor %}
                         {% endif %}
                         {% if fu_check %}
-                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-fup-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">FollowUp</a><!-- from Followup move to followup list -->
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-fup-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">OPD Visits</a><!-- from Followup move to followup list -->
                         {% endif %}
                         {% if pft_check %}
                             <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-pftdetails-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">PFT Details</a><!-- from Followup move to followup list -->
@@ -110,7 +111,7 @@
                             {% endif %}
                             <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-surgery' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Sx</a>
                             <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-chemotherapy' content.parent_id.crnumber content.s3_id %}">New Chemo</a>
-                            <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-fup1' content.parent_id.crnumber content.s2_id.s2_id content.s3_id %}?next={{ request.path|urlencode }}">Follow up</a></h5>
+                            <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-fup1' content.parent_id.crnumber content.s2_id.s2_id content.s3_id %}?next={{ request.path|urlencode }}">Record New Visit</a></h5>
                             <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
                         </div>
                         <small class="text-muted"><b>Mx Start Date: </b>: {{ content.startdate|date:"F d, Y" }}</small><br>

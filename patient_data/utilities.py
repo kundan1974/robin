@@ -23,6 +23,7 @@ def db_homestatus(crnumber=None):
         if res:
             try:
                 mx = S3CarePlan.objects.filter(parent_id=res[0].crnumber)
+
                 if mx:
                     dx = True
                     try:

@@ -19,34 +19,93 @@
                         <h5><a  class="btn btn-dark" href="{% url 'radonc-careplan-list' data.0.parent_id.crnumber %}">Back</a></h5>
                     {% endif %}
                 </div>
-                {% for content in data %}
-                    <div>
-                        <h5>Diagnosis: {{content.s3_id.s2_id.icd_topo_code}} ({{ content.s3_id.s2_id.icd_path_code }})</h5>
-                        <h6>Unit: {{ content.unit }}, Chemo Protocol: {{ content.protocolcode }} Cycle No: {{ content.cycleno }}, Day: {{ content.chemo_day }}</h6>
-                        <h6>Date: {{ content.chemodate|date:"F d, Y" }}</h6>
-                        <div>
-                            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-chemotherapy-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
-                            <a class="btn btn-success btn-sm mt-1 mb-1"
-                               href="{% url 'radonc-chemotherapy' content.parent_id.crnumber content.s3_id.s3_id %}?next={{ request.path|urlencode }}">New Cycle</a>
-                            <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
-                        </div>
-                        <small class="text-muted"><b>Drug1: </b>: {{ content.drug1 }} {{ content.d1dose }} mg
-                            started on {{ content.sdate1|date:"F d, Y" }} and completed on {{ content.fdate1|date:"F d, Y" }}
-                        </small><br>
-                        <small class="text-muted"><b>Drug2: </b>: {{ content.drug2 }} {{ content.d2dose }} mg
-                            started on {{ content.sdate2|date:"F d, Y" }} and completed on {{ content.fdate2|date:"F d, Y" }}
-                        </small><br>
-                        <small class="text-muted"><b>Drug3: </b>: {{ content.drug3 }} {{ content.d3dose }} mg
-                            started on {{ content.sdate3|date:"F d, Y" }} and completed on {{ content.fdate3|date:"F d, Y" }}
-                        </small><br>
-                        <small class="text-muted"><b>Drug4: </b>: {{ content.drug4 }} {{ content.d4dose }} mg
-                            started on {{ content.sdate4|date:"F d, Y" }} and completed on {{ content.fdate4|date:"F d, Y" }}
-                        </small><br>
-                        <small class="text-muted"><b>Drug5: </b>: {{ content.drug5 }} {{ content.d5dose }} mg
-                            started on {{ content.sdate5|date:"F d, Y" }} and completed on {{ content.fdate5|date:"F d, Y" }}
-                        </small><br>
-                    </div><hr>
-                {% endfor %}
+{#                {% for content in data %}#}
+{#                    <div>#}
+{#                        <h5>Diagnosis: {{content.s3_id.s2_id.icd_topo_code}} ({{ content.s3_id.s2_id.icd_path_code }})</h5>#}
+{#                        <h6>Unit: {{ content.unit }}, Chemo Protocol: {{ content.protocolcode }} Cycle No: {{ content.cycleno }}, Day: {{ content.chemo_day }}</h6>#}
+{#                        <h6>Date: {{ content.chemodate|date:"F d, Y" }}</h6>#}
+{#                        <div>#}
+{#                            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-chemotherapy-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>#}
+{#                            <a class="btn btn-success btn-sm mt-1 mb-1"#}
+{#                               href="{% url 'radonc-chemotherapy' content.parent_id.crnumber content.s3_id.s3_id %}?next={{ request.path|urlencode }}">New Cycle</a>#}
+{#                            <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>#}
+{#                        </div>#}
+{#                        <small class="text-muted"><b>Drug1: </b>: {{ content.drug1 }} {{ content.d1dose }} mg#}
+{#                            started on {{ content.sdate1|date:"F d, Y" }} and completed on {{ content.fdate1|date:"F d, Y" }}#}
+{#                        </small><br>#}
+{#                        <small class="text-muted"><b>Drug2: </b>: {{ content.drug2 }} {{ content.d2dose }} mg#}
+{#                            started on {{ content.sdate2|date:"F d, Y" }} and completed on {{ content.fdate2|date:"F d, Y" }}#}
+{#                        </small><br>#}
+{#                        <small class="text-muted"><b>Drug3: </b>: {{ content.drug3 }} {{ content.d3dose }} mg#}
+{#                            started on {{ content.sdate3|date:"F d, Y" }} and completed on {{ content.fdate3|date:"F d, Y" }}#}
+{#                        </small><br>#}
+{#                        <small class="text-muted"><b>Drug4: </b>: {{ content.drug4 }} {{ content.d4dose }} mg#}
+{#                            started on {{ content.sdate4|date:"F d, Y" }} and completed on {{ content.fdate4|date:"F d, Y" }}#}
+{#                        </small><br>#}
+{#                        <small class="text-muted"><b>Drug5: </b>: {{ content.drug5 }} {{ content.d5dose }} mg#}
+{#                            started on {{ content.sdate5|date:"F d, Y" }} and completed on {{ content.fdate5|date:"F d, Y" }}#}
+{#                        </small><br>#}
+{#                    </div><hr>#}
+{#                {% endfor %}#}
+                    <table class="styled-table">
+                        <thead>
+                        <h5>Protocol: <em style="color: sienna">{{ data.0.chemo_protocol }}</em> Unit: <em style="color: sienna">{{ data.0.unit }}</em></h5>
+                            <tr>
+                                <th>CyNo.</th>
+                                <th>Day</th>
+                                <th>Date</th>
+                                <th>Drug1</th>
+                                <th>Drug2</th>
+                                <th>Drug3</th>
+                                <th>Drug4</th>
+                                <th>Drug5</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for content in data %}
+                            <tr>
+                                <td>{{ content.cycleno }}</td>
+                                <td>{{ content.chemo_day }}</td>
+                                <td>{{ content.chemodate|date:"d/m/y" }}</td>
+                                {% if content.drug1 %}
+                                <td>{{ content.drug1 }} {{ content.d1dose }} mg</td>
+                                {% endif %}
+
+                                {% if content.drug2 %}
+                                <td>{{ content.drug2 }} {{ content.d2dose }} mg</td>
+                                {% else %}
+                                <td>-----</td>
+                                {% endif %}
+
+                                {% if content.drug3 %}
+                                <td>{{ content.drug3 }} {{ content.d3dose }} mg</td>
+                                {% else %}
+                                <td>-----</td>
+                                {% endif %}
+
+                                {% if content.drug4 %}
+                                <td>{{ content.drug4 }} {{ content.d4dose }} mg</td>
+                                {% else %}
+                                <td>-----</td>
+                                {% endif %}
+
+                                {% if content.drug5 %}
+                                <td>{{ content.drug5 }} {{ content.d5dose }} mg</td>
+                                {% else %}
+                                <td>-----</td>
+                                {% endif %}
+
+                                <td>
+                                    <a class="btn btn-sm btn-warning" href="{% url 'radonc-chemotherapy-update' content.pk%}?next={{ request.path|urlencode }}">E</a>
+                                    <a class="btn btn-sm btn-danger" href="{% url 'radonc-chemotherapy-delete' content.pk %}">X</a>
+                                </td>
+                            </tr>
+                        {% endfor  %}
+                            <!-- and so on... -->
+                        </tbody>
+                    </table>
+
             </div>
         </div>
         {# Right Space #}

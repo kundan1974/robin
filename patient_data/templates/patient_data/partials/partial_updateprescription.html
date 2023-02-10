@@ -1,0 +1,81 @@
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+    <div class="container">
+        <div class="my-form">
+            <h3>Update Prescription Data!!!</h3>
+            <hr>
+            <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row justify-content-left g-3">
+                        <div class="form-control">
+                            <div class="row g-2 mt-2" style="align-content: center">
+                                <div class="col-md-2 d-none">
+                                        {{ form.parent_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
+                                        {{ form.parent_id }}
+                                    </div>
+                                    <div class="col-md-2 d-none">
+                                        {{ form.s8_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.s8_id.id_for_label }}">FU ID:</label>
+                                        {{ form.s8_id }}
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ form.symptoms.errors }}
+                                        <label class="oncflow-labels" for="{{ form.symptoms.id_for_label }}">Symptom:</label>
+                                        {{ form.symptoms }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.symptoms_type.errors }}
+                                        <label class="oncflow-labels" for="{{ form.symptoms_type.id_for_label }}">Severity:</label>
+                                        {{ form.symptoms_type }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.symp_duration.errors }}
+                                        <label class="oncflow-labels" for="{{ form.symp_duration.id_for_label }}">Duration(Days):</label>
+                                        {{ form.symp_duration }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.drug_name.errors }}
+                                        <label class="oncflow-labels" for="{{ form.drug_name.id_for_label }}">Drug:</label>
+                                        {{ form.drug_name }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.dosage.errors }}
+                                        <label class="oncflow-labels" for="{{ form.dosage.id_for_label }}">Dosage:</label>
+                                        {{ form.dosage }}
+                                    </div>
+                                     <div class="col-md-1">
+                                        {{ form.unit.errors }}
+                                        <label class="oncflow-labels" for="{{ form.unit.id_for_label }}">Unit:</label>
+                                        {{ form.unit }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.route.errors }}
+                                        <label class="oncflow-labels" for="{{ form.route.id_for_label }}">Route:</label>
+                                        {{ form.route }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.frequency.errors }}
+                                        <label class="oncflow-labels" for="{{ form.frequency.id_for_label }}">Frequency:</label>
+                                        {{ form.frequency }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.duration.errors }}
+                                        <label class="oncflow-labels" for="{{ form.duration.id_for_label }}">Duration(Days):</label>
+                                        {{ form.duration }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        {{ form.notes.errors }}
+                                        <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                        {{ form.notes }}
+                                    </div>
+                            </div>
+                        </div>
+                    <!-- Button Row -->
+                        <div class="form-group mt-2">
+                            <button class="btn btn-dark" type="submit" hx-post="{% url 'updateprescription' dvhid %}" hx-target="#display-prescription">Update Prescription</button>
+                        </div>
+                    </div>
+                </form>
+        </div>
+    </div>

@@ -312,6 +312,39 @@ class FMAID(models.Model):
         return f'{self.shortname}--{self.description}'
 
 
+# InvestigationImaging
+class ImagingType(models.Model):
+    code = models.CharField(max_length=250)
+    type = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'patient_data_imagingtype'
+
+
+class ImageLocation(models.Model):
+    id = models.AutoField(primary_key=True, blank=False, null=False)
+    location = models.CharField(max_length=255, unique=True, blank=False, null=False)
+
+    class Meta:
+        db_table = 'patient_data_imagelocation'
+
+
+class ImagingResult(models.Model):
+    id = models.AutoField(primary_key=True, blank=False, null=False)
+    result = models.CharField(max_length=255, unique=True, blank=False, null=False)
+
+    class Meta:
+        db_table = 'patient_data_imagingresult'
+
+
+class LabName(models.Model):
+    id = models.AutoField(primary_key=True, blank=False, null=False)
+    name = models.CharField(max_length=255, unique=True, blank=False, null=False)
+
+    class Meta:
+        db_table = 'patient_data_labname'
+
+
 # Models for Radiation Oncology Database
 
 class S1ParentMain(models.Model):
@@ -1220,7 +1253,7 @@ class Prescription(models.Model):
                               db_column='s8_id', to_field='s8_id')
     parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
                                   to_field='crnumber')
-    symptoms = models.CharField(max_length=255, blank=True, null=True)
+    symptoms = models.CharField(max_length=255, blank=False, null=True)
     symptoms_type = models.CharField(max_length=255, blank=True, null=True)
     symp_duration = models.IntegerField()  # duration in days
     drug_name = models.CharField(max_length=255, blank=True, null=True)
@@ -1232,6 +1265,7 @@ class Prescription(models.Model):
     user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
     last_updated = models.DateTimeField(default=timezone.now)
     updated_by = models.CharField(max_length=45, blank=True, null=True)  # New
+    notes = models.TextField(blank=True, null=True)
 
     class Meta:
         db_table = 'prescription'
@@ -1247,11 +1281,15 @@ class InvestigationsImaging(models.Model):
     parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
                                   to_field='crnumber')
     imaging_date = models.DateTimeField(blank=False, null=False)
-    imaging_type = models.CharField(max_length=255, blank=True, null=True)  # CT, MRI, X-Ray, Ultrasound, etc
-    imaging_location = models.CharField(max_length=255, blank=True, null=True)
-    imaging_result = models.CharField(max_length=255, blank=True, null=True)
+    imaging_type = models.ForeignKey(ImagingType, null=True, blank=False, on_delete=models.DO_NOTHING,
+                                     db_column='imaging_type')  # CT, MRI, X-Ray, Ultrasound, etc
+    imaging_location = models.ForeignKey(ImageLocation, models.CASCADE, blank=True, null=True,
+                                         db_column='imaging_location', to_field='id')
+    imaging_result = models.ForeignKey(ImagingResult, models.CASCADE, blank=False, null=True,
+                                       db_column='imaging_result', to_field='id')
     imaging_result_details = models.TextField(blank=True, null=True)
-    lab_name = models.CharField(max_length=255, blank=True, null=True)
+    lab_name = models.ForeignKey(LabName, models.CASCADE, blank=True, null=True,
+                                 db_column='lab_name', to_field='id')
     lab_contact = models.CharField(max_length=255, blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
     # image = models.FileField(upload_to='images/') # In future we have to provide options for storing images
@@ -1272,21 +1310,18 @@ class InvestigationsLabs(models.Model):
                               db_column='s8_id', to_field='s8_id')
     parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
                                   to_field='crnumber')
-    test_name = models.CharField(max_length=255, blank=True, null=True)  # CBC, ESR, CRP, Tumor markers, etc
+    test_name = models.CharField(max_length=255, blank=False, null=True)  # CBC, ESR, CRP, Tumor markers, etc
     test_date = models.DateField(blank=True, null=True)
-    test_result = models.CharField(max_length=255, blank=True, null=True)
+    test_result = models.CharField(max_length=255, blank=False, null=True)
     test_result_details = models.TextField(blank=True, null=True)
     test_unit = models.CharField(max_length=255, blank=True, null=True)
-    normal_range = models.TextField(blank=True, null=True)
+    normal_range_min = models.CharField(max_length=255, blank=True, null=True)
+    normal_range_max = models.CharField(max_length=255, blank=True, null=True)
     lab_name = models.CharField(max_length=255, blank=True, null=True)
     lab_contact = models.CharField(max_length=255, blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
     cancer_related = models.BooleanField(
-        default=False)  # if its true then fill further fields like tumor marker and biopsy
-    tumor_marker_name = models.CharField(max_length=255, blank=True, null=True)
-    tumor_marker_level = models.FloatField(blank=True, null=True)
-    tumor_marker_level_unit = models.CharField(max_length=255, blank=True, null=True)
-    tumor_marker_normal_range = models.CharField(max_length=255, blank=True, null=True)
+        default=False)  # True or False
     # image = models.FileField(upload_to='images/')
     user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
     last_updated = models.DateTimeField(default=timezone.now)
@@ -1305,24 +1340,57 @@ class InvestigationsPath(models.Model):
                               db_column='s8_id', to_field='s8_id')
     parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
                                   to_field='crnumber')
-    biopsy_type = models.CharField(max_length=255, blank=True,
-                                   null=True)  # Fine needle aspiration, core needle biopsy, excisional biopsy, etc
+    path_type = models.CharField(max_length=255, blank=False,
+                                 null=True)  # Fine needle aspiration, Ascitic fluid, Pleural Fluid, core needle biopsy, excisional biopsy, etc
+    guided_by = models.CharField(max_length=255, blank=True,
+                                 null=True)  # USG, CT, MRI
     biopsy_date = models.DateField(blank=True, null=True)
     biopsy_location = models.ForeignKey(FMAID, models.CASCADE, blank=True, null=True, db_column='biopsy_location',
                                         to_field='fma_id')
-    biopsy_result = models.ForeignKey(HPE, models.CASCADE, blank=True, null=True, db_column='biopsy_result')
+    biopsy_result = models.ForeignKey(HPE, models.CASCADE, blank=False, null=True, db_column='biopsy_result')
     biopsy_result_details = models.TextField(blank=True, null=True)
     lab_name = models.CharField(max_length=255, blank=True, null=True)
     lab_contact = models.CharField(max_length=255, blank=True, null=True)
     notes = models.TextField()
     # image = models.FileField(upload_to='images/')
-    molecular_profile = models.TextField(blank=True, null=True)
+    molecular_profile = models.TextField(blank=True, null=True)  # Done or not done
+    molecular_profile_status = models.TextField(blank=True, null=True)  # Awaited, avialbale
     user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
     last_updated = models.DateTimeField(default=timezone.now)
     updated_by = models.CharField(max_length=45, blank=True, null=True)  # New
 
     class Meta:
         db_table = 'inv_path'
+
+    def __str__(self):
+        return f'CRN: {self.parent_id} -- FUID: {self.s8_id} -- Date: {self.biopsy_date} -- Result: {self.biopsy_result}'
+
+
+class InvestigationsMolecular(models.Model):
+    mol_id = models.AutoField(primary_key=True)
+    s8_path_id = models.ForeignKey(InvestigationsPath, models.CASCADE, blank=False, null=False,
+                                   db_column='s8_path_id', to_field='s8_path_id')
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+                                  to_field='crnumber')
+    mol_type = models.CharField(max_length=255, blank=False,
+                                null=True)  # Test name - EGFR, ALK, ROS
+    mol_result = models.CharField(max_length=255, blank=False,
+                                  null=True)  # Yes, No, Unknown Significance
+    mol_value = models.CharField(max_length=255, blank=True,
+                                 null=True)  # Value if applicable
+    mol_unit = models.CharField(max_length=255, blank=True,
+                                null=True)  # If value then measuring unit of that value
+
+    lab_name = models.CharField(max_length=255, blank=True, null=True)
+    lab_contact = models.CharField(max_length=255, blank=True, null=True)
+    notes = models.TextField()
+
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)  # New
+
+    class Meta:
+        db_table = 'inv_molecular'
 
     def __str__(self):
         return f'CRN: {self.parent_id} -- FUID: {self.s8_id} -- Date: {self.biopsy_date} -- Result: {self.biopsy_result}'

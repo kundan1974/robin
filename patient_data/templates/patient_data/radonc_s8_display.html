@@ -48,6 +48,8 @@
                             <a class="btn btn-info btn-sm mt-1 mb-1"
                                href="{% url 'radonc-pftdetails' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}?next={{ request.path|urlencode }}">PFT</a>
                             <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
+                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'inv-imaging2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Imaging</a>
+                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'prescription2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Prescription</a>
                         </div>
 
                         {% if content.visitaction %}
