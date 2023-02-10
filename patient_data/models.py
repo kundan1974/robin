@@ -1247,6 +1247,34 @@ class S8FUP(models.Model):
         return f'CRN: {self.parent_id} -- DxID: {self.s2_id} -- Mx_ID: {self.s3_id} -- Date: {self.visitdate}'
 
 
+class LateToxicity(models.Model):
+    s8_latetox_id = models.AutoField(primary_key=True)
+    s8_id = models.ForeignKey(S8FUP, models.CASCADE, blank=False, null=False,
+                              db_column='s8_id', to_field='s8_id')
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+                                  to_field='crnumber')
+    toxtype = models.CharField(max_length=255, blank=False, null=True)
+    toxgrade = models.CharField(max_length=255, blank=True, null=True)
+    toxdetails = models.TextField()  # duration in days
+    drug_name = models.CharField(max_length=255, blank=True, null=True)
+    dosage = models.CharField(max_length=255, blank=True, null=True)
+    unit = models.CharField(max_length=255, blank=True, null=True)
+    route = models.CharField(max_length=255, blank=True, null=True)
+    frequency = models.CharField(max_length=255, blank=True, null=True)
+    duration = models.IntegerField(blank=True, null=True)  # duration in days
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)  # New
+    notes = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'late_toxicity'
+
+    def __str__(self):
+        return f'CRN: {self.parent_id} -- FU_ID: {self.s8_id} -- ' \
+               f'Symp: {self.toxtype} -- SympDur: {self.toxgrade} -- Drug: {self.drug_name}'
+
+
 class Prescription(models.Model):
     s8_prescription_id = models.AutoField(primary_key=True)
     s8_id = models.ForeignKey(S8FUP, models.CASCADE, blank=False, null=False,
