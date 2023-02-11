@@ -4,12 +4,13 @@ from django.utils import timezone
 from django.forms.formsets import formset_factory
 from .models import S1ParentMain, Comorbidity, PreSimulation, S2Diagnosis, S3CarePlan, Simulation, S4RT, S7Assessment, \
     S6Surgery, S6HPE, S5Chemo, S8FUP, PrimaryDVH, PFTDetails, CardiacMarkers, Site, RTTech, StudyGroup, ICDMainSites, \
-    InvestigationsImaging, Prescription
+    InvestigationsImaging, Prescription, InvestigationsPath, InvestigationsMolecular, InvestigationsLabs, LateToxicity
 
 from .options import (GENDER, YES_NO, SMOKE_FREQ, SMOKE_DUR, PS, INTENT_CHOICES, CP_CHOICES,
                       DOC_TYPE_CHOICES, RT_LATE_TOXICITY, visit_choices, deathcause_choices,
                       frequency_choices, unit_choices, route_choices, drugs_choices,
-                      symp_type_choices, txstatus_choices, toxicity_choices)
+                      symp_type_choices, txstatus_choices, toxicity_choices, PROCEDURE_TYPE, GUIDED_BY, LAB_NAME,
+                      MOLECULAR_STATUS, MOLECULAR_TYPE, MOLECULAR_RESULT, MOLECULAR_UNIT, LAB_TEST_NAME, LAB_TEST_UNITS)
 
 
 # Created class to use date time picker
@@ -617,7 +618,7 @@ class S8FUPForm(ModelForm):
         exclude = ["s8_id", "last_updated"]
 
         widgets = {
-            'parent_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
             's2_id': forms.NumberInput(attrs={'class': 'form-control'}),
             's3_id': forms.NumberInput(attrs={'class': 'form-control'}),
             'visitdate': DateInput(attrs={'class': 'form-control'}),
@@ -804,7 +805,6 @@ class InvestigationsImagingForm(ModelForm):
         fields = "__all__"
         exclude = ["s8_imaging_id", "last_updated"]
 
-
         widgets = {
             'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
             's8_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
@@ -843,25 +843,89 @@ class PrescriptionForm(ModelForm):
 
 class InvestigationsPathForm(ModelForm):
     class Meta:
-        model = Prescription
+        model = InvestigationsPath
         fields = "__all__"
         exclude = ["s8_path_id", "last_updated"]
 
         widgets = {
             'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
             's8_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
-            "path_type": forms.TextInput(attrs={'class': 'form-control'}),
-            "guided_by": forms.Select(attrs={'class': 'form-control'}, choices=symp_type_choices),
-            "biopsy_date": forms.NumberInput(attrs={'class': 'form-control'}),
+            "path_type": forms.Select(attrs={'class': 'form-control'}, choices=PROCEDURE_TYPE),
+            "guided_by": forms.Select(attrs={'class': 'form-control'}, choices=GUIDED_BY),
+            "biopsy_date": DateInput(attrs={'class': 'form-control'}),
             "biopsy_location": forms.Select(attrs={'class': 'form-control'}, choices=drugs_choices),
-            "biopsy_result": forms.TextInput(attrs={'class': 'form-control'}),
-            "biopsy_result_details": forms.Select(attrs={'class': 'form-control'}, choices=unit_choices),
-            "lab_name": forms.Select(attrs={'class': 'form-control'}, choices=route_choices),
-            "lab_contact": forms.Select(attrs={'class': 'form-control'}, choices=frequency_choices),
-            "molecular_profile": forms.TextInput(attrs={'class': 'form-control'}),
-            "molecular_profile_status": forms.TextInput(attrs={'class': 'form-control'}),
+            "biopsy_result": forms.Select(attrs={'class': 'form-control'}),
+            "biopsy_result_details": forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+            "lab_name": forms.Select(attrs={'class': 'form-control'}, choices=LAB_NAME),
+            "lab_contact": forms.TextInput(attrs={'class': 'form-control'}),
+            "molecular_profile": forms.Select(attrs={'class': 'form-control'}, choices=YES_NO),
+            "molecular_profile_status": forms.Select(attrs={'class': 'form-control'}, choices=MOLECULAR_STATUS),
             "notes": forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
         }
+
+
+class InvestigationsMolecularForm(ModelForm):
+    class Meta:
+        model = InvestigationsMolecular
+        fields = "__all__"
+        exclude = ["mol_id", "last_updated"]
+
+        widgets = {
+            'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
+            's8_path_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
+            "mol_type": forms.Select(attrs={'class': 'form-control'}, choices=MOLECULAR_TYPE),
+            "mol_result": forms.Select(attrs={'class': 'form-control'}, choices=MOLECULAR_RESULT),
+            "mol_value": forms.NumberInput(attrs={'class': 'form-control'}),
+            "mol_unit": forms.Select(attrs={'class': 'form-control'}, choices=MOLECULAR_UNIT),
+            "lab_name": forms.Select(attrs={'class': 'form-control'}, choices=LAB_NAME),
+            "lab_contact": forms.TextInput(attrs={'class': 'form-control'}),
+            "notes": forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
+
+
+class InvestigationsLabsForm(ModelForm):
+    class Meta:
+        model = InvestigationsLabs
+        fields = "__all__"
+        exclude = ["s8_labs_id", "last_updated"]
+
+        widgets = {
+            'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
+            's8_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
+            "test_name": forms.Select(attrs={'class': 'form-control'}, choices=LAB_TEST_NAME),
+            "test_date": DateInput(attrs={'class': 'form-control'}),
+            "test_result": forms.TextInput(attrs={'class': 'form-control'}),
+            "test_result_details": forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+            "test_unit": forms.Select(attrs={'class': 'form-control'}, choices=LAB_TEST_UNITS),
+            "normal_range_min": forms.NumberInput(attrs={'class': 'form-control'}),
+            "normal_range_max": forms.NumberInput(attrs={'class': 'form-control'}),
+            "lab_name": forms.Select(attrs={'class': 'form-control'}, choices=LAB_NAME),
+            "lab_contact": forms.TextInput(attrs={'class': 'form-control'}),
+            "notes": forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+        }
+
+
+class LateToxicityForm(ModelForm):
+    class Meta:
+        model = LateToxicity
+        fields = "__all__"
+        exclude = ["s8_latetox_id", "last_updated"]
+
+        widgets = {
+            'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
+            's8_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
+            "toxtype": forms.Select(attrs={'class': 'form-control'}, choices=RT_LATE_TOXICITY),
+            "toxgrade": forms.Select(attrs={'class': 'form-control'}, choices=toxicity_choices),
+            "toxdetails": forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
+            "drug_name": forms.Select(attrs={'class': 'form-control'}, choices=drugs_choices),
+            "dosage": forms.NumberInput(attrs={'class': 'form-control'}),
+            "unit": forms.Select(attrs={'class': 'form-control'}, choices=unit_choices),
+            "route": forms.Select(attrs={'class': 'form-control'}, choices=route_choices),
+            "frequency": forms.Select(attrs={'class': 'form-control'}, choices=frequency_choices),
+            "duration": forms.NumberInput(attrs={'class': 'form-control'}),
+            "notes": forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+        }
+
 
 class PrimaryDVHForm(ModelForm):
     class Meta:

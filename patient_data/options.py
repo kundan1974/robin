@@ -50,14 +50,14 @@ SMOKE_DUR = [
 
 PS = [
     ('', ''),
-    ('PS 0', 'Fully active, able to carry on all pre-disease performance without restriction'),
+    ('PS 0', 'PS 0: Fully active, able to carry on all pre-disease performance without restriction'),
     ('PS 1',
-     'Restricted in physically strenuous activity but ambulatory and able to carry out work of a light or sedentary nature, e.g., light house work, office work'),
+     'PS 1: Restricted in physically strenuous activity but ambulatory and able to carry out work of a light or sedentary nature, e.g., light house work, office work'),
     ('PS 2',
-     'Ambulatory and capable of all selfcare but unable to carry out any work activities; up and about more than 50% of waking hours'),
-    ('PS 3', 'Capable of only limited selfcare; confined to bed or chair more than 50% of waking hours'),
-    ('PS 4', 'Completely disabled; cannot carry on any selfcare; totally confined to bed or chair'),
-    ('PS 5', 'Dead'),
+     'PS 2: Ambulatory and capable of all selfcare but unable to carry out any work activities; up and about more than 50% of waking hours'),
+    ('PS 3', 'PS 3: Capable of only limited selfcare; confined to bed or chair more than 50% of waking hours'),
+    ('PS 4', 'PS 4: Completely disabled; cannot carry on any selfcare; totally confined to bed or chair'),
+    ('PS 5', 'PS 5: Dead'),
 ]
 
 REF_BY = [
@@ -253,7 +253,8 @@ visit_choices = [
 visit_actions = [
     ("", ""),
     ('No-Diagnosis No-Careplan Workup Evaluation Continued', 'No-Diagnosis No-Careplan Workup Evaluation Continued'),
-    ('Diagnosis with No-Careplan (Pending Tumor Board Decision)', 'Diagnosis with No-Careplan (Pending Tumor Board Decision)'),
+    ('Diagnosis with No-Careplan (Pending Tumor Board Decision)',
+     'Diagnosis with No-Careplan (Pending Tumor Board Decision)'),
     ('Careplan-Continued', 'Careplan-Continued'),
     ('Change-Careplan', 'Change-Careplan'),
     ('Close Careplan (Death)', 'Close Careplan (Death)')
@@ -466,8 +467,10 @@ RT_LATE_TOXICITY = [
     ("No Toxicity", "No Toxicity"),
 ]
 
-INTENT_CHOICES = [('Curative', 'Curative'),
-                  ('Palliative', 'Palliative')]
+INTENT_CHOICES = [
+    ('', ''),
+    ('Curative', 'Curative'),
+    ('Palliative', 'Palliative')]
 
 CP_CHOICES = [('', ''),
               ('Primary', 'Primary'),
@@ -489,3 +492,139 @@ DOC_TYPE_CHOICES = [('------', '------'),
                     ('Voter ID', 'Voter ID'),
                     ('Other', 'Other')
                     ]
+
+LAB_NAME = [('', ''),
+            ('InHouse', 'InHouse'),
+            ('Outside(unspecified)', 'Outside(unspecified)'),
+            ]
+
+PROCEDURE_TYPE = [('', ''),
+                  ('FNAC', 'FNAC'),
+                  ('Biopsy', 'Biopsy'),
+                  ('CSF', 'CSF'),
+                  ('Ascitic Fluid', 'Ascitic Fluid'),
+                  ('Pleural Fluid', 'Pleural Fluid'),
+                  ('Pap Smear', 'Pap Smear')]
+
+GUIDED_BY = [('', ''),
+             ('CT', 'CT'),
+             ('USG', 'USG'),
+             ('MR', 'MR'),
+             ('EUS', 'EUS'),
+             ('EBUS', 'EBUS'),
+             ('UGIE', 'UGIE'),
+             ('ProctoSigmoidoScopy', 'ProctoSigmoidoScopy'),
+             ('Fluro', 'Fluro')
+             ]
+
+MOLECULAR_STATUS = [
+    ("", ""),
+    ('Report Awaited', 'Report Awaited'),
+    ('Reported', 'Reported'),
+]
+
+MOLECULAR_TYPE = [
+    ("", ""),
+    ('EGFR', 'EGFR'),
+    ('ALK', 'ALK'),
+    ('ROS', 'ROS'),
+    ('BRAF', 'BRAF'),
+    ('ER', 'ER'),
+    ('PR', 'PR'),
+    ('HER2Neu', 'HER2Neu'),
+    ('BRACA1', 'BRACA1'),
+    ('BRACA2', 'BRACA2'),
+    ('PDL1', 'PDL1'),
+]
+
+MOLECULAR_RESULT = [
+    ("", ""),
+    ('Yes', 'Yes'),
+    ('No', 'No'),
+    ('Unknown Significance', 'Unknown Significance'),
+]
+
+MOLECULAR_UNIT = [
+    ("", ""),
+    ('%', '%'),
+]
+
+LAB_TEST_NAME = [
+    ("", ""),
+    ("Hb", "Hb"),
+    ("TLC", "Total Leukocyte Count"),
+    ("ANC", "Absolute Leukocyte Count"),
+    ("ALC", "Absolute Lymphocyte Count"),
+    ("AMC", "Absolute Monocyte Count"),
+    ("AEC", "Absolute Eosinophil Count"),
+    ("Plt", "Platelet Count"),
+    ("S.Urea", "S.Urea"),
+    ("S.Creat", "S.Creatinine"),
+    ("Creat Clearance", "Creatinine Clearance"),
+    ("GFR", "Glomular Filtration Rate(GFR)"),
+    ("CEA", "CEA"),
+    ("CA-125", "Cancer antigen 125 (CA 125)"),
+    ("CA 15-3", "Cancer antigen 15-3 (CA 15-3)"),
+    ("CA 19-9", "Cancer antigen 19-9 (CA 19-9)"),
+    ("AFP", "Alpha-Fetoprotein (AFP)"),
+    ("B-hCG", "Beta-Human Chorionic Gonadotropin (B-hCG)"),
+    ("Chromogranin A", "Chromogranin A"),
+    ("Synaptophysin", "Synaptophysin"),
+    ("PSA", "Prostate-Specific Antigen (PSA)"),
+    ("Testosterone", "Testosterone"),
+    ("Estrogen", "Estrogen"),
+    ("Progesterone", "Progesterone"),
+    ("Na", "Sodium"),
+    ("K", "Potassium"),
+    ("Mg", "Magnesium"),
+    ("Chl", "Chloride"),
+    ("Ca", "Calcium"),
+    ("Ca+", "Ionized Calcium"),
+    ("RBS", "Random Blood Sugar"),
+    ("FBS", "Fasting Blood Sugar"),
+    ("HbA1C", "Hemoglobin A1C"),
+    ("SGPT", "SGPT"),
+    ("SGOT", "SGOT"),
+    ("ALP", "Alkaline Phosphatase"),
+    ("T.Bil", "Total Bilrubin"),
+    ("Direct Bilirubin", "Conjugated(Direct) Bilrubin"),
+    ("Indirect Bilirubin", "UnConjugated(Indirect) Bilrubin"),
+    ("B12", "B12"),
+    ("CRP", "C-Reactive Protein (CRP)"),
+    ("PT", "Prothrombin Time (PT)"),
+    ("PTT", "Partial Thromboplastin Time (PTT)"),
+    ("INR", "INR"),
+    ("Iron", "Iron"),
+    ("TIBC", "Total Iron-Binding Capacity (TIBC)"),
+    ("Folic Acid", "Folic Acid"),
+    ("TSH", "Thyroid Stimulating Hormone"),
+    ("T3", "T3"),
+    ("T4", "T4"),
+    ("ANA", "Antinuclear Antibody (ANA)"),
+    ("HIV", "Human Immunodeficiency Virus (HIV) Test"),
+    ("OBC", "Occult Blood Stool"),
+    ("Ferritin", "Ferritin"),
+]
+
+LAB_TEST_UNITS = [
+    ("", ""),
+    ("%", "Percent (%)"),
+    ("g/dL", "Grams per deciliter (g/dL)"),
+    ("mg/dL", "Milligrams per deciliter (mg/dL)"),
+    ("μg/dL", "Micrograms per deciliter (μg/dL)"),
+    ("μg/L", " Micrograms per liter (μg/L)"),
+    ("ng/mL", "Nanograms per milliliter (ng/mL)"),
+    ("pg/dL", "Picograms per deciliter (pg/dL)"),
+    ("mmol/L", "Millimoles per liter (mmol/L)"),
+    ("nmol/L", "Nanomoles per liter (nmol/L)"),
+    ("U/L", " Units per liter (U/L)"),
+    ("U/mL", " Units per milliliter (U/mL)"),
+    ("μU/mL", "Microunits per liter (μU/mL)"),
+    ("IU/L", "International units per liter (IU/L)"),
+    ("mL/min", "Milliliters per minute (mL/min)"),
+    ("s", "Seconds (s)"),
+    ("P", "Present"),
+    ("A", "Absent"),
+    ("Pos", "Positive"),
+    ("N", "Negative"),
+]

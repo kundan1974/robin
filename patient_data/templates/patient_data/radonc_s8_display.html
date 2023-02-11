@@ -50,6 +50,9 @@
                             <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
                             <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'inv-imaging2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Imaging</a>
                             <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'prescription2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Prescription</a>
+                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'inv-lab2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Laboratory</a>
+                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'inv-pathlab2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Pathology</a>
+                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'latetox2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Late Toxicity</a>
                         </div>
 
                         {% if content.visitaction %}

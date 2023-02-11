@@ -14,7 +14,7 @@
                     {% csrf_token %}
                     <div class="form-row justify-content-left g-3">
                         {% if update %}
-                            <h1 class="mb-3">Pathology(Biopsy/Cytology) Update Form</h1>
+                            <h1 class="mb-3">Pathology(Molecular) Update Form</h1>
                                 <div class="row">
                                     <div class="col-auto">
                                         {% if request.GET.next %}
@@ -29,7 +29,7 @@
                                     </div>
                                 </div>
                         {% else %}
-                            <h1 class="mb-3">Pathology(Biopsy/Cytology) Form</h1>
+                            <h1 class="mb-3">Pathology(Molecular) Form</h1>
                             {% with crnumber=123456 %}
                                 <div class="row">
                                     <div class="col-auto">
@@ -47,71 +47,68 @@
                         {% endif %}
                         <div class="form-control">
                                 <div class="row g-2 mt-2">
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 d-none">
                                         {{ form.parent_id.errors }}
                                         <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
                                         {{ form.parent_id }}
                                     </div>
                                     <div class="col-md-2 d-none">
-                                        {{ form.s8_id.errors }}
-                                        <label class="oncflow-labels" for="{{ form.s8_id.id_for_label }}">FU ID:</label>
-                                        {{ form.s8_id }}
+                                        {{ form.s8_path_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.s8_path_id.id_for_label }}">FU ID:</label>
+                                        {{ form.s8_path_id }}
                                     </div>
-                                    <div class="col-md-4">
-                                        {{ form.path_type.errors }}
-                                        <label class="oncflow-labels" for="{{ form.path_type.id_for_label }}">Procedure Type:</label>
-                                        {{ form.path_type }}
+                                    <div class="col-md-2">
+                                        {{ form.mol_type.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Mention the test namer here. (Molecular/IHC)"
+                                               for="{{ form.mol_type.id_for_label }}">Test Name:</label>
+                                        {{ form.mol_type }}
                                     </div>
-                                    <div class="col-md-3">
-                                        {{ form.guided_by.errors }}
-                                        <label class="oncflow-labels" for="{{ form.guided_by.id_for_label }}">Biopsy Guided by:</label>
-                                        {{ form.guided_by }}
+                                    <div class="col-md-2">
+                                        {{ form.mol_result.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Report the relevant test as yes if positive else no.
+                                               Also some genetic test result are of unknown significance at this time.
+                                               Report them accordingly"
+                                               for="{{ form.mol_result.id_for_label }}">Result:</label>
+                                        {{ form.mol_result }}
                                     </div>
-                                    <div class="col-md-3">
-                                        {{ form.biopsy_date.errors }}
-                                        <label class="oncflow-labels" for="{{ form.biopsy_date.id_for_label }}">Biopsy Date:</label>
-                                        {{ form.biopsy_date }}
+                                    <div class="col-md-2">
+                                        {{ form.mol_value.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="If test value is reported, please enter the same."
+                                               for="{{ form.mol_value.id_for_label }}">Value:</label>
+                                        {{ form.mol_value }}
                                     </div>
-                                    <div class="col-md-6">
-                                        {{ form.biopsy_location.errors }}
-                                        <label class="oncflow-labels" for="{{ form.biopsy_location.id_for_label }}">Biopsy Site:</label>
-                                        {{ form.biopsy_location }}
+                                    <div class="col-md-2">
+                                        {{ form.mol_unit.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="If value is mentioned in previous field, specify the measuring unit here."
+                                               for="{{ form.mol_unit.id_for_label }}">Unit:</label>
+                                        {{ form.mol_unit }}
                                     </div>
-                                    <div class="col-md-6">
-                                        {{ form.biopsy_result.errors }}
-                                        <label class="oncflow-labels" for="{{ form.biopsy_result.id_for_label }}">Biopsy (Result):</label>
-                                        {{ form.biopsy_result }}
-                                    </div>
-                                    <div class="col-md-12">
-                                        {{ form.biopsy_result_details.errors }}
-                                        <label class="oncflow-labels" for="{{ form.biopsy_result_details.id_for_label }}">Biopsy (Details):</label>
-                                        {{ form.biopsy_result_details }}
-                                    </div>
-                                     <div class="col-md-3">
+                                    <div class="col-md-2">
                                         {{ form.lab_name.errors }}
-                                        <label class="oncflow-labels" for="{{ form.lab_name.id_for_label }}">Lab Name:</label>
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Report the name of Laboratory where test was done"
+                                               for="{{ form.lab_name.id_for_label }}">Lab Name:</label>
                                         {{ form.lab_name }}
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         {{ form.lab_contact.errors }}
-                                        <label class="oncflow-labels" for="{{ form.lab_contact.id_for_label }}">Lab Contact:</label>
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Contact details of laboratory, if available"
+                                               for="{{ form.lab_contact.id_for_label }}">Lab (Contact):</label>
                                         {{ form.lab_contact }}
                                     </div>
-                                    <div class="col-md-3">
-                                        {{ form.molecular_profile.errors }}
-                                        <label class="oncflow-labels" for="{{ form.molecular_profile.id_for_label }}">Molecular Profile Done?:</label>
-                                        {{ form.molecular_profile }}
-                                    </div>
-                                    <div class="col-md-3">
-                                        {{ form.molecular_profile_status.errors }}
-                                        <label class="oncflow-labels" for="{{ form.molecular_profile_status.id_for_label }}">Molecular Profile Status:</label>
-                                        {{ form.molecular_profile_status }}
-                                    </div>
-                                    <div class="col-md-12">
+                                     <div class="col-md-12">
                                         {{ form.notes.errors }}
-                                        <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Record any other important information,
+                                               which can not be recorded into the above fields"
+                                               for="{{ form.notes.id_for_label }}">Notes:</label>
                                         {{ form.notes }}
-                                    </div>
+                                     </div>
                                 </div>
                             </div>
                     <!-- Button Row -->
@@ -141,7 +138,12 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#id_biopsy_location').select2();
+            $('#id_imaging_type1').select2();
         });
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     </script>
 {% endblock javascript %}

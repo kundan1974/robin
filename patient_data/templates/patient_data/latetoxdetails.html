@@ -1,0 +1,170 @@
+{% extends "patient_data/base.html" %}
+{% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheet %}
+{% block content %}
+    <div class="container">
+    <div class="query-container">
+        {# Left Space #}
+        <div class="col-md-1"></div>
+        {# Middle Space #}
+        <div class="col-md-10">
+            <div class="my-form">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row justify-content-left g-3">
+                        {% if update %}
+                            <h1 class="mb-3">Late Toxicity Update Form</h1>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        {% if request.GET.next %}
+                                            <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                                        {% else %}
+                                            <h5><a class="btn btn-dark" href="#">Back</a></h5>
+                                        {% endif %}
+
+                                    </div>
+                                    <div class="col-auto">
+{#                                        <h5><a class="btn btn-dark" href="{% url 'db_operations' updatecrn %}">Database Operations</a></h5>#}
+                                    </div>
+                                </div>
+                        {% else %}
+                            <h1 class="mb-3">Late Toxicity Form</h1>
+                            {% with crnumber=123456 %}
+                                <div class="row">
+                                    <div class="col-auto">
+                                        {% if request.GET.next %}
+                                            <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                                        {% else %}
+                                            <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.crnumber %}">Back</a></h5>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-auto">
+                                        <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.crnumber %}">Database Operations</a></h5>
+                                    </div>
+                                </div>
+                            {% endwith %}
+                        {% endif %}
+                        <div class="form-control">
+                                <div class="row g-2 mt-2">
+                                    <div class="col-md-2 d-none">
+                                        {{ form.parent_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
+                                        {{ form.parent_id }}
+                                    </div>
+                                    <div class="col-md-2 d-none">
+                                        {{ form.s8_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.s8_id.id_for_label }}">FU ID:</label>
+                                        {{ form.s8_id }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.toxtype.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Select the observed late toxicity. (Molecular/IHC)"
+                                               for="{{ form.toxtype.id_for_label }}">Late Toxicity:</label>
+                                        {{ form.toxtype }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.toxgrade.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Select the severity grades of toxicity as per CTC v. 2.0"
+                                               for="{{ form.toxgrade.id_for_label }}">Toxicity Grade:</label>
+                                        {{ form.toxgrade }}
+                                    </div>
+                                    <div class="col-md-7">
+                                        {{ form.toxdetails.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Mention any other information about this late toxicity"
+                                               for="{{ form.toxdetails.id_for_label }}">Toxicity Details:</label>
+                                        {{ form.toxdetails }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        {{ form.drug_name.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Select drug prescribed to manage this toxicity. If multiple
+                                               drugs (n) are prescribed then you have to enter the same
+                                               toxicity (n) times and mention that drug there."
+                                               for="{{ form.drug_name.id_for_label }}">Drug Prescribed:</label>
+                                        {{ form.drug_name }}
+                                    </div>
+                                    <div class="col-md-1">
+                                        {{ form.dosage.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Mention the prescribed drug dosage here."
+                                               for="{{ form.dosage.id_for_label }}">Dose:</label>
+                                        {{ form.dosage }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.unit.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Select the prescribed drugh dosage unit here"
+                                               for="{{ form.unit.id_for_label }}">Unit:</label>
+                                        {{ form.unit }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.route.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Select the drug delivery route."
+                                               for="{{ form.route.id_for_label }}">Route:</label>
+                                        {{ form.route }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.frequency.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Select how frequently drug has to be taken"
+                                               for="{{ form.frequency.id_for_label }}">Frequency:</label>
+                                        {{ form.frequency }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.duration.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Mention the time in days for which prescribed drug is to be continued."
+                                               for="{{ form.duration.id_for_label }}">Duration(Days):</label>
+                                        {{ form.duration }}
+                                    </div>
+                                     <div class="col-md-12">
+                                        {{ form.notes.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Record any other important information,
+                                               which can not be recorded into the above fields"
+                                               for="{{ form.notes.id_for_label }}">Notes:</label>
+                                        {{ form.notes }}
+                                     </div>
+                                </div>
+                            </div>
+                    <!-- Button Row -->
+                        {% if update %}
+                            <div class="d-flex form-group justify-content-between mt-2">
+                                <button class="btn btn-dark" type="submit">Update</button>
+                            </div>
+                        {% else %}
+                            <div class="d-flex form-group justify-content-between mt-2">
+                                <button class="btn btn-dark" type="submit">Save</button>
+                                <button class="btn btn-dark" type="submit" name="to_fup">Save -> Follow up</button>
+                                <button class="btn btn-dark" type="submit" name="to_cp">Save -> CarePlan</button>
+                            </div>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+        {# Right Space #}
+        <div class="col-md-1"></div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_imaging_type1').select2();
+        });
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+{% endblock javascript %}

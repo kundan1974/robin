@@ -14,7 +14,7 @@
                     {% csrf_token %}
                     <div class="form-row justify-content-left g-3">
                         {% if update %}
-                            <h1 class="mb-3">Pathology(Biopsy/Cytology) Update Form</h1>
+                            <h1 class="mb-3">Pathology(Molecular) Update Form</h1>
                                 <div class="row">
                                     <div class="col-auto">
                                         {% if request.GET.next %}
@@ -29,7 +29,7 @@
                                     </div>
                                 </div>
                         {% else %}
-                            <h1 class="mb-3">Pathology(Biopsy/Cytology) Form</h1>
+                            <h1 class="mb-3">Pathology(Molecular) Form</h1>
                             {% with crnumber=123456 %}
                                 <div class="row">
                                     <div class="col-auto">
@@ -47,7 +47,7 @@
                         {% endif %}
                         <div class="form-control">
                                 <div class="row g-2 mt-2">
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 d-none">
                                         {{ form.parent_id.errors }}
                                         <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
                                         {{ form.parent_id }}
@@ -58,60 +58,78 @@
                                         {{ form.s8_id }}
                                     </div>
                                     <div class="col-md-4">
-                                        {{ form.path_type.errors }}
-                                        <label class="oncflow-labels" for="{{ form.path_type.id_for_label }}">Procedure Type:</label>
-                                        {{ form.path_type }}
+                                        {{ form.test_name.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Mention the Lab test name here."
+                                               for="{{ form.test_name.id_for_label }}">Test Name:</label>
+                                        {{ form.test_name }}
                                     </div>
-                                    <div class="col-md-3">
-                                        {{ form.guided_by.errors }}
-                                        <label class="oncflow-labels" for="{{ form.guided_by.id_for_label }}">Biopsy Guided by:</label>
-                                        {{ form.guided_by }}
+                                    <div class="col-md-2">
+                                        {{ form.test_date.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Date, when test was performed"
+                                               for="{{ form.test_date.id_for_label }}">Date:</label>
+                                        {{ form.test_date }}
                                     </div>
-                                    <div class="col-md-3">
-                                        {{ form.biopsy_date.errors }}
-                                        <label class="oncflow-labels" for="{{ form.biopsy_date.id_for_label }}">Biopsy Date:</label>
-                                        {{ form.biopsy_date }}
+                                    <div class="col-md-2">
+                                        {{ form.test_result.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Report Test value. If outcome is binary like positive or
+                                               negative, mention it as Binary and select positive or negative in
+                                               units drop down choices."
+                                               for="{{ form.test_result.id_for_label }}">Result:</label>
+                                        {{ form.test_result }}
                                     </div>
-                                    <div class="col-md-6">
-                                        {{ form.biopsy_location.errors }}
-                                        <label class="oncflow-labels" for="{{ form.biopsy_location.id_for_label }}">Biopsy Site:</label>
-                                        {{ form.biopsy_location }}
-                                    </div>
-                                    <div class="col-md-6">
-                                        {{ form.biopsy_result.errors }}
-                                        <label class="oncflow-labels" for="{{ form.biopsy_result.id_for_label }}">Biopsy (Result):</label>
-                                        {{ form.biopsy_result }}
+                                    <div class="col-md-4">
+                                        {{ form.test_unit.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Report the measuring unit for the test"
+                                               for="{{ form.test_unit.id_for_label }}">Units:</label>
+                                        {{ form.test_unit }}
                                     </div>
                                     <div class="col-md-12">
-                                        {{ form.biopsy_result_details.errors }}
-                                        <label class="oncflow-labels" for="{{ form.biopsy_result_details.id_for_label }}">Biopsy (Details):</label>
-                                        {{ form.biopsy_result_details }}
+                                        {{ form.test_result_details.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Mention additional comments about the result here"
+                                               for="{{ form.test_result_details.id_for_label }}">Result Details(if any):</label>
+                                        {{ form.test_result_details }}
                                     </div>
-                                     <div class="col-md-3">
+                                    <div class="col-md-2">
+                                        {{ form.normal_range_min.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Mention Minimum normal range for the test, if applicable"
+                                               for="{{ form.normal_range_min.id_for_label }}">NR(Min):</label>
+                                        {{ form.normal_range_min }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.normal_range_max.errors }}
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Mention Maximum normal range for the test, if applicable"
+                                               for="{{ form.normal_range_max.id_for_label }}">NR(Max):</label>
+                                        {{ form.normal_range_max }}
+                                    </div>
+                                    <div class="col-md-4">
                                         {{ form.lab_name.errors }}
-                                        <label class="oncflow-labels" for="{{ form.lab_name.id_for_label }}">Lab Name:</label>
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Mention the Laboratory where test was performed"
+                                               for="{{ form.lab_name.id_for_label }}">Lab Name:</label>
                                         {{ form.lab_name }}
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         {{ form.lab_contact.errors }}
-                                        <label class="oncflow-labels" for="{{ form.lab_contact.id_for_label }}">Lab Contact:</label>
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Contact details of laboratory, if available"
+                                               for="{{ form.lab_contact.id_for_label }}">Lab (Contact):</label>
                                         {{ form.lab_contact }}
                                     </div>
-                                    <div class="col-md-3">
-                                        {{ form.molecular_profile.errors }}
-                                        <label class="oncflow-labels" for="{{ form.molecular_profile.id_for_label }}">Molecular Profile Done?:</label>
-                                        {{ form.molecular_profile }}
-                                    </div>
-                                    <div class="col-md-3">
-                                        {{ form.molecular_profile_status.errors }}
-                                        <label class="oncflow-labels" for="{{ form.molecular_profile_status.id_for_label }}">Molecular Profile Status:</label>
-                                        {{ form.molecular_profile_status }}
-                                    </div>
-                                    <div class="col-md-12">
+                                     <div class="col-md-12">
                                         {{ form.notes.errors }}
-                                        <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                        <label class="oncflow-labels" data-toggle="tooltip" data-placement="top"
+                                               title="Record any other important information,
+                                               which can not be recorded into the above fields"
+                                               for="{{ form.notes.id_for_label }}">Notes:</label>
                                         {{ form.notes }}
-                                    </div>
+                                     </div>
                                 </div>
                             </div>
                     <!-- Button Row -->
@@ -141,7 +159,13 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#id_biopsy_location').select2();
+            $('#id_test_name').select2();
+            $('#id_test_unit').select2();
         });
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     </script>
 {% endblock javascript %}

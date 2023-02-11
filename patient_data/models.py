@@ -320,6 +320,9 @@ class ImagingType(models.Model):
     class Meta:
         db_table = 'patient_data_imagingtype'
 
+    def __str__(self):
+        return f'{self.code}--{self.type}'
+
 
 class ImageLocation(models.Model):
     id = models.AutoField(primary_key=True, blank=False, null=False)
@@ -328,6 +331,10 @@ class ImageLocation(models.Model):
     class Meta:
         db_table = 'patient_data_imagelocation'
 
+    def __str__(self):
+        return f'{self.location}'
+
+
 
 class ImagingResult(models.Model):
     id = models.AutoField(primary_key=True, blank=False, null=False)
@@ -335,6 +342,8 @@ class ImagingResult(models.Model):
 
     class Meta:
         db_table = 'patient_data_imagingresult'
+    def __str__(self):
+        return f'{self.result}'
 
 
 class LabName(models.Model):
@@ -343,6 +352,8 @@ class LabName(models.Model):
 
     class Meta:
         db_table = 'patient_data_labname'
+    def __str__(self):
+        return f'{self.name}'
 
 
 # Models for Radiation Oncology Database
@@ -1077,164 +1088,6 @@ class S8FUP(models.Model):
     Death = models.CharField(max_length=45, blank=True, null=True)
     CauseDeath = models.CharField(max_length=45, blank=True, null=True)
     Datedeath = models.DateTimeField(blank=True, null=True)
-    # Record Late Toxicity
-    ToxType1 = models.CharField(max_length=45, blank=True, null=True)
-    SeverityT1 = models.CharField(max_length=45, blank=True, null=True)
-    ToxType2 = models.CharField(max_length=45, blank=True, null=True)
-    SeverityT2 = models.CharField(max_length=45, blank=True, null=True)
-    ToxType3 = models.CharField(max_length=45, blank=True, null=True)
-    SeverityT3 = models.CharField(max_length=45, blank=True, null=True)
-    ToxType4 = models.CharField(max_length=45, blank=True, null=True)
-    SeverityT4 = models.CharField(max_length=45, blank=True, null=True)
-    ToxType5 = models.CharField(max_length=45, blank=True, null=True)
-    SeverityT5 = models.CharField(max_length=45, blank=True, null=True)
-    # Prescription
-    Symp1 = models.CharField(max_length=100, blank=True, null=True)
-    Symp2 = models.CharField(max_length=100, blank=True, null=True)
-    Symp3 = models.CharField(max_length=100, blank=True, null=True)
-    Symp4 = models.CharField(max_length=100, blank=True, null=True)
-    Symp5 = models.CharField(max_length=100, blank=True, null=True)
-    Symp6 = models.CharField(max_length=100, blank=True, null=True)
-    Symp7 = models.CharField(max_length=100, blank=True, null=True)
-    Symp1Type = models.CharField(max_length=15, blank=True, null=True)
-    Symp2Type = models.CharField(max_length=15, blank=True, null=True)
-    Symp3Type = models.CharField(max_length=15, blank=True, null=True)
-    Symp4Type = models.CharField(max_length=15, blank=True, null=True)
-    Symp5Type = models.CharField(max_length=15, blank=True, null=True)
-    Symp6Type = models.CharField(max_length=15, blank=True, null=True)
-    Symp7Type = models.CharField(max_length=15, blank=True, null=True)
-    DrugRx1 = models.CharField(max_length=45, blank=True, null=True)
-    DrugRx2 = models.CharField(max_length=45, blank=True, null=True)
-    DrugRx3 = models.CharField(max_length=45, blank=True, null=True)
-    DrugRx4 = models.CharField(max_length=45, blank=True, null=True)
-    DrugRx5 = models.CharField(max_length=45, blank=True, null=True)
-    DrugRx6 = models.CharField(max_length=45, blank=True, null=True)
-    Rx1Fx = models.CharField(max_length=15, blank=True, null=True)
-    Rx2Fx = models.CharField(max_length=15, blank=True, null=True)
-    Rx3Fx = models.CharField(max_length=15, blank=True, null=True)
-    Rx4Fx = models.CharField(max_length=15, blank=True, null=True)
-    Rx5Fx = models.CharField(max_length=15, blank=True, null=True)
-    Rx6Fx = models.CharField(max_length=15, blank=True, null=True)
-    Rx1Route = models.CharField(max_length=15, blank=True, null=True)
-    Rx2Route = models.CharField(max_length=15, blank=True, null=True)
-    Rx3Route = models.CharField(max_length=15, blank=True, null=True)
-    Rx4Route = models.CharField(max_length=15, blank=True, null=True)
-    Rx5Route = models.CharField(max_length=15, blank=True, null=True)
-    Rx6Route = models.CharField(max_length=15, blank=True, null=True)
-    Rx1Dur = models.IntegerField(blank=True, null=True)
-    Rx2Dur = models.IntegerField(blank=True, null=True)
-    Rx3Dur = models.IntegerField(blank=True, null=True)
-    Rx4Dur = models.IntegerField(blank=True, null=True)
-    Rx5Dur = models.IntegerField(blank=True, null=True)
-    Rx6Dur = models.IntegerField(blank=True, null=True)
-    Rx1Inst = models.CharField(max_length=100, blank=True, null=True)
-    Rx2Inst = models.CharField(max_length=100, blank=True, null=True)
-    Rx3Inst = models.CharField(max_length=100, blank=True, null=True)
-    Rx4Inst = models.CharField(max_length=100, blank=True, null=True)
-    Rx5Inst = models.CharField(max_length=100, blank=True, null=True)
-    Rx6Inst = models.CharField(max_length=100, blank=True, null=True)
-    RxDose1 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
-    RxDose2 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
-    RxDose3 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
-    RxDose4 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
-    RxDose5 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
-    RxDose6 = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
-    RxUnit1 = models.CharField(max_length=10, blank=True, null=True)
-    RxUnit2 = models.CharField(max_length=10, blank=True, null=True)
-    RxUnit3 = models.CharField(max_length=10, blank=True, null=True)
-    RxUnit4 = models.CharField(max_length=10, blank=True, null=True)
-    RxUnit5 = models.CharField(max_length=10, blank=True, null=True)
-    RxUnit6 = models.CharField(max_length=10, blank=True, null=True)
-    # Any Intervention
-    Intervention1 = models.CharField(max_length=45, blank=True, null=True)
-    Intervention2 = models.CharField(max_length=45, blank=True, null=True)
-    Intervention3 = models.CharField(max_length=45, blank=True, null=True)
-    Intervention4 = models.CharField(max_length=45, blank=True, null=True)
-    # Investigations - Imaging
-    PETCTSite = models.CharField(max_length=45, blank=True, null=True)
-    PETCTSite1 = models.CharField(max_length=45, blank=True, null=True)
-    PETCTSite2 = models.CharField(max_length=45, blank=True, null=True)
-    PETCTSite3 = models.CharField(max_length=45, blank=True, null=True)
-    PETCTSite4 = models.CharField(max_length=45, blank=True, null=True)
-    PETCT = models.CharField(max_length=45, blank=True, null=True)
-    PETCT1 = models.CharField(max_length=45, blank=True, null=True)
-    PETCT2 = models.CharField(max_length=45, blank=True, null=True)
-    PETCT3 = models.CharField(max_length=45, blank=True, null=True)
-    PETCT4 = models.CharField(max_length=45, blank=True, null=True)
-    PETCTNotes = models.CharField(max_length=255, blank=True, null=True)
-    PETCTNotes1 = models.CharField(max_length=255, blank=True, null=True)
-    PETCTNotes2 = models.CharField(max_length=255, blank=True, null=True)
-    PETCTNotes3 = models.CharField(max_length=255, blank=True, null=True)
-    PETCTNotes4 = models.CharField(max_length=255, blank=True, null=True)
-    PETCTReport = models.CharField(max_length=255, blank=True, null=True)
-    CTSite = models.CharField(max_length=45, blank=True, null=True)
-    CTSite1 = models.CharField(max_length=45, blank=True, null=True)
-    CTSite2 = models.CharField(max_length=45, blank=True, null=True)
-    CTSite3 = models.CharField(max_length=45, blank=True, null=True)
-    CTSite4 = models.CharField(max_length=45, blank=True, null=True)
-    CECT = models.CharField(max_length=45, blank=True, null=True)
-    CECT1 = models.CharField(max_length=45, blank=True, null=True)
-    CECT2 = models.CharField(max_length=45, blank=True, null=True)
-    CECT3 = models.CharField(max_length=45, blank=True, null=True)
-    CECT4 = models.CharField(max_length=45, blank=True, null=True)
-    CECTNotes = models.CharField(max_length=255, blank=True, null=True)
-    CECTNotes1 = models.CharField(max_length=255, blank=True, null=True)
-    CECTNotes2 = models.CharField(max_length=255, blank=True, null=True)
-    CECTNotes3 = models.CharField(max_length=255, blank=True, null=True)
-    CECTNotes4 = models.CharField(max_length=255, blank=True, null=True)
-    LDCT = models.CharField(max_length=45, blank=True, null=True)
-    LDCTNotes = models.CharField(max_length=255, blank=True, null=True)
-    UGIE = models.CharField(max_length=45, blank=True, null=True)
-    UGIENotes = models.CharField(max_length=255, blank=True, null=True)
-    XRaySite = models.CharField(max_length=45, blank=True, null=True)
-    XRaySite1 = models.CharField(max_length=45, blank=True, null=True)
-    XRaySite2 = models.CharField(max_length=45, blank=True, null=True)
-    XRaySite3 = models.CharField(max_length=45, blank=True, null=True)
-    XRaySite4 = models.CharField(max_length=45, blank=True, null=True)
-    XRay = models.CharField(max_length=45, blank=True, null=True)
-    XRay1 = models.CharField(max_length=45, blank=True, null=True)
-    XRay2 = models.CharField(max_length=45, blank=True, null=True)
-    XRay3 = models.CharField(max_length=45, blank=True, null=True)
-    XRay4 = models.CharField(max_length=45, blank=True, null=True)
-    XRayNotes = models.CharField(max_length=255, blank=True, null=True)
-    XRayNotes1 = models.CharField(max_length=255, blank=True, null=True)
-    XRayNotes2 = models.CharField(max_length=255, blank=True, null=True)
-    XRayNotes3 = models.CharField(max_length=255, blank=True, null=True)
-    XRayNotes4 = models.CharField(max_length=255, blank=True, null=True)
-    MRSite = models.CharField(max_length=45, blank=True, null=True)
-    MRSite1 = models.CharField(max_length=45, blank=True, null=True)
-    MRSite2 = models.CharField(max_length=45, blank=True, null=True)
-    MRSite3 = models.CharField(max_length=45, blank=True, null=True)
-    MRSite4 = models.CharField(max_length=45, blank=True, null=True)
-    MR = models.CharField(max_length=45, blank=True, null=True)
-    MR1 = models.CharField(max_length=45, blank=True, null=True)
-    MR2 = models.CharField(max_length=45, blank=True, null=True)
-    MR3 = models.CharField(max_length=45, blank=True, null=True)
-    MR4 = models.CharField(max_length=45, blank=True, null=True)
-    MRNotes = models.CharField(max_length=255, blank=True, null=True)
-    MRNotes1 = models.CharField(max_length=255, blank=True, null=True)
-    MRNotes2 = models.CharField(max_length=255, blank=True, null=True)
-    MRNotes3 = models.CharField(max_length=255, blank=True, null=True)
-    MRNotes4 = models.CharField(max_length=255, blank=True, null=True)
-    # Investigations - PathLabs
-    BiopsySite = models.CharField(max_length=45, blank=True, null=True)
-    BiopsySite1 = models.CharField(max_length=45, blank=True, null=True)
-    BiopsySite2 = models.CharField(max_length=45, blank=True, null=True)
-    BiopsySite3 = models.CharField(max_length=45, blank=True, null=True)
-    BiopsySite4 = models.CharField(max_length=45, blank=True, null=True)
-    BiopsyResult = models.CharField(max_length=45, blank=True, null=True)
-    BiopsyResult1 = models.CharField(max_length=45, blank=True, null=True)
-    BiopsyResult2 = models.CharField(max_length=45, blank=True, null=True)
-    BiopsyResult3 = models.CharField(max_length=45, blank=True, null=True)
-    BiopsyResult4 = models.CharField(max_length=45, blank=True, null=True)
-    BiopsyNotes = models.CharField(max_length=255, blank=True, null=True)
-    BiopsyNotes1 = models.CharField(max_length=255, blank=True, null=True)
-    BiopsyNotes2 = models.CharField(max_length=255, blank=True, null=True)
-    BiopsyNotes3 = models.CharField(max_length=255, blank=True, null=True)
-    BiopsyNotes4 = models.CharField(max_length=255, blank=True, null=True)
-
-    # Investigations - Hematology and biochemistry to be added
-
     Notes = models.TextField(blank=True, null=True)
     user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
     last_updated = models.DateTimeField(default=timezone.now)
@@ -1343,8 +1196,8 @@ class InvestigationsLabs(models.Model):
     test_result = models.CharField(max_length=255, blank=False, null=True)
     test_result_details = models.TextField(blank=True, null=True)
     test_unit = models.CharField(max_length=255, blank=True, null=True)
-    normal_range_min = models.CharField(max_length=255, blank=True, null=True)
-    normal_range_max = models.CharField(max_length=255, blank=True, null=True)
+    normal_range_min = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
+    normal_range_max = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
     lab_name = models.CharField(max_length=255, blank=True, null=True)
     lab_contact = models.CharField(max_length=255, blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
@@ -1379,7 +1232,7 @@ class InvestigationsPath(models.Model):
     biopsy_result_details = models.TextField(blank=True, null=True)
     lab_name = models.CharField(max_length=255, blank=True, null=True)
     lab_contact = models.CharField(max_length=255, blank=True, null=True)
-    notes = models.TextField()
+    notes = models.TextField(blank=True, null=True)
     # image = models.FileField(upload_to='images/')
     molecular_profile = models.TextField(blank=True, null=True)  # Done or not done
     molecular_profile_status = models.TextField(blank=True, null=True)  # Awaited, avialbale
@@ -1396,9 +1249,9 @@ class InvestigationsPath(models.Model):
 
 class InvestigationsMolecular(models.Model):
     mol_id = models.AutoField(primary_key=True)
-    s8_path_id = models.ForeignKey(InvestigationsPath, models.CASCADE, blank=False, null=False,
-                                   db_column='s8_path_id', to_field='s8_path_id')
-    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+    s8_path_id = models.ForeignKey(InvestigationsPath, on_delete=models.CASCADE, blank=False, null=False,
+                                   db_column='s8_path_id')
+    parent_id = models.ForeignKey(S1ParentMain, on_delete=models.CASCADE, blank=False, null=False, db_column='parent_id',
                                   to_field='crnumber')
     mol_type = models.CharField(max_length=255, blank=False,
                                 null=True)  # Test name - EGFR, ALK, ROS
@@ -1411,7 +1264,7 @@ class InvestigationsMolecular(models.Model):
 
     lab_name = models.CharField(max_length=255, blank=True, null=True)
     lab_contact = models.CharField(max_length=255, blank=True, null=True)
-    notes = models.TextField()
+    notes = models.TextField(blank=True, null=True)
 
     user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
     last_updated = models.DateTimeField(default=timezone.now)
@@ -1421,7 +1274,7 @@ class InvestigationsMolecular(models.Model):
         db_table = 'inv_molecular'
 
     def __str__(self):
-        return f'CRN: {self.parent_id} -- FUID: {self.s8_id} -- Date: {self.biopsy_date} -- Result: {self.biopsy_result}'
+        return f'CRN: {self.parent_id} -- FUID: {self.s8_path_id} -- Date: {self.mol_type} -- Result: {self.mol_result}'
 
 
 # PFT Model

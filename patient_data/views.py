@@ -21,7 +21,8 @@ from django.views.generic import UpdateView, CreateView, ListView, DeleteView, F
 
 from .forms import (S1PatientRegForm, PreSimulationForm, S2DiagnosisForm, S3CarePlanForm, SimulationForm, S4RTForm,
                     S7AssessmentForm, S6SurgeryForm, S6HPEForm, S5ChemoForm, S8FUPForm, PrimaryDVHForm, PFTDetailsForm,
-                    CardiacMarkersForm, FilterRTStarted, InvestigationsImagingForm, PrescriptionForm)
+                    CardiacMarkersForm, FilterRTStarted, InvestigationsImagingForm, PrescriptionForm,
+                    InvestigationsPathForm, InvestigationsMolecularForm, InvestigationsLabsForm, LateToxicityForm)
 from django.utils import timezone
 from django.contrib import messages
 import pandas as pd
@@ -44,7 +45,8 @@ from .models import (Comorbidity, OurDiagnosis, HPE, Site,
                      PrimaryDVH, StrType, StrName, StrNameClassifierBase, StrNameClassifierNumber,
                      StrNameClassifierImage, StrNameClassifierDose, StrNameClassifierCustom, DVHParameters, PFTDetails,
                      CardiacMarkers, ICDMainSites, InvestigationsImaging, ImageLocation, ImagingResult, ImagingType,
-                     LabName, Prescription)
+                     LabName, Prescription, InvestigationsPath, InvestigationsMolecular, InvestigationsLabs,
+                     LateToxicity)
 
 
 # Simulation, PreSimulation, S2Diagnosis, S3CarePlan, S4RT,
@@ -1734,6 +1736,10 @@ class FUPCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
                 return reverse_lazy("inv-imaging2", kwargs={"crnumber": crn, "s8_id": s8_id})
             if 'to_prescription' in self.request.POST:
                 return reverse_lazy("prescription2", kwargs={"crnumber": crn, "s8_id": s8_id})
+            if 'to_pathology' in self.request.POST:
+                return reverse_lazy("inv-pathlab2", kwargs={"crnumber": crn, "s8_id": s8_id})
+            if 'to_labs' in self.request.POST:
+                return reverse_lazy("inv-lab2", kwargs={"crnumber": crn, "s8_id": s8_id})
 
         return reverse_lazy("radonc-careplan-list", kwargs={"crnumber": crn})
 
@@ -1834,6 +1840,10 @@ class FUPUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
             return reverse_lazy("inv-imaging2", kwargs={"crnumber": crn, "s8_id": pk})
         if 'to_prescription' in self.request.POST:
             return reverse_lazy("prescription2", kwargs={"crnumber": crn, "s8_id": pk})
+        if 'to_pathology' in self.request.POST:
+            return reverse_lazy("inv-pathlab2", kwargs={"crnumber": crn, "s8_id": pk})
+        if 'to_labs' in self.request.POST:
+            return reverse_lazy("inv-lab2", kwargs={"crnumber": crn, "s8_id": pk})
         return reverse_lazy("radonc-fup-list", kwargs={"crnumber": crn})
 
     def get_context_data(self, **kwargs):
@@ -1891,7 +1901,7 @@ class InvImgCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         if "to_fup" in self.request.POST:
             return reverse_lazy("radonc-fup-update", kwargs={"pk": pk})
         if "to_cp" in self.request.POST:
-            return reverse_lazy("radonc-careplan-list", kwargs={"pk": pk})
+            return reverse_lazy("radonc-careplan-list", kwargs={"pk": crn})
 
         return reverse_lazy("radonc-fup-list", kwargs={"crnumber": crn})
 
@@ -1901,26 +1911,26 @@ class InvImgCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         s8_id = self.kwargs['s8_id']
 
         patient = S1ParentMain.objects.get(crnumber=crnumber)
-        imagingtype_choices = []
-        imaging_location = []
-        imaging_result = []
-        lab_names = []
-        for choice in ImagingType.objects.all():
-            imagingtype_choices.append((choice.id, choice.type))
-        for choice in ImageLocation.objects.all():
-            imaging_location.append((choice.id, choice.location))
-        for choice in ImagingResult.objects.all():
-            imaging_result.append((choice.id, choice.result))
-        for choice in LabName.objects.all():
-            lab_names.append((choice.id, choice.name))
+        # imagingtype_choices = []
+        # imaging_location = []
+        # imaging_result = []
+        # lab_names = []
+        # for choice in ImagingType.objects.all():
+        #     imagingtype_choices.append((choice.id, choice.type))
+        # for choice in ImageLocation.objects.all():
+        #     imaging_location.append((choice.id, choice.location))
+        # for choice in ImagingResult.objects.all():
+        #     imaging_result.append((choice.id, choice.result))
+        # for choice in LabName.objects.all():
+        #     lab_names.append((choice.id, choice.name))
 
         class InvForm(InvestigationsImagingForm):
             def __init__(self, *args, **kwargs):
                 super(InvForm, self).__init__(*args, **kwargs)
-                self.fields['imaging_type'].choices = imagingtype_choices
-                self.fields['imaging_location'].choices = imaging_location
-                self.fields['imaging_result'].choices = imaging_result
-                self.fields['lab_name'].choices = lab_names
+                # self.fields['imaging_type'].choices = imagingtype_choices
+                # self.fields['imaging_location'].choices = imaging_location
+                # self.fields['imaging_result'].choices = imaging_result
+                # self.fields['lab_name'].choices = lab_names
 
         form = InvForm()
         context['form'] = form
@@ -1967,23 +1977,23 @@ class InvImgUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         patient = InvestigationsImaging.objects.get(pk=pk)
         updatecrn = patient.parent_id.crnumber
 
-        imagingtype_choices = []
-        imaging_location = []
-        imaging_result = []
-        lab_names = []
-        for choice in ImagingType.objects.all():
-            imagingtype_choices.append((choice.id, choice.type))
-        for choice in ImageLocation.objects.all():
-            imaging_location.append((choice.id, choice.location))
-        for choice in ImagingResult.objects.all():
-            imaging_result.append((choice.id, choice.result))
-        for choice in LabName.objects.all():
-            lab_names.append((choice.id, choice.name))
+        # imagingtype_choices = []
+        # imaging_location = []
+        # imaging_result = []
+        # lab_names = []
+        # for choice in ImagingType.objects.all():
+        #     imagingtype_choices.append((choice.id, choice.type))
+        # for choice in ImageLocation.objects.all():
+        #     imaging_location.append((choice.id, choice.location))
+        # for choice in ImagingResult.objects.all():
+        #     imaging_result.append((choice.id, choice.result))
+        # for choice in LabName.objects.all():
+        #     lab_names.append((choice.id, choice.name))
 
-        context['form'].fields['imaging_type'].choices = imagingtype_choices
-        context['form'].fields['imaging_location'].choices = imaging_location
-        context['form'].fields['imaging_result'].choices = imaging_result
-        context['form'].fields['lab_name'].choices = lab_names
+        # context['form'].fields['imaging_type'].choices = imagingtype_choices
+        # context['form'].fields['imaging_location'].choices = imaging_location
+        # context['form'].fields['imaging_result'].choices = imaging_result
+        # context['form'].fields['lab_name'].choices = lab_names
 
         context['updatecrn'] = updatecrn
         context['update'] = True
@@ -2023,7 +2033,7 @@ class PrescriptionCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView
         if "to_fup" in self.request.POST:
             return reverse_lazy("radonc-fup-update", kwargs={"pk": pk})
         if "to_cp" in self.request.POST:
-            return reverse_lazy("radonc-careplan-list", kwargs={"pk": pk})
+            return reverse_lazy("radonc-careplan-list", kwargs={"pk": crn})
 
         return reverse_lazy("radonc-fup-list", kwargs={"crnumber": crn})
 
@@ -2132,6 +2142,417 @@ class PrescriptionDeleteView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         pk = self.kwargs["pk"]
         patient = Prescription.objects.get(pk=pk)
+        return reverse_lazy("radonc-fup-update", kwargs={"pk": patient.s8_id.s8_id})
+
+
+# INVESTIGATION PATHLAB DETAILS
+class InvPathlabCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+    model = InvestigationsPath
+    form_class = modelform_factory(InvestigationsPath, InvestigationsPathForm)
+    template_name = "patient_data/invpathdetails.html"
+    success_message = "Pathology Details Created Successfully!"
+    # success_url = reverse_lazy('radonc-database-home')
+    context_object_name = 'data'
+
+    def form_valid(self, form):
+        current_user = User.objects.get(id=self.request.user.id)
+        # crnumber = self.kwargs['crnumber']
+
+        form.instance.user_id = current_user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        pk = self.kwargs['s8_id']
+        fu_details = S8FUP.objects.get(s8_id=pk)
+        crn = fu_details.parent_id.crnumber
+        if "to_fup" in self.request.POST:
+            return reverse_lazy("radonc-fup-update", kwargs={"pk": pk})
+        if "to_cp" in self.request.POST:
+            return reverse_lazy("radonc-careplan-list", kwargs={"pk": crn})
+
+        return reverse_lazy("radonc-fup-list", kwargs={"crnumber": crn})
+
+    def get_context_data(self, **kwargs):
+        context = super(InvPathlabCreateView, self).get_context_data(**kwargs)
+        crnumber = self.kwargs['crnumber']
+        s8_id = self.kwargs['s8_id']
+
+        patient = S1ParentMain.objects.get(crnumber=crnumber)
+
+        # imagingtype_choices = []
+        # imaging_location = []
+        # imaging_result = []
+        # lab_names = []
+        # for choice in ImagingType.objects.all():
+        #     imagingtype_choices.append((choice.id, choice.type))
+        # for choice in ImageLocation.objects.all():
+        #     imaging_location.append((choice.id, choice.location))
+        # for choice in ImagingResult.objects.all():
+        #     imaging_result.append((choice.id, choice.result))
+        # for choice in LabName.objects.all():
+        #     lab_names.append((choice.id, choice.name))
+
+        class PathForm(InvestigationsPathForm):
+            def __init__(self, *args, **kwargs):
+                super(PathForm, self).__init__(*args, **kwargs)
+
+        form = PathForm()
+        context['form'] = form
+        context['crnumber'] = crnumber
+        context['patient'] = patient
+        context['s8_id'] = s8_id
+        context['form'].initial['parent_id'] = crnumber
+        context['form'].initial['s8_id'] = s8_id
+        return context
+
+    def form_invalid(self, form):
+        # print(form.data)
+        print(form.errors)
+        return form.errors
+
+
+class InvPathlabUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    model = InvestigationsPath
+    form_class = modelform_factory(InvestigationsPath, InvestigationsPathForm)
+    template_name = "patient_data/invpathdetails.html"
+    success_message = "Pathlab Investigation Updated Successfully!"
+    context_object_name = 'view_data'
+
+    def form_valid(self, form):
+        pk = self.kwargs["pk"]
+        patient = InvestigationsPath.objects.get(pk=pk)
+        current_user = User.objects.get(id=self.request.user.id)
+        # form.instance.updated_by = current_user.username
+        form.instance.user_id = patient.user_id
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        patient = InvestigationsPath.objects.get(pk=pk)
+        crn = patient.parent_id.crnumber
+        # patient = PatientDiagnosis.objects.get(pk=pk)
+        patient.updated_by = self.request.user.username
+        patient.save()
+        return reverse_lazy("radonc-fup-update", kwargs={"pk": self.request.POST['s8_id']})
+
+    def get_context_data(self, **kwargs):
+        context = super(InvPathlabUpdateView, self).get_context_data(**kwargs)
+        pk = self.kwargs["pk"]
+        patient = InvestigationsPath.objects.get(pk=pk)
+        updatecrn = patient.parent_id.crnumber
+
+        # imagingtype_choices = []
+        # imaging_location = []
+        # imaging_result = []
+        # lab_names = []
+        # for choice in ImagingType.objects.all():
+        #     imagingtype_choices.append((choice.id, choice.type))
+        # for choice in ImageLocation.objects.all():
+        #     imaging_location.append((choice.id, choice.location))
+        # for choice in ImagingResult.objects.all():
+        #     imaging_result.append((choice.id, choice.result))
+        # for choice in LabName.objects.all():
+        #     lab_names.append((choice.id, choice.name))
+
+        # context['form'].fields['imaging_type'].choices = imagingtype_choices
+        # context['form'].fields['imaging_location'].choices = imaging_location
+        # context['form'].fields['imaging_result'].choices = imaging_result
+        # context['form'].fields['lab_name'].choices = lab_names
+
+        context['updatecrn'] = updatecrn
+        context['update'] = True
+        context['patient'] = patient
+        context['s8_id'] = patient.s8_id.s8_id
+        return context
+
+
+class InvPathlabDeleteView(LoginRequiredMixin, DeleteView):
+    model = InvestigationsPath
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        patient = InvestigationsPath.objects.get(pk=pk)
+        return reverse_lazy("radonc-fup-update", kwargs={"pk": patient.s8_id.s8_id})
+
+
+# INVESTIGATION MOL PATHLAB DETAILS
+class InvMolPathlabCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+    model = InvestigationsMolecular
+    form_class = modelform_factory(InvestigationsMolecular, InvestigationsMolecularForm)
+    template_name = "patient_data/invmolpathdetails.html"
+    success_message = "Molecular Pathology Details Created Successfully!"
+    # success_url = reverse_lazy('radonc-database-home')
+    context_object_name = 'data'
+
+    def form_valid(self, form):
+        current_user = User.objects.get(id=self.request.user.id)
+        # crnumber = self.kwargs['crnumber']
+
+        form.instance.user_id = current_user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        pk = self.kwargs['s8_path_id']
+        path_details = InvestigationsPath.objects.get(s8_path_id=pk)
+        s8_id = path_details.s8_id.s8_id
+        crn = path_details.parent_id.crnumber
+        if "to_fup" in self.request.POST:
+            return reverse_lazy("radonc-fup-update", kwargs={"pk": s8_id})
+        if "to_cp" in self.request.POST:
+            return reverse_lazy("radonc-careplan-list", kwargs={"pk": crn})
+
+        return reverse_lazy("radonc-fup-list", kwargs={"crnumber": crn})
+
+    def get_context_data(self, **kwargs):
+        context = super(InvMolPathlabCreateView, self).get_context_data(**kwargs)
+        crnumber = self.kwargs['crnumber']
+        s8_path_id = self.kwargs['s8_path_id']
+
+        patient = S1ParentMain.objects.get(crnumber=crnumber)
+
+        class MolPathForm(InvestigationsMolecularForm):
+            def __init__(self, *args, **kwargs):
+                super(MolPathForm, self).__init__(*args, **kwargs)
+
+        form = MolPathForm()
+        context['form'] = form
+        context['crnumber'] = crnumber
+        context['patient'] = patient
+        context['s8_path_id'] = s8_path_id
+        context['form'].initial['parent_id'] = crnumber
+        context['form'].initial['s8_path_id'] = s8_path_id
+        return context
+
+    def form_invalid(self, form):
+        # print(form.data)
+        print(form.errors)
+        return form.errors
+
+
+class InvMolPathlabUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    model = InvestigationsMolecular
+    form_class = modelform_factory(InvestigationsMolecular, InvestigationsMolecularForm)
+    template_name = "patient_data/invmolpathdetails.html"
+    success_message = "Molecular Pathology Details Updated Successfully!"
+    context_object_name = 'view_data'
+
+    def form_valid(self, form):
+        pk = self.kwargs["pk"]
+        patient = InvestigationsMolecular.objects.get(pk=pk)
+        form.instance.user_id = patient.user_id
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        patient = InvestigationsMolecular.objects.get(pk=pk)
+        s8_id = patient.s8_path_id.s8_id.s8_id
+        patient.updated_by = self.request.user.username
+        patient.save()
+        return reverse_lazy("radonc-fup-update", kwargs={"pk": s8_id})
+
+    def get_context_data(self, **kwargs):
+        context = super(InvMolPathlabUpdateView, self).get_context_data(**kwargs)
+        pk = self.kwargs["pk"]
+        patient = InvestigationsMolecular.objects.get(pk=pk)
+        updatecrn = patient.parent_id.crnumber
+
+        context['updatecrn'] = updatecrn
+        context['update'] = True
+        context['patient'] = patient
+        context['s8_id'] = patient.s8_path_id.s8_id.s8_id
+        return context
+
+
+class InvMolPathlabDeleteView(LoginRequiredMixin, DeleteView):
+    model = InvestigationsMolecular
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        patient = InvestigationsMolecular.objects.get(pk=pk)
+        return reverse_lazy("radonc-fup-update", kwargs={"pk": patient.s8_path_id.s8_id.s8_id})
+
+
+# INVESTIGATION BASIC LAB DETAILS
+class InvLabsCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+    model = InvestigationsLabs
+    form_class = modelform_factory(InvestigationsLabs, InvestigationsLabsForm)
+    template_name = "patient_data/invlabdetails.html"
+    success_message = "Lab Report Created Successfully!"
+    context_object_name = 'data'
+
+    def form_valid(self, form):
+        current_user = User.objects.get(id=self.request.user.id)
+        # crnumber = self.kwargs['crnumber']
+
+        form.instance.user_id = current_user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        pk = self.kwargs['s8_id']
+        fu_details = S8FUP.objects.get(s8_id=pk)
+        crn = fu_details.parent_id.crnumber
+        if "to_fup" in self.request.POST:
+            return reverse_lazy("radonc-fup-update", kwargs={"pk": pk})
+        if "to_cp" in self.request.POST:
+            return reverse_lazy("radonc-careplan-list", kwargs={"pk": crn})
+
+        return reverse_lazy("radonc-fup-list", kwargs={"crnumber": crn})
+
+    def get_context_data(self, **kwargs):
+        context = super(InvLabsCreateView, self).get_context_data(**kwargs)
+        crnumber = self.kwargs['crnumber']
+        s8_id = self.kwargs['s8_id']
+
+        patient = S1ParentMain.objects.get(crnumber=crnumber)
+
+        class InvLabForm(InvestigationsLabsForm):
+            def __init__(self, *args, **kwargs):
+                super(InvLabForm, self).__init__(*args, **kwargs)
+
+        form = InvLabForm()
+        context['form'] = form
+        context['crnumber'] = crnumber
+        context['patient'] = patient
+        context['form'].initial['parent_id'] = crnumber
+        context['form'].initial['s8_id'] = s8_id
+
+        return context
+
+    def form_invalid(self, form):
+        # print(form.data)
+        print(form.errors)
+        return form.errors
+
+
+class InvLabsUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    model = InvestigationsLabs
+    form_class = modelform_factory(InvestigationsLabs, InvestigationsLabsForm)
+    template_name = "patient_data/invlabdetails.html"
+    success_message = "Lab Report Updated Successfully!"
+
+    def form_valid(self, form):
+        pk = self.kwargs["pk"]
+        patient = InvestigationsLabs.objects.get(pk=pk)
+        form.instance.user_id = patient.user_id
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        patient = InvestigationsLabs.objects.get(pk=pk)
+        crn = patient.parent_id.crnumber
+        patient.updated_by = self.request.user.username
+        patient.save()
+        return reverse_lazy("radonc-fup-update", kwargs={"pk": self.request.POST['s8_id']})
+
+    def get_context_data(self, **kwargs):
+        context = super(InvLabsUpdateView, self).get_context_data(**kwargs)
+        pk = self.kwargs["pk"]
+        patient = InvestigationsLabs.objects.get(pk=pk)
+        updatecrn = patient.parent_id.crnumber
+
+        context['updatecrn'] = updatecrn
+        context['update'] = True
+        context['patient'] = patient
+        return context
+
+
+class InvLabsDeleteView(LoginRequiredMixin, DeleteView):
+    model = InvestigationsLabs
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        patient = InvestigationsLabs.objects.get(pk=pk)
+        return reverse_lazy("radonc-fup-update", kwargs={"pk": patient.s8_id.s8_id})
+
+
+# LATE TOXICITY DETAILS
+class LateToxCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+    model = LateToxicity
+    form_class = modelform_factory(LateToxicity, LateToxicityForm)
+    template_name = "patient_data/latetoxdetails.html"
+    success_message = "Late Toxicity Created Successfully!"
+    context_object_name = 'data'
+
+    def form_valid(self, form):
+        current_user = User.objects.get(id=self.request.user.id)
+        form.instance.user_id = current_user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        pk = self.kwargs['s8_id']
+        fu_details = S8FUP.objects.get(s8_id=pk)
+        crn = fu_details.parent_id.crnumber
+        if "to_fup" in self.request.POST:
+            return reverse_lazy("radonc-fup-update", kwargs={"pk": pk})
+        if "to_cp" in self.request.POST:
+            return reverse_lazy("radonc-careplan-list", kwargs={"pk": crn})
+
+        return reverse_lazy("radonc-fup-list", kwargs={"crnumber": crn})
+
+    def get_context_data(self, **kwargs):
+        context = super(LateToxCreateView, self).get_context_data(**kwargs)
+        crnumber = self.kwargs['crnumber']
+        s8_id = self.kwargs['s8_id']
+
+        patient = S1ParentMain.objects.get(crnumber=crnumber)
+
+        class LateToxForm(LateToxicityForm):
+            def __init__(self, *args, **kwargs):
+                super(LateToxForm, self).__init__(*args, **kwargs)
+
+        form = LateToxForm()
+        context['form'] = form
+        context['crnumber'] = crnumber
+        context['patient'] = patient
+        context['form'].initial['parent_id'] = crnumber
+        context['form'].initial['s8_id'] = s8_id
+
+        return context
+
+    def form_invalid(self, form):
+        # print(form.data)
+        print(form.errors)
+        return form.errors
+
+
+class LateToxUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    model = LateToxicity
+    form_class = modelform_factory(LateToxicity, LateToxicityForm)
+    template_name = "patient_data/latetoxdetails.html"
+    success_message = "Late Toxicity Updated Successfully!"
+
+    def form_valid(self, form):
+        pk = self.kwargs["pk"]
+        patient = LateToxicity.objects.get(pk=pk)
+        form.instance.user_id = patient.user_id
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        patient = LateToxicity.objects.get(pk=pk)
+        crn = patient.parent_id.crnumber
+        patient.updated_by = self.request.user.username
+        patient.save()
+        return reverse_lazy("radonc-fup-update", kwargs={"pk": self.request.POST['s8_id']})
+
+    def get_context_data(self, **kwargs):
+        context = super(LateToxUpdateView, self).get_context_data(**kwargs)
+        pk = self.kwargs["pk"]
+        patient = LateToxicity.objects.get(pk=pk)
+        updatecrn = patient.parent_id.crnumber
+
+        context['updatecrn'] = updatecrn
+        context['update'] = True
+        context['patient'] = patient
+        return context
+
+
+class LateToxDeleteView(LoginRequiredMixin, DeleteView):
+    model = LateToxicity
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        patient = LateToxicity.objects.get(pk=pk)
         return reverse_lazy("radonc-fup-update", kwargs={"pk": patient.s8_id.s8_id})
 
 

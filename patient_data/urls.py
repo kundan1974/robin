@@ -15,7 +15,10 @@ from .views import S1RegUpdateView, S1ListView, PreSimulationUpdateView, PreSimu
     ChemotherapyUpdateView, FUPCreateView, FUPListView, FUPUpdateView, PrimaryDVHCreateView, PFTDetailsCreateView, \
     PFTDetailsListView, PFTDetailsUpdateView, PFTDetailsDeleteView, CardiacMarkersCreateView, CardiacMarkersListView, \
     CardiacMarkersUpdateView, CardiacMarkersDeleteView, ChemotherapyDeleteView, InvImgCreateView, InvImgUpdateView, \
-    InvImgDeleteView, PrescriptionCreateView, PrescriptionUpdateView, PrescriptionDeleteView
+    InvImgDeleteView, PrescriptionCreateView, PrescriptionUpdateView, PrescriptionDeleteView, InvPathlabCreateView, \
+    InvPathlabUpdateView, InvPathlabDeleteView, InvMolPathlabCreateView, InvMolPathlabUpdateView, \
+    InvMolPathlabDeleteView, InvLabsCreateView, InvLabsUpdateView, InvLabsDeleteView, LateToxCreateView, \
+    LateToxUpdateView, LateToxDeleteView
 
 urlpatterns = [
     path('', views.index, name='database-index'),
@@ -93,6 +96,31 @@ urlpatterns = [
     path('inv-imaging/<str:crnumber>/<int:s8_id>/', InvImgCreateView.as_view(), name="inv-imaging2"),
     path('inv-imaging/<int:pk>/update/', InvImgUpdateView.as_view(), name="inv-imaging-update"),
     path('inv-imaging/<int:pk>/delete/', InvImgDeleteView.as_view(), name="inv-imaging-delete"),
+
+    # INVESTIGATION LAB TEST
+    path('inv-lab/<str:crnumber>/', InvLabsCreateView.as_view(), name="inv-lab1"),
+    path('inv-lab/<str:crnumber>/<int:s8_id>/', InvLabsCreateView.as_view(), name="inv-lab2"),
+    path('inv-lab/<int:pk>/update/', InvLabsUpdateView.as_view(), name="inv-lab-update"),
+    path('inv-lab/<int:pk>/delete/', InvLabsDeleteView.as_view(), name="inv-lab-delete"),
+
+    # INVESTIGATION PATH LABS
+    path('inv-pathlab/<str:crnumber>/', InvPathlabCreateView.as_view(), name="inv-pathlab1"),
+    path('inv-pathlab/<str:crnumber>/<int:s8_id>/', InvPathlabCreateView.as_view(), name="inv-pathlab2"),
+    path('inv-pathlab/<int:pk>/update/', InvPathlabUpdateView.as_view(), name="inv-pathlab-update"),
+    path('inv-pathlab/<int:pk>/delete/', InvPathlabDeleteView.as_view(), name="inv-pathlab-delete"),
+
+    # INVESTIGATIONS MOL PATH LABS inv-molpathlab1
+    path('inv-molpathlab/<str:crnumber>/', InvMolPathlabCreateView.as_view(), name="inv-molpathlab1"),
+    path('inv-molpathlab/<str:crnumber>/<int:s8_path_id>/', InvMolPathlabCreateView.as_view(), name="inv-molpathlab2"),
+    path('inv-molpathlab/<int:pk>/update/', InvMolPathlabUpdateView.as_view(), name="inv-molpathlab-update"),
+    path('inv-molpathlab/<int:pk>/delete/', InvMolPathlabDeleteView.as_view(), name="inv-molpathlab-delete"),
+
+    # LATE TOXICITY LABS
+    path('latetox/<str:crnumber>/', LateToxCreateView.as_view(), name="latetox1"),
+    path('latetox/<str:crnumber>/<int:s8_id>/', LateToxCreateView.as_view(), name="latetox2"),
+    path('latetox/<int:pk>/update/', LateToxUpdateView.as_view(), name="latetox-update"),
+    path('latetox/<int:pk>/delete/', LateToxDeleteView.as_view(), name="latetox-delete"),
+
 
     # PRESCRIPTION
     path('prescription/<str:crnumber>/', PrescriptionCreateView.as_view(), name="prescription1"),
