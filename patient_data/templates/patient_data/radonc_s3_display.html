@@ -94,24 +94,26 @@
                         <h4 class="font-monospace"><span class="text-dark">Histopathology: </span>{{ content.s2_id.icd_path_code }}</h4>
                         <div>
                             <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-careplan-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
-                            {% if content.s2_id.icd_main_topo.site == 'Breast' and content.s2_id.laterality == "Left" %}
-                                {% if presim_check %}
-                                    {% if oldpresim %}
-                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-presimulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New PreSimulation</a>
-                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-simulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Simulation</a>
-                                    {% else %}
-                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-presimulation-list' content.parent_id.crnumber %}?next={{ request.path|urlencode }}">Update PreSimulation</a>
-                                    {% endif %}
-                                {% else %}
-                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-presimulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New PreSimulation</a>
-                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-simulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Simulation</a>
-                                {% endif %}
-                            {% else %}
-                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-simulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Simulation</a>
-                            {% endif %}
+{#                            {% if content.s2_id.icd_main_topo.site == 'Breast' and content.s2_id.laterality == "Left" %}#}
+{#                                {% if presim_check %}#}
+{#                                    {% if oldpresim %}#}
+{#                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-presimulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New PreSimulation</a>#}
+{#                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-simulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Simulation</a>#}
+{#                                    {% else %}#}
+{#                                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-presimulation-list' content.parent_id.crnumber %}?next={{ request.path|urlencode }}">Update PreSimulation</a>#}
+{#                                    {% endif %}#}
+{#                                {% else %}#}
+{#                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-presimulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New PreSimulation</a>#}
+{#                                    <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-simulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Simulation</a>#}
+{#                                {% endif %}#}
+{#                            {% else %}#}
+{#                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-simulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Simulation</a>#}
+{#                            {% endif %}#}
+                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'new-simulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New-Sim</a>
                             <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-surgery' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Sx</a>
                             <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-chemotherapy' content.parent_id.crnumber content.s3_id %}">New Chemo</a>
                             <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-fup1' content.parent_id.crnumber content.s2_id.s2_id content.s3_id %}?next={{ request.path|urlencode }}">Record New Visit</a></h5>
+                            <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-chemoprotocol' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">Record New Chemo-Protocol</a></h5>
                             <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
                         </div>
                         <small class="text-muted"><b>Mx Start Date: </b>: {{ content.startdate|date:"F d, Y" }}</small><br>

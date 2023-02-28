@@ -80,39 +80,39 @@
                                 </h2>
                                 <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushPrescription">
                                     <div class="accordion-body">
-                                    <a class="btn btn-sm btn-dark text-light m-2" href="{% url 'prescription2' patient.parent_id.crnumber patient.s8_id %}?next={{ request.path|urlencode }}">Add New</a>
+                                        <a class="btn btn-sm btn-dark text-light m-2" href="{% url 'prescription2' patient.parent_id.crnumber patient.s8_id %}?next={{ request.path|urlencode }}">Add New</a>
                                         {% if patient.prescription_set.all %}
                                             <table class="styled-table m-1">
-                                <thead>
-                                    <tr>
-                                        <th>Symptoms</th>
-                                        <th>Duration</th>
-                                        <th>Drug</th>
-                                        <th>Route</th>
-                                        <th>Frequency</th>
-                                        <th>Duration</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {% for content in patient.prescription_set.all %}
-                                    <tr>
-                                        <td>{{ content.symptoms }}</td>
-                                        <td>{{ content.symp_duration }}</td>
-                                        <td>{{ content.drug_name }} {{ content.dosage }}{{ content.unit }}</td>
-                                        <td>{{ content.route }}</td>
-                                        <td>{{ content.frequency }}</td>
-                                        <td>{{ content.duration }}</td>
+                                            <thead>
+                                                <tr>
+                                                    <th>Symptoms</th>
+                                                    <th>Duration</th>
+                                                    <th>Drug</th>
+                                                    <th>Route</th>
+                                                    <th>Frequency</th>
+                                                    <th>Duration</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for content in patient.prescription_set.all %}
+                                                <tr>
+                                                    <td>{{ content.symptoms }}</td>
+                                                    <td>{{ content.symp_duration }}</td>
+                                                    <td>{{ content.drug_name }} {{ content.dosage }}{{ content.unit }}</td>
+                                                    <td>{{ content.route }}</td>
+                                                    <td>{{ content.frequency }}</td>
+                                                    <td>{{ content.duration }}</td>
 
-                                        <td>
-                                            <a class="btn btn-sm btn-warning" href="{% url 'prescription-update' content.pk %}?next={{ request.path|urlencode }}">E</a>
-                                            <a class="btn btn-sm btn-danger" href="{% url 'prescription-delete' content.pk %}">X</a>
-                                        </td>
-                                    </tr>
-                                {% endfor  %}
-                                    <!-- and so on... -->
-                                </tbody>
-                            </table>
+                                                    <td>
+                                                        <a class="btn btn-sm btn-warning" href="{% url 'prescription-update' content.pk %}?next={{ request.path|urlencode }}">E</a>
+                                                        <a class="btn btn-sm btn-danger" href="{% url 'prescription-delete' content.pk %}">X</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor  %}
+                                                <!-- and so on... -->
+                                            </tbody>
+                                        </table>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -267,17 +267,17 @@
                                         </thead>
                                         <tbody>
                                         {% for content in patient.investigationspath_set.all %}
-                                        <tr>
                                             {% for mol_content in content.investigationsmolecular_set.all %}
-                                                <td>{{ content.biopsy_date }}: {{ mol_content.mol_type }}</td>
-                                                <td>{{ mol_content.mol_result }}</td>
-                                                <td>{{ mol_content.mol_value }} {{ mol_content.mol_unit }}</td>
-                                                <td>
-                                                    <a class="btn btn-sm btn-warning" href="{% url 'inv-molpathlab-update' mol_content.pk %}?next={{ request.path|urlencode }}">E</a>
-                                                    <a class="btn btn-sm btn-danger" href="{% url 'inv-molpathlab-delete' mol_content.pk %}">X</a>
-                                                </td>
+                                                <tr>
+                                                    <td>{{ content.biopsy_date }}: {{ mol_content.mol_type }}</td>
+                                                    <td>{{ mol_content.mol_result }}</td>
+                                                    <td>{{ mol_content.mol_value }} {{ mol_content.mol_unit }}</td>
+                                                    <td>
+                                                        <a class="btn btn-sm btn-warning" href="{% url 'inv-molpathlab-update' mol_content.pk %}?next={{ request.path|urlencode }}">E</a>
+                                                        <a class="btn btn-sm btn-danger" href="{% url 'inv-molpathlab-delete' mol_content.pk %}">X</a>
+                                                    </td>
+                                                </tr>
                                             {% endfor %}
-                                        </tr>
                                         {% endfor %}
                                         <!-- and so on... -->
                                         </tbody>

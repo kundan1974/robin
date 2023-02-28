@@ -1,0 +1,21 @@
+{{ form.final_status.errors }}
+    <label class="oncflow-labels" for="id_finalstatus">Final Status:</label>
+{% if selected %}
+    <select name="final_status" class="form-control"
+            hx-post="{% url "get-presim-buttons" %}"
+            hx-target="#presimbuttons" hx-trigger="change">
+        <option value="{{ selected }}">{{ selected }}</option>
+        {% for option in options %}
+            <option value="{{ option.0 }}">{{ option.1 }}</option>
+        {% endfor %}
+    </select>
+{% else %}
+    <select name="final_status" class="form-control"
+            hx-post="{% url "get-presim-buttons" %}"
+            hx-target="#presimbuttons" hx-trigger="change">
+        <option value="0">-------</option>
+        {% for option in options %}
+            <option value="{{ option.0 }}">{{ option.1 }}</option>
+        {% endfor %}
+    </select>
+{% endif %}

@@ -24,7 +24,7 @@
                             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-hpe-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
                             <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
                         </div>
-                        <small class="text-muted"><b>HPE Date: </b>: {{ content.sx_idhpe.dischargedate|date:"F d, Y" }}</small><br>
+                        <small class="text-muted"><b>HPE Date: </b>: {{ content.hpedate|date:"F d, Y" }}</small><br>
                         <small class="text-muted"><b>HPE: </b>: {{ content.hpetype }} <b>Grade: </b>:{{ content.hpegrade }}</small><br>
                         <small class="text-muted"><b>AJCC TNM STAGE</b> <b>pT</b>:{{ content.pt }} <b>pN</b>:{{ content.pn }} <b>pM</b>:{{ content.pm }}</small><br>
                         <small class="text-muted"><b>Stage Group: </b>: {{ content.pstagegroup }}</small><br>

@@ -9,7 +9,12 @@
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-outline-danger" type="submit">Yes, Delete</button>
+                {% if object.s8_path_id.s8_id %}
                 <a class="btn btn-outline-secondary" href="{% url 'radonc-fup-update' object.s8_path_id.s8_id.s8_id %}">Cancel</a>
+                {% endif %}
+                {% if object.s8_path_id.s7_id %}
+                <a class="btn btn-outline-secondary" href="{% url 'radonc-ass-update' object.s8_path_id.s7_id.s7_id %}">Cancel</a>
+                {% endif %}
             </div>
         </form>
     </div>

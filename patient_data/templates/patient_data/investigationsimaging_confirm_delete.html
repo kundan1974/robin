@@ -5,11 +5,18 @@
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Delete Imaging Details</legend>
-                <h2>Are you sure you want to delete this Imaging detail: "{{ object.imaging_type.type }} dated {{ object.imaging_date|date:"d-m-Y" }}, with result: {{ object.imaging_result.result }}"</h2>
+                <h2>Are you sure you want to delete this Imaging detail: "{{ object.imaging_type.type }}
+                    dated {{ object.imaging_date|date:"d-m-Y" }},
+                    with result: {{ object.imaging_result.result }}"</h2>
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-outline-danger" type="submit">Yes, Delete</button>
+                 {% if object.s8_id %}
                 <a class="btn btn-outline-secondary" href="{% url 'radonc-fup-update' object.s8_id.s8_id %}">Cancel</a>
+                {% endif %}
+                {% if object.s7_id %}
+                <a class="btn btn-outline-secondary" href="{% url 'radonc-ass-update' object.s7_id.s7_id %}">Cancel</a>
+                {% endif %}
             </div>
         </form>
     </div>

@@ -1,0 +1,147 @@
+{% extends "patient_data/base.html" %}
+{% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheet %}
+{% block content %}
+    <div class="container">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <div class="my-form">
+            {% if update %}
+                <h1 class="mb-3">Acute Toxicity <em class="red-highlight p-2 box-redius box-shadow text-light">Update</em> Form</h1>
+                <div class="row">
+                    <div class="col-auto">
+                        <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                    </div>
+                    <div class="col-auto">
+                        <h5><a class="btn btn-dark" href="#">Database Operations</a></h5>
+                    </div>
+                </div>
+            {% else %}
+                <h1 class="mb-3">Acute Toxicity Form</h1>
+                <div class="row">
+                    <div class="col-auto">
+                        <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                    </div>
+                    <div class="col-auto">
+                        <h5><a class="btn btn-dark" href="#">Database Operations</a></h5>
+                    </div>
+                </div>
+            {% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-row justify-content-left g-3">
+                    <div class="form-control">
+                        <div class="row g-2 mt-2 p-1" style="background: #cfb3f6">
+                            <div class="col-md-2 d-none">
+                                {{ form.parent_id.errors }}
+                                <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">Parent_ID:</label>
+                                {{ form.parent_id }}
+                            </div>
+                            <div class="col-md-2 d-none">
+                                {{ form.s7_id.errors }}
+                                <label class="oncflow-labels" for="{{ form.s7_id.id_for_label }}">As_ID:</label>
+                                {{ form.s7_id }}
+                            </div>
+                            {% if update %}
+                                <div class="col-md-6">
+                                    <label class="oncflow-labels" for="id_system">
+                                        <h5 class="red text-light p-2 box-redius box-shadow">{{ patient.tox_system }}</h5></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="oncflow-labels" for="toxicity1">
+                                        <h5 class="red text-light p-2 box-redius box-shadow">{{ patient.tox_term }}</h5></label>
+                                </div>
+                            {% endif %}
+                            <div class="col-6">
+                                {% if update %}
+                                    <label class="oncflow-labels" for="id_system">Update Toxicity Type</label>
+                                {% else %}
+                                    <label for="id_system" class="oncflow-labels">Select Toxicity Type</label>
+                                {% endif %}
+                                <select class="form-select form-select-lg mb-3" name="tox_system" id="id_system"
+                                        hx-post="{% url "acute_tox_second_field_options" %}" hx-target="#toxicity" hx-trigger="change">
+                                    <option value="">--Select Involved System--</option>
+                                        {% for option in options_system %}
+                                    <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                        {% endfor %}
+                                </select>
+                            </div>
+                            <div id="toxicity" class="col-6">
+{#                                {% if update %}#}
+{#                                    <label class="oncflow-labels" for="toxicity1">Update Toxicity</label>#}
+{#                                {% else %}#}
+{#                                    <label for="toxicity1" class="oncflow-labels">Select Toxicity</label>#}
+{#                                {% endif %}#}
+{#                                <select class="form-select form-select-lg mb-3" name="toxicity1" id="toxicity1">#}
+{#                                    <option value="">--First Choose System to Populate Choices--</option>#}
+{#                                </select>#}
+                                {% include 'patient_data/partials/partial_select_toxicities.html' %}
+                            </div>
+                        <hr>
+                            {% if update %}
+                                <div class="col-md-12">
+                                    <label class="oncflow-labels" for="id_system">
+                                        <h5 class="red text-light p-2 box-redius box-shadow">{{ patient.tox_grade }}</h5></label>
+                                </div>
+                            {% endif %}
+                            <div id="display-grades">
+{#                                {% if update %}#}
+{#                                    <label class="form-label oncflow-labels">Update Toxicity Grade</label>#}
+{#                                {% else %}#}
+{#                                    <label class="form-label oncflow-labels">Select Toxicity Grade</label>#}
+{#                                    <h5>First Choose Toxicity Type & Toxicity to Populate Choices</h5>#}
+{#                                {% endif %}#}
+                                {% include 'patient_data/partials/partial_display_grades.html' %}
+                            </div>
+
+{#                            <div class="col-md-4">#}
+{#                                {{ form.tox_system.errors }}#}
+{#                                <label class="oncflow-labels" for="{{ form.tox_system.id_for_label }}">System:</label>#}
+{#                                {{ form.tox_system }}#}
+{#                            </div>#}
+{#                            <div class="col-md-6">#}
+{#                                {{ form.tox_term.errors }}#}
+{#                                <label class="oncflow-labels" for="{{ form.tox_term.id_for_label }}">Toxicity:</label>#}
+{#                                {{ form.tox_term }}#}
+{#                            </div>#}
+                            <div class="col-md-12">
+                                {{ form.notes.errors }}
+                                <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                {{ form.notes }}
+                            </div>
+                        </div>
+                    </div>
+                <!-- Button Row -->
+                    {% if update %}
+                        <div class="form-group mt-3">
+                            <button class="btn btn-dark" type="submit">Update</button>
+                        </div>
+                    {% else %}
+                        <div class="form-group mt-3">
+                            <button class="btn btn-dark" type="submit">Save</button>
+                        </div>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+        <div class="col-md-1"></div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_tox_term').select2();
+            $('#id_tox_system').select2();
+        });
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+{% endblock javascript %}

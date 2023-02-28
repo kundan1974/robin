@@ -1,0 +1,25 @@
+{% extends "patient_data/base.html" %}
+{% block content %}
+<div class="container">
+    <div class="query-container">
+        <div class="content-section">
+        <form class="my-form" method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Delete Simulation</legend>
+                <h2 style="color: crimson">Are you sure you want to delete <br>SImulation Details for :</h2><br><br>
+                    <p><b>Simulation Detail</b>: {{ object.simparent.crnumber }} <br><b>SimID</b>: {{object.pk}} <br>
+                        Dated: {{ object.last_updated|date:"d-m-Y" }}<br><br>
+                        Site: {{ object.site }}<br>
+                        Intent: {{ object.intent }}, Dose: {{ object.dosephase1 }}Gy / {{ object.fxphase1 }}Fx
+                    </p>
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-danger" type="submit">Yes, Delete</button>
+                <a class="btn btn-secondary" href="{% url 'new-simulation' object.simparent.crnumber object.s3_id.s3_id %}">Cancel</a>
+            </div>
+        </form>
+    </div>
+    </div>
+</div>
+{% endblock content %}

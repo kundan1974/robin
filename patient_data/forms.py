@@ -4,14 +4,22 @@ from django.utils import timezone
 from django.forms.formsets import formset_factory
 from .models import S1ParentMain, Comorbidity, PreSimulation, S2Diagnosis, S3CarePlan, Simulation, S4RT, S7Assessment, \
     S6Surgery, S6HPE, S5Chemo, S8FUP, PrimaryDVH, PFTDetails, CardiacMarkers, Site, RTTech, StudyGroup, ICDMainSites, \
-    InvestigationsImaging, Prescription, InvestigationsPath, InvestigationsMolecular, InvestigationsLabs, LateToxicity
+    InvestigationsImaging, Prescription, InvestigationsPath, InvestigationsMolecular, InvestigationsLabs, LateToxicity, \
+    S5ChemoProtocol, S5ChemoDrugs, CTCV5, AcuteToxicity, NewPreSimulation
 
 from .options import (GENDER, YES_NO, SMOKE_FREQ, SMOKE_DUR, PS, INTENT_CHOICES, CP_CHOICES,
                       DOC_TYPE_CHOICES, RT_LATE_TOXICITY, visit_choices, deathcause_choices,
                       frequency_choices, unit_choices, route_choices, drugs_choices,
                       symp_type_choices, txstatus_choices, toxicity_choices, PROCEDURE_TYPE, GUIDED_BY, LAB_NAME,
-                      MOLECULAR_STATUS, MOLECULAR_TYPE, MOLECULAR_RESULT, MOLECULAR_UNIT, LAB_TEST_NAME, LAB_TEST_UNITS)
+                      MOLECULAR_STATUS, MOLECULAR_TYPE, MOLECULAR_RESULT, MOLECULAR_UNIT, LAB_TEST_NAME, LAB_TEST_UNITS,
+                      DIBH_DAYS)
 
+from django.forms.models import inlineformset_factory
+
+tox_system_choices = []
+for value in CTCV5.objects.values_list('system', flat=True).distinct():
+    tox_system_choices.append(("", ""))
+    tox_system_choices.append((value, value))
 
 # Created class to use date time picker
 # https://stackoverflow.com/questions/3367091/whats-the-cleanest-simplest-to-get-running-datepicker-in-django
@@ -125,6 +133,27 @@ class PreSimulationForm(ModelForm):
 
             'final_status': forms.Select(choices=[], attrs={'class': 'form-control'}),
             'final_remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
+
+
+class NewPreSimulationForm(ModelForm):
+    class Meta:
+        model = NewPreSimulation
+        fields = ["presimparent", 's3_id', "date", "day", "ul_amp", "ll_amp", "average_amp",
+                  "ahd", "al", "remarks", "assessedby", "status", "final_status",
+                  "user", "updated_by"]
+        widgets = {
+            'presimparent': forms.TextInput(attrs={'class': 'form-control'}),
+            'date': DateInput(attrs={'class': 'form-control'}),
+            'day': forms.Select(attrs={'class': 'form-control'}, choices=DIBH_DAYS),
+            'ul_amp': forms.NumberInput(attrs={'class': 'form-control'}),
+            'll_amp': forms.NumberInput(attrs={'class': 'form-control'}),
+            'average_amp': forms.NumberInput(attrs={'class': 'form-control'}),
+            'ahd': forms.NumberInput(attrs={'class': 'form-control'}),
+            'remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'assessedby': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            'status': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            'final_status': forms.Select(choices=[], attrs={'class': 'form-control'}),
         }
 
 
@@ -456,6 +485,49 @@ class S5ChemoForm(ModelForm):
         }
 
 
+class S5ChemoProtocolForm(ModelForm):
+    class Meta:
+        model = S5ChemoProtocol
+        fields = "__all__"
+        exclude = ["s5_protocol_id", "last_updated"]
+        widgets = {
+            'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
+            's3_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
+            'protocol_date': DateInput(attrs={'class': 'form-control'}),
+            'chemo_protocol': forms.Select(attrs={'class': 'form-control'}),
+            'unit': forms.Select(attrs={'class': 'form-control'}),
+            'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
+        }
+
+
+class S5ChemoDrugsForm(ModelForm):
+    class Meta:
+        model = S5ChemoDrugs
+        fields = "__all__"
+        exclude = ["ch_id", "last_updated"]
+        widgets = {
+            'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
+            's5_protocol_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
+            'cycleno': forms.NumberInput(attrs={'class': 'form-control'}),
+            'chemo_day': forms.TextInput(attrs={'class': 'form-control'}),
+            'chemodate': DateInput(attrs={'class': 'form-control'}),
+            'drug': forms.Select(attrs={'class': 'form-control'}),
+            'measuring_unit': forms.Select(attrs={'class': 'form-control'}, choices=unit_choices),
+            'dose': forms.NumberInput(attrs={'class': 'form-control'}),
+            'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
+        }
+
+
+S5ChemoDrugsFormSet = inlineformset_factory(
+    S5ChemoProtocol,
+    S5ChemoDrugs,
+    S5ChemoDrugsForm,
+    can_delete=True,
+    min_num=2,
+    extra=0,
+)
+
+
 class S7AssessmentForm(ModelForm):
     class Meta:
         model = S7Assessment
@@ -608,6 +680,26 @@ class S7AssessmentForm(ModelForm):
             'intervention3': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
             'intervention4': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
             'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 10})
+        }
+
+
+class AcuteToxicityForm(forms.ModelForm):
+
+    # tox_system = forms.ModelChoiceField(queryset=CTCV5.objects.values_list('system', flat=True).distinct(),
+    #                                     widget=forms.Select(attrs={'class': 'form-control'}))
+    class Meta:
+        model = AcuteToxicity
+        fields = "__all__"
+        exclude = ["s8_acutetox_id", "last_updated"]
+
+        widgets = {
+            'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
+            's7_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
+            'tox_system': forms.Select(attrs={'class': 'form-control'}, choices=tox_system_choices),
+            'tox_term': forms.Select(attrs={'class': 'form-control'}),
+            'tox_grade': forms.Select(attrs={'class': 'form-control'}, choices=toxicity_choices),
+            'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
+
         }
 
 
@@ -828,6 +920,7 @@ class PrescriptionForm(ModelForm):
         widgets = {
             'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
             's8_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
+            's7_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
             "symptoms": forms.TextInput(attrs={'class': 'form-control'}),
             "symptoms_type": forms.Select(attrs={'class': 'form-control'}, choices=symp_type_choices),
             "symp_duration": forms.NumberInput(attrs={'class': 'form-control'}),

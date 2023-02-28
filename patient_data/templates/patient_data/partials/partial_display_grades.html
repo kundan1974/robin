@@ -1,0 +1,12 @@
+{% if update %}
+    <label for="id_grades1" class="form-label oncflow-labels">Update Toxicity Grade</label>
+{% else %}
+    <label for="id_grades1" class="form-label oncflow-labels">Select Toxicity Grade</label>
+{% endif %}
+
+<select class="form-select form-select-lg mb-3" name="tox_grade" id="id_grades1">
+        <option value="">--First Choose Toxicity Type & Toxicity to Populate This field--</option>
+        {% for option in options %}
+            <option value="Grade{{ forloop.counter0 }}: {{ option }}">Grade {{ forloop.counter0 }}-{{ option }}</option>
+        {% endfor %}
+</select>

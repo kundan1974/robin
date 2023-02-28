@@ -1,0 +1,62 @@
+<h2>DIBH Assessment Exists. <span class="badge green">Proceed to Simulation via Assessment</span>
+<span class="badge"><a class="btn btn-sm btn-danger" href="{% url 'radonc-simulation2' crnumber s3_id %}">Direct Sim</a></span>
+</h2>
+<table class="styled-table m-1">
+
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Day</th>
+            <th>Amp(UL)</th>
+            <th>Amp(LL)</th>
+            <th>Amp(Avg)</th>
+            <th>Hold(Avg)</th>
+            <th>Leak</th>
+            <th>Remarks</th>
+            <th>Assessed by</th>
+            <th>Status</th>
+            <th>Final Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for content in presim %}
+            <tr>
+                <td>{{ content.date|date:"d-m-Y" }}</td>
+                <td>{{ content.day }}</td>
+                <td>{{ content.ul_amp }}</td>
+                <td>{{ content.ll_amp }}</td>
+                <td>{{ content.average_amp }}</td>
+                <td>{{ content.ahd }}</td>
+                <td>{{ content.al }}</td>
+                <td>{{ content.remarks }}</td>
+                <td>{{ content.assessedby }}</td>
+                <td>{{ content.status }}</td>
+                <td>{{ content.final_status }}</td>
+
+                <td>
+{#                    <a class="btn btn-sm btn-warning" href="{% url 'radonc-new-presimulation-update' content.pk %}">E</a>#}
+                    <a class="btn btn-sm btn-warning mb-2"
+                       hx-get="{% url 'radonc-new-presimulation-update' content.pk %}"
+                       hx-target="#presim">E</a>
+
+                    <a class="btn btn-sm btn-danger mb-2"
+                       hx-delete="{% url 'radonc-new-presimulation-delete' content.pk %}"
+                       hx-confirm="Are you sure? You want to delete this presim details?"
+                       hx-target="#presim">X</a>
+                    {% if content.day == '3' or content.day == '4' or content.day == '5' %}
+                        {% if content.simulation_set.all %}
+                            {% if error %}
+                                <h6><span class="red-highlight text-light box-shadow box-redius">ERROR!!! Can Not delete, Simulation Exist.</span></h6>
+                            {% endif %}
+                            <a class="btn btn-sm btn-warning" href="{% url 'radonc-simulation-update' content.simulation_set.all.first.pk %}">EditSim</a>
+                        {% else %}
+                            <a class="btn btn-sm btn-warning" href="{% url 'radonc-simulation2' content.presimparent.crnumber content.s3_id.s3_id content.pk  %}">Sim</a>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor  %}
+        <!-- and so on... -->
+    </tbody>
+</table>

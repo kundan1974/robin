@@ -1,0 +1,107 @@
+{% extends "patient_data/base.html" %}
+<!--{% load crispy_forms_tags %} -->
+{% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheet %}
+{% block content %}
+<div class="container">
+    <div class="query-container">
+        <div class="my-form mt-5">
+            <form method="POST">
+            {% csrf_token %}
+                <div class="form-row justify-content-left g-3">
+                    <div class="row">
+                        <div class="col-6">
+                            <h2 class="mb-3">Simulation Details Form <span class="badge green">({{ crnumber }})</span></h2>
+                            <h5 class="mb-3">Diagnosis: {{ cp.s2_id.laterality }} {{ cp.s2_id.icd_main_topo.site }}
+                                <span class="badge red">{{ cp.s2_id.icd_path_code.hpe }} ({{ cp.s2_id.biopsy_date|date:"d-m-Y" }})</span>
+                            </h5>
+                            <div>
+                            <table class="styled-table m-1">
+                                <thead>
+                                    <tr>
+                                        <th>Previous Simulations</th>
+                                        <th>Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for s in sim %}
+                                        {% for site in s.icdmainsite.all %}
+                                        <tr>
+                                            <td>{{ site.description }}</td>
+                                            <td>{{ s.simdate|date:"d-m-Y" }}</td>
+                                            <td>
+                                                <a class="btn btn-sm btn-warning" href="{% url 'radonc-simulation-update' s.pk %}?next={{ request.path|urlencode }}">EditSim</a>
+                                                {% if s.s4rt_set.all %}
+                                                    <a class="btn btn-sm btn-warning" href="{% url 'radonc-radiotherapy-update' s.s4rt_set.all.last.pk %}?next={{ request.path|urlencode }}">EditRT</a>
+                                                {% else %}
+                                                    <a class="btn btn-sm btn-warning" href="{% url 'radonc-radiotherapy' s.simparent.crnumber s.pk %}?next={{ request.path|urlencode }}">NewRT</a>
+                                                {% endif %}
+
+                                                <a class="btn btn-sm btn-danger" href="{% url 'radonc-simulation-delete' s.pk %}">X</a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% endfor  %}
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                        <div class="col-6 my-card box-redius box-shadow">
+                            {% for s in sx %}
+                                <h6 class="mb-3"><b>Surgery:</b> {% for surgery in s.sxtype.all %}{{ surgery }}, {% endfor %}</h6>
+                            <p>{% for hpe in s.s6hpe_set.all %}
+                                <b>HPE</b>: {{ hpe.icd_path_code.hpe }},<br>
+                                <b>Lymph Nodes:</b> {{ hpe.nodesp }}/{{ hpe.nodesr }} Positive<br>
+                                <b>Hormonal Status:</b> ER: {{ hpe.er }}, PR: {{ hpe.pr }} HER2Neu: {{ hpe.her2neu }}<br>
+
+                                {% if hpe.s6_id.s3_id.surgery == 'Primary' and hpe.s6_id.s3_id.chemotherapy == 'Neoadjuvant' %}
+                                    <b>TNM: </b> ypT{{ hpe.pt }} ypN{{ hpe.pn }} M{{ hpe.pm }}<br>
+                                {% else %}
+                                    <b>TNM: </b> pT{{ hpe.pt }} pN{{ hpe.pn }} M{{ hpe.pm }}<br>
+                                {% endif %}
+                                <b>Stage: </b> {{ hpe.pstagegroup }}
+                            {% endfor %}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-3">
+                            <label for="id_dibh" class="oncflow-labels">DIBH Assessment Required?</label>
+                            <select name="dibh" id="id_dibh" class="form-control"
+                                    hx-post="{% url "get-presim" crnumber s3_id %}"
+                                    hx-target="#presim" hx-trigger="change">
+                                <option value="">--DIBH Technique ?--</option>
+                                <option value='0'>Yes</option>
+                                <option value='1'>No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row" id="presim">
+                        <div class="col-3"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{##}
+{#{% load static %}#}
+{#<script src="{% static 'patient_data/simform.js' %}"></script>#}
+{% endblock content %}
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_icdmainsite').select2();
+            $('#id_initialstatus').select2();
+            $('#id_site').select2();
+            $('#id_technique').select2();
+            $('#id_intent').select2();
+            $('#id_volumes').select2();
+        });
+    </script>
+{% endblock javascript %}

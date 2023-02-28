@@ -1,0 +1,90 @@
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+    <div class="container" hx-target="this" hx-swap="outerHTML">
+        <div class="my-form">
+            <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row justify-content-left g-3">
+                        <div class="form-control">
+                            <div class="row g-2 mt-2" style="align-content: center">
+                                <div class="col-md-2">
+                                    {{ form.parent_id.errors }}
+                                    <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CR Number:</label>
+                                    {{ form.parent_id }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.s5_protocol_id.errors }}
+                                    <label class="oncflow-labels" for="{{ form.s5_protocol_id.id_for_label }}">Protocol ID:</label>
+                                    {{ form.s5_protocol_id }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.cycleno.errors }}
+                                    <label class="oncflow-labels" for="{{ form.cycleno.id_for_label }}">Cycle No.:</label>
+                                    {{ form.cycleno }}
+                                </div>
+                                <div class="col-md-1">
+                                    {{ form.chemo_day.errors }}
+                                    <label class="oncflow-labels" for="{{ form.chemo_day.id_for_label }}">Day:</label>
+                                    {{ form.chemo_day }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.chemodate.errors }}
+                                    <label class="oncflow-labels" for="{{ form.chemodate.id_for_label }}">Date:</label>
+                                    {{ form.chemodate }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.drug.errors }}
+                                    <label class="oncflow-labels" for="{{ form.drug.id_for_label }}">Drug:</label>
+                                    {{ form.drug }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.dose.errors }}
+                                    <label class="oncflow-labels" for="{{ form.dose.id_for_label }}">Dose:</label>
+                                    {{ form.dose }}
+                                </div>
+                                <div class="col-md-1">
+                                    {{ form.measuring_unit.errors }}
+                                    <label class="oncflow-labels" for="{{ form.measuring_unit.id_for_label }}">Unit:</label>
+                                    {{ form.measuring_unit }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.notes.errors }}
+                                    <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                    {{ form.notes }}
+                                </div>
+                            </div>
+                        </div>
+                    <!-- Button Row -->
+                         {% if drug %}
+                            <div class="form-group mt-2">
+                                <button hx-post="{% url 'drug-update' drug.pk %}" class="btn btn-dark" type="submit">Update Drug</button>
+                            </div>
+                        {% else %}
+                            <div class="form-group mt-2">
+                                <button hx-post="." class="btn btn-dark" type="submit">Add Drug</button>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </form>
+        </div>
+    </div>
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_chemo_protocol').select2();
+            $('#id_drug').select2();
+            $('#id_drug2').select2();
+            $('#id_drug3').select2();
+            $('#id_drug4').select2();
+            $('#id_drug5').select2();
+        });
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+{% endblock javascript %}

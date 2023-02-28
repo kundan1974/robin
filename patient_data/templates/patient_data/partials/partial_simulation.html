@@ -1,0 +1,238 @@
+<!--{% load crispy_forms_tags %} -->
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<div class="container">
+    <div class="query-container">
+        <div class="col-md-12">
+            <div class="my-form mt-5">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row justify-content-left g-3">
+                        {% if update and rtdetails %}
+                            <h1 class="mb-3">Simulation Update Form</h1>
+                            <div class="red text-light p-1 box-redius mb-1"><p><em><span>RT Details for the Patient Name: {{ rtdetails.simid.name }}
+                                with Site:
+                                {% for site in  rtdetails.rtsite_main.all %}
+                                    {{ site.description }}
+                                {% endfor %}
+                                and RT Status: {{ rtdetails.rtstatus }} exists
+                            already. Updating RT status here will update the status in Radiotherapy Module also</span></em></p></div>
+
+                            <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                        {% else %}
+                            <h1 class="mb-3">Simulation Form</h1>
+                            {% with crnumber=123456 %}
+                                <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                            {% endwith %}
+                        {% endif %}
+                        {% if error_status %}
+                            <p class="box-shadow box-redius bg-danger text-light p-3">{{ error_msg }}</p>
+                        {% endif %}
+                        <div class="form-control section-odd card mb-2">
+                            <div class="row g-2 mt-2">
+                                <div class="col-md-2">
+                                    {{ form.simparent.errors }}
+                                    <label class="oncflow-labels" for="{{ form.simparent.id_for_label }}">CR Number:</label>
+                                    {{ form.simparent }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.name.errors }}
+                                    <label class="oncflow-labels" for="{{ form.name.id_for_label }}">Name:</label>
+                                    {{ form.name }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.simdate.errors }}
+                                    <label class="oncflow-labels" for="{{ form.simdate.id_for_label }}">Simulation Date:</label>
+                                    {{ form.simdate }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.impdate.errors }}
+                                    <label class="oncflow-labels" for="{{ form.impdate.id_for_label }}">Imp Date:</label>
+                                    {{ form.impdate }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.simnotes.errors }}
+                                    <label class="oncflow-labels" for="{{ form.simnotes.id_for_label }}">Simulation Notes:</label>
+                                    {{ form.simnotes }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.impnotes.errors }}
+                                    <label class="oncflow-labels" for="{{ form.impnotes.id_for_label }}">Imp Notes:</label>
+                                    {{ form.impnotes }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.initialstatus.errors }}
+                                    <label class="oncflow-labels" for="{{ form.initialstatus.id_for_label }}">Status:</label>
+                                    {{ form.initialstatus }}
+                                </div>
+                                <div class="col-md-8">
+                                    {{ form.site.errors }}
+                                    <label class="oncflow-labels" for="{{ form.site.id_for_label }}">Site Treated (Custom):</label>
+                                    {{ form.site }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.icdmainsite.errors }}
+                                    <label class="oncflow-labels" for="{{ form.icdmainsite.id_for_label }}">Sites Treated (Standardized):</label>
+                                    {{ form.icdmainsite }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.technique.errors }}
+                                    <label class="oncflow-labels" for="{{ form.technique.id_for_label }}">Technique:</label>
+                                    {{ form.technique }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.intent.errors }}
+                                    <label class="oncflow-labels" for="{{ form.intent.id_for_label }}">Intent:</label>
+                                    {{ form.intent }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.volumes.errors }}
+                                    <label class="oncflow-labels" for="{{ form.volumes.id_for_label }}">Volumes:</label>
+                                    {{ form.volumes }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.dosephase1.errors }}
+                                    <label class="oncflow-labels" for="{{ form.dosephase1.id_for_label }}">Phase1(Gy):</label>
+                                    {{ form.dosephase1 }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.fxphase1.errors }}
+                                    <label class="oncflow-labels" for="{{ form.fxphase1.id_for_label }}">Phase1(Fr):</label>
+                                    {{ form.fxphase1 }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.dosephase2.errors }}
+                                    <label class="oncflow-labels" for="{{ form.dosephase2.id_for_label }}">Phase2(Gy):</label>
+                                    {{ form.dosephase2 }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.fxphase2.errors }}
+                                    <label class="oncflow-labels" for="{{ form.fxphase2.id_for_label }}">Phase2(Fr):</label>
+                                    {{ form.fxphase2 }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.dosephase3.errors }}
+                                    <label class="oncflow-labels" for="{{ form.dosephase3.id_for_label }}">Phase3(Gy):</label>
+                                    {{ form.dosephase3 }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.fxphase3.errors }}
+                                    <label class="oncflow-labels" for="{{ form.fxphase3.id_for_label }}">Phase3(Fr):</label>
+                                    {{ form.fxphase3 }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.dosephase4.errors }}
+                                    <label class="oncflow-labels" for="{{ form.dosephase4.id_for_label }}">Phase4(Gy):</label>
+                                    {{ form.dosephase4 }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.fxphase4.errors }}
+                                    <label class="oncflow-labels" for="{{ form.fxphase4.id_for_label }}">Phase4(Fr):</label>
+                                    {{ form.fxphase4 }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.totaldose.errors }}
+                                    <label class="oncflow-labels" for="{{ form.totaldose.id_for_label }}">Dose(Total):</label>
+                                    {{ form.totaldose }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.totalfractions.errors }}
+                                    <label class="oncflow-labels" for="{{ form.totalfractions.id_for_label }}">Fractions(Total):</label>
+                                    {{ form.totalfractions }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.assignedto.errors }}
+                                    <label class="oncflow-labels" for="{{ form.assignedto.id_for_label }}">Assigned to:</label>
+                                    {{ form.assignedto }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.futureplan.errors }}
+                                    <label class="oncflow-labels" for="{{ form.futureplan.id_for_label }}">Future Plan:</label>
+                                    {{ form.futureplan }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.remarks.errors }}
+                                    <label class="oncflow-labels" for="{{ form.remarks.id_for_label }}">Remarks:</label>
+                                    {{ form.remarks }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.tentativecompletiondate.errors }}
+                                    <label class="oncflow-labels" for="{{ form.tentativecompletiondate.id_for_label }}">Tentative Completion Date:</label>
+                                    {{ form.tentativecompletiondate }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.actualcompletiondate.errors }}
+                                    <label class="oncflow-labels" for="{{ form.actualcompletiondate.id_for_label }}">Actual Completion Date:</label>
+                                    {{ form.actualcompletiondate }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.as_date.errors }}
+                                    <label class="oncflow-labels" for="{{ form.as_date.id_for_label }}">Assessed on:</label>
+                                    {{ form.as_date }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.donefr.errors }}
+                                    <label class="oncflow-labels" for="{{ form.donefr.id_for_label }}">Done(Fr):</label>
+                                    {{ form.donefr }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form.send_mail.errors }}
+                                    <label class="oncflow-labels me-3">Send Mail:</label>
+                                    {{ form.send_mail }}
+                                </div>
+                                <div class="col-md-6 d-none">
+                                    {% if presimstatus %}
+                                        {{ form.presimid.errors }}
+                                        <label class="oncflow-labels" for="{{ form.presimid.id_for_label }}">PreSimID:</label>
+                                        {{ form.presimid }}
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6 d-none">
+                                    {{ form.s2_id.errors }}
+                                    <label class="oncflow-labels" for="{{ form.s2_id.id_for_label }}">S2_ID:</label>
+                                    {{ form.s2_id }}
+                                </div>
+                                <div class="col-md-6 d-none">
+                                    {{ form.s3_id.errors }}
+                                    <label class="oncflow-labels" for="{{ form.s3_id.id_for_label }}">S3_ID:</label>
+                                    {{ form.s3_id }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Button Row -->
+                    {% if update %}
+                        <div class="form-group mt-2">
+                            <button class="btn btn-dark" type="submit">Update</button>
+                        </div>
+                    {% else %}
+                        {% if not error_status %}
+                            <div class="form-group mt-2">
+                                <button class="btn btn-dark" name="save_sim" type="submit">Save</button>
+                            </div>
+                        {% else %}
+                            <div class="form-group mt-2">
+                                <label class="box-redius box-shadow p-1 bg-danger text-light">First complete the Final Status in Presimulation form</label>
+                                <button class="btn btn-dark disabled" name="save_sim" type="submit">Save</button>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% load static %}
+<script src="{% static 'patient_data/simform.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#id_icdmainsite').select2();
+        $('#id_initialstatus').select2();
+        $('#id_site').select2();
+        $('#id_technique').select2();
+        $('#id_intent').select2();
+        $('#id_volumes').select2();
+    });
+</script>

@@ -31,6 +31,7 @@
                       <p><span class="highlight"> This module
                       is mandatory - without this you cannot proceed to other modules</span></p>
                       {% if res %}
+                          <p><span class="highlight"> This patient is already registered</span></p>
                           <div class="row">
                             <div class="col-12">
                               <a href="{% url 'registration-update' res.0.pk %}?regcrn={{ crnumber }}&update_status={{ True }}" class="btn my-btn">Update:

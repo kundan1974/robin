@@ -1,0 +1,54 @@
+{% extends "patient_data/base.html" %}
+{% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheet %}
+{% block content %}
+
+<div class="container">
+    <div class="query-container">
+        <a class="btn btn-dark" href="{{ request.GET.next }}">Back</a>
+        <div class="my-form" id="main-form">
+            <div class="form-row justify-content-left g-3">
+                <h1 class="mb-3">Chemotherapy Module for {{ protocol.parent_id.crnumber }}</h1>
+                <h4>Protocol: {{ protocol.chemo_protocol.protocol }}</h4>
+            </div>
+            <div class="form-group mt-2">
+                <button class="btn btn-dark"
+                        hx-get="{% url 'chemodrug-form' crnumber s5_protocol_id %}" hx-swap="beforeend"
+                        hx-target="#drug-entry">Add Drug</button>
+            </div>
+            <div class="mt-3" id="drug-entry">
+                {% load set_var %}
+                {% for drug in drugs %}
+                    {% if prev_cycleno != drug.cycleno %}
+                        <hr>
+                        <h4>Chemotherapy Cycle No. {{ drug.cycleno }}</h4>
+                    {% endif %}
+                    {% include 'patient_data/partials/partial_chemo_drug_detail.html' %}
+                    {% set_var drug.cycleno %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_chemo_protocol').select2();
+            $('#id_drug').select2();
+            $('#id_drug2').select2();
+            $('#id_drug3').select2();
+            $('#id_drug4').select2();
+            $('#id_drug5').select2();
+        });
+    </script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+{% endblock javascript %}

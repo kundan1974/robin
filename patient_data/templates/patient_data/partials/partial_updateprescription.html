@@ -9,16 +9,25 @@
                     <div class="form-row justify-content-left g-3">
                         <div class="form-control">
                             <div class="row g-2 mt-2" style="align-content: center">
-                                <div class="col-md-2 d-none">
+                                    <div class="col-md-2 d-none">
                                         {{ form.parent_id.errors }}
                                         <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
                                         {{ form.parent_id }}
                                     </div>
+                                    {% if s8_id %}
                                     <div class="col-md-2 d-none">
                                         {{ form.s8_id.errors }}
                                         <label class="oncflow-labels" for="{{ form.s8_id.id_for_label }}">FU ID:</label>
                                         {{ form.s8_id }}
                                     </div>
+                                    {% endif %}
+                                    {% if s7_id %}
+                                    <div class="col-md-2 d-none">
+                                        {{ form.s7_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.s7_id.id_for_label }}">FU ID:</label>
+                                        {{ form.s7_id }}
+                                    </div>
+                                    {% endif %}
                                     <div class="col-md-8">
                                         {{ form.symptoms.errors }}
                                         <label class="oncflow-labels" for="{{ form.symptoms.id_for_label }}">Symptom:</label>
@@ -70,11 +79,18 @@
                                         {{ form.notes }}
                                     </div>
                             </div>
-                        </div>
+                        </div>{{ s7_id }}
                     <!-- Button Row -->
-                        <div class="form-group mt-2">
-                            <button class="btn btn-dark" type="submit" hx-post="{% url 'updateprescription' dvhid %}" hx-target="#display-prescription">Update Prescription</button>
-                        </div>
+                        {% if s8_id %}
+                            <div class="form-group mt-2">
+                                <button class="btn btn-dark" type="submit" hx-post="{% url 'updateprescription' prescription_id %}" hx-target="#display-prescription">Update Prescription</button>
+                            </div>
+                        {% endif %}
+                        {% if s7_id %}
+                            <div class="form-group mt-2">
+                                <button class="btn btn-dark" type="submit" hx-post="{% url 'rtupdateprescription' prescription_id %}" hx-target="#display-prescription">Update Prescription</button>
+                            </div>
+                        {% endif %}
                     </div>
                 </form>
         </div>

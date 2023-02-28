@@ -1,0 +1,14 @@
+{% if update %}
+    <label class="oncflow-labels">Update Toxicity</label>
+{% else %}
+    <label class="oncflow-labels">Select Toxicity</label>
+{% endif %}
+
+<select class="form-select form-select-lg mb-3" name="tox_term"
+        hx-post="{% url "display-tox" %}"
+        hx-target="#display-grades" hx-trigger="change">
+        <option value="">--First Choose System to Populate Choices--</option>
+        {% for option in options %}
+            <option value="{{ option.0 }}">{{ option.2 }}</option>
+        {% endfor %}
+</select>

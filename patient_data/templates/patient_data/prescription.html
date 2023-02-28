@@ -29,14 +29,30 @@
                         {% else %}
                             <div class="query-container">
                                 <div class="my-card">
-                                    <h6>To Check Existing Prescription ----- Click HERE<span class="badge bg-info text-dark me-2 mx-2"
-                                                                                        hx-get="{% url 'showprescription' s8_id %}"
-                                                                                        hx-target="#display-prescription"
-                                                                                        style="cursor: pointer">Show Full Prescription</span></h6>
+                                    {% if s8_id %}
+
+                                        <h6>To Check Existing Prescription ----- Click HERE<span class="badge bg-info text-dark me-2 mx-2"
+                                                                                            hx-get="{% url 'showprescription' s8_id %}"
+                                                                                            hx-target="#display-prescription"
+                                                                                            style="cursor: pointer">Show Full Prescription</span></h6>
+                                    {% endif %}
+                                    {% if s7_id %}
+                                        <h6>To Check Existing Prescription ----- Click HERE<span class="badge bg-info text-dark me-2 mx-2"
+                                                                                            hx-get="{% url 'rtshowprescription' s7_id %}"
+                                                                                            hx-target="#display-prescription"
+                                                                                            style="cursor: pointer">Show Full Prescription</span></h6>
+                                    {% endif %}
                         {#                <a class="btn btn-secondary btn-sm mt-1 mb-1"hx-get="{% url 'showdvh' s4_id %}" hx-target="#display-dvh">Show DVHData</a>#}
-                                    <div id="display-prescription">
-                                        {% include 'patient_data/partials/partial_prescription.html' with s8_id=view.kwargs.s8_id %}
-                                    </div>
+                                    {% if s8_id %}
+                                        <div id="display-prescription">
+                                            {% include 'patient_data/partials/partial_prescription.html' with s8_id=view.kwargs.s8_id %}
+                                        </div>
+                                    {% endif %}
+                                    {% if s7_id %}
+                                        <div id="display-prescription">
+                                            {% include 'patient_data/partials/partial_prescription.html' with s7_id=view.kwargs.s7_id %}
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                             <h1 class="mb-3">Prescription Form ({{ patient.crnumber }})</h1>
@@ -62,11 +78,25 @@
                                         <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
                                         {{ form.parent_id }}
                                     </div>
+                                    {% if s8_id %}
                                     <div class="col-md-2 d-none">
                                         {{ form.s8_id.errors }}
                                         <label class="oncflow-labels" for="{{ form.s8_id.id_for_label }}">FU ID:</label>
                                         {{ form.s8_id }}
                                     </div>
+                                    {% endif %}
+                                    {% if s7_id %}
+                                    <div class="col-md-2 d-none">
+                                        {{ form.s7_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.s7_id.id_for_label }}">As ID:</label>
+                                        {{ form.s7_id }}
+                                    </div>
+                                    {% endif %}
+{#                                    <div class="col-md-2 d-none">#}
+{#                                        {{ form.s7_id.errors }}#}
+{#                                        <label class="oncflow-labels" for="{{ form.s7_id.id_for_label }}">As ID:</label>#}
+{#                                        {{ form.s7_id }}#}
+{#                                    </div>#}
                                     <div class="col-md-8">
                                         {{ form.symptoms.errors }}
                                         <label class="oncflow-labels" for="{{ form.symptoms.id_for_label }}">Symptom:</label>
@@ -127,13 +157,26 @@
                         {% else %}
                             <div class="d-flex form-group justify-content-between mt-2">
                                 <button class="btn btn-dark" type="submit">Save</button>
-                                <button class="btn btn-dark" type="submit"
-                                        hx-post="{% url 'showprescription' s8_id %}"
-                                        hx-target="#display-prescription">Save & Continue Rx
-                                </button>
+                                {% if s8_id %}
+                                    <button class="btn btn-dark" type="submit"
+                                            hx-post="{% url 'showprescription' s8_id %}"
+                                            hx-target="#display-prescription">Save & Continue Rx
+                                    </button>
+                                {% endif %}
+                                {% if s7_id %}
+                                    <button class="btn btn-dark" type="submit"
+                                            hx-post="{% url 'rtshowprescription' s7_id %}"
+                                            hx-target="#display-prescription">Save & Continue Rx
+                                    </button>
+                                {% endif %}
                                 <button class="btn btn-warning" type="submit" onclick="return resetForm(this.form);">Clear Form
                                 </button>
-                                <button class="btn btn-dark" type="submit" name="to_fup">Save -> Follow up</button>
+                                {% if s8_id %}
+                                    <button class="btn btn-dark" type="submit" name="to_fup">Save -> Follow up</button>
+                                {% endif %}
+                                {% if s7_id %}
+                                    <button class="btn btn-dark" type="submit" name="to_fup">Save -> Assessment</button>
+                                {% endif %}
                                 <button class="btn btn-dark" type="submit" name="to_cp">Save -> CarePlan</button>
                             </div>
                         {% endif %}

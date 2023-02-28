@@ -281,6 +281,7 @@ class RTStatus(models.Model):
 class ChemoDrugs(models.Model):
     id = models.CharField(max_length=200, primary_key=True)
     code = models.CharField(max_length=200)
+    drug_class = models.CharField(max_length=200, blank=False, null=True)
 
     class Meta:
         db_table = 'patient_data_drugs'
@@ -335,13 +336,13 @@ class ImageLocation(models.Model):
         return f'{self.location}'
 
 
-
 class ImagingResult(models.Model):
     id = models.AutoField(primary_key=True, blank=False, null=False)
     result = models.CharField(max_length=255, unique=True, blank=False, null=False)
 
     class Meta:
         db_table = 'patient_data_imagingresult'
+
     def __str__(self):
         return f'{self.result}'
 
@@ -352,8 +353,28 @@ class LabName(models.Model):
 
     class Meta:
         db_table = 'patient_data_labname'
+
     def __str__(self):
         return f'{self.name}'
+
+
+class CTCV5(models.Model):
+    code = models.IntegerField(primary_key=True, blank=False, null=False)
+    system = models.CharField(max_length=255, blank=False, null=False)
+    term = models.CharField(max_length=255, unique=True, blank=False, null=False)
+    grade0 = models.CharField(max_length=25, blank=True, null=True)
+    grade1 = models.CharField(max_length=1000, blank=True, null=True)
+    grade2 = models.CharField(max_length=1000, blank=True, null=True)
+    grade3 = models.CharField(max_length=1000, blank=True, null=True)
+    grade4 = models.CharField(max_length=1000, blank=True, null=True)
+    grade5 = models.CharField(max_length=255, blank=True, null=True)
+    definition = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'ctc_v5_27_11_2017'
+
+    def __str__(self):
+        return f'{self.term}'
 
 
 # Models for Radiation Oncology Database
@@ -557,9 +578,38 @@ class PreSimulation(models.Model):
         return f'{self.presimparent} -- {self.presimid} -- {self.day1status} -- {self.day2status}-- {self.day3status}'
 
 
+class NewPreSimulation(models.Model):
+    presimid = models.AutoField(db_column='presimID', primary_key=True)
+    presimparent = models.ForeignKey(S1ParentMain, models.CASCADE, to_field='crnumber', blank=False, null=True)
+    s3_id = models.ForeignKey(S3CarePlan, models.CASCADE, blank=True, db_column='s3_id', to_field='s3_id', null=True)
+    # Day 1
+    date = models.DateTimeField(blank=False, null=True)
+    day = models.CharField(max_length=45, blank=False, null=True)  # Day 1, Day2, Day3
+    ul_amp = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Upper limit of amplitude
+    ll_amp = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Lower limit of amplitude
+    average_amp = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # Average Amp
+    ahd = models.IntegerField(blank=True, null=True)  # Average hold duration
+    al = models.BooleanField()  # Air leak
+    remarks = models.TextField(blank=True, null=True)
+    # DIBH Assessment done by
+    assessedby = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, related_name="assessedby")
+    status = models.ForeignKey(PreSimStatus, models.DO_NOTHING, blank=True, null=True)  # Status on Day 1
+    final_status = models.ForeignKey(RTTech, models.DO_NOTHING, blank=True, null=True)  # Final Status on Day 3/4/5.
+    # Options same as technique field in Simulation table
+    user = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)
+    last_updated = models.DateTimeField(default=timezone.now, blank=True, null=True)
+
+    class Meta:
+        db_table = 'new_presimulation'
+
+    def __str__(self):
+        return f'CRNumber: {self.presimparent} -- PreSimID: {self.presimid} -- FinalStatus: {self.final_status}'
+
+
 class Simulation(models.Model):
     simid = models.AutoField(db_column='simID', primary_key=True)  # Field name made lowercase.
-    presimid = models.ForeignKey(PreSimulation, models.DO_NOTHING, blank=True, null=True)
+    presimid = models.ForeignKey(NewPreSimulation, models.DO_NOTHING, blank=True, null=True)
     simparent = models.ForeignKey(S1ParentMain, models.CASCADE, db_column='simParent_ID', to_field='crnumber',
                                   blank=False, null=True)  # Field name made lowercase.
     s2_id = models.ForeignKey(S2Diagnosis, models.CASCADE, blank=False, null=True,
@@ -626,7 +676,7 @@ class S4RT(models.Model):
     s3_id = models.ForeignKey(S3CarePlan, models.CASCADE, blank=False, null=True,
                               db_column="s3_id", to_field="s3_id", related_name="rt_careplan_id")
 
-    simid = models.ForeignKey(Simulation, models.CASCADE, blank=False, unique=False, db_column='simid', null=True, )
+    simid = models.ForeignKey(Simulation, models.RESTRICT, blank=False, unique=False, db_column='simid', null=True, )
     # rtcourse = models.CharField(max_length=40, blank=False, null=False)
     rtindication = models.ForeignKey(RTIntent, models.CASCADE, db_column='rtindication', blank=True, null=True, )
     simdate = models.DateTimeField(blank=True, null=True)
@@ -653,7 +703,7 @@ class S4RT(models.Model):
     rtfinishdate = models.DateTimeField(blank=True, null=True)
     rtmachine = models.ForeignKey(RTMachines, models.DO_NOTHING, blank=True, null=True, db_column='rtmachine',
                                   related_name='rtmachine')
-    rtstatus = models.ForeignKey(RTStatus, models.DO_NOTHING, blank=True, null=True, db_column='rtstatus',
+    rtstatus = models.ForeignKey(RTStatus, models.DO_NOTHING, blank=False, null=True, db_column='rtstatus',
                                  related_name='rtstatus')
     institution = models.CharField(max_length=100, blank=True, null=True)
     studygp = models.ManyToManyField(StudyGroup, blank=True)
@@ -886,6 +936,31 @@ class S7Assessment(models.Model):
                f'Dose: {self.as_date} -- Status: {self.txstatus}'
 
 
+class AcuteToxicity(models.Model):
+    s8_acutetox_id = models.AutoField(primary_key=True)
+    s7_id = models.ForeignKey(S7Assessment, models.CASCADE, blank=False, null=False,
+                              db_column='s7_id', to_field='s7_id')
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+                                  to_field='crnumber')
+    tox_system = models.CharField(max_length=255, blank=True, null=True)
+    # tox_term = models.ForeignKey(CTCV5, models.CASCADE, blank=False, null=True,
+    #                              db_column='tox_term', to_field='term')
+    tox_term = models.CharField(max_length=255, blank=True, null=True)
+    tox_grade = models.TextField()
+
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)  # New
+    notes = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'acute_toxicity'
+
+    def __str__(self):
+        return f'CRN: {self.parent_id} -- FU_ID: {self.s7_id} -- ' \
+               f'Symp: {self.tox_system} -- SympDur: {self.tox_term} -- Drug: {self.tox_grade}'
+
+
 class S6Surgery(models.Model):
     s6_id = models.AutoField(primary_key=True)
     parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
@@ -1013,6 +1088,7 @@ class S6HPE(models.Model):
         return f'CRN: {self.parent_id} -- Sx ID: {self.s6_id} -- Histopath: {self.icd_path_code} -- Date: {self.hpedate}'
 
 
+# Have to DISCARD THIS TABLE LATER ON
 class S5Chemo(models.Model):
     s5_id = models.AutoField(primary_key=True)
     parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
@@ -1063,7 +1139,51 @@ class S5Chemo(models.Model):
     updated_by = models.CharField(max_length=45, blank=True, null=True)
 
     class Meta:
-        db_table = 's5_child_cp_ch'
+        db_table = 's5_child_cp_ch'  ##
+
+
+class S5ChemoProtocol(models.Model):
+    s5_protocol_id = models.AutoField(primary_key=True)
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+                                  to_field='crnumber')
+    s3_id = models.ForeignKey(S3CarePlan, models.CASCADE, blank=False, null=False,
+                              db_column="s3_id", to_field="s3_id")
+    protocol_date = models.DateTimeField(blank=True, null=True)
+
+    chemo_protocol = models.ForeignKey(ChemoProtocolNew, models.DO_NOTHING, blank=True, null=True,
+                                       db_column='chemo_protocol', to_field='id')
+    unit = models.ForeignKey(Referredby, models.CASCADE, db_column='unit', blank=True, null=True, to_field='refby')
+
+    notes = models.TextField(blank=True, null=True)
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)
+
+    class Meta:
+        db_table = 's5_child_cp_ch_protocol'
+
+
+class S5ChemoDrugs(models.Model):
+    ch_id = models.AutoField(primary_key=True)
+    parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
+                                  to_field='crnumber')
+    s5_protocol_id = models.ForeignKey(S5ChemoProtocol, models.CASCADE, blank=False, null=False,
+                                       db_column="s5_protocol_id", to_field="s5_protocol_id")
+    cycleno = models.IntegerField(blank=True, null=True)
+    chemo_day = models.CharField(max_length=45, blank=True, null=True)
+    chemodate = models.DateTimeField(blank=True, null=True)
+
+    drug = models.ForeignKey(ChemoDrugs, models.CASCADE, db_column='drug', blank=False, null=True)
+    dose = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    measuring_unit = models.CharField(max_length=45, blank=True, null=True)
+
+    notes = models.TextField(blank=True, null=True)
+    user_id = models.ForeignKey(User, models.DO_NOTHING, blank=True, null=True, db_column='user_id')
+    last_updated = models.DateTimeField(default=timezone.now)
+    updated_by = models.CharField(max_length=45, blank=True, null=True)
+
+    class Meta:
+        db_table = 's5_child_cp_ch_drugs'
 
 
 class S8FUP(models.Model):
@@ -1130,8 +1250,10 @@ class LateToxicity(models.Model):
 
 class Prescription(models.Model):
     s8_prescription_id = models.AutoField(primary_key=True)
-    s8_id = models.ForeignKey(S8FUP, models.CASCADE, blank=False, null=False,
+    s8_id = models.ForeignKey(S8FUP, models.CASCADE, blank=True, null=True,
                               db_column='s8_id', to_field='s8_id')
+    s7_id = models.ForeignKey(S7Assessment, models.CASCADE, blank=True, null=True,
+                              db_column='s7_id', to_field='s7_id')
     parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
                                   to_field='crnumber')
     symptoms = models.CharField(max_length=255, blank=False, null=True)
@@ -1157,8 +1279,10 @@ class Prescription(models.Model):
 
 class InvestigationsImaging(models.Model):
     s8_imaging_id = models.AutoField(primary_key=True)
-    s8_id = models.ForeignKey(S8FUP, models.CASCADE, blank=False, null=False,
+    s8_id = models.ForeignKey(S8FUP, models.CASCADE, blank=True, null=True,
                               db_column='s8_id', to_field='s8_id')
+    s7_id = models.ForeignKey(S7Assessment, models.CASCADE, blank=True, null=True,
+                              db_column='s7_id', to_field='s7_id')
     parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
                                   to_field='crnumber')
     imaging_date = models.DateTimeField(blank=False, null=False)
@@ -1187,8 +1311,10 @@ class InvestigationsImaging(models.Model):
 
 class InvestigationsLabs(models.Model):
     s8_labs_id = models.AutoField(primary_key=True)
-    s8_id = models.ForeignKey(S8FUP, models.CASCADE, blank=False, null=False,
+    s8_id = models.ForeignKey(S8FUP, models.CASCADE, blank=True, null=True,
                               db_column='s8_id', to_field='s8_id')
+    s7_id = models.ForeignKey(S7Assessment, models.CASCADE, blank=True, null=True,
+                              db_column='s7_id', to_field='s7_id')
     parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
                                   to_field='crnumber')
     test_name = models.CharField(max_length=255, blank=False, null=True)  # CBC, ESR, CRP, Tumor markers, etc
@@ -1217,8 +1343,10 @@ class InvestigationsLabs(models.Model):
 
 class InvestigationsPath(models.Model):
     s8_path_id = models.AutoField(primary_key=True)
-    s8_id = models.ForeignKey(S8FUP, models.CASCADE, blank=False, null=False,
+    s8_id = models.ForeignKey(S8FUP, models.CASCADE, blank=True, null=True,
                               db_column='s8_id', to_field='s8_id')
+    s7_id = models.ForeignKey(S7Assessment, models.CASCADE, blank=True, null=True,
+                              db_column='s7_id', to_field='s7_id')
     parent_id = models.ForeignKey(S1ParentMain, models.CASCADE, blank=False, null=False, db_column='parent_id',
                                   to_field='crnumber')
     path_type = models.CharField(max_length=255, blank=False,
@@ -1251,7 +1379,8 @@ class InvestigationsMolecular(models.Model):
     mol_id = models.AutoField(primary_key=True)
     s8_path_id = models.ForeignKey(InvestigationsPath, on_delete=models.CASCADE, blank=False, null=False,
                                    db_column='s8_path_id')
-    parent_id = models.ForeignKey(S1ParentMain, on_delete=models.CASCADE, blank=False, null=False, db_column='parent_id',
+    parent_id = models.ForeignKey(S1ParentMain, on_delete=models.CASCADE, blank=False, null=False,
+                                  db_column='parent_id',
                                   to_field='crnumber')
     mol_type = models.CharField(max_length=255, blank=False,
                                 null=True)  # Test name - EGFR, ALK, ROS

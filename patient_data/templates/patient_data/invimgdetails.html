@@ -20,12 +20,11 @@
                                         {% if request.GET.next %}
                                             <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
                                         {% else %}
-                                            <h5><a class="btn btn-dark" href="#">Back</a></h5>
+                                            <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.parent_id.crnumber %}">Back</a></h5>
                                         {% endif %}
-
                                     </div>
                                     <div class="col-auto">
-{#                                        <h5><a class="btn btn-dark" href="{% url 'db_operations' updatecrn %}">Database Operations</a></h5>#}
+                                        <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.parent_id.crnumber %}">Database Operations</a></h5>
                                     </div>
                                 </div>
                         {% else %}
@@ -52,11 +51,20 @@
                                         <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
                                         {{ form.parent_id }}
                                     </div>
-                                    <div class="col-md-2 d-none">
-                                        {{ form.s8_id.errors }}
-                                        <label class="oncflow-labels" for="{{ form.s8_id.id_for_label }}">FU ID:</label>
-                                        {{ form.s8_id }}
-                                    </div>
+                                    {% if s8_id %}
+                                        <div class="col-md-2">
+                                            {{ form.s8_id.errors }}
+                                            <label class="oncflow-labels" for="{{ form.s8_id.id_for_label }}">FU ID:</label>
+                                            {{ form.s8_id }}
+                                        </div>
+                                    {% endif %}
+                                    {% if s7_id %}
+                                        <div class="col-md-2 d-none">
+                                            {{ form.s7_id.errors }}
+                                            <label class="oncflow-labels" for="{{ form.s7_id.id_for_label }}">As ID:</label>
+                                            {{ form.s7_id }}
+                                        </div>
+                                    {% endif %}
                                     <div class="col-md-2">
                                         {{ form.imaging_date.errors }}
                                         <label class="oncflow-labels" for="{{ form.imaging_date.id_for_label }}">Date:</label>
@@ -107,7 +115,12 @@
                         {% else %}
                             <div class="d-flex form-group justify-content-between mt-2">
                                 <button class="btn btn-dark" type="submit">Save</button>
-                                <button class="btn btn-dark" type="submit" name="to_fup">Save -> Follow up</button>
+                                {% if s8_id %}
+                                    <button class="btn btn-dark" type="submit" name="to_fup">Save -> Follow up</button>
+                                {% endif %}
+                                {% if s7_id %}
+                                    <button class="btn btn-dark" type="submit" name="to_ass">Save -> Assessment</button>
+                                {% endif %}
                                 <button class="btn btn-dark" type="submit" name="to_cp">Save -> CarePlan</button>
                             </div>
                         {% endif %}

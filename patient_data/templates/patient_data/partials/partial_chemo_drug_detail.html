@@ -1,0 +1,17 @@
+<div hx-target="this" hx-swap="outerHTML">
+    <div class="row">
+        <div class="col-8 d-flex me-1">
+            <h5>Cycle: </h5>:<p><span class="badge green text-dark p-2">{{ drug.cycleno }}</span></p>
+            <h5 class="mx-1">Day: </h5>:<p><span class="badge green text-dark p-2">{{ drug.chemo_day }}</span></p>
+            <h5 class="mx-1">Date: </h5>:<p>{{ drug.chemodate|date:"d-m-Y" }}</p>
+            <h5 class="mx-1">Drug: </h5>:<p>{{ drug.drug }}</p>
+            <h5 class="mx-1">Drug: </h5>:<p>{{ drug.dose }}{{ drug.measuring_unit }}</p>
+        </div>
+        <div class="col-3 mb-2">
+            <button class="btn btn-sm btn-dark" hx-get="{% url 'drug-update' drug.pk %}">Update</button>
+            <button class="btn btn-sm btn-danger" hx-confirm="Are you sure you want to delete?"
+                    hx-post="{% url 'drug-delete' drug.pk %}">Delete</button>
+        </div>
+    </div>
+
+</div>

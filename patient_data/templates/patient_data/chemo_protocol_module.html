@@ -1,0 +1,149 @@
+{% extends "patient_data/base.html" %}
+{% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheet %}
+{% block content %}
+    <div class="container justify-content-center">
+        <div class="my-form">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row justify-content-left g-3">
+                        {% if update %}
+                            <h1 class="mb-3">Update Chemotherapy Protocol</h1>
+                                <div class="row">
+                                    <div class="col-auto">
+                                        {% if request.GET.next %}
+                                            <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                                        {% else %}
+                                            <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' updatecrn %}">Back</a></h5>
+                                        {% endif %}
+
+                                    </div>
+                                    <div class="col-auto">
+                                        <h5><a class="btn btn-dark" href="{% url 'db_operations' updatecrn %}">Database Operations</a></h5>
+                                    </div>
+                                </div>
+                        {% else %}
+                            <h1 class="mb-3">Create Chemotherapy Protocol</h1>
+                            {% with crnumber=123456 %}
+                                <div class="row">
+                                    <div class="col-auto">
+                                        {% if request.GET.next %}
+                                            <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                                        {% else %}
+                                            <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.crnumber %}">Back</a></h5>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-auto">
+                                        <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.crnumber %}">Database Operations</a></h5>
+                                    </div>
+                                    <div class="col-12">
+                                        {% if previous_protocol %}
+                                            <p><span class="red-highlight text-light box-redius box-shadow p-1">Last Chemotherapy Protocol have been copied. Edit it accordigly</span></p>
+                                        {% else %}
+                                            <p><span class="green text-dark box-redius box-shadow p-1">No Previous Chemotherapy Protocol Present. Enter First Cycle</span></p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endwith %}
+                        {% endif %}
+                        <div class="form-control">
+                                <div class="row g-2 mt-2">
+                                    <div class="col-md-2">
+                                        {{ form.parent_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
+                                        {{ form.parent_id }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.s3_id.errors }}
+                                        <label class="oncflow-labels" for="{{ form.s3_id.id_for_label }}">Mx ID:</label>
+                                        {{ form.s3_id }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.protocol_date.errors }}
+                                        <label class="oncflow-labels" for="{{ form.protocol_date.id_for_label }}">Initiation Date:</label>
+                                        {{ form.protocol_date }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form.chemo_protocol.errors }}
+                                        <label class="oncflow-labels" for="{{ form.chemo_protocol.id_for_label }}">Chemotherapy Protocol:</label>
+                                        {{ form.chemo_protocol }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.unit.errors }}
+                                        <label class="oncflow-labels" for="{{ form.unit.id_for_label }}">Team:</label>
+                                        {{ form.unit }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        {{ form.notes.errors }}
+                                        <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                        {{ form.notes }}
+                                    </div>
+                                </div>
+                                <!-- Button Row -->
+                                <div class="d-flex justify-content-end">
+                                    {% if update %}
+                                        <div class="form-group mt-2">
+                                            <button class="btn btn-dark" type="submit">Update</button>
+                                        </div>
+                                    {% else %}
+                                        <div class="form-group mt-2">
+                                            <button class="btn btn-dark" type="submit">Create New Protocol</button>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="mt-3">
+                    {% if not update %}
+                        {% if previous_protocol %}
+                            <table class="styled-table m-1">
+                                <caption><h4>Available Chemotherapy Protocols</h4></caption>
+                            <thead>
+                                <tr>
+                                <th>Unit</th>
+                                <th>Protocol</th>
+                                <th>Protocol Date</th>
+                                <th>Notes</th>
+                                <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for content in protocols %}
+                                <tr>
+                                    <td>{{ content.unit }}</td>
+                                    <td>{{ content.chemo_protocol.protocol }}</td>
+                                    <td>{{ content.protocol_date|date:"d-m-Y" }}</td>
+                                    <td>{{ content.notes }}</td>
+                                    <td>
+                                    <a class="btn btn-sm btn-warning" href="{% url 'create-chemodrug' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Add Drugs</a>
+                                    <a class="btn btn-sm btn-warning" href="{% url 'radonc-chemoprotocol-update' content.pk %}?next={{ request.path|urlencode }}">Edit</a>
+                                    <a class="btn btn-sm btn-danger" href="{% url 'radonc-chemoprotocol-delete' content.pk %}">Delete</a>
+                                    </td>
+                                </tr>
+                                {% endfor  %}
+                                <!-- and so on... -->
+                            </tbody>
+                        </table>
+                        {% else %}
+                            <h4>No Available Chemotherapy Protocols</h4>
+                            <p class="green box-redius p-1 text-danger">First add chemotherapy protocol. Later you can add chemotherapy cycles and drugs</p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+    </div>
+{% load static %}
+<script src="{% static 'patient_data/chemoform.js' %}"></script>
+{% endblock content %}
+{% block javascript %}
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#id_chemo_protocol').select2();
+            $('#id_drug').select2();
+        });
+    </script>
+{% endblock javascript %}
