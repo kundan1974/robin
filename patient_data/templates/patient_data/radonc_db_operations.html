@@ -42,8 +42,8 @@
                                   {% if mx %}
                                     <a href="{% url 'radonc-fup-list' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mx-1">All Visits</a>
                                       <a href="{% url 'radonc-fup2' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mx-1">New Visit</a>
-                                      <p class="red-highlight text-light mt-1"><span class="badge">Record New Visit via CarePlan</span></p>
-                                      <p class="red-highlight text-light mt-1"><span class="box-redius g-2">If not done via careplan - will not link to any careplan</span></p>
+                                      <p class="red-highlight text-light mt-1"><span class="form-btn">Care Plan exists! Record New Visit via CarePlan</span></p>
+                                      <p><span class="btn btn-danger">If not done via careplan - may link to wrong diagnosis/carepaln</span></p>
 
                                   {% else %}
                                     <a href="{% url 'radonc-fup-list' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mx-1">All Visits</a>

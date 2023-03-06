@@ -2599,7 +2599,10 @@ class FUPCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             if 'to_labs' in self.request.POST:
                 return reverse_lazy("inv-lab2", kwargs={"crnumber": crn, "s8_id": s8_id})
 
-        return reverse_lazy("radonc-careplan-list", kwargs={"crnumber": crn})
+        if S3CarePlan.objects.filter(parent_id=crn).last():
+            return reverse_lazy("radonc-careplan-list", kwargs={"crnumber": crn})
+        else:
+            return reverse_lazy("db_operations", kwargs={"crnumber": crn})
 
     def get_context_data(self, **kwargs):
         context = super(FUPCreateView, self).get_context_data(**kwargs)
@@ -2620,7 +2623,11 @@ class FUPCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             context['form'].initial['parent_id'] = crnumber
 
         except KeyError:
-            patient_mx = False
+            if patient.s3careplan_set.all().last():
+                patient_mx = patient.s3careplan_set.all().last()
+                context['form'].initial['s3_id'] = patient_mx.s3_id
+            else:
+                patient_mx = False
             context['patient_mx'] = patient_mx
             context['form'].fields['RecordRecc'].widget.attrs['readonly'] = True
             context['form'].fields['RecordRecc'].disabled = True
@@ -2635,7 +2642,9 @@ class FUPCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             s2_id = self.kwargs['s2_id']
             context['form'].initial['s2_id'] = s2_id
         except KeyError:
-            pass
+            if patient.s3careplan_set.all().last():
+                patient_mx = patient.s3careplan_set.all().last()
+                context['form'].initial['s2_id'] = patient_mx.s2_id.s2_id
         context['patient'] = patient
         context['crnumber'] = crnumber
 
