@@ -7,19 +7,19 @@
                     <div class="form-row justify-content-left g-3">
                         <div class="form-control">
                             <div class="row g-2 mt-2" style="align-content: center">
-                                <div class="col-md-2">
+                                <div class="col-md-2 d-none">
                                     {{ form.parent_id.errors }}
                                     <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CR Number:</label>
                                     {{ form.parent_id }}
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2 d-none">
                                     {{ form.s5_protocol_id.errors }}
                                     <label class="oncflow-labels" for="{{ form.s5_protocol_id.id_for_label }}">Protocol ID:</label>
                                     {{ form.s5_protocol_id }}
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                     {{ form.cycleno.errors }}
-                                    <label class="oncflow-labels" for="{{ form.cycleno.id_for_label }}">Cycle No.:</label>
+                                    <label class="oncflow-labels" for="{{ form.cycleno.id_for_label }}">CycleNo.:</label>
                                     {{ form.cycleno }}
                                 </div>
                                 <div class="col-md-1">
@@ -32,7 +32,7 @@
                                     <label class="oncflow-labels" for="{{ form.chemodate.id_for_label }}">Date:</label>
                                     {{ form.chemodate }}
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     {{ form.drug.errors }}
                                     <label class="oncflow-labels" for="{{ form.drug.id_for_label }}">Drug:</label>
                                     {{ form.drug }}

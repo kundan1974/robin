@@ -25,13 +25,18 @@
                                 {% endfor %}
                                 and RT Status: {{ rtdetails.rtstatus }} exists
                             already. Updating RT status here will update the status in Radiotherapy Module also</span></em></p></div>
-
+                            {% if request.GET.next %}
                             <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                            {% elif request.GET.newsim %}
+                            <h5><a class="btn btn-dark" href="{% url 'new-simulation' rtdetails.parent_id.crnumber rtdetails.s3_id.s3_id %}">Back</a></h5>
+                            {% endif %}
                         {% else %}
                             <h1 class="mb-3">Simulation Form</h1>
-                            {% with crnumber=123456 %}
+                            {% if request.GET.next %}
                                 <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
-                            {% endwith %}
+                            {% elif request.GET.newsim %}
+                                <h5><a class="btn btn-dark" href="{% url 'new-simulation' crnumber s3_id %}">Back</a></h5>
+                            {% endif %}
                         {% endif %}
                         {% if error_status %}
                             <p class="box-shadow box-redius bg-danger text-light p-3">{{ error_msg }}</p>

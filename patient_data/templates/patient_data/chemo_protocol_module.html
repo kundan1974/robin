@@ -49,12 +49,12 @@
                         {% endif %}
                         <div class="form-control">
                                 <div class="row g-2 mt-2">
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 d-none">
                                         {{ form.parent_id.errors }}
                                         <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
                                         {{ form.parent_id }}
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-2 d-none">
                                         {{ form.s3_id.errors }}
                                         <label class="oncflow-labels" for="{{ form.s3_id.id_for_label }}">Mx ID:</label>
                                         {{ form.s3_id }}
@@ -64,7 +64,7 @@
                                         <label class="oncflow-labels" for="{{ form.protocol_date.id_for_label }}">Initiation Date:</label>
                                         {{ form.protocol_date }}
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-8">
                                         {{ form.chemo_protocol.errors }}
                                         <label class="oncflow-labels" for="{{ form.chemo_protocol.id_for_label }}">Chemotherapy Protocol:</label>
                                         {{ form.chemo_protocol }}

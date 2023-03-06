@@ -18,6 +18,8 @@
                         hx-target="#drug-entry">Add Drug</button>
             </div>
             <div class="mt-3" id="drug-entry">
+            </div>
+            <div class="mt-3" id="drug-display">
                 {% load set_var %}
                 {% for drug in drugs %}
                     {% if prev_cycleno != drug.cycleno %}

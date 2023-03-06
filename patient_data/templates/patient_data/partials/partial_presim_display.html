@@ -1,5 +1,5 @@
 <h2>DIBH Assessment Exists. <span class="badge green">Proceed to Simulation via Assessment</span>
-<span class="badge"><a class="btn btn-sm btn-danger" href="{% url 'radonc-simulation2' crnumber s3_id %}">Direct Sim</a></span>
+<span class="badge"><a class="btn btn-sm btn-danger" href="{% url 'radonc-simulation2' crnumber s3_id %}?newsim='newsim'">Direct Sim</a></span>
 </h2>
 <table class="styled-table m-1">
 
@@ -49,9 +49,9 @@
                             {% if error %}
                                 <h6><span class="red-highlight text-light box-shadow box-redius">ERROR!!! Can Not delete, Simulation Exist.</span></h6>
                             {% endif %}
-                            <a class="btn btn-sm btn-warning" href="{% url 'radonc-simulation-update' content.simulation_set.all.first.pk %}">EditSim</a>
+                            <a class="btn btn-sm btn-warning" href="{% url 'radonc-simulation-update' content.simulation_set.all.first.pk %}?newsim='newsim'">EditSim</a>
                         {% else %}
-                            <a class="btn btn-sm btn-warning" href="{% url 'radonc-simulation2' content.presimparent.crnumber content.s3_id.s3_id content.pk  %}">Sim</a>
+                            <a class="btn btn-sm btn-warning" href="{% url 'radonc-simulation2' content.presimparent.crnumber content.s3_id.s3_id content.pk  %}?newsim='newsim'">Sim</a>
                         {% endif %}
                     {% endif %}
                 </td>

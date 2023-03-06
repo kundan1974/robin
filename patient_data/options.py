@@ -36,6 +36,7 @@ SMOKE_FREQ = [
     ('>4 pack <=5 pack', '>4 pack <=5 pack'),
     ('>5 pack', '>5 pack')
 ]
+
 SMOKE_DUR = [
     ('', ''),
     ('<5 years', '<5 years'),
@@ -93,6 +94,7 @@ EGFR_STATUS = [
     ('QNS', 'QNS'),
     ('Not Needed', 'Not Needed'),
 ]
+
 ALK_BY = [
     ('', ''),
     ('FISH', 'FISH'),
@@ -106,6 +108,7 @@ ALK_STATUS = [
     ('QNS', 'QNS'),
     ('Not Needed', 'Not Needed'),
 ]
+
 T_STAGE = [
     ('', ''),
     ('Tx', 'Tx'),
@@ -196,6 +199,7 @@ FU_STATUS = [
     ('Not Assessed', 'Not Assessed'),
     ('Death', 'Death'),
 ]
+
 CHEMO_PROTOCOL = [
     ('', ''),
     ('Cis-Pacli', 'Cis-Pacli'),
@@ -474,17 +478,17 @@ INTENT_CHOICES = [
 
 CP_CHOICES = [('', ''),
               ('Primary', 'Primary'),
+              ('Salvage', 'Salvage'),
               ('Neoadjuvant', 'Neoadjuvant'),
               ('Adjuvant', 'Adjuvant'),
-              ('Not Planned', 'Not Planned'),
               ('Palliative', 'Palliative'),
               ('Consolidation', 'Consolidation'),
               ('Sequential', 'Sequential'),
               ('Concurrent', 'Concurrent'),
-              ('PostNACT-CTRT', 'PostNACT-CTRT'),
-              ('AdjuvantCTRT', 'AdjuvantCTRT'),
-              ('PCI', 'Prophylactic Cranial Irradiation'),
+              ('Prophylactic', 'Prophylactic'),
+              ('Not Planned', 'Not Planned'),
               ]
+
 DOC_TYPE_CHOICES = [('------', '------'),
                     ('Aadhar', 'Aadhar'),
                     ('PAN', 'PAN'),

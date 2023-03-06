@@ -1000,11 +1000,11 @@ def simulation2(request, crnumber=None, s3_id=None, presimid=None):
         else:
             form = SimulationForm()
 
-        print(request.GET)
-
         return render(request, 'patient_data/radonc_simulation.html', {'form': form, 'presimstatus': presimstatus,
                                                                        'error_msg': error_msg,
-                                                                       'error_status': error_status})
+                                                                       'error_status': error_status,
+                                                                       'crnumber': crnumber,
+                                                                       's3_id': s3_id})
         # return render(request, 'patient_data/partials/partial_simulation.html',
         #               {'form': form, 'presimstatus': presimstatus,
         #                'error_msg': error_msg,
@@ -1051,10 +1051,10 @@ class SimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         pk = self.kwargs["pk"]
         patient = Simulation.objects.get(pk=pk)
-        assignedto_id = patient.assignedto.id
-        if assignedto_id:
-            assigned_user = User.objects.get(pk=assignedto_id)
-            form.instance.assignedto = assigned_user
+        # assignedto_id = patient.assignedto.id
+        # if assignedto_id:
+        #     assigned_user = User.objects.get(pk=assignedto_id)
+        #     form.instance.assignedto = assigned_user
         current_user = User.objects.get(id=self.request.user.id)
         form.instance.updated_by = current_user.username
         form.instance.user = patient.user
@@ -4176,7 +4176,7 @@ def rtdeleteprescription(request, pk):
 def create_chemodrug(request, crnumber, pk):
     protocol = S5ChemoProtocol.objects.get(pk=pk)
     patient = S1ParentMain.objects.get(crnumber=crnumber)
-    drugs = S5ChemoDrugs.objects.filter(s5_protocol_id=protocol)
+    drugs = S5ChemoDrugs.objects.filter(s5_protocol_id=protocol).order_by('cycleno')
     form = S5ChemoDrugsForm(request.POST or None)
 
     if request.method == "POST":
@@ -4203,9 +4203,15 @@ def create_chemodrug(request, crnumber, pk):
 
 def create_chemodrug_form(request, crnumber, s5_protocol_id):
     patient = S1ParentMain.objects.get(crnumber=crnumber)
-    form = S5ChemoDrugsForm()
-    form.initial['parent_id'] = crnumber
-    form.initial['s5_protocol_id'] = s5_protocol_id
+    last_patient_chemo = S5ChemoDrugs.objects.filter(parent_id=crnumber).last()
+    print(last_patient_chemo)
+    if last_patient_chemo:
+        form = S5ChemoDrugsForm(instance=last_patient_chemo)
+        form.initial['s5_protocol_id'] = s5_protocol_id
+    else:
+        form = S5ChemoDrugsForm()
+        form.initial['parent_id'] = crnumber
+        form.initial['s5_protocol_id'] = s5_protocol_id
 
     context = {
         "form": form
@@ -4342,6 +4348,7 @@ def create_presim(request):
                            's3_id': s3_id,
                            'error': error,
                            'form': form})
+
 
 def edit_presim(request, pk):
     presim = NewPreSimulation.objects.get(pk=pk)

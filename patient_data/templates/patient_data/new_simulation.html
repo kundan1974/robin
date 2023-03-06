@@ -11,8 +11,13 @@
             {% csrf_token %}
                 <div class="form-row justify-content-left g-3">
                     <div class="row">
+                        <div class="col-md-2">
+                            <h5><a  class="btn btn-dark" href="{% url 'radonc-careplan-list' crnumber %}">Back</a></h5>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-6">
-                            <h2 class="mb-3">Simulation Details Form <span class="badge green">({{ crnumber }})</span></h2>
+                            <h2 class="mb-3">Simulation Radiotherapy Module <span class="badge green">({{ crnumber }})</span></h2>
                             <h5 class="mb-3">Diagnosis: {{ cp.s2_id.laterality }} {{ cp.s2_id.icd_main_topo.site }}
                                 <span class="badge red">{{ cp.s2_id.icd_path_code.hpe }} ({{ cp.s2_id.biopsy_date|date:"d-m-Y" }})</span>
                             </h5>
@@ -49,6 +54,7 @@
                             </div>
                         </div>
                         <div class="col-6 my-card box-redius box-shadow">
+                        {% if sx %}
                             {% for s in sx %}
                                 <h6 class="mb-3"><b>Surgery:</b> {% for surgery in s.sxtype.all %}{{ surgery }}, {% endfor %}</h6>
                             <p>{% for hpe in s.s6hpe_set.all %}
@@ -64,6 +70,11 @@
                                 <b>Stage: </b> {{ hpe.pstagegroup }}
                             {% endfor %}</p>
                             {% endfor %}
+                        {% else %}
+                            <h5>No Surgical details</h5>
+                            <p>This section get prefilled with previous surgical details
+                                relevant for this simulation and radiation</p>
+                        {% endif %}
                         </div>
                     </div>
                     <div class="row mt-3">
