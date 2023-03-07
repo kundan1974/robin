@@ -1187,7 +1187,6 @@ def new_simulation(request, crnumber, s3_id):
             messages.success(request,
                              f'DIBH assessment details has been saved for CRNumber: {crnumber} for DAY-{day}')
             presim = NewPreSimulation.objects.filter(presimparent=crnumber).last()
-            print(presim)
             return redirect('radonc-simulation2', crnumber, s3_id, presim.pk)
         else:
             print(form.errors)
@@ -1258,10 +1257,12 @@ def new_simulation(request, crnumber, s3_id):
                 msg.send()
             messages.success(request,
                              f'Data has been saved for CRNumber: {crn} and is assigned to: {assignedto_user}')
-            return redirect('radonc-simulation-list', crn)
+            if s3_id is not None:
+                return redirect('new-simulation', crn, s3_id)
+            else:
+                return redirect('radonc-simulation-list', crn)
         else:
             print(form.errors)
-
     return render(request, 'patient_data/new_simulation.html', {'cp': cp, 's3_id': s3_id, 'sx': sx,
                                                                 'crnumber': crnumber, 'form': form,
                                                                 'sim': sim})
