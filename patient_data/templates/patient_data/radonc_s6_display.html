@@ -1,17 +1,14 @@
 {% extends "patient_data/base.html" %}
 {% block content %}
-<div class="container">
+<div class="container" style="width: 80%; margin-top: 80px;">
     <div class="query-container">
-        {# Left Space #}
-        <div class="col-md-1"></div>
-        {# Middle Space #}
-        <div class="col-md-10">
-            <div class="my-form">
+
                 {% if data.0.parent_id.gender == 'Male' %}
                     <div><h4>All Surgery details for - Mr. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
                 {% else %}
                     <div><h4>All Surgery details for - Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
                 {% endif %}
+                <hr>
                 <div>
                     {% if request.GET.next %}
                         <h5><a  class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
@@ -20,7 +17,7 @@
                     {% endif %}
                 </div>
                 {% for content in data %}
-                    <div>
+                    <div class="data-container">
                         <h5>Diagnosis: {{content.s3_id.s2_id.icd_topo_code}} ({{ content.s3_id.s2_id.icd_path_code }})</h5>
                         <h6>Unit: {{ content.sxunit }}, Admission Date: {{ content.admissiondate|date:"F d, Y" }} Discharge Date: {{ content.dischargedate|date:"F d, Y" }}</h6>
                         <h6>Surgery Date: {{ content.sxdate|date:"F d, Y" }}</h6>
@@ -39,10 +36,6 @@
                         {% endfor %}
                     </div>
                 {% endfor %}
-            </div>
-        </div>
-        {# Right Space #}
-        <div class="col-md-1"></div>
     </div>
 </div>
 {% endblock content %}

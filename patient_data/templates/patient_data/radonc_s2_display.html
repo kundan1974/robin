@@ -1,17 +1,14 @@
 {% extends "patient_data/base.html" %}
 {% block content %}
-<div class="container">
+<div class="container" style="width: 70%; margin-top: 50px;">
     <div class="query-container">
-        {# Left Space #}
-        <div class="col-md-1"></div>
-        {# Middle Space #}
-        <div class="col-md-10">
-            <div class="my-form">
+            <div class="my-form1">
                 {% if data.0.parent_id.gender == 'Male' %}
                 <div><h4>All Diagnosis details for - Mr. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
                 {% else %}
                     <div><h4>All Diagnosis details for - Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
                 {% endif %}
+                <hr>
                 <div>
                     {% if request.session.crnumber %}
                         <h5><a  class="btn btn-dark" href="{% url 'db_operations' request.session.crnumber %}">Back</a></h5>
@@ -23,7 +20,7 @@
                 </div>
                 {% if data %}
                     {% for content in data %}
-                        <article class="media content-section section-odd mt-3 mb-5">
+                        <article class="media content-section data-container mt-3 mb-5">
                            <div class="media-body">
                                 <div class="article-title">
                                     <h4>{{ content.diagnosis }}</h4>
@@ -57,9 +54,6 @@
                     </article>
                 {% endif %}
             </div>
-        </div>
-        {# Right Space #}
-        <div class="col-md-1"></div>
-    </div>
+</div>
 </div>
 {% endblock content %}

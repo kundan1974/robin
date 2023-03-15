@@ -5,10 +5,6 @@
 {% block content %}
 <div class="container">
     <div class="query-container">
-        {# Left Space #}
-        <div class="col-md-1"></div>
-        {# Middle Space #}
-        <div class="col-md-10">
             <div class="my-form">
                 <form method="POST">
                     {% csrf_token %}
@@ -495,9 +491,6 @@
                     </div>
                 </form>
             </div>
-        </div>
-        {# Right Space #}
-        <div class="col-md-1"></div>
     </div>
 </div>
 {% endblock content %}

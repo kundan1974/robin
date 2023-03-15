@@ -3,13 +3,9 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 {% endblock stylesheet %}
 {% block content %}
-    <div class="container">
+    <div class="container" style="width: 70%;">
         <div class="query-container">
-            {# Left Space #}
-            <div class="col-md-1"></div>
-            {# Middle Space #}
-            <div class="col-md-10">
-                <div class="my-form">
+                <div class="data-container">
                     <form method="POST">
                         {% csrf_token %}
                         <div class="form-row justify-content-left g-3">
@@ -92,18 +88,17 @@
                             {% if update %}
                                 <div class="form-group mt-2">
                                     <button class="btn btn-dark" type="submit">Update</button>
+                                    <button class="btn btn-dark m-1" type="submit" name="to_hpa">Update -> Add HPA Details</button>
                                 </div>
                             {% else %}
                                 <div class="form-group mt-2">
                                     <button class="btn btn-dark" type="submit">Save</button>
+                                    <button class="btn btn-dark m-1" type="submit" name="to_hpa">Save -> Add HPA Details</button>
                                 </div>
                             {% endif %}
                         </div>
                     </form>
                 </div>
-            </div>
-            {# Right Space #}
-            <div class="col-md-1"></div>
         </div>
     </div>
 {% endblock content %}

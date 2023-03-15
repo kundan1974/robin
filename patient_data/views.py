@@ -285,6 +285,9 @@ def radonc_home(request, crnumber=None):
 
 @login_required
 def s1registration(request, crnumber=123456):
+    """
+    Patient Registratation
+    """
     if request.method == 'POST':
         current_user = User.objects.get(id=request.user.id)
         # YOU HAVE TO COPY THE POST DATA - otherwise it will not work

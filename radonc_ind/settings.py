@@ -102,6 +102,18 @@ WSGI_APPLICATION = 'radonc_ind.wsgi.application'
 #     }
 # }
 #Local Database
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'ind_db',
+#         'HOST': '127.0.0.1',
+#         'PORT': '3306',
+#         'USER': 'root',
+#         'PASSWORD': 'adnpc5604q',
+#     }
+# }
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -109,9 +121,10 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'USER': 'root',
-        'PASSWORD': 'adnpc5604q',
+        'PASSWORD': 'Nitesh@1996',
     }
 }
+
 
 # Fake PyMySQL’s version and install as MySQLdb
 # https://adamj.eu/tech/2020/02/04/how-to-use-pymysql-with-django/

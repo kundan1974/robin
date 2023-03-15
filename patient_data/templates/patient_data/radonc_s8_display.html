@@ -1,135 +1,127 @@
 {% extends "patient_data/base.html" %}
 {% block content %}
-<div class="container">
-    <div class="query-container mb-0">
-        {# Left Space #}
-        <div class="col-md-1"></div>
-        {# Middle Space #}
-        <div class="col-md-10">
-            <div class="my-form">
-                {% if data.0.parent_id.gender == 'Male' %}
-                    <div><h4>All Follow up details for - Mr. {{ data.0.parent_id.first_name|upper }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
-                {% else %}
-                    <div><h4>All Follow up details for - Mrs. {{ data.0.parent_id.first_name|upper }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
-                {% endif %}
-                {% if not data %}
-                    <h5><a  class="btn btn-dark" href="{% url 'database-index' %}">Back</a></h5>
-                {% endif %}
-                {% for content in data %}
-                    <div class="d-flex">
-                        {% if request.GET.next %}
-                            <h5><a  class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
-                        {% else %}
-                            <h5><a  class="btn btn-dark" href="{% url 'db_operations' content.parent_id.crnumber %}">Back</a></h5>
-                        {% endif %}
-                    {% if content.pftdetails_set.all %}
-                        <h5><a  class="btn btn-dark mx-1" href="{% url 'radonc-pftdetails-list' content.parent_id.crnumber %}?next={{ request.path|urlencode }}">PFT details</a></h5>
+<div class="container" style="margin-top: 50px;">
+        {% if data.0.parent_id.gender == 'Male' %}
+            <div><h4>All Follow up details for - Mr. {{ data.0.parent_id.first_name|upper }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+        {% else %}
+            <div><h4>All Follow up details for - Mrs. {{ data.0.parent_id.first_name|upper }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+        {% endif %}
+        <hr>
+        {% if not data %}
+            <h5><a  class="btn btn-dark" href="{% url 'database-index' %}">Back</a></h5>
+        {% endif %}
+        {% for content in data %}
+            <div class="data-container ">
+                <div class="d-flex">
+                    {% if request.GET.next %}
+                        <h5><a  class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                    {% else %}
+                        <h5><a  class="btn btn-dark" href="{% url 'db_operations' content.parent_id.crnumber %}">Back</a></h5>
                     {% endif %}
-                    {% if content.cardiacmarkers_set.all %}
-                        <h5><a  class="btn btn-dark mx-1" href="{% url 'radonc-cardiacmarkers-list' content.parent_id.crnumber %}?next={{ request.path|urlencode }}">CardiacMarker details</a></h5>
+                {% if content.pftdetails_set.all %}
+                    <h5><a  class="btn btn-dark mx-1" href="{% url 'radonc-pftdetails-list' content.parent_id.crnumber %}?next={{ request.path|urlencode }}">PFT details</a></h5>
+                {% endif %}
+                {% if content.cardiacmarkers_set.all %}
+                    <h5><a  class="btn btn-dark mx-1" href="{% url 'radonc-cardiacmarkers-list' content.parent_id.crnumber %}?next={{ request.path|urlencode }}">CardiacMarker details</a></h5>
+                {% endif %}
+                </div>
+                <div>
+                    {% if content.parent_id.s2diagnosis_set.all %}
+                        <h5>Diagnosis: {{content.s2_id.icd_topo_code|upper}}({{ content.s2_id.icd_path_code }})</h5>
+                    {% else %}
+                        <h5>Diagnosis: No Diagnosis established yet</h5>
                     {% endif %}
-                    </div>
+                    <h6>Follow up Date: {{ content.visitdate|date:"F d, Y" }}</h6>
+                    <h6>Follow up type: {% for type in content.visittype.all %}{{ type }}, {% endfor %}</h6>
+                    <h6>Treatment Planned:
+                        Radiotherapy: {{ content.s3_id.radiotherapy }}
+                        Surgery: {{ content.s3_id.surgery }}
+                        Chemotherapy: {{ content.s3_id.chemotherapy }}
+                    </h6>
                     <div>
-                        {% if content.parent_id.s2diagnosis_set.all %}
-                            <h5>Diagnosis: {{content.s2_id.icd_topo_code|upper}}({{ content.s2_id.icd_path_code }})</h5>
-                        {% else %}
-                            <h5>Diagnosis: No Diagnosis established yet</h5>
-                        {% endif %}
-                        <h6>Follow up Date: {{ content.visitdate|date:"F d, Y" }}</h6>
-                        <h6>Follow up type: {% for type in content.visittype.all %}{{ type }}, {% endfor %}</h6>
-                        <h6>Treatment Planned:
-                            Radiotherapy: {{ content.s3_id.radiotherapy }}
-                            Surgery: {{ content.s3_id.surgery }}
-                            Chemotherapy: {{ content.s3_id.chemotherapy }}
-                        </h6>
-                        <div>
-                            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-fup-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
-                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-cardiacmarkers' content.parent_id.crnumber content.s8_id %}?next={{ request.path|urlencode }}">Cardiac Markers</a>
-                            <a class="btn btn-info btn-sm mt-1 mb-1"
-                               href="{% url 'radonc-pftdetails' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}?next={{ request.path|urlencode }}">PFT</a>
-                            <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
-                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'inv-imaging2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Imaging</a>
-                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'prescription2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Prescription</a>
-                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'inv-lab2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Laboratory</a>
-                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'inv-pathlab2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Pathology</a>
-                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'latetox2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Late Toxicity</a>
-                        </div>
-
-                        {% if content.visitaction %}
-                            <small class="text-muted"><b>Action Taken: </b>: {{ content.visitaction }}, </small>
-                        {% endif %}
-                        {% if content.RecordRecc %}
-                            <small class="text-muted"><b>Reccurence: </b>: {{ content.RecordRecc }}, </small>
-                        {% endif %}
-                        {% if content.Death %}
-                            <small class="text-muted"><b>Death: </b>: {{ content.Death }}, </small>
-                        {% endif %}
-                        {% if content.Datedeath %}
-                            <small class="text-muted"><b>Date of Death: </b>: {{ content.Datedeath|date:"F d, Y" }}</small><br>
-                        {% endif %}
-
-                        {% if content.ToxType1 %}
-                            <small class="text-muted"><b>Toxicity: </b>: {{ content.ToxType1 }} <b>Severity: </b>{{ content.SeverityT1 }}</small>
-                        {% endif %}
-                        {% if content.ToxType2 %}
-                            <small class="text-muted"><b>Toxicity: </b>: {{ content.ToxType2 }} <b>Severity: </b>{{ content.SeverityT2 }}</small>
-                        {% endif %}
-                        {% if content.ToxType3 %}
-                            <small class="text-muted"><b>Toxicity: </b>: {{ content.ToxType3 }} <b>Severity: </b>{{ content.SeverityT3 }}</small>
-                        {% endif %}
-                        {% if content.ToxType4 %}
-                            <small class="text-muted"><b>Toxicity: </b>: {{ content.ToxType4 }} <b>Severity: </b>{{ content.SeverityT4 }}</small>
-                        {% endif %}
-                        {% if content.ToxType5 %}
-                            <small class="text-muted"><b>Toxicity: </b>: {{ content.ToxType5 }} <b>Severity: </b>{{ content.SeverityT5 }}</small>
-                        {% endif %}
-                        <br>
-                        {% if content.Symp1 %}
-                            <small class="text-muted"><b>Symptoms: </b>: {{ content.Symp1 }} <b>Severity:</b> {{ content.Symp1Type }}</small>
-                        {% endif %}
-                        {% if content.Symp2 %}
-                            <small class="text-muted"><b>Symptoms: </b>: {{ content.Symp2 }} <b>Severity:</b> {{ content.Symp2Type }}</small>
-                        {% endif %}
-                        {% if content.Symp3 %}
-                            <small class="text-muted"><b>Symptoms: </b>: {{ content.Symp3 }} <b>Severity:</b> {{ content.Symp3Type }}</small>
-                        {% endif %}
-                        {% if content.Symp4 %}
-                            <small class="text-muted"><b>Symptoms: </b>: {{ content.Symp4 }} <b>Severity:</b> {{ content.Symp4Type }}</small>
-                        {% endif %}
-                        {% if content.Symp5 %}
-                            <small class="text-muted"><b>Symptoms: </b>: {{ content.Symp5 }} <b>Severity:</b> {{ content.Symp5Type }}</small>
-                        {% endif %}
-                        {% if content.Symp6 %}
-                            <small class="text-muted"><b>Symptoms: </b>: {{ content.Symp6 }} <b>Severity:</b> {{ content.Symp6Type }}</small>
-                        {% endif %}
-                        {% if content.Symp7 %}
-                            <small class="text-muted"><b>Symptoms: </b>: {{ content.Symp7 }} <b>Severity:</b> {{ content.Symp7Type }}</small>
-                        {% endif %}
-                        <br>
-                        {% if content.DrugRx1 %}
-                            <small class="text-muted"><b>Drugs Prescribed: </b>: {{ content.DrugRx1 }}, </small>
-                        {% endif %}
-                        {% if content.DrugRx2 %}
-                            <small class="text-muted">{{ content.DrugRx2 }}, </small>
-                        {% endif %}
-                        {% if content.DrugRx3 %}
-                            <small class="text-muted">{{ content.DrugRx3 }}, </small>
-                        {% endif %}
-                        {% if content.DrugRx4 %}
-                            <small class="text-muted">{{ content.DrugRx4 }}, </small>
-                        {% endif %}
-                        {% if content.DrugRx5 %}
-                            <small class="text-muted">{{ content.DrugRx5 }}, </small>
-                        {% endif %}
-                        {% if content.DrugRx6 %}
-                            <small class="text-muted">{{ content.DrugRx6 }}</small>
-                        {% endif %}
-                    </div><hr>
-                {% endfor %}
+                        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-fup-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
+                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-cardiacmarkers' content.parent_id.crnumber content.s8_id %}?next={{ request.path|urlencode }}">Cardiac Markers</a>
+                        <a class="btn btn-info btn-sm mt-1 mb-1"
+                           href="{% url 'radonc-pftdetails' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}?next={{ request.path|urlencode }}">PFT</a>
+                        <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
+                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'inv-imaging2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Imaging</a>
+                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'prescription2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Prescription</a>
+                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'inv-lab2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Laboratory</a>
+                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'inv-pathlab2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Pathology</a>
+                        <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'latetox2' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Late Toxicity</a>
+                    </div>
+    
+                    {% if content.visitaction %}
+                        <small class="text-muted"><b>Action Taken: </b>: {{ content.visitaction }}, </small>
+                    {% endif %}
+                    {% if content.RecordRecc %}
+                        <small class="text-muted"><b>Reccurence: </b>: {{ content.RecordRecc }}, </small>
+                    {% endif %}
+                    {% if content.Death %}
+                        <small class="text-muted"><b>Death: </b>: {{ content.Death }}, </small>
+                    {% endif %}
+                    {% if content.Datedeath %}
+                        <small class="text-muted"><b>Date of Death: </b>: {{ content.Datedeath|date:"F d, Y" }}</small><br>
+                    {% endif %}
+    
+                    {% if content.ToxType1 %}
+                        <small class="text-muted"><b>Toxicity: </b>: {{ content.ToxType1 }} <b>Severity: </b>{{ content.SeverityT1 }}</small>
+                    {% endif %}
+                    {% if content.ToxType2 %}
+                        <small class="text-muted"><b>Toxicity: </b>: {{ content.ToxType2 }} <b>Severity: </b>{{ content.SeverityT2 }}</small>
+                    {% endif %}
+                    {% if content.ToxType3 %}
+                        <small class="text-muted"><b>Toxicity: </b>: {{ content.ToxType3 }} <b>Severity: </b>{{ content.SeverityT3 }}</small>
+                    {% endif %}
+                    {% if content.ToxType4 %}
+                        <small class="text-muted"><b>Toxicity: </b>: {{ content.ToxType4 }} <b>Severity: </b>{{ content.SeverityT4 }}</small>
+                    {% endif %}
+                    {% if content.ToxType5 %}
+                        <small class="text-muted"><b>Toxicity: </b>: {{ content.ToxType5 }} <b>Severity: </b>{{ content.SeverityT5 }}</small>
+                    {% endif %}
+                    <br>
+                    {% if content.Symp1 %}
+                        <small class="text-muted"><b>Symptoms: </b>: {{ content.Symp1 }} <b>Severity:</b> {{ content.Symp1Type }}</small>
+                    {% endif %}
+                    {% if content.Symp2 %}
+                        <small class="text-muted"><b>Symptoms: </b>: {{ content.Symp2 }} <b>Severity:</b> {{ content.Symp2Type }}</small>
+                    {% endif %}
+                    {% if content.Symp3 %}
+                        <small class="text-muted"><b>Symptoms: </b>: {{ content.Symp3 }} <b>Severity:</b> {{ content.Symp3Type }}</small>
+                    {% endif %}
+                    {% if content.Symp4 %}
+                        <small class="text-muted"><b>Symptoms: </b>: {{ content.Symp4 }} <b>Severity:</b> {{ content.Symp4Type }}</small>
+                    {% endif %}
+                    {% if content.Symp5 %}
+                        <small class="text-muted"><b>Symptoms: </b>: {{ content.Symp5 }} <b>Severity:</b> {{ content.Symp5Type }}</small>
+                    {% endif %}
+                    {% if content.Symp6 %}
+                        <small class="text-muted"><b>Symptoms: </b>: {{ content.Symp6 }} <b>Severity:</b> {{ content.Symp6Type }}</small>
+                    {% endif %}
+                    {% if content.Symp7 %}
+                        <small class="text-muted"><b>Symptoms: </b>: {{ content.Symp7 }} <b>Severity:</b> {{ content.Symp7Type }}</small>
+                    {% endif %}
+                    <br>
+                    {% if content.DrugRx1 %}
+                        <small class="text-muted"><b>Drugs Prescribed: </b>: {{ content.DrugRx1 }}, </small>
+                    {% endif %}
+                    {% if content.DrugRx2 %}
+                        <small class="text-muted">{{ content.DrugRx2 }}, </small>
+                    {% endif %}
+                    {% if content.DrugRx3 %}
+                        <small class="text-muted">{{ content.DrugRx3 }}, </small>
+                    {% endif %}
+                    {% if content.DrugRx4 %}
+                        <small class="text-muted">{{ content.DrugRx4 }}, </small>
+                    {% endif %}
+                    {% if content.DrugRx5 %}
+                        <small class="text-muted">{{ content.DrugRx5 }}, </small>
+                    {% endif %}
+                    {% if content.DrugRx6 %}
+                        <small class="text-muted">{{ content.DrugRx6 }}</small>
+                    {% endif %}
+                </div>
             </div>
-        </div>
-        {# Right Space #}
-        <div class="col-md-1"></div>
-    </div>
+        {% endfor %}
 </div>
 {% endblock content %}
