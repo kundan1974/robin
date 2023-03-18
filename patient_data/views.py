@@ -3864,9 +3864,11 @@ def download_file(request):
 
 def get_second_field_options(request):
     first_field_value = request.POST.get('main_site', '')
+    print(first_field_value)
     if first_field_value:
         icdmain_code_values = first_field_value.split(',')[0][:3]
-        second_field_options = Site.objects.filter(code__startswith=icdmain_code_values).values_list()
+        codes = first_field_value.split(',')
+        second_field_options = Site.objects.filter(code__in=codes).values_list()
     else:
         second_field_options = []
 
