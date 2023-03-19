@@ -3746,7 +3746,10 @@ def summary(request, crnumber):
         path = path.split(sep=',')[0]
         lat = d[0].laterality
         topo = d[0].icd_topo_code.site
-        main_topo = d[0].icd_main_topo.site
+        try:
+            main_topo = d[0].icd_main_topo.site
+        except AttributeError:
+            main_topo = None
         topo = topo.split(sep=',')[0]
         t = d[0].c_t_id
         n = d[0].c_n_id
@@ -3804,7 +3807,10 @@ def summary(request, crnumber):
             nodes_r = "Unknown"
             pt = "x"
             pn = "x"
-
+        try:
+            temp_main = main_topo.upper()
+        except AttributeError:
+            main_topo = "NO DETAILS"
         if main_topo.upper() == 'BREAST':
             dx_clinical = f"{path} of {lat} {topo}, T{t}N{n}M{m} {stage}, ER:{er} PR:{pr} HER2Neu:{her2neu}"
             fixed_text = f"After {'his' if p.gender == 'Male' else 'her'} initial workup {'his' if p.gender == 'Male' else 'her'} was diagnosed with Breast Carcinoma " \
