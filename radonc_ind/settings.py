@@ -91,16 +91,16 @@ WSGI_APPLICATION = 'radonc_ind.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 # Remote Database
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'aus_db',
-#         'HOST': '194.195.117.139',
-#         'PORT': '3306',
-#         'USER': 'kundan25',
-#         'PASSWORD': 'drks2504',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ind_db',
+        'HOST': '194.195.117.139',
+        'PORT': '3306',
+        'USER': 'kundan25',
+        'PASSWORD': 'drks2504',
+    }
+}
 #Local Database
 # DATABASES = {
 #     'default': {
@@ -114,16 +114,16 @@ WSGI_APPLICATION = 'radonc_ind.wsgi.application'
 # }
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ind_db',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'USER': 'root',
-        'PASSWORD': 'Nitesh@1996',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'ind_db',
+#         'HOST': '127.0.0.1',
+#         'PORT': '3306',
+#         'USER': 'root',
+#         'PASSWORD': 'Nitesh@1996',
+#     }
+# }
 
 
 # Fake PyMySQL’s version and install as MySQLdb
