@@ -43,22 +43,18 @@
                                     <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-ass-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
                                     <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
                                 </div>
-                                <small class="text-muted"><b>Dermatitis: </b>: {{ content.dermatitis }}</small><br>
-                                <small class="text-muted"><b>Dermatitis Location: </b>:
-                                    Axilla: {{ content.skin_axilla }}, SCF: {{ content.skin_scf }}, IMF: {{ content.skin_imf }},
-                                    UOQ: {{ content.skin_uoq }}, LOQ: {{ content.skin_loq }}, UIQ: {{ content.skin_uiq }},
-                                    LIQ: {{ content.skin_liq }}
-                                </small><br>
-                                <small class="text-muted"><b>Esophagitis: </b>: {{ content.esophagitis }}</small>,
-                                <small class="text-muted"><b>Apetite</b> :{{ content.apetite }}</small>,
-                                <small class="text-muted"><b>Fatigue: </b>: {{ content.fatigue }}</small>,
-                                <small class="text-muted"><b>Pain: </b>: {{ content.pain }}</small><br>
-                                <small class="text-muted"><b>Symptoms: </b>: {{ content.symp1 }}, {{ content.symp2 }},
-                                    {{ content.symp3 }}
-                                </small><br>
-                                <small class="text-muted"><b>Prescription: </b>: {{ content.drugrx1 }}, {{ content.drugrx2 }},
-                                    {{ content.drugrx3 }}, {{ content.drugrx4 }}, {{ content.drugrx5 }}, {{ content.drugrx6 }}
-                                </small>
+                                {% for tox in  content.acutetoxicity_set.all %}
+                                    <small class="text-muted"><b>{{ tox.tox_term }}: </b>: {{ tox.tox_grade }}</small><br>
+                                {% endfor %}
+                                {% for pres in  content.prescription_set.all %}
+                                    <small class="text-muted"><b>
+                                        {{ pres.symptoms_type }} -- {{ pres.symptoms }} for {{ pres.symp_duration }} days
+                                    </b></small><br>
+                                    <small class="text-muted"><b>
+                                        Prescription: -- {{ pres.drug_name }}{{ pres.unit }} for {{ pres.dosage }} for {{ pres.duration }} days
+                                    </b></small><br>
+                                {% endfor %}
+
                             </div>
                        </div>
                     </article>
