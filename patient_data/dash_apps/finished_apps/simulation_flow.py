@@ -127,7 +127,10 @@ def get_df():
             if pd.isna(row.fxphase2) or row.fxphase2 == 0:
                 ph2_imp_impdate = None
             else:
-                ph2_imp_impdate = row.as_date + BDay(remaining_fr_ph1 + 1)
+                if row.as_date:
+                    ph2_imp_impdate = row.as_date + BDay(remaining_fr_ph1 + 1)
+                else:
+                    ph2_imp_impdate = row.impdate + BDay(remaining_fr_ph1 + 1)
             if pd.isna(row.fxphase3) or row.fxphase3 == 0:
                 ph3_imp_impdate = None
             else:
