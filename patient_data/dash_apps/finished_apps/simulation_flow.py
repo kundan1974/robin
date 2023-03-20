@@ -122,7 +122,7 @@ def get_df():
         elif now > row.impdate:
             try:
                 dynamic_completion_date = row.as_date + BDay(remaining_fr_total)
-            except AttributeError:
+            except TypeError:
                 dynamic_completion_date = None
             if pd.isna(row.fxphase2) or row.fxphase2 == 0:
                 ph2_imp_impdate = None
