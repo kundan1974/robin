@@ -9,7 +9,7 @@
             {% csrf_token %}
             <div class="form-row justify-content-left g-3">
                 {% if update %}
-                    <h1 class="mb-3">Diagnosis Update Form</h1>
+                    <h1 class="mb-3">Diagnosis-Status Update Form</h1>
                     {% if request.session.crnumber %}
                         <h5><a class="btn btn-dark" href="{% url 'db_operations' request.session.crnumber %}">Back</a></h5>
                     {% else %}
@@ -18,7 +18,7 @@
                         {% endwith %}
                     {% endif %}
                 {% else %}
-                    <h1 class="mb-3">Diagnosis Form</h1>
+                    <h1 class="mb-3">Diagnosis-Status Form</h1>
                     <hr>
                     {% if request.session.crnumber %}
                     <h5><a class="btn btn-dark" href="{% url 'db_operations' request.session.crnumber %}">Back</a></h5>
@@ -58,7 +58,7 @@
                         </div>
                         <div class="col-md-4">
                             {{ form.dx_date.errors }}
-                            <label class="oncflow-labels" for="{{ form.dx_date.id_for_label }}">Diagnosis(Date):</label>
+                            <label class="oncflow-labels" for="{{ form.dx_date.id_for_label }}">Diagnosis(Status Date):</label>
                             {{ form.dx_date }}
                         </div>
                         <div class="col-md-4">

@@ -74,13 +74,13 @@
                     {% else %}
                     <div class="my-card box-shadow box-redius">
                     {% endif %}
-                        <h4><span class="me-1">2. </span>Diagnosis*</h4>
+                        <h4><span class="me-1">2. </span>Diagnosis(Status)*</h4>
                         <hr>
                         <p style="color: #ff6d00"><b>MANDATORY</b></p>
-                        <p>Here Details regarding diagnosis and clinical stage are filled.<span class="highlight"> Workup for initial diagnosis prior to any treatment
-                        is required here. Can have multiple diagnosis</span></p>
+                        <p>Here Details regarding status of diagnosis and clinical stage are filled.<span class="highlight">
+                            Patient can have multiple statuses for the same diagnosis</span></p>
                             {% if res and dx %}
-                            <a href="{% url 'radonc-diagnosis' crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mt-5">New</a>
+                            <a href="{% url 'radonc-diagnosis' crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mt-5">New Status</a>
                             <a href="{% url 'radonc-diagnosis-list' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn my-btn mt-5">Previous</a>
                             {% elif res %}
                             <a href="{% url 'radonc-diagnosis' crnumber %}?next={{ request.path|urlencode }}" class="btn btn-dark mt-5">New</a>

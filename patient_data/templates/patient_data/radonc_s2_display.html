@@ -4,9 +4,9 @@
     <div class="query-container">
             <div class="my-form1">
                 {% if data.0.parent_id.gender == 'Male' %}
-                <div><h4>All Diagnosis details for - Mr. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+                <div><h4>All Diagnosis Status for - Mr. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
                 {% else %}
-                    <div><h4>All Diagnosis details for - Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
+                    <div><h4>All Diagnosis Status for - Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
                 {% endif %}
                 <hr>
                 <div>
