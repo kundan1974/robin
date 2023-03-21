@@ -7,9 +7,9 @@
         <div class="col-md-10">
             <div class="my-form">
             {% if data.0.parent_id.gender == 'Male' %}
-                <div><h4 class="">All CarePlan details for - <span class="text-light gradient-highlight p-2 box-redius">Mr. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</span></h4></div>
+                <div><h4 class="">All Treatment Course details for - <span class="text-light gradient-highlight p-2 box-redius">Mr. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</span></h4></div>
             {% else %}
-                <div><h4 class="">All CarePlan details for - <span class="text-light gradient-highlight p-2 box-redius">Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</span></h4></div>
+                <div><h4 class="">All Treatment Course details for - <span class="text-light gradient-highlight p-2 box-redius">Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</span></h4></div>
             {% endif %}
             <hr>
 {#            TOP LEVEL BUTTONS#}
@@ -21,7 +21,7 @@
                     {% endif %}
 
                         {% if presim_check %}
-                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-presimulation-list' data.0.parent_id.crnumber  %}?mx_display_crnumber={{ data.0.parent_id.crnumber }}">PreSimulation</a><!-- from simulation move to simulation list and then to RT -->
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-newpresimulation-list' data.0.parent_id.crnumber  %}?mx_display_crnumber={{ data.0.parent_id.crnumber }}">PreSimulation</a><!-- from simulation move to simulation list and then to RT -->
                         {% else %}
                             {% if sim_check %}
                                 <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-simulation-list' data.0.parent_id.crnumber %}">Simulation (update)</a><!-- from simulation move to simulation list and then to RT -->
