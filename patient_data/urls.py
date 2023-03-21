@@ -22,7 +22,7 @@ from .views import S1RegUpdateView, S1ListView, PreSimulationUpdateView, PreSimu
     AcuteToxicityCreateView, RTPrescriptionCreateView, RTPrescriptionUpdateView, RTPrescriptionDeleteView, \
     RTInvImgCreateView, RTInvImgUpdateView, RTInvImgDeleteView, RTInvPathlabCreateView, RTInvPathlabUpdateView, \
     RTInvPathlabDeleteView, RTInvLabsCreateView, RTInvLabsUpdateView, RTInvLabsDeleteView, AcuteToxicityUpdateView, \
-    AcuteToxicityDeleteView, SimulationDeleteView
+    AcuteToxicityDeleteView, SimulationDeleteView, NewPreSimulationListView
 
 urlpatterns = [
     path('', views.index, name='database-index'),
@@ -35,6 +35,7 @@ urlpatterns = [
     path('radonc-patientlist/', S1ListView.as_view(), name='radonc-patientlist'),
     path('summary/<str:crnumber>/', views.summary, name="summary"),
     # path('radonc-presimulation/', views.presimulation, name="radonc-presimulation"),
+    # PRESIMULATION PATHS
     path('radonc-presimulation/<str:crnumber>/<int:s3_id>/', views.presimulation, name="radonc-presimulation"),
     path('radonc-presimulation/<int:pk>/update/', PreSimulationUpdateView.as_view(),
          name="radonc-presimulation-update"),
@@ -42,6 +43,11 @@ urlpatterns = [
          name="radonc-presimulation-list"),
     path('radonc-presimulation/<int:pk>/delete/', PreSimulationDeleteView.as_view(),
          name="radonc-presimulation-delete"),
+
+    path('radonc-newpresimulation/<str:crnumber>/list/', NewPreSimulationListView.as_view(),
+         name="radonc-newpresimulation-list"),
+
+
     # path('presim2sim/<int:crnumber>/', views.proceed2sim, name="proceed2sim"),
     path('radonc-diagnosis/', DiagnosisCreateView.as_view(), name="radonc-diagnosis"),
     path('radonc-diagnosis/<str:crnumber>/', DiagnosisCreateView.as_view(), name="radonc-diagnosis"),

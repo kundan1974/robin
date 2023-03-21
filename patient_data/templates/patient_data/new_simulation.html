@@ -16,44 +16,11 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
-                            <h2 class="mb-3">Simulation Radiotherapy Module <span class="badge green">({{ crnumber }})</span></h2>
-                            <h5 class="mb-3">Diagnosis: {{ cp.s2_id.laterality }} {{ cp.s2_id.icd_main_topo.site }}
-                                <span class="badge red">{{ cp.s2_id.icd_path_code.hpe }} ({{ cp.s2_id.biopsy_date|date:"d-m-Y" }})</span>
-                            </h5>
-                            <div>
-                            <table class="styled-table m-1">
-                                <thead>
-                                    <tr>
-                                        <th>Previous Simulations</th>
-                                        <th>Date</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for s in sim %}
-                                        {% for site in s.icdmainsite.all %}
-                                        <tr>
-                                            <td>{{ site.description }}</td>
-                                            <td>{{ s.simdate|date:"d-m-Y" }}</td>
-                                            <td>
-                                                <a class="btn btn-sm btn-warning" href="{% url 'radonc-simulation-update' s.pk %}?next={{ request.path|urlencode }}">EditSim</a>
-                                                {% if s.s4rt_set.all %}
-                                                    <a class="btn btn-sm btn-warning" href="{% url 'radonc-radiotherapy-update' s.s4rt_set.all.last.pk %}?next={{ request.path|urlencode }}">EditRT</a>
-                                                {% else %}
-                                                    <a class="btn btn-sm btn-warning" href="{% url 'radonc-radiotherapy' s.simparent.crnumber s.pk %}?next={{ request.path|urlencode }}">NewRT</a>
-                                                {% endif %}
-
-                                                <a class="btn btn-sm btn-danger" href="{% url 'radonc-simulation-delete' s.pk %}">X</a>
-                                            </td>
-                                        </tr>
-                                        {% endfor %}
-                                    {% endfor  %}
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                        <div class="col-6 my-card box-redius box-shadow">
+                        <h2 class="mb-3">Simulation Radiotherapy Module <span class="badge green">({{ crnumber }})</span></h2>
+                        <h5 class="mb-3">Diagnosis: {{ cp.s2_id.laterality }} {{ cp.s2_id.icd_main_topo.site }}
+                            <span class="badge red">{{ cp.s2_id.icd_path_code.hpe }} ({{ cp.s2_id.biopsy_date|date:"d-m-Y" }})</span>
+                        </h5>
+                        <div class="col-12 my-card box-redius box-shadow">
                         {% if sx %}
                             {% for s in sx %}
                                 <h6 class="mb-3"><b>Surgery:</b> {% for surgery in s.sxtype.all %}{{ surgery }}, {% endfor %}</h6>
@@ -76,6 +43,81 @@
                                 relevant for this simulation and radiation</p>
                         {% endif %}
                         </div>
+                        <div class="col-12 mt-3">
+                            <h5>After adding or editing simulation/presimulation please refresh page to view updated previous details</h5>
+                            <a class="btn btn-info" href="{% url 'new-simulation' crnumber cp.pk %}">Refresh</a>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <div class="row">
+    {#                            PREVIOUS SIMULATION DETAILS#}
+                                <div class="col-6">
+                                    <table class="styled-table m-1">
+                                    <thead>
+                                        <tr>
+                                            <th>Previous Simulations</th>
+                                            <th>Date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for s in sim %}
+                                            {% for site in s.icdmainsite.all %}
+                                            <tr>
+                                                <td>{{ site.description }}</td>
+                                                <td>{{ s.simdate|date:"d-m-Y" }}</td>
+                                                <td>
+                                                    <a class="btn btn-sm btn-warning" href="{% url 'radonc-simulation-update' s.pk %}?next={{ request.path|urlencode }}">EditSim</a>
+                                                    {% if s.s4rt_set.all %}
+                                                        <a class="btn btn-sm btn-warning" href="{% url 'radonc-radiotherapy-update' s.s4rt_set.all.last.pk %}?next={{ request.path|urlencode }}">EditRT</a>
+                                                    {% else %}
+                                                        <a class="btn btn-sm btn-warning" href="{% url 'radonc-radiotherapy' s.simparent.crnumber s.pk %}?next={{ request.path|urlencode }}">NewRT</a>
+                                                    {% endif %}
+
+                                                    <a class="btn btn-sm btn-danger" href="{% url 'radonc-simulation-delete' s.pk %}">X</a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        {% endfor  %}
+                                    </tbody>
+                                </table>
+                                </div>
+    {#                            PREVIOUS PRESIMULATION DETAILS#}
+                                <div class="col-6">
+                                    <table class="styled-table m-1">
+                                    <thead>
+                                        <tr>
+                                            <th>Previous PreSims</th>
+                                            <th>Date</th>
+                                            <th>AvgAmp(mm)</th>
+                                            <th>AvgHold(Sec)</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for s in presim %}
+                                            <tr>
+                                                <td>Day {{ s.day }}</td>
+                                                <td>{{ s.date|date:"d-m-Y" }}</td>
+                                                <td>{{ s.average_amp }}</td>
+                                                <td>{{ s.ahd }}</td>
+                                                <td>{{ s.status }}</td>
+                                                <td>
+                                                    <a class="btn btn-sm btn-warning"
+                                                       hx-get="{% url 'radonc-new-presimulation-update' s.pk %}?next={{ request.path|urlencode }}"
+                                                       hx-target="#presim">E</a>
+                                                    <a class="btn btn-sm btn-danger" hx-delete="{% url 'radonc-new-presimulation-delete' s.pk %}"
+                                                       hx-confirm="Are you sure? You want to delete this presim details?"
+                                                       hx-target="#presim">X</a>
+                                                </td>
+                                            </tr>
+                                        {% endfor  %}
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="row mt-3">
                         <div class="col-3">

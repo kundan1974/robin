@@ -471,6 +471,14 @@ class PreSimulationDeleteView(LoginRequiredMixin, DeleteView):
         return render(request, 'patient_data/error.html')
 
 
+class NewPreSimulationListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
+    model = NewPreSimulation
+    template_name = 'patient_data/radonc_newpresimulation_display.html'  # <app>/<model>_<view type>.html
+    context_object_name = 'data'
+
+    def get_queryset(self):
+        return NewPreSimulation.objects.filter(presimparent=self.kwargs['crnumber'])
+
 # DIAGNOSIS
 
 class DiagnosisCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
@@ -638,20 +646,20 @@ class CareplanListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
         patient_mx = S1ParentMain.objects.get(crnumber=pk)
         oldpresim = False
         try:
-            all_presim = patient_mx.presimulation_set.all()
+            all_presim = patient_mx.newpresimulation_set.all()
             if all_presim:
-                presim = all_presim.get(presimparent=pk)
                 diff = timezone.timedelta(21)
-                if timezone.now() - presim.day1date > diff:
-                    oldpresim = True
-
-                else:
-                    oldpresim = False
-                context['oldpresim'] = oldpresim
+                for p in all_presim:
+                    if timezone.now() - p.date > diff:
+                        oldpresim = True
+                    else:
+                        oldpresim = False
+                    context['oldpresim'] = oldpresim
             else:
                 oldpresim = False
         except:
             all_presim = False
+            context['oldpresim'] = oldpresim
         try:
             all_sim = patient_mx.simulation_set.all()
         except:
@@ -694,7 +702,7 @@ class CareplanListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
             all_cm = False
         if all_presim:
             context['presim_check'] = True
-            context['oldpresim'] = oldpresim
+            # context['oldpresim'] = oldpresim
         if all_sim:
             context['sim_check'] = True
         if all_rt:
@@ -1158,6 +1166,10 @@ def new_simulation(request, crnumber, s3_id):
         sim = Simulation.objects.filter(s3_id=s3_id).all()
     else:
         sim = None
+    if NewPreSimulation.objects.filter(s3_id=s3_id).exists():
+        presim = NewPreSimulation.objects.filter(s3_id=s3_id)
+    else:
+        presim = None
 
     # print(f"NEW-SIMULATION{request.POST}")
 
@@ -1268,7 +1280,7 @@ def new_simulation(request, crnumber, s3_id):
             print(form.errors)
     return render(request, 'patient_data/new_simulation.html', {'cp': cp, 's3_id': s3_id, 'sx': sx,
                                                                 'crnumber': crnumber, 'form': form,
-                                                                'sim': sim})
+                                                                'sim': sim, 'presim': presim})
 
 
 class RadiotherapyCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
