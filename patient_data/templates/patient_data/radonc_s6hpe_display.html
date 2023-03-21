@@ -17,8 +17,8 @@
                 </div>
                 {% for content in data %}
                     <div>
-                        <h5>Diagnosis: {{content.s6hpe_dx_id.icd_topo}}</h5>
-                        <h6>Unit: {{ content.sx_idhpe.sxunit }}, Surgery Date: {{ content.sx_idhpe.dischargedate|date:"F d, Y" }}</h6>
+                        <h5>Diagnosis: {{content.s6_id.s3_id.s2_id.icd_topo_code}} ({{content.s6_id.s3_id.s2_id.dx_type}})</h5>
+                        <h6>Unit: {{ content.s6_id.sxunit }}, Surgery Date: {{ content.s6_id.sxdate|date:"F d, Y" }}</h6>
                         <h6>HPE No: {{ content.hpeno }}</h6>
                         <div>
                             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-hpe-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
