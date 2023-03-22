@@ -503,6 +503,7 @@ LAB_NAME = [('', ''),
             ]
 
 PROCEDURE_TYPE = [('', ''),
+                  ('Block/Slide Review', 'Block/Slide Review'),
                   ('FNAC', 'FNAC'),
                   ('Biopsy', 'Biopsy'),
                   ('CSF', 'CSF'),
@@ -511,6 +512,7 @@ PROCEDURE_TYPE = [('', ''),
                   ('Pap Smear', 'Pap Smear')]
 
 GUIDED_BY = [('', ''),
+             ('None', 'None'),
              ('CT', 'CT'),
              ('USG', 'USG'),
              ('MR', 'MR'),
@@ -557,7 +559,7 @@ LAB_TEST_NAME = [
     ("", ""),
     ("Hb", "Hb"),
     ("TLC", "Total Leukocyte Count"),
-    ("ANC", "Absolute Leukocyte Count"),
+    ("ANC", "Absolute Neutrophil Count"),
     ("ALC", "Absolute Lymphocyte Count"),
     ("AMC", "Absolute Monocyte Count"),
     ("AEC", "Absolute Eosinophil Count"),
@@ -631,6 +633,7 @@ LAB_TEST_UNITS = [
     ("A", "Absent"),
     ("Pos", "Positive"),
     ("N", "Negative"),
+    ('units/cumm', 'Units per cumm')
 ]
 
 DIBH_DAYS = [

@@ -494,6 +494,7 @@ class DiagnosisCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         crnumber = self.kwargs['crnumber']
 
         form.instance.user = current_user
+        print(form.errors)
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -510,10 +511,31 @@ class DiagnosisCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         context = super(DiagnosisCreateView, self).get_context_data(**kwargs)
         crnumber = self.kwargs['crnumber']
         self.request.session["crnumber"] = crnumber
+        if S2Diagnosis.objects.filter(parent_id=crnumber).exists():
+            primary_dx = S2Diagnosis.objects.filter(parent_id=crnumber).first()
+            context['form'].initial['laterality'] = primary_dx.laterality
+            context['form'].initial['diagnosis'] = primary_dx.diagnosis
+            context['form'].initial['icd_main_topo'] = primary_dx.icd_main_topo
+            context['form'].initial['icd_main_topo'] = primary_dx.icd_main_topo
+            context['form'].initial['icd_topo_code'] = primary_dx.icd_topo_code
+            context['form'].initial['icd_path_code'] = primary_dx.icd_path_code
+            context['form'].initial['c_t'] = primary_dx.c_t
+            context['form'].initial['c_n'] = primary_dx.c_n
+            context['form'].initial['c_m'] = primary_dx.c_m
+            context['form'].initial['c_stage_group'] = primary_dx.c_stage_group
+            context['form'].initial['c_ajcc_edition'] = primary_dx.c_ajcc_edition
+            context['form'].initial['p_t'] = primary_dx.p_t
+            context['form'].initial['p_n'] = primary_dx.p_n
+            context['form'].initial['p_m'] = primary_dx.p_m
+            context['form'].initial['p_stage_group'] = primary_dx.p_stage_group
+        else:
+            primary_dx = None
+        context['primary_dx'] = primary_dx
         patient = S1ParentMain.objects.get(crnumber=crnumber)
         context['patient'] = patient
         context['crnumber'] = crnumber
         context['form'].initial['parent_id'] = crnumber
+
         return context
 
     # def form_invalid(self, form):
@@ -580,7 +602,6 @@ class DiagnosisUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         # dx = patient.dx
         # diagnosis = OurDiagnosis.objects.filter(our_diagnosis=dx).first().pk
         # context['form'].initial['diagnosis'] = diagnosis
-
         context['updatecrn'] = updatecrn
         context['update'] = True
         context['patient'] = patient
@@ -645,6 +666,7 @@ class CareplanListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
         pk = self.kwargs["crnumber"]
         patient_mx = S1ParentMain.objects.get(crnumber=pk)
         oldpresim = False
+        context['patient_mx'] = patient_mx
         try:
             all_presim = patient_mx.newpresimulation_set.all()
             if all_presim:
@@ -2719,6 +2741,13 @@ class FUPUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         context = super(FUPUpdateView, self).get_context_data(**kwargs)
         pk = self.kwargs["pk"]
         patient = S8FUP.objects.get(pk=pk)
+        patient_hp = InvestigationsPath.objects.filter(s8_id=pk)
+        mol_path = []
+        for path in patient_hp:
+            if path.molecular_profile == "Yes":
+                mol_path.append(path)
+        context['mol_path_list'] = mol_path
+
         updatecrn = patient.parent_id.crnumber
         if patient.s2_id:
             diagnosis = True

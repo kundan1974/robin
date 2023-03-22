@@ -44,10 +44,9 @@
                             <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-chemotherapy-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">Chemo Details</a><!-- from Chemo move to Chemo List -->
                         {% endif %}
                         {% if ass_check %}
-                            {% for pat in data %}
-                                {% for pat_rt in data.0.rt_careplan_id.all %}
-                                    <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-ass-list' pat_rt.s4_id %}?next={{ request.path|urlencode }}">Assessment</a>
-                                {% endfor %}
+                            {% for pat_rt in patient_mx.s4rt_set.all %}
+                                    <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-ass-list' pat_rt.s4_id %}?next={{ request.path|urlencode }}">
+                                        Assessment {{ pat_rt.s3_id.s2_id.icd_topo_code }} {{ pat_rt.s3_id.s2_id.dx_type }}</a>
                             {% endfor %}
                         {% endif %}
                         {% if fu_check %}
@@ -90,30 +89,33 @@
 
             <div class="alert alert-info" style="margin-top: 10px;" role="alert">
                 {% if not rt_check %}
-                {% if not sim_check and presim_check %}
-                    <h6 class="text-sm-left text-dark p-1">For new Simulation details proceed via PreSimulation</h6>
-                {% elif not sim_check and not presim_check %}
-                    <h6 class="text-sm-left text-dark p-1">There are no simulation/presimulation details.
-                        For Left sided Breast cancer patient Please enter simulation via Presimulation
-                        module if DIBH Technique is planned.</h6>
-                    <h6 class="text-sm-left text-dark p-1">Once Simulation module is completed, you can proceed for RT Details</h6>
+                    {% if not sim_check and presim_check %}
+                        <h6 class="text-sm-left text-dark p-1">For new Simulation details proceed via PreSimulation</h6>
+                    {% elif not sim_check and not presim_check %}
+                        <h6 class="text-sm-left text-dark p-1">There are no simulation/presimulation details.
+                            For Left sided Breast cancer patient Please enter simulation via Presimulation
+                            module if DIBH Technique is planned.</h6>
+                        <h6 class="text-sm-left text-dark p-1">Once Simulation module is completed, you can proceed for RT Details</h6>
+                    {% else %}
+                        <h6 class="text-sm-left text-dark p-1">For RT details proceed via simulation details</h6>
+                    {% endif %}
                 {% else %}
-                    <h6 class="text-sm-left text-dark p-1">For RT details proceed via simulation details</h6>
+                    {% if not ass_check %}
+                        <h6 class="text-sm-left text-dark p-1">For RT assessment proceed via RT Details</h6>
+                    {% endif %}
                 {% endif %}
-            {% else %}
-                {% if not ass_check %}
-                    <h6 class="text-sm-left text-dark p-1">For RT assessment proceed via RT Details</h6>
-                {% endif %}
-            {% endif %}
 
-            {% if sx_check and not hpe_check %}
-                <h6 class="text-sm-left text-dark p-1">For new HPE details proceed via Sx Details</h6>
-            {% endif %}
+                {% if sx_check and not hpe_check %}
+                    <h6 class="text-sm-left text-dark p-1">For new HPE details proceed via Sx Details</h6>
+                {% endif %}
               </div>
                 {% for content in data %}
                     <div class="mt-3 lh-base">
                         <h5>Laterality: <span style="font-weight: lighter; color: rgb(84, 82, 82);">{{ content.s2_id.laterality }}</span></h5>
-                        <h5>Site(Main Site): <span style="font-weight: lighter; color: rgb(84, 82, 82);">{{ content.s2_id.icd_main_topo }}</span></h5>
+                        <h5>Site(Main Site):
+                            <span style="font-weight: lighter; color: rgb(84, 82, 82);">{{ content.s2_id.icd_main_topo }}</span>
+                            <span style="font-weight: lighter; color: rgb(217,47,47);"><b>Status</b>:{{ content.s2_id.dx_type }}</span>
+                        </h5>
                         <h5>SubSite: <span style="font-weight: lighter; color: rgb(84, 82, 82);">{{ content.s2_id.icd_topo_code }}</span></h5>
                         <h5>Histopathology: <span style="font-weight: lighter; color: rgb(84, 82, 82);">{{ content.s2_id.icd_path_code }}</span></h5>
                         <!-- <h4 class=""><span class="text-dark">Laterality: </span>{{ content.s2_id.laterality }}</h4>

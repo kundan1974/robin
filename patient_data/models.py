@@ -437,6 +437,12 @@ class S2Diagnosis(models.Model):
     c_n = models.ForeignKey(ClinN, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
     c_m = models.ForeignKey(ClinM, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
     c_stage_group = models.ForeignKey(StageGroup, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
+
+    p_t = models.ForeignKey(ClinT, null=True, blank=True, on_delete=models.DO_NOTHING, related_name="path_t")  # FK
+    p_n = models.ForeignKey(ClinN, null=True, blank=True, on_delete=models.DO_NOTHING, related_name="path_n")  # FK
+    p_m = models.ForeignKey(ClinM, null=True, blank=True, on_delete=models.DO_NOTHING, related_name="path_m")  # FK
+    p_stage_group = models.ForeignKey(StageGroup, null=True, blank=True, on_delete=models.DO_NOTHING, related_name="path_stage_group")  # FK
+
     c_ajcc_edition = models.ForeignKey(AjccEdition, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
     er = models.CharField(max_length=45, blank=True, null=True)
     pr = models.CharField(max_length=45, blank=True, null=True)
@@ -674,7 +680,7 @@ class S4RT(models.Model):
     s2_id = models.ForeignKey(S2Diagnosis, models.CASCADE, blank=False, null=True,
                               db_column='s2_id', to_field='s2_id', related_name="rt_diagnosis_id")
     s3_id = models.ForeignKey(S3CarePlan, models.CASCADE, blank=False, null=True,
-                              db_column="s3_id", to_field="s3_id", related_name="rt_careplan_id")
+                              db_column="s3_id", to_field="s3_id", related_name="s4rt")
 
     simid = models.ForeignKey(Simulation, models.RESTRICT, blank=False, unique=False, db_column='simid', null=True, )
     # rtcourse = models.CharField(max_length=40, blank=False, null=False)

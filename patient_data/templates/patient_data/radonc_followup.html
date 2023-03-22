@@ -217,7 +217,7 @@
                                 </h2>
                                 <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive" data-bs-parent="#accordionFlushImgMolProfile">
                                     <div class="accordion-body">
-                                         {% if patient.investigationspath_set.first.investigationsmolecular_set.all %}
+                                         {% if mol_path_list %}
                                             <table class="styled-table m-1">
                                         <thead>
                                         <tr>
@@ -228,7 +228,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for content in patient.investigationspath_set.all %}
+                                        {% for content in mol_path_list %}
                                             {% for mol_content in content.investigationsmolecular_set.all %}
                                                 <tr>
                                                     <td>{{ content.biopsy_date }}: {{ mol_content.mol_type }}</td>
