@@ -19,9 +19,13 @@ def careplanUpdate(sender, instance, created, **kwargs):
         patient_mx.enddate = instance.visitdate
         patient_mx.save()
     else:
-        patient_mx = S3CarePlan.objects.get(pk=instance.s3_id.s3_id)
-        patient_mx.enddate = None
-        patient_mx.save()
+        if S3CarePlan.objects.filter(parent_id=instance.parent_id):
+            patient_mx = S3CarePlan.objects.get(pk=instance.s3_id.s3_id)
+            patient_mx.enddate = None
+            patient_mx.save()
+        else:
+            print("No Careplan")
+            pass
 
 
 post_save.connect(simulationUpdate, sender=S7Assessment)
