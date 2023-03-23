@@ -3841,7 +3841,10 @@ def summary(request, crnumber):
                 hptype = f"{hp[0].icd_path_code.hpe.split(',')[0]}"
             except:
                 hptype = None
-            grade = f"{hp[0].hpegrade.code}"
+            try:
+                grade = f"{hp[0].hpegrade.code}"
+            except:
+                grade = None
             nodes_p = f"{hp[0].nodesp}"
             nodes_r = f"{hp[0].nodesr}"
             pt = f"{hp[0].pt_id}"
