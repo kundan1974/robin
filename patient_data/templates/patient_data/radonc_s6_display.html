@@ -21,7 +21,8 @@
                         <h5>Diagnosis: {{content.s3_id.s2_id.icd_topo_code}} ({{ content.s3_id.s2_id.icd_path_code }})</h5>
                         <h6>Unit: {{ content.sxunit }}, Admission Date: {{ content.admissiondate|date:"F d, Y" }} Discharge Date: {{ content.dischargedate|date:"F d, Y" }}</h6>
                         <h6>Surgery Date: {{ content.sxdate|date:"F d, Y" }}</h6>
-                        <div>
+                        {% if not content.s3_id.enddate %}
+                            <div>
                             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-surgery-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
                             {% if content.s6_id in hpeids %}
                                  <a class="btn btn-success btn-sm mt-1 mb-1" href="{% url 'radonc-hpe-update' content.s6hpe_set.all.0.pk %}?next={{ request.path|urlencode }}">UpdateHPE</a>
@@ -31,6 +32,9 @@
 
                             <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
                         </div>
+                        {% else %}
+                            <h6 class="red-highlight p-3 box-redius box-shadow text-light">This treatment course is closed</h6>
+                        {% endif %}
                         {% for surgery in content.sxtype.all %}
                         <small class="text-dark"><b>Surgery Type: </b>: {{ surgery.surgery }}</small><br>
                         {% endfor %}

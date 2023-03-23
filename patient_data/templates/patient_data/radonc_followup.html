@@ -179,29 +179,29 @@
                                     <a class="btn btn-sm btn-dark text-light m-2" href="{% url 'inv-lab2' patient.parent_id.crnumber patient.s8_id %}?next={{ request.path|urlencode }}">Add New</a>
                                         {% if patient.investigationslabs_set.all %}
                                             <table class="styled-table m-1">
-                                        <thead>
-                                        <tr>
-                                        <th>Date</th>
-                                        <th>Test Name</th>
-                                        <th>Result</th>
-                                        <th>Action</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for content in patient.investigationslabs_set.all %}
-                                        <tr>
-                                        <td>{{ content.test_date|date:"d/m/y" }}</td>
-                                        <td>{{ content.test_name }}</td>
-                                        <td>{{ content.test_result }} {{ content.test_unit }}</td>
-                                        <td>
-                                        <a class="btn btn-sm btn-warning" href="{% url 'inv-lab-update' content.pk %}?next={{ request.path|urlencode }}">E</a>
-                                        <a class="btn btn-sm btn-danger" href="{% url 'inv-lab-delete' content.pk %}">X</a>
-                                        </td>
-                                        </tr>
-                                        {% endfor  %}
-                                        <!-- and so on... -->
-                                        </tbody>
-                                        </table>
+                                                <thead>
+                                                <tr>
+                                                <th>Date</th>
+                                                <th>Test Name</th>
+                                                <th>Result</th>
+                                                <th>Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for content in patient.investigationslabs_set.all %}
+                                                <tr>
+                                                <td>{{ content.test_date|date:"d/m/y" }}</td>
+                                                <td>{{ content.test_name }}</td>
+                                                <td>{{ content.test_result }} {{ content.test_unit }}</td>
+                                                <td>
+                                                <a class="btn btn-sm btn-warning" href="{% url 'inv-lab-update' content.pk %}?next={{ request.path|urlencode }}">E</a>
+                                                <a class="btn btn-sm btn-danger" href="{% url 'inv-lab-delete' content.pk %}">X</a>
+                                                </td>
+                                                </tr>
+                                                {% endfor  %}
+                                                <!-- and so on... -->
+                                                </tbody>
+                                            </table>
                                         {% endif %}
                                     </div>
                                 </div>

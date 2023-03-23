@@ -20,32 +20,58 @@
                             <h5><a  class="btn btn-dark" href="{% url 'radonc-radiotherapy-list' data.0.parent_id.crnumber %}">Back</a></h5>
                         {% endif %}
                     </div>
-                    <div class="col-auto">
-                        <h5><a  class="btn btn-dark" href="{% url 'radonc-ass' data.0.s4_id.s4_id %}?next={{ request.path|urlencode }}">New Assessment</a></h5>
-                    </div>
+{#                    <div class="col-auto">#}
+{#                        <h5><a  class="btn btn-dark" href="{% url 'radonc-ass' data.0.s4_id.s4_id %}?next={{ request.path|urlencode }}">New Assessment</a></h5>#}
+{#                    </div>#}
                 </div>
-                {% for content in data %}
-                    <article class="media content-section section-odd mt-3 mb-5">
-                       <div class="media-body">
-                            <div class="article-title">
-                                <h5>Diagnosis: {{content.s4_id.s2_id.icd_topo_code|upper}} ({{ content.s4_id.s2_id.icd_path_code }})</h5>
-                                <h6>Assessment Date: {{ content.as_date|date:"F d, Y" }}</h6>
-                                <h6>Treatment Status: {{ content.txstatus }}, Planned Dose: {{ content.s4_id.rtdose1 }} Gy / {{ content.s4_id.rtdosefr1 }} fractions</h6>
-                                <h6>Boost Planned:
-                                    {% if content.s4_id.rtdose2 %}
-                                        Yes, Boost Dose: {{ content.s4_id.rtdose2 }} Gy / {{ content.s4_id.rtdosefr2 }} fractions
-                                    {% else %}
-                                        No
-                                    {% endif %}
-                                </h6>
-                                <h6>Fractions Completed: {{ content.fxdone }}</h6>
-                                <div>
-                                    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-ass-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
-                                    <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
-                                </div>
+                <table class="styled-table m-1">
+                    <caption>
+                        <h6>Diagnosis: {{ data.0.s4_id.s2_id.icd_topo_code|upper}} ({{ data.0.s4_id.s2_id.icd_path_code }})</h6>
+                        {% if data.0.s4_id.s3_id.enddate %}
+                            <a class="btn btn-danger">Treatment Course is closed. Can not edit further</a>
+                        {% endif %}
+                        <h6 class="gradient-mini text-light box-shadow box-redius p-1 mt-2 text-dark">
+                            Diagnosis Status: {{ data.0.s4_id.s2_id.dx_type|upper}}
+                            Treatment Course: Start: {{ data.0.s4_id.s3_id.startdate|date:'d-m-Y' }}
+                            End:
+                            {% if data.0.s4_id.s3_id.enddate %}
+                                {{ data.0.s4_id.s3_id.enddate|date:'d-m-Y' }}
+                            {% else %}
+                                Treatment Course not closed
+                            {% endif %}
+                        </h6>
+                        <h6>Planned RT Details: {{ data.0.s4_id.rtdose1 }} Gy / {{ data.0.s4_id.rtdosefr1 }} fractions.
+                            <b>Boost?:
+                                {% if data.0.s4_id.rtdose2 %}
+                                    Yes, Boost Dose: {{ data.0.s4_id.rtdose2 }} Gy / {{ data.0.s4_id.rtdosefr2 }} fractions
+                                {% else %}
+                                    No
+                                {% endif %}
+                            </b>
+                        </h6>
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th>Assessment Date</th>
+                            <th>RT Status</th>
+                            <th>Fx Done</th>
+                            <th>Toxicity</th>
+                            <th>Prescription</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for content in data %}
+                            <tr>
+                            <td>{{ content.as_date|date:"F d, Y" }}</td>
+                            <td>{{ content.txstatus }}</td>
+                            <td>{{ content.fxdone }}</td>
+                            <td>
                                 {% for tox in  content.acutetoxicity_set.all %}
                                     <small class="text-muted"><b>{{ tox.tox_term }}: </b>: {{ tox.tox_grade }}</small><br>
                                 {% endfor %}
+                            </td>
+                            <td>
                                 {% for pres in  content.prescription_set.all %}
                                     <small class="text-muted"><b>
                                         {{ pres.symptoms_type }} -- {{ pres.symptoms }} for {{ pres.symp_duration }} days
@@ -54,11 +80,19 @@
                                         Prescription: -- {{ pres.drug_name }} {{ pres.dosage }} {{ pres.unit }} for {{ pres.duration }} days
                                     </b></small><br>
                                 {% endfor %}
-
-                            </div>
-                       </div>
-                    </article>
-                {% endfor %}
+                            </td>
+                            <td>
+                                {% if not content.s4_id.s3_id.enddate %}
+                                    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-ass-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
+                                    <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
+                                {% else %}
+                                    <a class="btn btn-sm btn-danger disabled">Closed</a>
+                                {% endif %}
+                            </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
         {# Right Space #}

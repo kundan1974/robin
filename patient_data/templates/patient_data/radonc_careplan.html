@@ -14,9 +14,14 @@
             <div class="form-row justify-content-left g-3">
                 {% if update %}
                     <h1 class="mb-3">Careplan Update Form</h1>
+                    <h3 class="mb-3">
+                        Name: {{ patient.parent_id.first_name }} {{ patient.parent_id.last_name }}
+                    ({{ patient.parent_id.crnumber }})
+                    </h3>
                     <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
                 {% else %}
                     <h1 class="mb-3">Careplan Form</h1>
+                    <h3 class="mb-3">Name: {{ patient.first_name }} {{ patient.last_name }}</h3>
                     {% if request.GET.next %}
                         <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
                     {% else %}
@@ -25,8 +30,93 @@
                     {% endwith %}
                     {% endif %}
                 {% endif %}
-                <h3 class="mb-3">Name: {{ patient.first_name }} {{ patient.last_name }}</h3>
-                <div class="form-control section-odd card mb-5">
+
+                {% if mx_end %}
+                    <p class="box-redius box-shadow red-highlight p-3 text-light">
+                        During Follow up this treatment plan was marked as closed, these limited fields can be edited</p>
+                    <div class="form-control section-odd card mb-5">
+                    <div class="row g-2 mt-2">
+                        <div class="col-md-3">
+                            {{ form.parent_id.errors }}
+                            <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CR Number:</label>
+                            {{ form.parent_id }}
+                        </div>
+                        <div class="col-md-9">
+                            {{ form.s2_id.errors }}
+{#                            <label class="oncflow-labels" for="{{ form.s2_id.id_for_label }}">S2_ID:</label>#}
+                            {{ form.s2_id }}
+                        </div>
+                        <div class="col-md-2 d-none">
+                            {{ form.startdate.errors }}
+                            <label class="oncflow-labels" for="{{ form.startdate.id_for_label }}">Mx(Start Date):</label>
+                            {{ form.startdate }}
+                        </div>
+                        <div class="col-md-8" style="background: #e8c6c6">
+                            {{ form.enddate.errors }}
+                            <label class="oncflow-labels" for="{{ form.enddate.id_for_label }}">
+                                Mx(End Date):<em class="text-danger">Can be edited if event occurred(death or recurrence) as per follow up module</em>
+                            </label>
+                            {{ form.enddate }}
+                        </div>
+                        <div class="col-md-2 d-none">
+                            {{ form.intent.errors }}
+                            <label class="oncflow-labels" for="{{ form.intent.id_for_label }}">Intent:</label>
+                            {{ form.intent }}
+                        </div>
+                        <div class="col-md-3 d-none">
+                            {{ form.radiotherapy.errors }}
+                            <label class="oncflow-labels" for="{{ form.radiotherapy.id_for_label }}">Radiotherapy:</label>
+                            {{ form.radiotherapy }}
+                        </div>
+                        <div class="col-md-3 d-none">
+                            {{ form.surgery.errors }}
+                            <label class="oncflow-labels" for="{{ form.surgery.id_for_label }}">Surgery:</label>
+                            {{ form.surgery }}
+                        </div>
+                        <div class="col-md-3 d-none">
+                            {{ form.chemotherapy.errors }}
+                            <label class="oncflow-labels" for="{{ form.chemotherapy.id_for_label }}">Chemo(Cytotoxic):</label>
+                            {{ form.chemotherapy }}
+                        </div>
+                        <div class="col-md-3 d-none">
+                            {{ form.genetherapy.errors }}
+                            <label class="oncflow-labels" for="{{ form.genetherapy.id_for_label }}">Chemo(Targeted):</label>
+                            {{ form.targettherapy }}
+                        </div>
+                        <div class="col-md-3 d-none">
+                            {{ form.brachytherapy.errors }}
+                            <label class="oncflow-labels" for="{{ form.brachytherapy.id_for_label }}">Brachytherapy:</label>
+                            {{ form.brachytherapy }}
+                        </div>
+                        <div class="col-md-3 d-none">
+                            {{ form.hormone.errors }}
+                            <label class="oncflow-labels" for="{{ form.hormone.id_for_label }}">Hormone:</label>
+                            {{ form.hormone }}
+                        </div>
+                        <div class="col-md-3 d-none">
+                            {{ form.immunotherapy.errors }}
+                            <label class="oncflow-labels" for="{{ form.immunotherapy.id_for_label }}">Immunotherapy:</label>
+                            {{ form.immunotherapy }}
+                        </div>
+                        <div class="col-md-3 d-none">
+                            {{ form.bmt.errors }}
+                            <label class="oncflow-labels" for="{{ form.bmt.id_for_label }}">BMT:</label>
+                            {{ form.bmt }}
+                        </div>
+                        <div class="col-md-12">
+                            {{ form.studyprotocol.errors }}
+                            <label class="oncflow-labels" for="{{ form.studyprotocol.id_for_label }}">StudyProtocol:</label>
+                            {{ form.studyprotocol }}
+                        </div>
+                        <div class="col-md-12 d-none">
+                            {{ form.notes.errors }}
+                            <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                            {{ form.notes }}
+                        </div>
+                    </div>
+            </div>
+                {% else %}
+                    <div class="form-control section-odd card mb-5">
                     <div class="row g-2 mt-2">
                         <div class="col-md-3">
                             {{ form.parent_id.errors }}
@@ -107,6 +197,8 @@
                         </div>
                     </div>
             </div>
+                {% endif %}
+
             <!-- Button Row -->
             {% if update %}
                 <div class="row g-1">

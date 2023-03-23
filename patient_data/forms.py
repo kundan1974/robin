@@ -683,7 +683,8 @@ class S7AssessmentForm(ModelForm):
             'intervention2': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
             'intervention3': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
             'intervention4': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
-            'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 10})
+            'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 10}),
+            'updated_by': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
 

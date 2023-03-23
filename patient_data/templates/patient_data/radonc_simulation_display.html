@@ -24,28 +24,45 @@
                        <div class="media-body">
                             <div class="article-title">
                                 <h4>{{ content.site }}</h4>
-                                <div>
-                                    <a class="btn btn-dark" href="{% url 'radonc-simulation-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
-                                    {% if content.pk in rt_simids %}
-                                        {% for i, value in rt_id.items %}
-                                            {% if i == content.pk %}
-                                                <a class="btn btn-success" href="{% url 'radonc-radiotherapy-update' value %}?next={{ request.path|urlencode }}">Update RT Details</a>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% else %}
-                                        <a class="btn btn-primary" href="{% url 'radonc-radiotherapy' content.simparent.crnumber content.simid %}">New RT Details</a>
-                                    {% endif %}
-                                    <a class="btn btn-danger" href="#">Delete</a>
-                                </div>
-                                <small class="text-bold"><b>SimID: </b>: {{ content.simid }}</small><br>
-                                <small class="text-bold"><b>Simulation Date: </b>: {{ content.simdate|date:"F d, Y" }}</small><br>
-                                <small class="text-bold"><b>Implementation Date: </b>: {{ content.impdate|date:"F d, Y" }}</small><br>
-                                <small class="text-bold"><b>Status: </b>: {{ content.initialstatus }}</small><br>
-                                <small class="text-bold"><b>Technique:</b>: {{ content.technique }}</small><br>
-                                <small class="text-bold"><b>RT Prescription: </b>: Total Dose: {{ content.totaldose }} Gy in {{ content.totalfractions }} fractions</small><br>
-                                <small class="text-bold"><b>Tentative Completion Date :</b>: {{ content.tentativecompletiondate|date:"F d, Y" }}</small><br>
-                                <small class="text-bold"><b>Notes:</b>: {{ content.remarks }}</small><br>
-                                <small class="text-bold"><b>Assigned to:</b>: {{ content.assignedto }}</small>
+                                {% if not content.s3_id.enddate %}
+                                    <div>
+                                        <a class="btn btn-dark" href="{% url 'radonc-simulation-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
+                                        {% if content.pk in rt_simids %}
+                                            {% for i, value in rt_id.items %}
+                                                {% if i == content.pk %}
+                                                    <a class="btn btn-success" href="{% url 'radonc-radiotherapy-update' value %}?next={{ request.path|urlencode }}">Update RT Details</a>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            <a class="btn btn-primary" href="{% url 'radonc-radiotherapy' content.simparent.crnumber content.simid %}">New RT Details</a>
+                                        {% endif %}
+                                        <a class="btn btn-danger" href="#">Delete</a>
+                                    </div>
+                                {% else %}
+                                    <div>
+                                        <h6 class="red-highlight p-3 box-redius box-shadow text-light">This treatment course is closed</h6>
+                                        <a class="btn btn-dark disabled" href="#">Update</a>
+                                        {% if content.pk in rt_simids %}
+                                            {% for i, value in rt_id.items %}
+                                                {% if i == content.pk %}
+                                                    <a class="btn btn-success disabled" href="#">Update RT Details</a>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            <a class="btn btn-primary disabled" href="#">New RT Details</a>
+                                        {% endif %}
+                                        <a class="btn btn-danger disabled" href="#">Delete</a>
+                                    </div>
+                                {% endif %}
+                                    <small class="text-bold"><b>SimID: </b>: {{ content.simid }}</small><br>
+                                    <small class="text-bold"><b>Simulation Date: </b>: {{ content.simdate|date:"F d, Y" }}</small><br>
+                                    <small class="text-bold"><b>Implementation Date: </b>: {{ content.impdate|date:"F d, Y" }}</small><br>
+                                    <small class="text-bold"><b>Status: </b>: {{ content.initialstatus }}</small><br>
+                                    <small class="text-bold"><b>Technique:</b>: {{ content.technique }}</small><br>
+                                    <small class="text-bold"><b>RT Prescription: </b>: Total Dose: {{ content.totaldose }} Gy in {{ content.totalfractions }} fractions</small><br>
+                                    <small class="text-bold"><b>Tentative Completion Date :</b>: {{ content.tentativecompletiondate|date:"F d, Y" }}</small><br>
+                                    <small class="text-bold"><b>Notes:</b>: {{ content.remarks }}</small><br>
+                                    <small class="text-bold"><b>Assigned to:</b>: {{ content.assignedto }}</small>
                             </div>
                        </div>
                     </article>

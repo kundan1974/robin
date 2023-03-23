@@ -638,7 +638,8 @@ class CareplanCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             def __init__(self, *args, **kwargs):
                 super(CareplanForm, self).__init__(*args, **kwargs)
                 # self.fields['s3_dx_id'].queryset = S2Diagnosis.objects.filter(parent_id=111111)
-                self.fields['enddate'].widget.attrs['readonly'] = True
+                self.fields['parent_id'].widget.attrs['disabled'] = True
+                self.fields['enddate'].widget.attrs['disabled'] = True
 
         form = CareplanForm()
         context['form'] = form
@@ -667,6 +668,8 @@ class CareplanListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
         patient_mx = S1ParentMain.objects.get(crnumber=pk)
         oldpresim = False
         context['patient_mx'] = patient_mx
+
+        context['mx_end'] = True
         try:
             all_presim = patient_mx.newpresimulation_set.all()
             if all_presim:
@@ -766,6 +769,8 @@ class CarePlanUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         # form.instance.updated_by = current_user.username
         form.instance.user_id = patient.user_id
         return super().form_valid(form)
+    # def form_invalid(self, form):
+    #     print(form.errors)
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -794,10 +799,32 @@ class CarePlanUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         except:
             readonly_status = True
 
+        class CareplanForm(S3CarePlanForm):
+            def __init__(self, *args, **kwargs):
+                super(CareplanForm, self).__init__(*args, **kwargs)
+                self.fields['parent_id'].widget.attrs['readonly'] = True
+                if patient.enddate:
+                    self.fields['enddate'].widget.attrs['readonly'] = False
+                    self.fields['startdate'].widget.attrs['readonly'] = True
+                    # self.fields['intent'].widget.attrs['hidden'] = True
+                    # self.fields['radiotherapy'].widget.attrs['hidden'] = True
+                    # self.fields['surgery'].widget.attrs['disabled'] = True
+                    # self.fields['chemotherapy'].widget.attrs['disabled'] = True
+                    # self.fields['brachytherapy'].widget.attrs['disabled'] = True
+                    # self.fields['hormone'].widget.attrs['disabled'] = True
+                    # self.fields['immunotherapy'].widget.attrs['disabled'] = True
+                    # self.fields['bmt'].widget.attrs['disabled'] = True
+                    # self.fields['targettherapy'].widget.attrs['disabled'] = True
+                    # self.fields['studyprotocol'].widget.attrs['disabled'] = True
+                    self.fields['notes'].widget.attrs['readonly'] = True
+                    context['mx_end'] = True
+        form = CareplanForm(instance=context['data'])
         context['updatecrn'] = updatecrn
         context['update'] = True
         context['patient'] = patient
-        context['form'].fields['enddate'].widget.attrs['readonly'] = readonly_status
+        context['form'] = form
+        print(context['data'])
+
         return context
 
 
@@ -2060,12 +2087,12 @@ class AssUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         pk = self.kwargs["pk"]
         patient = S7Assessment.objects.get(pk=pk)
         # patient = PatientDiagnosis.objects.get(pk=pk)
-        patient.updated_by = self.request.user.username
-        patient.save()
-        sim_details = Simulation.objects.get(pk=patient.s4_id.simid.simid)
-        sim_details.donefr = self.request.POST['fxdone']
-        sim_details.as_date = self.request.POST['as_date']
-        sim_details.save()
+        # patient.updated_by = self.request.user.username
+        # patient.save()
+        # sim_details = Simulation.objects.get(pk=patient.s4_id.simid.simid)
+        # sim_details.donefr = self.request.POST['fxdone']
+        # sim_details.as_date = self.request.POST['as_date']
+        # sim_details.save()
         return reverse_lazy("radonc-ass-list", kwargs={"s4_id": patient.s4_id.s4_id})
 
     def get_context_data(self, **kwargs):
@@ -2078,6 +2105,7 @@ class AssUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         rt_choices = [(patient.s4_id.s4_id, patient.s4_id.s4_id)]
 
         context['form'].fields['s4_id'].choices = rt_choices
+        context['form'].initial['updated_by'] = self.request.user.username
         context['updatecrn'] = updatecrn
         context['update'] = True
         context['patient'] = patient

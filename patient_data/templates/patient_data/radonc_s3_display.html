@@ -20,6 +20,7 @@
                         <h5><a  class="btn btn-dark" href="{% url 'db_operations' %}">Back</a></h5>
                     {% endif %}
 
+
                         {% if presim_check %}
                             <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-newpresimulation-list' data.0.parent_id.crnumber  %}?mx_display_crnumber={{ data.0.parent_id.crnumber }}">PreSimulation</a><!-- from simulation move to simulation list and then to RT -->
                         {% else %}
@@ -123,7 +124,9 @@
                         <h4 class=""><span class="text-dark">SubSite: </span>{{ content.s2_id.icd_topo_code }}</h4>
                         <h4 class=""><span class="text-dark">Histopathology: </span>{{ content.s2_id.icd_path_code }}</h4> -->
                         <div>
-                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-careplan-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
+                            {% if not content.enddate %}
+                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-careplan-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
+
 {#                            {% if content.s2_id.icd_main_topo.site == 'Breast' and content.s2_id.laterality == "Left" %}#}
 {#                                {% if presim_check %}#}
 {#                                    {% if oldpresim %}#}
@@ -139,12 +142,15 @@
 {#                            {% else %}#}
 {#                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-simulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Simulation</a>#}
 {#                            {% endif %}#}
-                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'new-simulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">Sim-RT Module</a>
-                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-surgery' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Sx</a>
-{#                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-chemotherapy' content.parent_id.crnumber content.s3_id %}">New Chemo</a>#}
-                            <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-fup1' content.parent_id.crnumber content.s2_id.s2_id content.s3_id %}?next={{ request.path|urlencode }}">Record New Visit</a></h5>
-                            <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-chemoprotocol' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">Record New Chemo-Protocol</a></h5>
-                            <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
+                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'new-simulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">Sim-RT Module</a>
+                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-surgery' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Sx</a>
+    {#                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-chemotherapy' content.parent_id.crnumber content.s3_id %}">New Chemo</a>#}
+                                <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-fup1' content.parent_id.crnumber content.s2_id.s2_id content.s3_id %}?next={{ request.path|urlencode }}">Record New Visit</a></h5>
+                                <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-chemoprotocol' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">Record New Chemo-Protocol</a></h5>
+                                <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
+                            {% else %}
+                                <h6 class="red-highlight p-3 box-redius box-shadow text-light">This treatment course is closed</h6>
+                            {% endif %}
                         </div>
                         <small class="text-muted"><b>Mx Start Date: </b>: {{ content.startdate|date:"F d, Y" }}</small><br>
                         <small class="text-muted"><b>Intent: </b>: {{ content.intent }}</small><br>

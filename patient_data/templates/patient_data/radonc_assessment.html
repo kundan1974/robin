@@ -500,8 +500,13 @@
                                 </div>
                                 <div class="col-md-12">
                                     {{ form.notes.errors }}
-                                    <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Clinical Notes):</label>
+                                    <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Clinical Notes:</label>
                                     {{ form.notes }}
+                                </div>
+                                <div class="col-md-12">
+                                    {{ form.updated_by.errors }}
+                                    <label class="oncflow-labels" for="{{ form.updated_by.id_for_label }}">Updated by:</label>
+                                    {{ form.updated_by }}
                                 </div>
                             </div>
                     </div>

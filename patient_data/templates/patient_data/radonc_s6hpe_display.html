@@ -20,10 +20,14 @@
                         <h5>Diagnosis: {{content.s6_id.s3_id.s2_id.icd_topo_code}} ({{content.s6_id.s3_id.s2_id.dx_type}})</h5>
                         <h6>Unit: {{ content.s6_id.sxunit }}, Surgery Date: {{ content.s6_id.sxdate|date:"F d, Y" }}</h6>
                         <h6>HPE No: {{ content.hpeno }}</h6>
-                        <div>
+                        {% if not content.s6_id.s3_id.enddate %}
+                            <div>
                             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'radonc-hpe-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
                             <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
                         </div>
+                        {% else %}
+                            <h6 class="red-highlight p-3 box-redius box-shadow text-light">This treatment course is closed</h6>
+                        {% endif %}
                         <small class="text-muted"><b>HPE Date: </b>: {{ content.hpedate|date:"F d, Y" }}</small><br>
                         <small class="text-muted"><b>HPE: </b>: {{ content.hpetype }} <b>Grade: </b>:{{ content.hpegrade }}</small><br>
                         <small class="text-muted"><b>AJCC TNM STAGE</b> <b>pT</b>:{{ content.pt }} <b>pN</b>:{{ content.pn }} <b>pM</b>:{{ content.pm }}</small><br>
