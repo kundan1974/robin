@@ -638,8 +638,8 @@ class CareplanCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             def __init__(self, *args, **kwargs):
                 super(CareplanForm, self).__init__(*args, **kwargs)
                 # self.fields['s3_dx_id'].queryset = S2Diagnosis.objects.filter(parent_id=111111)
-                self.fields['parent_id'].widget.attrs['disabled'] = True
-                self.fields['enddate'].widget.attrs['disabled'] = True
+                self.fields['parent_id'].widget.attrs['readonly'] = True
+                self.fields['enddate'].widget.attrs['readonly'] = True
 
         form = CareplanForm()
         context['form'] = form
