@@ -99,8 +99,16 @@ def get_df():
     # TODO create options for second phase
     # Creating a new dataframe by adding each row for other phases of rt plans
     data_list = []
-
+    users = {
+        1: "Dr Kundan S Chufal",
+        4: "Dr Irfan Ahmad",
+        5: "Arti Shukla",
+        6: "Dr Rahul",
+        7: "Dr Ismail",
+        10: "Preetha"
+    }
     for row in records_df1.itertuples(index=False):
+        assignedto = users.get(row.assignedto_id)
         if pd.isna(row.donefr):
             remaining_fr_total = row.totalfractions
             remaining_fr_ph1 = row.fxphase1
@@ -147,7 +155,7 @@ def get_df():
                      "RT Volumes": row.volumes_id,
                      "Intent": row.intent_id,
                      "Technique": row.technique_id,
-                     "Assigned to": row.assignedto_id,
+                     "Assigned to": assignedto,
                      "Phase1 Dose": row.dosephase1,
                      "Phase1 Fractions": row.fxphase1,
                      "Phase2 Dose": row.dosephase2,
