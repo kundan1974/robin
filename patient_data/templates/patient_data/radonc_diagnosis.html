@@ -161,129 +161,97 @@
                     {% else %}
                         <div class="row g-2 mt-2 mb-2 ml-2 p-2 section-even">
                     {% endif %}
-                    <div class="col-md-3">
-                        {{ form.dx_type.errors }}
-                        <label class="oncflow-labels" for="{{ form.dx_type.id_for_label }}">Dx Type(Status):</label>
-                        {{ form.dx_type }}
-                    </div>
-                    <div class="col-md-4">
-                        {{ form.confirmed_by.errors }}
-                        <label class="oncflow-labels" for="{{ form.confirmed_by.id_for_label }}">Diagnosis(Status Confirmed by):</label>
-                        {{ form.confirmed_by }}
-                    </div>
-                    <div class="col-md-4">
-                        {{ form.dx_date.errors }}
-                        <label class="oncflow-labels" for="{{ form.dx_date.id_for_label }}">Diagnosis(Status Date):</label>
-                        {{ form.dx_date }}
-                    </div>
-                    <div class="col-md-2">
-                        {{ form.biopsy_grade.errors }}
-                        <label class="oncflow-labels" for="{{ form.biopsy_grade.id_for_label }}">Biopsy(Grade):</label>
-                        {{ form.biopsy_grade }}
-                    </div>
-                    <div class="col-md-2">
-                        {{ form.biopsy_no.errors }}
-                        <label class="oncflow-labels" for="{{ form.biopsy_no.id_for_label }}">Biopsy No:</label>
-                        {{ form.biopsy_no }}
-                    </div>
-                    <div class="col-md-2">
-                        {{ form.biopsy_date.errors }}
-                        <label class="oncflow-labels" for="{{ form.biopsy_date.id_for_label }}">Biopsy(Date):</label>
-                        {{ form.biopsy_date }}
-                    </div>
-                    <div class="col-md-6">
-                        {{ form.biopsy.errors }}
-                        <label class="oncflow-labels" for="{{ form.biopsy.id_for_label }}">Biopsy(Additional Comments):</label>
-                        {{ form.biopsy }}
-                    </div>
-                    {% if not update %}
-                        <div class="col-md-2">
-                            {{ form.laterality.errors }}
-                            <label class="oncflow-labels" for="{{ form.laterality.id_for_label }}">Laterality:</label>
-                            {{ form.laterality }}
-                        </div>
-                        <div class="col-md-2">
-                            {{ form.diagnosis.errors }}
-                            <label class="oncflow-labels" for="{{ form.diagnosis.id_for_label }}">Primary Diagnosis:</label>
-                            {{ form.diagnosis }}
-                        </div>
-                        <div class="col-md-2">
-                            {{ form.icd_main_topo.errors }}
-                            <label class="oncflow-labels" for="{{ form.icd_main_topo.id_for_label }}">ICD(Main Site):</label>
-                            {{ form.icd_main_topo }}
-                        </div>
                         <div class="col-md-3">
-                            {{ form.icd_topo_code.errors }}
-                            <label class="oncflow-labels" for="{{ form.icd_topo_code.id_for_label }}">ICD(Site Details):</label>
-                            {{ form.icd_topo_code }}
+                            {{ form.dx_type.errors }}
+                            <label class="oncflow-labels" for="{{ form.dx_type.id_for_label }}">Dx Type(Status):</label>
+                            {{ form.dx_type }}
                         </div>
-                        <div class="col-md-3">
-                            {{ form.icd_path_code.errors }}
-                            <label class="oncflow-labels" for="{{ form.icd_path_code.id_for_label }}">ICD(Patho):</label>
-                            {{ form.icd_path_code }}
-                        </div><br>
-                    {% endif %}
+                        <div class="col-md-4">
+                            {{ form.confirmed_by.errors }}
+                            <label class="oncflow-labels" for="{{ form.confirmed_by.id_for_label }}">Diagnosis(Status Confirmed by):</label>
+                            {{ form.confirmed_by }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form.dx_date.errors }}
+                            <label class="oncflow-labels" for="{{ form.dx_date.id_for_label }}">Diagnosis(Status Date):</label>
+                            {{ form.dx_date }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form.biopsy_grade.errors }}
+                            <label class="oncflow-labels" for="{{ form.biopsy_grade.id_for_label }}">Biopsy(Grade):</label>
+                            {{ form.biopsy_grade }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form.biopsy_no.errors }}
+                            <label class="oncflow-labels" for="{{ form.biopsy_no.id_for_label }}">Biopsy No:</label>
+                            {{ form.biopsy_no }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form.biopsy_date.errors }}
+                            <label class="oncflow-labels" for="{{ form.biopsy_date.id_for_label }}">Biopsy(Date):</label>
+                            {{ form.biopsy_date }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.biopsy.errors }}
+                            <label class="oncflow-labels" for="{{ form.biopsy.id_for_label }}">Biopsy(Additional Comments):</label>
+                            {{ form.biopsy }}
+                        </div>
+                            {% if primary_dx %}
+                                <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Stage for changed Diagnosis Status/New Primary
+                                    <span class="badge text-sm">Shown is primary stage of patient - please edit accordingly</span>
+                                </h4>
+                                <h5 class="mt-3">Clinical Stage</h5><hr>
+                                <div class="col-md-2">
+                                    {{ form.c_t.errors }}
+                                    <label class="oncflow-labels" for="{{ form.c_t.id_for_label }}">cT:</label>
+                                    {{ form.c_t }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.c_n.errors }}
+                                    <label class="oncflow-labels" for="{{ form.c_n.id_for_label }}">cN:</label>
+                                    {{ form.c_n }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.c_m.errors }}
+                                    <label class="oncflow-labels" for="{{ form.c_m.id_for_label }}">cM:</label>
+                                    {{ form.c_m }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.c_stage_group.errors }}
+                                    <label class="oncflow-labels" for="{{ form.c_stage_group.id_for_label }}">Stage Group:</label>
+                                    {{ form.c_stage_group }}
+                                </div><br>
 
-                        {% if primary_dx %}
-                            <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Stage for changed Diagnosis Status/New Primary
-                                <span class="badge text-sm">Shown is primary stage of patient - please edit accordingly</span>
-                            </h4>
-                            <h5 class="mt-3">Clinical Stage</h5><hr>
-                            <div class="col-md-2">
-                                {{ form.c_t.errors }}
-                                <label class="oncflow-labels" for="{{ form.c_t.id_for_label }}">cT:</label>
-                                {{ form.c_t }}
-                            </div>
-                            <div class="col-md-2">
-                                {{ form.c_n.errors }}
-                                <label class="oncflow-labels" for="{{ form.c_n.id_for_label }}">cN:</label>
-                                {{ form.c_n }}
-                            </div>
-                            <div class="col-md-2">
-                                {{ form.c_m.errors }}
-                                <label class="oncflow-labels" for="{{ form.c_m.id_for_label }}">cM:</label>
-                                {{ form.c_m }}
-                            </div>
-                            <div class="col-md-3">
-                                {{ form.c_stage_group.errors }}
-                                <label class="oncflow-labels" for="{{ form.c_stage_group.id_for_label }}">Stage Group:</label>
-                                {{ form.c_stage_group }}
-                            </div><br>
-
-                            <h5 class="mt-3">Pathological Stage(If applicable)</h5><hr>
-                            <div class="col-md-2">
-                                {{ form.p_t.errors }}
-                                <label class="oncflow-labels" for="{{ form.p_t.id_for_label }}">pT:</label>
-                                {{ form.p_t }}
-                            </div>
-                            <div class="col-md-2">
-                                {{ form.p_n.errors }}
-                                <label class="oncflow-labels" for="{{ form.p_n.id_for_label }}">pN:</label>
-                                {{ form.p_n }}
-                            </div>
-                            <div class="col-md-2">
-                                {{ form.p_m.errors }}
-                                <label class="oncflow-labels" for="{{ form.p_m.id_for_label }}">pM:</label>
-                                {{ form.p_m }}
-                            </div>
-                            <div class="col-md-3">
-                                {{ form.p_stage_group.errors }}
-                                <label class="oncflow-labels" for="{{ form.p_stage_group.id_for_label }}">pStage Group:</label>
-                                {{ form.p_stage_group }}
-                            </div>
-                            <div class="col-md-3"></div><hr>
-                            <div class="col-md-3 mb-3 mt-3">
-                                {{ form.c_ajcc_edition.errors }}
-                                <label class="oncflow-labels" for="{{ form.c_ajcc_edition.id_for_label }}">Ajcc Edition:</label>
-                                {{ form.c_ajcc_edition }}
-                            </div>
-                        {% endif %}
-
+                                <h5 class="mt-3">Pathological Stage(If applicable)</h5><hr>
+                                <div class="col-md-2">
+                                    {{ form.p_t.errors }}
+                                    <label class="oncflow-labels" for="{{ form.p_t.id_for_label }}">pT:</label>
+                                    {{ form.p_t }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.p_n.errors }}
+                                    <label class="oncflow-labels" for="{{ form.p_n.id_for_label }}">pN:</label>
+                                    {{ form.p_n }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.p_m.errors }}
+                                    <label class="oncflow-labels" for="{{ form.p_m.id_for_label }}">pM:</label>
+                                    {{ form.p_m }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.p_stage_group.errors }}
+                                    <label class="oncflow-labels" for="{{ form.p_stage_group.id_for_label }}">pStage Group:</label>
+                                    {{ form.p_stage_group }}
+                                </div>
+                                <div class="col-md-3"></div><hr>
+                                <div class="col-md-3 mb-3 mt-3">
+                                    {{ form.c_ajcc_edition.errors }}
+                                    <label class="oncflow-labels" for="{{ form.c_ajcc_edition.id_for_label }}">Ajcc Edition:</label>
+                                    {{ form.c_ajcc_edition }}
+                                </div>
+                            {% endif %}
                     </div>
 
-                    <div class="row g-2 mt-2 mb-2 section-odd">
-
-                    </div>
                     <div class="row g-2 mt-2">
                         <div class="col-md-2 mb-3">
                             {{ form.er.errors }}
