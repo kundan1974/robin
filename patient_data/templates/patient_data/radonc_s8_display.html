@@ -26,10 +26,10 @@
                 {% endif %}
                 </div>
                 <div>
-                    {% if content.parent_id.s2diagnosis_set.all %}
+                    {% if content.s2_id or content.s3_id %}
                         <h5>Diagnosis: {{content.s2_id.icd_topo_code|upper}}({{ content.s2_id.icd_path_code }})</h5>
                     {% else %}
-                        <h5>Diagnosis: No Diagnosis established yet</h5>
+                        <h5>Diagnosis: Visit prior to establishing diagnosis/careplan</h5>
                     {% endif %}
                     <h6>Follow up Date: {{ content.visitdate|date:"F d, Y" }}</h6>
                     <h6>Follow up type: {% for type in content.visittype.all %}{{ type }}, {% endfor %}</h6>

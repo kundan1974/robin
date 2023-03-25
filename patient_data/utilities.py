@@ -1,4 +1,5 @@
-from patient_data.models import S1ParentMain, S3CarePlan, PreSimulation, Simulation, S2Diagnosis, S8FUP
+from patient_data.models import S1ParentMain, S3CarePlan, PreSimulation, Simulation, S2Diagnosis, S8FUP, S4RT, \
+    S5ChemoProtocol, S6Surgery
 
 
 def db_homestatus(crnumber=None):
@@ -83,3 +84,50 @@ def db_homestatus(crnumber=None):
     status = {'fu': fu, 'res': res, 'presim': presim, 'sim': sim, 'dx': dx, 'mx': mx, 'rt': rt,
               'pft': pft, 'cm': cm, 'presimdetails': presimdetails, 'crnumber': crnumber}
     return status
+
+
+def get_timeline(crnumber):
+    if S1ParentMain.objects.filter(crnumber=crnumber).exists():
+        regdetails = S1ParentMain.objects.filter(crnumber=crnumber).last()
+        reg_date = regdetails.reg_date
+    else:
+        reg_date = None
+    if S2Diagnosis.objects.filter(parent_id=crnumber).exists():
+        dxdetails = S2Diagnosis.objects.filter(parent_id=crnumber).all()
+        dxinfo = []
+        for dx in dxdetails:
+            if dx.icd_main_topo:
+                main_topo = dx.icd_main_topo.site
+            else:
+                main_topo = None
+            if dx.dx_type:
+                dx_type = dx.dx_type.type
+            else:
+                dx_type = None
+            if dx.icd_path_code:
+                path_code = dx.icd_path_code.hpe
+            else:
+                path_code = None
+            dxinfo.append((dx.dx_date.date(), main_topo, dx_type, path_code))
+    else:
+        dxinfo = None
+
+    if S3CarePlan.objects.filter(parent_id=crnumber).exists():
+        mxdetails = S3CarePlan.objects.filter(parent_id=crnumber).all()
+        mxinfo = []
+        for mx in mxdetails:
+            mxinfo.append((mx.startdate, mx.enddate, mx.surgery, mx.radiotherapy, mx.chemotherapy, mx.targettherapy,
+                           mx.hormone, mx.immunotherapy))
+    else:
+        mxinfo = None
+    if S4RT.objects.filter(parent_id=crnumber).exists():
+        rtdetails = S4RT.objects.filter(parent_id=crnumber).all()
+    if S5ChemoProtocol.objects.filter(parent_id=crnumber):
+        chemodetails = S5ChemoProtocol.objects.filter(parent_id=crnumber).all()
+    if S6Surgery.objects.filter(parent_id=crnumber):
+        sxdetails = S6Surgery.objects.filter(parent_id=crnumber).all()
+    if S8FUP.objects.filter(parent_id=crnumber).all():
+        fupdetails = S6Surgery.objects.filter(parent_id=crnumber).all()
+
+    return reg_date, dxinfo, mxinfo
+

@@ -19,7 +19,7 @@
                     {% endif %}
                     <h4 class="mb-3">Name: {{ patient.parent_id.first_name }} {{ patient.parent_id.last_name }} ID: {{ patient.parent_id.crnumber }}</h4>
                 {% else %}
-                    <h1 class="mb-3">Diagnosis-Status Form</h1>
+                    <h1 class="mb-3">New Diagnosis-Status Form</h1>
                     <hr>
                     {% if request.session.crnumber %}
                     <h5><a class="btn btn-dark" href="{% url 'db_operations' request.session.crnumber %}">Back</a></h5>
@@ -198,8 +198,34 @@
                         </div>
                             {% if primary_dx %}
                                 <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Stage for changed Diagnosis Status/New Primary
-                                    <span class="badge text-sm">Shown is primary stage of patient - please edit accordingly</span>
+                                    <span class="badge text-sm">Shown is primary stage of patient - if needed please edit accordingly</span>
                                 </h4>
+                                <div class="col-md-2">
+                                    {{ form.diagnosis.errors }}
+                                    <label class="oncflow-labels" for="{{ form.diagnosis.id_for_label }}">Primary Diagnosis:</label>
+                                    {{ form.diagnosis }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.laterality.errors }}
+                                    <label class="oncflow-labels" for="{{ form.laterality.id_for_label }}">Laterality:</label>
+                                    {{ form.laterality }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.icd_main_topo.errors }}
+                                    <label class="oncflow-labels" for="{{ form.icd_main_topo.id_for_label }}">ICD(Main Site):</label>
+                                    {{ form.icd_main_topo }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.icd_topo_code.errors }}
+                                    <label class="oncflow-labels" for="{{ form.icd_topo_code.id_for_label }}">ICD(Site Details):</label>
+                                    {{ form.icd_topo_code }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.icd_path_code.errors }}
+                                    <label class="oncflow-labels" for="{{ form.icd_path_code.id_for_label }}">ICD(Patho):</label>
+                                    {{ form.icd_path_code }}
+                                </div><br>
+
                                 <h5 class="mt-3">Clinical Stage</h5><hr>
                                 <div class="col-md-2">
                                     {{ form.c_t.errors }}

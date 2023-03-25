@@ -27,7 +27,7 @@ from .forms import (S1PatientRegForm, PreSimulationForm, S2DiagnosisForm, S3Care
 from django.utils import timezone
 from django.contrib import messages
 import pandas as pd
-from .utilities import db_homestatus
+from .utilities import db_homestatus, get_timeline
 from log2d import Log
 from wsgiref.util import FileWrapper
 
@@ -238,7 +238,7 @@ def index1(request):
     cache.set('patient_data', context, 300)  # cache for 300 seconds
     return render(request, 'patient_data/index1.html', context)
 
-
+# db_operations view
 @login_required
 def radonc_home(request, crnumber=None):
     # presim = False
@@ -265,6 +265,12 @@ def radonc_home(request, crnumber=None):
         status = db_homestatus(crnumber)
         status['form'] = form
         status['user_sim'] = user_sim
+
+        reg_date, dxinfo, mxinfo = get_timeline(crnumber)
+        status['reg_date'] = reg_date
+        status['dxinfo'] = dxinfo
+        status['mxinfo'] = mxinfo
+
         return render(request, 'patient_data/radonc_db_operations.html', status)
     else:
         if crnumber:
@@ -499,9 +505,13 @@ class DiagnosisCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         crn = self.kwargs["crnumber"]
-        fup = S8FUP.objects.filter(parent_id=crn).all()
-        dx = S2Diagnosis.objects.filter(parent_id=crn).last()
-        fup.update(s2_id=dx)
+        # try:
+        #     fup = S8FUP.objects.filter(parent_id=crn).last()
+        #     dx = S2Diagnosis.objects.filter(parent_id=crn).last()
+        #     print(fup)
+        #     fup.update(s2_id=dx)
+        # except AttributeError:
+        #     pass
 
         if self.request.GET['next'] == "/patient_data/radonc-patientlist/":
             return reverse_lazy("radonc-patientlist")
@@ -598,6 +608,7 @@ class DiagnosisUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         context = super(DiagnosisUpdateView, self).get_context_data(**kwargs)
         pk = self.kwargs["pk"]
         patient = S2Diagnosis.objects.get(pk=pk)
+        # primary_dx = S2Diagnosis.objects.filter(parent_id=patient.parent_id).first()
         updatecrn = patient.parent_id.crnumber
         # dx = patient.dx
         # diagnosis = OurDiagnosis.objects.filter(our_diagnosis=dx).first().pk
@@ -605,6 +616,7 @@ class DiagnosisUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         context['updatecrn'] = updatecrn
         context['update'] = True
         context['patient'] = patient
+        # context['primary_dx'] = primary_dx
         return context
 
 
@@ -632,7 +644,8 @@ class CareplanCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         s2_id = self.kwargs['s2_id']
         patient = S1ParentMain.objects.get(crnumber=crnumber)
 
-        patient_dx = patient.s2diagnosis_set.get(s2_id=s2_id)
+        # patient_dx = patient.s2diagnosis_set.get(s2_id=s2_id)
+        patient_dx = S2Diagnosis.objects.get(s2_id=s2_id)
 
         class CareplanForm(S3CarePlanForm):
             def __init__(self, *args, **kwargs):
@@ -647,7 +660,7 @@ class CareplanCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         context['patient_dx'] = patient_dx
         context['crnumber'] = crnumber
         context['form'].initial['parent_id'] = crnumber
-        context['form'].initial['s2_id'] = patient_dx.s2_id
+        context['form'].initial['s2_id'] = s2_id
 
         return context
 
@@ -2665,7 +2678,7 @@ class FUPCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             if 'to_labs' in self.request.POST:
                 return reverse_lazy("inv-lab2", kwargs={"crnumber": crn, "s8_id": s8_id})
 
-        if S3CarePlan.objects.filter(parent_id=crn).last():
+        if S3CarePlan.objects.filter(parent_id=crn).exists():
             return reverse_lazy("radonc-careplan-list", kwargs={"crnumber": crn})
         else:
             return reverse_lazy("db_operations", kwargs={"crnumber": crn})
@@ -2683,9 +2696,11 @@ class FUPCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         context['form'] = form
         try:
             s3_id = self.kwargs['s3_id']
+            s2_id = self.kwargs['s2_id']
             patient_mx = S3CarePlan.objects.get(pk=s3_id)
             context['patient_mx'] = patient_mx
             context['form'].initial['s3_id'] = s3_id
+            context['form'].initial['s2_id'] = s2_id
             context['form'].initial['parent_id'] = crnumber
 
         except KeyError:
@@ -2763,7 +2778,10 @@ class FUPUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
             return reverse_lazy("inv-pathlab2", kwargs={"crnumber": crn, "s8_id": pk})
         if 'to_labs' in self.request.POST:
             return reverse_lazy("inv-lab2", kwargs={"crnumber": crn, "s8_id": pk})
-        return reverse_lazy("radonc-fup-list", kwargs={"crnumber": crn})
+        if S3CarePlan.objects.filter(parent_id=crn).exists():
+            return reverse_lazy("radonc-careplan-list", kwargs={"crnumber": crn})
+        else:
+            return reverse_lazy("db_operations", kwargs={"crnumber": crn})
 
     def get_context_data(self, **kwargs):
         context = super(FUPUpdateView, self).get_context_data(**kwargs)

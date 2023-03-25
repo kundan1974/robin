@@ -35,10 +35,12 @@
                                                     {% endif %}
                                                 {% endfor %}
                                             {% endif %}
+                                            {% if not content.s8fup_set.all.last.visitaction.code == "CC-STC" %}
                                             <a class="btn btn-success" href="{% url 'radonc-careplan' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">New Management</a>
+                                            {% endif %}
                                         {% endif %}
                                          <a class="btn btn-danger" href="#">Delete</a>
-                                    </div>
+                                    </div>{{ content.s8fup_set.all.last.visitaction.code }}
                                     <small class="text-dark"><b>Diagnosis Date: </b>: {{ content.dx_date|date:"F d, Y" }}</small><br>
                                     <small class="text-dark"><b>HPE(ICD): </b>: {{ content.icd_path_code }}</small><br>
                                     <small class="text-dark"><b>Site(ICD): </b>: {{ content.icd_topo_code }}</small><br>
