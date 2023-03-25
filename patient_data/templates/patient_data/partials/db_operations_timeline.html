@@ -1,0 +1,143 @@
+{#{% load static %}#}
+{##}
+{#<link rel="stylesheet" href="{% static 'patient_data/style.css' %}" />#}
+
+<div class="container">
+    <div class="row text-center justify-content-center mb-1">
+        <div class="col-xl-6 col-lg-8">
+            <h2 class="font-weight-bold">Treatment Course - Timeline</h2>
+            <p class="text-light">Brief overview of the patient's journey</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="timeline-steps aos-init aos-animate" data-aos="fade-up">
+                <div class="timeline-step">
+                    <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2003">
+                        <div class="inner-circle"></div>
+                        <p class="h6 mt-3 mb-1">{{ reg_date|date:'d-m-Y' }}</p>
+                        <p class="h6 text-muted mb-0 mb-lg-0">First Visit</p>
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2004">
+                        <div class="inner-circle"></div>
+                        {% for content in dxinfo %}
+                            {% if forloop.last %}
+                                <div class="red-highlight box-redius box-shadow p-2 text-light mt-2">
+                                <p class="h6 mt-3 mb-1">
+                                    <small>{{ content.0|date:'d-m-Y' }}</small></p>
+                                <p class="h6 mb-0 mb-lg-0">
+                                    <small>Diagnossis: {{ content.1}}, <b>{{ content.2 }}</b></small></p>
+                                </div>
+                            {% else %}
+                                <p class="h6 mt-3 mb-1"><small>{{ content.0|date:'d-m-Y' }}</small></p>
+                                <p class="h6 text-muted mb-0 mb-lg-0"><small>Diagnossis: {{ content.1}}, <b>{{ content.2 }}</b></small></p>
+                            {% endif %}
+
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="timeline-step">
+                    <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2005">
+                        <div class="inner-circle"></div>
+                        {% if mxinfo %}
+                            {% for mx in mxinfo %}
+                                {% if forloop.last %}
+                                    <div class="red-highlight box-redius box-shadow p-2 text-light mt-2">
+                                        <p class="h6 mt-3 mb-1"><small>Start: {{ mx.0|date:'d-m-Y' }}
+                                        {% if not mx.1 %}
+                                            End: Management continued
+                                        {% else %}
+                                            End: {{ mx.1|date:'d-m-Y' }}
+                                        {% endif %}
+                                        </small></p>
+                                        <p class="h6 mb-0 mb-lg-0"><small>
+                                            {% if mx.2 != "Not Planned" %}
+                                                Surgery({{ mx.2 }}),
+                                            {% endif %}
+                                            {% if mx.3 != "Not Planned" %}
+                                                Radiotherapy({{ mx.3 }}),
+                                            {% endif %}
+                                            {% if mx.4 != "Not Planned" %}
+                                                Chemotherapy({{ mx.4 }}),
+                                            {% endif %}
+                                            {% if mx.5 != "Not Planned" %}
+                                                Targeted({{ mx.5 }}),
+                                            {% endif %}
+                                            {% if mx.6 != "Not Planned" %}
+                                                Hormone({{ mx.6 }}),
+                                            {% endif %}
+                                            {% if mx.7 != "Not Planned" %}
+                                                Immunotherapy({{ mx.7 }}),
+                                            {% endif %}
+                                        </small></p>
+                                    </div>
+                                {% else %}
+                                    <p class="h6 mt-3 mb-1"><small>Start: {{ mx.0|date:'d-m-Y' }}
+                                        {% if not mx.1 %}
+                                            End: Management continued
+                                        {% else %}
+                                            End: {{ mx.1|date:'d-m-Y' }}
+                                        {% endif %}
+                                        </small></p>
+                                    <p class="h6 mb-0 mb-lg-0"><small>
+                                            {% if mx.2 != "Not Planned" %}
+                                                Surgery({{ mx.2 }}),
+                                            {% endif %}
+                                            {% if mx.3 != "Not Planned" %}
+                                                Radiotherapy({{ mx.3 }}),
+                                            {% endif %}
+                                            {% if mx.4 != "Not Planned" %}
+                                                Chemotherapy({{ mx.4 }}),
+                                            {% endif %}
+                                            {% if mx.5 != "Not Planned" %}
+                                                Targeted({{ mx.5 }}),
+                                            {% endif %}
+                                            {% if mx.6 != "Not Planned" %}
+                                                Hormone({{ mx.6 }}),
+                                            {% endif %}
+                                            {% if mx.7 != "Not Planned" %}
+                                                Immunotherapy({{ mx.7 }}),
+                                            {% endif %}
+                                        </small></p>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="timeline-step mb-0">
+                    <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2005">
+                        <div class="inner-circle"></div>
+                        {% if mxinfo %}
+                            {% for mx in mxinfo %}
+                                <p class="h6 mt-3 mb-1"><small>Treatment Details
+                                </small></p>
+                                <p class="h6 text-muted mb-0 mb-lg-0"><small>
+                                    {% if mx.2 != "Not Planned" %}
+                                        Surgery({{ mx.2 }}),
+                                    {% endif %}
+                                    {% if mx.3 != "Not Planned" %}
+                                        Radiotherapy({{ mx.3 }}),
+                                    {% endif %}
+                                    {% if mx.4 != "Not Planned" %}
+                                        Chemotherapy({{ mx.4 }}),
+                                    {% endif %}
+                                    {% if mx.5 != "Not Planned" %}
+                                        Targeted({{ mx.5 }}),
+                                    {% endif %}
+                                    {% if mx.6 != "Not Planned" %}
+                                        Hormone({{ mx.6 }}),
+                                    {% endif %}
+                                    {% if mx.7 != "Not Planned" %}
+                                        Immunotherapy({{ mx.7 }}),
+                                    {% endif %}
+                                </small></p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
