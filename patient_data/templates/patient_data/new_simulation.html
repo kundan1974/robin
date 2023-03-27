@@ -61,9 +61,14 @@
                                     </thead>
                                     <tbody>
                                         {% for s in sim %}
-                                            {% for site in s.icdmainsite.all %}
                                             <tr>
-                                                <td>{{ site.description }}</td>
+                                                <td>
+                                                    <ul>
+                                                    {% for site in s.icdmainsite.all %}
+                                                        <li>{{ site.description }}</li>
+                                                    {% endfor %}
+                                                    </ul>
+                                                </td>
                                                 <td>{{ s.simdate|date:"d-m-Y" }}</td>
                                                 <td>
                                                     <a class="btn btn-sm btn-warning" href="{% url 'radonc-simulation-update' s.pk %}?next={{ request.path|urlencode }}">EditSim</a>
@@ -76,13 +81,14 @@
                                                     <a class="btn btn-sm btn-danger" href="{% url 'radonc-simulation-delete' s.pk %}">X</a>
                                                 </td>
                                             </tr>
-                                            {% endfor %}
-                                        {% endfor  %}
+
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                                 </div>
     {#                            PREVIOUS PRESIMULATION DETAILS#}
-                                <div class="col-6">
+                                {% if presim %}
+                                    <div class="col-6">
                                     <table class="styled-table m-1">
                                     <thead>
                                         <tr>
@@ -115,6 +121,7 @@
                                     </tbody>
                                 </table>
                                 </div>
+                                {% endif %}
                             </div>
                         </div>
 
