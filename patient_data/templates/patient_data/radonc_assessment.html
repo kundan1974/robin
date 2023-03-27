@@ -372,7 +372,11 @@
                                     <div class="accordion-body">
                                         {% if rtdetails.s7assessment_set.all %}
                                                 {% for prev_ass in rtdetails.s7assessment_set.all %}
-                                                    <h5 class="gradient-mini text-light p-2 box-redius box-shadow">Assessment.{{ forloop.counter }}: ({{ prev_ass.as_date|date:"d-m-Y" }})</h5>
+                                                    <h5 class="gradient-mini text-light p-2 box-redius box-shadow">
+                                                        Assessment.{{ forloop.counter }}: ({{ prev_ass.as_date|date:"d-m-Y" }})
+                                                        <span class="red badge">RT Status: {{ prev_ass.txstatus }} RT Fractions: {{ prev_ass.fxdone }}</span>
+                                                    </h5>
+                                                    <a class="btn btn-sm btn-success mt-1" href="{% url 'radonc-ass-update' prev_ass.pk %}?next={{ request.path|urlencode }}">Update</a>
                                                     <div class="row mt-3">
                                                         {#ACUTE TOXICITY#}
                                                         <div class="col-md-6">

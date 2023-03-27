@@ -2,6 +2,7 @@ import pytz
 import datetime
 from django.contrib import messages
 from django.core.cache import cache
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
@@ -27,6 +28,7 @@ from .forms import (S1PatientRegForm, PreSimulationForm, S2DiagnosisForm, S3Care
 from django.utils import timezone
 from django.contrib import messages
 import pandas as pd
+
 from .utilities import db_homestatus, get_timeline
 from log2d import Log
 from wsgiref.util import FileWrapper
@@ -237,6 +239,7 @@ def index1(request):
     # Store the data in cache
     cache.set('patient_data', context, 300)  # cache for 300 seconds
     return render(request, 'patient_data/index1.html', context)
+
 
 # db_operations view
 @login_required
@@ -484,6 +487,7 @@ class NewPreSimulationListView(SuccessMessageMixin, LoginRequiredMixin, ListView
 
     def get_queryset(self):
         return NewPreSimulation.objects.filter(presimparent=self.kwargs['crnumber'])
+
 
 # DIAGNOSIS
 
@@ -782,6 +786,7 @@ class CarePlanUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         # form.instance.updated_by = current_user.username
         form.instance.user_id = patient.user_id
         return super().form_valid(form)
+
     # def form_invalid(self, form):
     #     print(form.errors)
 
@@ -831,6 +836,7 @@ class CarePlanUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
                     # self.fields['studyprotocol'].widget.attrs['disabled'] = True
                     self.fields['notes'].widget.attrs['readonly'] = True
                     context['mx_end'] = True
+
         form = CareplanForm(instance=context['data'])
         context['updatecrn'] = updatecrn
         context['update'] = True
@@ -2067,9 +2073,10 @@ class AssCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         return context
 
     def form_invalid(self, form):
-        # print(form.data)
-        print(form.errors)
-        return form.errors
+        s4_id = self.kwargs["s4_id"]
+        error = form['as_date'].errors
+        messages.warning(self.request, error)
+        return redirect('radonc-ass', s4_id)
 
 
 class AssListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
@@ -2698,6 +2705,8 @@ class FUPCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             s3_id = self.kwargs['s3_id']
             s2_id = self.kwargs['s2_id']
             patient_mx = S3CarePlan.objects.get(pk=s3_id)
+            all_fups = patient_mx.s8fup_set.all()
+            context['all_fups'] = all_fups
             context['patient_mx'] = patient_mx
             context['form'].initial['s3_id'] = s3_id
             context['form'].initial['s2_id'] = s2_id
@@ -4045,6 +4054,7 @@ def checkdata(request):
 
 
 # FUNCTIONS FOR HTMX
+
 @login_required
 def showdvh(request, s4_id):
     rt = S4RT.objects.get(pk=s4_id)
@@ -4283,7 +4293,7 @@ def rtdeleteprescription(request, pk):
 
 
 # NEW CHEMOTHERAPY FORMSET BASED VIEW
-
+@login_required
 def create_chemodrug(request, crnumber, pk):
     protocol = S5ChemoProtocol.objects.get(pk=pk)
     patient = S1ParentMain.objects.get(crnumber=crnumber)
@@ -4312,17 +4322,19 @@ def create_chemodrug(request, crnumber, pk):
     return render(request, "patient_data/chemo_entry_module.html", context)
 
 
+@login_required
 def create_chemodrug_form(request, crnumber, s5_protocol_id):
     patient = S1ParentMain.objects.get(crnumber=crnumber)
     last_patient_chemo = S5ChemoDrugs.objects.filter(parent_id=crnumber).last()
-    print(last_patient_chemo)
     if last_patient_chemo:
         form = S5ChemoDrugsForm(instance=last_patient_chemo)
         form.initial['s5_protocol_id'] = s5_protocol_id
+        form.initial['user_id'] = request.user
     else:
         form = S5ChemoDrugsForm()
         form.initial['parent_id'] = crnumber
         form.initial['s5_protocol_id'] = s5_protocol_id
+        form.initial['user_id'] = request.user
 
     context = {
         "form": form
@@ -4331,6 +4343,7 @@ def create_chemodrug_form(request, crnumber, s5_protocol_id):
     return render(request, "patient_data/partials/partial_chemo_drug_form.html", context)
 
 
+@login_required
 def drug_detail(request, pk):
     drug = S5ChemoDrugs.objects.get(pk=pk)
     context = {
@@ -4340,6 +4353,7 @@ def drug_detail(request, pk):
     return render(request, "patient_data/partials/partial_chemo_drug_detail.html", context)
 
 
+@login_required
 def update_chemodrug(request, pk):
     drug = S5ChemoDrugs.objects.get(pk=pk)
     form = S5ChemoDrugsForm(request.POST or None, instance=drug)
@@ -4347,6 +4361,9 @@ def update_chemodrug(request, pk):
     if request.method == "POST":
         if form.is_valid():
             drug = form.save()
+            drug = S5ChemoDrugs.objects.get(pk=pk)
+            drug.updated_by = request.user.username
+            drug.save()
             return redirect("drug-detail", pk=drug.pk)
 
     context = {
@@ -4357,6 +4374,7 @@ def update_chemodrug(request, pk):
     return render(request, "patient_data/partials/partial_chemo_drug_form.html", context)
 
 
+@login_required
 def drug_delete(request, pk):
     drug = S5ChemoDrugs.objects.get(pk=pk)
     drug.delete()
@@ -4364,6 +4382,7 @@ def drug_delete(request, pk):
     return HttpResponse('')
 
 
+@login_required
 def acute_tox_second_field_options(request):
     first_field_value = request.POST.get('tox_system', '')
     if first_field_value:
@@ -4379,6 +4398,7 @@ def acute_tox_second_field_options(request):
                   {'options': second_field_options})
 
 
+@login_required
 def display_tox(request):
     first_field_value = request.POST.get('tox_term', '')
     tox = CTCV5.objects.get(pk=first_field_value)
@@ -4388,6 +4408,7 @@ def display_tox(request):
                   {'options': options})
 
 
+@login_required
 def get_presim(request, crnumber, s3_id):
     field_dibh = request.POST.get('dibh', '')
     if field_dibh == '0':
@@ -4407,6 +4428,7 @@ def get_presim(request, crnumber, s3_id):
             return redirect('radonc-simulation', crnumber, s3_id)
 
 
+@login_required
 def get_final_status(request):
     training_day = request.POST.get('day', '')
     form = NewPreSimulationForm()
@@ -4426,6 +4448,7 @@ def get_final_status(request):
     return HttpResponse("")
 
 
+@login_required
 def get_presim_buttons(request):
     finalstatus = request.POST.get('final_status', '')
     if finalstatus == '0':
@@ -4434,6 +4457,7 @@ def get_presim_buttons(request):
         return render(request, 'patient_data/partials/partial_presim_buttons.html')
 
 
+@login_required
 def create_presim(request):
     if request.method == "POST":
         data = request.POST.copy()
@@ -4461,6 +4485,7 @@ def create_presim(request):
                            'form': form})
 
 
+@login_required
 def edit_presim(request, pk):
     presim = NewPreSimulation.objects.get(pk=pk)
     all_presim = NewPreSimulation.objects.filter(s3_id=presim.s3_id.s3_id).all()
@@ -4481,6 +4506,7 @@ def edit_presim(request, pk):
     return render(request, "patient_data/partials/partial_new_presim.html", context)
 
 
+@login_required
 def delete_presim(request, pk):
     presim = NewPreSimulation.objects.get(pk=pk)
     all_presim = NewPreSimulation.objects.filter(s3_id=presim.s3_id.s3_id).all
@@ -4495,3 +4521,56 @@ def delete_presim(request, pk):
     return render(request, 'patient_data/partials/partial_presim_display.html', {'presim': all_presim,
                                                                                  'crnumber': presim.presimparent.crnumber,
                                                                                  's3_id': presim.s3_id.s3_id})
+
+
+@login_required
+def patient_search(request):
+    res = S1ParentMain.objects.all()
+    page = request.GET.get('page')
+    page_no = int(request.GET.get('page', 1))
+    result = 10
+    serial_num = ((int(request.GET.get('page', 1)) - 1) * result + 1) -1
+
+    paginator = Paginator(res, result)
+
+    try:
+        res = paginator.page(page)
+    except PageNotAnInteger:
+        page = 1
+        res = paginator.page(page)
+    except EmptyPage:
+        page = paginator.num_pages
+        res = paginator.page(page)
+
+    context = {'result': res, 'paginator': paginator, 'serial_num': serial_num, 'page_no': page_no}
+
+    return render(request, 'patient_data/patient_search_form.html', context)
+
+
+@login_required
+def search(request):
+    try:
+        search_word = int(request.POST.get('search', ""))
+        res = S1ParentMain.objects.filter(crnumber__startswith=search_word)
+    except ValueError:
+        search_word = request.POST.get('search', "")
+        res = S1ParentMain.objects.filter(first_name__startswith=search_word)
+
+    page = request.GET.get('page')
+    page_no = int(request.GET.get('page', 1))
+    result = 10
+    serial_num = ((int(request.GET.get('page', 1)) - 1) * result + 1) - 1
+
+    paginator = Paginator(res, result)
+
+    try:
+        res = paginator.page(page)
+    except PageNotAnInteger:
+        page = 1
+        res = paginator.page(page)
+    except EmptyPage:
+        page = paginator.num_pages
+        res = paginator.page(page)
+
+    context = {'result': res, 'paginator': paginator, 'serial_num': serial_num, 'page_no': page_no}
+    return render(request, 'patient_data/partials/partial_patientlist.html', context)

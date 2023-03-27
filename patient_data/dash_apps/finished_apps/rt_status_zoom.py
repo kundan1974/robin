@@ -3,7 +3,7 @@ from django_plotly_dash import DjangoDash
 import plotly.express as px
 from dash import Input, Output, State
 import dash_bootstrap_components as dbc
-# from .simulation_flow import get_df
+from .simulation_flow import get_df
 
 CONTENT_STYLE = {
     "margin-left": "2rem",

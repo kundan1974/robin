@@ -7,13 +7,13 @@
                 <form method="POST">
                 {% csrf_token %}
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" style="font-weight: bold;" class="form-label">CR Number</label>
+                        <label for="id_crnumber" style="font-weight: bold;" class="form-label">CR Number</label>
                         {{ form.s_crnumber }}
                         {{form.s_crnumber.errors }}
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label"></label>
-                        <button type="submit" class="btn btn-dark">Submit</button>
+                        <label for="submit" class="form-label"></label>
+                        <button type="submit" class="btn btn-dark" name="submit">Submit</button>
                     </div>
                 </form>
                 {% if crnumber %}

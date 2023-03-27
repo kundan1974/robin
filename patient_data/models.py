@@ -407,6 +407,7 @@ class S1ParentMain(models.Model):
     class Meta:
         managed = True
         db_table = 's1_parent_main'
+        ordering = ['-last_updated']
 
     def __str__(self):
         return f'CRN: {self.crnumber} -- Name: {self.first_name} {self.last_name} -- Mobile: {self.mobile}'
@@ -628,6 +629,7 @@ class Simulation(models.Model):
     impdate = models.DateTimeField(db_column='ImpDate')  # Field name made lowercase.
     impnotes = models.TextField(db_column='ImpNotes', blank=True, null=True)  # Field name made lowercase.
     initialstatus = models.ForeignKey(SimStatus, models.DO_NOTHING, blank=True, null=True)  # Field name made lowercase.
+    finalstatus = models.IntegerField(db_column='finalstatus', blank=True, null=True)  # Field name made lowercase.
     futureplan = models.TextField(db_column='FuturePlan', blank=True, null=True)  # Field name made lowercase.
     site = models.ForeignKey(RTSites, models.DO_NOTHING, blank=True, null=True)  # Field name made lowercase.
     icdmainsite = models.ManyToManyField(FMAID, blank=True)

@@ -323,6 +323,108 @@
                         </div>
                     {% endwith %}
                 {% endif %}
+                <div class="mb-3">
+                    <div class="row justify-content-start align-items-center">
+                    <div class="col-md-12 accordion accordion-flush" id="accordionFlushPrescription">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingOne">
+                                    <button class="accordion-button collapsed accordian-bg" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        <h5 class="text-dark">Preview Previous Follow up</h5>
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushPrescription">
+                                    <div class="accordion-body">
+                                        {% if all_fups %}
+                                            {% for prev_ass in all_fups %}
+                                                <div class="gradient-mini text-light p-2 box-redius box-shadow"><h5>Follow up {{ forloop.counter }}: ({{ prev_ass.visitdate|date:"d-m-Y" }})
+                                                Action Taken: {{ prev_ass.visitaction.actions }}
+                                                </h5>
+                                                {% for purpose in prev_ass.visittype.all %}
+                                                    <p><b>Visit Purpose: </b>{{ purpose.visittype }}</p>
+                                                {% endfor %}
+                                                <a class="btn btn-sm btn-info" href="{% url 'radonc-fup-update' prev_ass.pk %}?next={{ request.path|urlencode }}">Update</a>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    {#ACUTE TOXICITY#}
+                                                    <div class="col-md-6">
+                                                        {% if prev_ass.latetoxicity_set.all %}
+                                                        <p>
+                                                            <h6 class="green p-2 box-redius box-shadow">Acute Toxicity Detials on {{ prev_ass.as_date|date:"d-m-Y" }}</h6>
+                                                            {% for toxicity in prev_ass.latetoxicity_set.all %}
+                                                                <em class="red-highlight text-light p-1 box-redius">{{ toxicity.toxtype }}:</em> {{ toxicity.toxgrade }}<br>
+                                                            {% endfor %}
+                                                        </p>
+                                                    {% else %}
+                                                        <h6 class="green p-2 box-redius box-shadow">No Late Toxicity Detials on {{ prev_ass.visitdate|date:"d-m-Y" }}</h6>
+                                                    {% endif %}
+                                                    </div>
+                                                    {#PRESCRIPTION#}
+                                                    <div class="col-md-6">
+                                                        {% if prev_ass.prescription_set.all %}
+                                                        <p>
+                                                            <h6 class="green p-2 box-redius box-shadow">Symptoms & Prescription</h6>
+                                                            {% for prescription in prev_ass.prescription_set.all %}
+                                                                {{ prescription.symptoms_type }} {{ prescription.symptoms }}<br>
+                                                            {% endfor %}
+                                                        </p>
+                                                    {% else %}
+                                                        <h6 class="green p-2 box-redius box-shadow">Nothing Prescribed</h6>
+                                                    {% endif %}
+                                                    </div>
+                                                    {#IMAGING#}
+                                                    <div class="col-md-6">
+                                                        {% if prev_ass.investigationsimaging_set.all %}
+                                                        <p>
+                                                            <h6 class="green p-2 box-redius box-shadow">Imaging</h6>
+                                                            {% for imaging in prev_ass.investigationsimaging_set.all %}
+                                                                {{ imaging.imaging_type.type }} of {{ imaging.imaging_location }}: {{ imaging.imaging_result }}<br>
+                                                            {% endfor %}
+                                                        </p>
+                                                    {% else %}
+                                                        <h6 class="green p-2 box-redius box-shadow">No Imaging</h6>
+                                                    {% endif %}
+                                                    </div>
+                                                    {#LABS#}
+                                                    <div class="col-md-6">
+                                                        {% if prev_ass.investigationslabs_set.all %}
+                                                        <p>
+                                                            <h6 class="green p-2 box-redius box-shadow">Lab Results</h6>
+                                                            {% for lab in prev_ass.investigationslabs_set.all %}
+                                                                {{ lab.test_name }} {{ lab.test_result }} {{ lab.test_unit }}<br>
+                                                            {% endfor %}
+                                                        </p>
+                                                    {% else %}
+                                                        <h6 class="green p-2 box-redius box-shadow">No Lab Investigations</h6>
+                                                    {% endif %}
+                                                    </div>
+                                                    {#PATHOLOGY#}
+                                                    <div class="col-md-6">
+                                                        {% if prev_ass.investigationspath_set.all %}
+                                                        <p>
+                                                            <h6 class="green p-2 box-redius box-shadow">Lab Results</h6>
+                                                            {% for path in prev_ass.investigationspath_set.all %}
+                                                                {{ path.path_type }} from {{ path.biopsy_location.shortname }}: {{ path.biopsy_result }}<br>
+                                                                {% for mol in path.investigationsmolecular_set.all %}
+                                                                    {{ forloop.counter }}. {{ mol.mol_type }} - {{ mol.mol_result }}
+                                                                {% endfor %}
+                                                            {% endfor %}
+                                                        </p>
+                                                    {% else %}
+                                                        <h6 class="green p-2 box-redius box-shadow">No Path Details</h6>
+                                                    {% endif %}
+                                                    </div>
+                                                    <hr>
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <h4>No Previous Follow ups</h4>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <form method="POST">
                     {% csrf_token %}
                     <div class="form-row justify-content-left g-3">

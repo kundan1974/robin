@@ -6,8 +6,6 @@ body {
    position: relative;
 }
 
-
-
 main {
   margin-bottom: 100px;
 }
@@ -19,6 +17,7 @@ main {
 
 .body {
   background-image: url('../../../media/Snapseed.jpg');
+  /*background-image: url('/media/Snapseed.jpg');*/
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;

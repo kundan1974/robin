@@ -49,7 +49,7 @@
                                         RadOnc
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                                        <li><a class="dropdown-item" href="{% url 'radonc-patientlist' %}">Patients</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'patient_search' %}">Patients</a></li>
                                         {% if request.session.crnumber %}
                                             {% with crnumber=123456 %}
                                             <li><a class="dropdown-item" href="{% url 'db_operations' request.session.crnumber %}">Database Operations</a></li>

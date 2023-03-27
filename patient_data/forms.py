@@ -143,7 +143,7 @@ class NewPreSimulationForm(ModelForm):
                   "ahd", "al", "remarks", "assessedby", "status", "final_status",
                   "user", "updated_by"]
         widgets = {
-            'presimparent': forms.TextInput(attrs={'class': 'form-control'}),
+            'presimparent': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
             'date': DateInput(attrs={'class': 'form-control'}),
             'day': forms.Select(attrs={'class': 'form-control'}, choices=DIBH_DAYS),
             'ul_amp': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -686,6 +686,21 @@ class S7AssessmentForm(ModelForm):
             'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 10}),
             'updated_by': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+    def clean_as_date(self, *args, **kwargs):
+        date = self.cleaned_data['as_date']
+        s4_id = self.cleaned_data['s4_id']
+        patient_rt = S4RT.objects.get(pk=s4_id.s4_id)
+        if date > timezone.now():
+            self.add_error('as_date', "Assessment Date cannot be in future")
+            # raise forms.ValidationError("Assessment Date cannot be later than today.")
+        if patient_rt.rtfinishdate:
+            date3months_postrt = patient_rt.rtfinishdate + timezone.timedelta(90)
+            if date > date3months_postrt:
+                self.add_error('as_date', "Assessment Date cannot be later than 3 months of finishing radiotherapy")
+        if date < patient_rt.rtstartdate:
+            self.add_error('as_date', "Assessment Date cannot be earlier than radiotherapy start date")
+        return date
 
 
 class AcuteToxicityForm(forms.ModelForm):

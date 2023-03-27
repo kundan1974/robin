@@ -52,6 +52,11 @@
                                     <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
                                     {{ form.notes }}
                                 </div>
+                                <div class="col-md-12 d-none">
+                                    {{ form.user_id.errors }}
+                                    <label class="oncflow-labels" for="{{ form.user_id.id_for_label }}">User:</label>
+                                    {{ form.user_id }}
+                                </div>
                             </div>
                         </div>
                     <!-- Button Row -->

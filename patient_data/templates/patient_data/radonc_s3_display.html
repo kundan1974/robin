@@ -46,8 +46,10 @@
                         {% endif %}
                         {% if ass_check %}
                             {% for pat_rt in patient_mx.s4rt_set.all %}
+                                {% if pat_rt.s7assessment_set.all %}
                                     <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-ass-list' pat_rt.s4_id %}?next={{ request.path|urlencode }}">
                                         Assessment {{ pat_rt.s3_id.s2_id.icd_topo_code }} {{ pat_rt.s3_id.s2_id.dx_type }}</a>
+                                {% endif %}
                             {% endfor %}
                         {% endif %}
                         {% if fu_check %}

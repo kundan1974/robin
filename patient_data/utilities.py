@@ -96,8 +96,8 @@ def get_timeline(crnumber):
         dxdetails = S2Diagnosis.objects.filter(parent_id=crnumber).all()
         dxinfo = []
         for dx in dxdetails:
-            if dx.icd_main_topo:
-                main_topo = dx.icd_main_topo.site
+            if dx.icd_topo_code:
+                main_topo = dx.icd_topo_code.site
             else:
                 main_topo = None
             if dx.dx_type:
@@ -116,8 +116,22 @@ def get_timeline(crnumber):
         mxdetails = S3CarePlan.objects.filter(parent_id=crnumber).all()
         mxinfo = []
         for mx in mxdetails:
+            rtinfo = []
+            cheminfo = []
+            sxinfo = []
+
+            # Getting Radiation details
+            if mx.s4rt.all().exists():
+                for rt in mx.s4rt.all():
+                    rtinfo.append(rt)
+            if mx.s6surgery_set.all().exists():
+                for sx in mx.s6surgery_set.all():
+                    sxinfo.append(sx)
+
             mxinfo.append((mx.startdate, mx.enddate, mx.surgery, mx.radiotherapy, mx.chemotherapy, mx.targettherapy,
-                           mx.hormone, mx.immunotherapy))
+                           mx.hormone, mx.immunotherapy, rtinfo, sxinfo))
+            # print(f"CHECK: RT info for {mx.s3_id}--{rtinfo}")
+            # Todo same to be done for chemo, followup as done for radiotherapy above
     else:
         mxinfo = None
     if S4RT.objects.filter(parent_id=crnumber).exists():
@@ -131,3 +145,6 @@ def get_timeline(crnumber):
 
     return reg_date, dxinfo, mxinfo
 
+
+def getnewsimulation_choices(n):
+    pass

@@ -33,6 +33,7 @@
                             {% else %}
                                 <p class="h6 mt-3 mb-1"><small>{{ content.0|date:'d-m-Y' }}</small></p>
                                 <p class="h6 text-muted mb-0 mb-lg-0"><small>Diagnossis: {{ content.1}}, <b>{{ content.2 }}</b></small></p>
+                                <hr>
                             {% endif %}
 
                         {% endfor %}
@@ -45,28 +46,38 @@
                             {% for mx in mxinfo %}
                                 {% if forloop.last %}
                                     <div class="red-highlight box-redius box-shadow p-2 text-light mt-2">
-                                        <p class="h6 mt-3 mb-1"><small>Start: {{ mx.0|date:'d-m-Y' }}
+                                        <p class="h6 mt-3"><small>Start: {{ mx.0|date:'d-m-Y' }}
                                         {% if not mx.1 %}
                                             End: Management continued
                                         {% else %}
                                             End: {{ mx.1|date:'d-m-Y' }}
                                         {% endif %}
                                         </small></p>
-                                        <p class="h6 mb-0 mb-lg-0"><small>
+                                        <p class="h6 mb-lg-0"><small>
                                             {% if mx.2 != "Not Planned" %}
-                                                Surgery({{ mx.2 }}),
-                                            {% endif %}
+                                                <b>Surgery({{ mx.2 }})</b> -
+                                                {% for sx in mx.9 %}
+                                                    <br><span class="small green mt-2 mb-2">{{ sx.sxdate|date:'d-m-Y' }}
+                                                        -- {% for surgery in sx.sxtype.all %}
+                                                            {{ surgery }}
+                                                        {% endfor %}
+                                                    </span>
+                                                {% endfor %}
+                                            {% endif %}<br>
                                             {% if mx.3 != "Not Planned" %}
-                                                Radiotherapy({{ mx.3 }}),
+                                                <b>Radiotherapy({{ mx.3 }})</b> -
+                                                {% for rt in mx.8 %}
+                                                    <br><span class="small green mt-2 mb-2">{{ rt.rtdose1 }}Gy/{{ rt.rtdosefr1|floatformat }} fx by{{ rt.tech1 }} technique</span>
+                                                {% endfor %}
                                             {% endif %}
                                             {% if mx.4 != "Not Planned" %}
-                                                Chemotherapy({{ mx.4 }}),
+                                                <b>Chemotherapy({{ mx.4 }})</b>,
                                             {% endif %}
                                             {% if mx.5 != "Not Planned" %}
-                                                Targeted({{ mx.5 }}),
+                                                <b>Targeted({{ mx.5 }})</b>,
                                             {% endif %}
                                             {% if mx.6 != "Not Planned" %}
-                                                Hormone({{ mx.6 }}),
+                                                <b>Hormone({{ mx.6 }})</b>,
                                             {% endif %}
                                             {% if mx.7 != "Not Planned" %}
                                                 Immunotherapy({{ mx.7 }}),
@@ -74,65 +85,46 @@
                                         </small></p>
                                     </div>
                                 {% else %}
-                                    <p class="h6 mt-3 mb-1"><small>Start: {{ mx.0|date:'d-m-Y' }}
-                                        {% if not mx.1 %}
-                                            End: Management continued
-                                        {% else %}
-                                            End: {{ mx.1|date:'d-m-Y' }}
-                                        {% endif %}
-                                        </small></p>
-                                    <p class="h6 mb-0 mb-lg-0"><small>
-                                            {% if mx.2 != "Not Planned" %}
-                                                Surgery({{ mx.2 }}),
+                                    <div class="ju">
+                                        <p class="h6 mt-1"><small>Start: {{ mx.0|date:'d-m-Y' }}
+                                            {% if not mx.1 %}
+                                                End: Management continued
+                                            {% else %}
+                                                End: {{ mx.1|date:'d-m-Y' }}
                                             {% endif %}
-                                            {% if mx.3 != "Not Planned" %}
-                                                Radiotherapy({{ mx.3 }}),
-                                            {% endif %}
-                                            {% if mx.4 != "Not Planned" %}
-                                                Chemotherapy({{ mx.4 }}),
-                                            {% endif %}
-                                            {% if mx.5 != "Not Planned" %}
-                                                Targeted({{ mx.5 }}),
-                                            {% endif %}
-                                            {% if mx.6 != "Not Planned" %}
-                                                Hormone({{ mx.6 }}),
-                                            {% endif %}
-                                            {% if mx.7 != "Not Planned" %}
-                                                Immunotherapy({{ mx.7 }}),
-                                            {% endif %}
-                                        </small></p>
+                                            </small></p>
+                                        <p class="h6 mb-0 mb-lg-0"><small>
+                                                {% if mx.2 != "Not Planned" %}
+                                                    <b>Surgery({{ mx.2 }})</b> -
+                                                    {% for sx in mx.9 %}
+                                                        <br><span class="small green mt-2 mb-2">{{ sx.sxdate|date:'d-m-Y' }}
+                                                            -- {% for surgery in sx.sxtype.all %}
+                                                                {{ surgery }}<br>
+                                                            {% endfor %}
+                                                        </span>
+                                                    {% endfor %}
+                                                {% endif %}
+                                                {% if mx.3 != "Not Planned" %}
+                                                    <b>Radiotherapy({{ mx.3 }})</b> -
+                                                    {% for rt in mx.8 %}
+                                                        <br><span class="small green mt-2 mb-2">{{ rt.rtdose1 }}Gy/{{ rt.rtdosefr1|floatformat }} fx by{{ rt.tech1 }} technique</span>
+                                                    {% endfor %}
+                                                {% endif %}
+                                                {% if mx.4 != "Not Planned" %}
+                                                    <b>Chemotherapy({{ mx.4 }})</b>,
+                                                {% endif %}
+                                                {% if mx.5 != "Not Planned" %}
+                                                    <b>Targeted({{ mx.5 }})</b>,
+                                                {% endif %}
+                                                {% if mx.6 != "Not Planned" %}
+                                                    <b>Hormone({{ mx.6 }})</b>,
+                                                {% endif %}
+                                                {% if mx.7 != "Not Planned" %}
+                                                    Immunotherapy({{ mx.7 }}),
+                                                {% endif %}
+                                            </small></p><hr>
+                                    </div>
                                 {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="timeline-step mb-0">
-                    <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2005">
-                        <div class="inner-circle"></div>
-                        {% if mxinfo %}
-                            {% for mx in mxinfo %}
-                                <p class="h6 mt-3 mb-1"><small>Treatment Details
-                                </small></p>
-                                <p class="h6 text-muted mb-0 mb-lg-0"><small>
-                                    {% if mx.2 != "Not Planned" %}
-                                        Surgery({{ mx.2 }}),
-                                    {% endif %}
-                                    {% if mx.3 != "Not Planned" %}
-                                        Radiotherapy({{ mx.3 }}),
-                                    {% endif %}
-                                    {% if mx.4 != "Not Planned" %}
-                                        Chemotherapy({{ mx.4 }}),
-                                    {% endif %}
-                                    {% if mx.5 != "Not Planned" %}
-                                        Targeted({{ mx.5 }}),
-                                    {% endif %}
-                                    {% if mx.6 != "Not Planned" %}
-                                        Hormone({{ mx.6 }}),
-                                    {% endif %}
-                                    {% if mx.7 != "Not Planned" %}
-                                        Immunotherapy({{ mx.7 }}),
-                                    {% endif %}
-                                </small></p>
                             {% endfor %}
                         {% endif %}
                     </div>

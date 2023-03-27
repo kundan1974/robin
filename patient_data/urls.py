@@ -250,6 +250,8 @@ htmx_urlpatterns = [
          name="radonc-new-presimulation-update"),
     path('radonc-new-presimulation/<int:pk>/delete/', views.delete_presim,
          name="radonc-new-presimulation-delete"),
+    path('patient-search/', views.patient_search, name="patient_search"),
+    path('patient-search/search/', views.search, name="search"),
 ]
 
 urlpatterns += htmx_urlpatterns

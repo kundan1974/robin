@@ -15,8 +15,6 @@
                             <th scope="col">Name</th>
                             <th scope="col">CRN</th>
                             <th scope="col">Reg Date</th>
-                            <th scope="col">Age</th>
-                            <th scope="col">Gender</th>
                             <th scope="col">Mobile</th>
                             <th scope="col">Summary</th>
                             <th scope="col">Edit/Create</th>
@@ -36,8 +34,6 @@
                                 <td>{{ patient.first_name }} {{ patient.last_name }}</td>
                                 <td><span class="count yellow">{{ patient.crnumber }}</span></td>
                                 <td>{{ patient.reg_date|date:'M d, Y' }}</td>
-                                <td>{{ patient.age }}</td>
-                                <td>{{ patient.gender }}</td>
                                 <td><span class="count green">{{ patient.mobile }}</span></td>
                                 {% if patient.s4rt_set.count > 0 %}
                                     <td><a href="{% url 'summary' patient.crnumber %}?next={{ request.path|urlencode }}"

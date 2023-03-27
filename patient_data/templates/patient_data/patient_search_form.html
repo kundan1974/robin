@@ -1,0 +1,45 @@
+{% extends "patient_data/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <form action="" method="POST" id="searchform">
+            {% csrf_token %}
+            <input class="form-control" name="search"
+                   hx-post="{% url "search" %}" hx-target="#search-result" hx-trigger="keyup changed delay:500ms"
+                   hx-indicator=".htmx-indicator" placeholder="SEARCH"><br>
+            </form>
+        </div>
+        <div class="col-md-8"></div>
+        <div class="col-md-4">
+            <h4 class="htmx-indicator text-light">Searching...</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div id="search-result" class="col-md-12">
+            {% include 'patient_data/partials/partial_patientlist.html' %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{#This java script will not work because we are using htmx#}
+{#{% block javascript %}#}
+{#    <script type="text/javascript">#}
+{#        let searchForm = document.getElementById('searchform')#}
+{#        let pageLinks = document.getElementsByClassName('page-link')#}
+{##}
+{#        if(searchForm){#}
+{#            for(let i=0; pageLinks.length > i; i++)#}
+{#                pageLinks[i].addEventListener('click', function (e){#}
+{#                    e.preventDefault()#}
+{##}
+{#                    let page = this.dataset.page#}
+{##}
+{#                    searchForm.innerHTML += `<input value="${page} name="page" hidden/>`#}
+{#                    searchForm.submit()#}
+{##}
+{#                })#}
+{#        }#}
+{#    </script>#}
+{#{% endblock javascript %}#}

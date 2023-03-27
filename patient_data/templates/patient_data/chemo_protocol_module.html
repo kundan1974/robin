@@ -39,7 +39,7 @@
                                     </div>
                                     <div class="col-12">
                                         {% if previous_protocol %}
-                                            <p><span class="red-highlight text-light box-redius box-shadow p-1">Last Chemotherapy Protocol have been copied. Edit it accordigly</span></p>
+                                            <p><span class="red-highlight text-light box-redius box-shadow p-1">Protocol Creation Form: Last Chemotherapy Protocol have been copied. Edit it accordigly</span></p>
                                         {% else %}
                                             <p><span class="green text-dark box-redius box-shadow p-1">No Previous Chemotherapy Protocol Present. Enter First Cycle</span></p>
                                         {% endif %}
@@ -88,7 +88,7 @@
                                         </div>
                                     {% else %}
                                         <div class="form-group mt-2">
-                                            <button class="btn btn-dark" type="submit">Create New Protocol</button>
+                                            <button class="btn btn-dark" type="submit" onclick="return confirm('This will Create New Protocol? If you want to add chemotherapy details use existing protocol. Press OK to Create or CANCEL to exit');">Create New Protocol</button>
                                         </div>
                                     {% endif %}
                                 </div>
@@ -100,6 +100,7 @@
                         {% if previous_protocol %}
                             <table class="styled-table m-1">
                                 <caption><h4>Available Chemotherapy Protocols</h4></caption>
+                                <caption><h5>View or Add chemotherapy details here</h5></caption>
                             <thead>
                                 <tr>
                                 <th>Unit</th>
@@ -107,6 +108,7 @@
                                 <th>Protocol Date</th>
                                 <th>Notes</th>
                                 <th>Action</th>
+                                <th>Chemo Details</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -117,13 +119,24 @@
                                     <td>{{ content.protocol_date|date:"d-m-Y" }}</td>
                                     <td>{{ content.notes }}</td>
                                     <td>
-                                    <a class="btn btn-sm btn-warning" href="{% url 'create-chemodrug' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">Add Drugs</a>
-                                    <a class="btn btn-sm btn-warning" href="{% url 'radonc-chemoprotocol-update' content.pk %}?next={{ request.path|urlencode }}">Edit</a>
+                                    <a class="btn btn-sm btn-warning" href="{% url 'create-chemodrug' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">View/Add</a>
+                                    <a class="btn btn-sm btn-warning" href="{% url 'radonc-chemoprotocol-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
                                     <a class="btn btn-sm btn-danger" href="{% url 'radonc-chemoprotocol-delete' content.pk %}">Delete</a>
+                                    </td>
+                                    <td>
+                                        <table class="styled-table m-1">
+                                            <tr>
+                                                <td>Total Cycle</td>
+                                                <td>Last Cycle Date</td>
+                                            </tr>
+                                            <tr>
+                                                <td>{{ content.s5chemodrugs_set.all.last.cycleno }}</td>
+                                                <td>{{ content.s5chemodrugs_set.all.last.chemodate|date:'d-m-Y' }}</td>
+                                            </tr>
+                                        </table>
                                     </td>
                                 </tr>
                                 {% endfor  %}
-                                <!-- and so on... -->
                             </tbody>
                         </table>
                         {% else %}

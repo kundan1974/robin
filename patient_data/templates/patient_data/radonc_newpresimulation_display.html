@@ -18,49 +18,49 @@
                         <a  class="btn btn-dark" href="{% url 'radonc-careplan-list' data.0.presimparent.crnumber %}">Back</a>
                         {% endif %}
                     </div>
+                    <h5 class="red-highlight p-1 box-shadow box-redius mt-3 text-light">You can edit these Presimulation details via Sim-RT Module</h5>
             </div>
             <article class="media content-section section-odd mt-3">
                    <div class="media-body">
                         <div class="article-title">
                             <table class="table">
-                  <thead>
-                    <tr>
-                        <th scope="col"><small>Days</small></th>
-                        <th scope="col"><small>Date</small></th>
-                        <th scope="col"><small>Amp(UL)</small></th>
-                        <th scope="col"><small>Amp(LL)</small></th>
-                        <th scope="col"><small>Amp(Avg)</small></th>
-                        <th scope="col"><small>Hold(sec)</small></th>
-                        <th scope="col"><small>Leak</small></th>
-                        <th scope="col"><small>Remarks</small></th>
-                        <th scope="col"><small>Status</small></th>
-                        <th dcope="col"><small>Action</small></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {% for content in data %}
-                    {% if content.simulation_set.count > 0 %}
-                        {% for sim in content.simulation_set.all %}
-                            <a  class="btn btn-success btn-sm" href="{% url 'radonc-simulation-update' sim.simid %}?next={{ request.path|urlencode }}">
-                                Update Simulation for: {{ sim.icdmainsite.all.0.description }} simulated on {{ sim.simdate|date:"d-m-Y" }}</a>
-                        {% endfor %}
-                  {% endif %}
-                    <tr>
-                        <th scope="row"><small>Day {{ content.day }}</small></th>
-                        <td><small>{{ content.date|date:"F d, Y" }}</small></td>
-                        <td><small>{{ content.ul_amp }}</small></td>
-                        <td><small>{{ content.ll_amp }}</small></td>
-                        <td><small>{{ content.average_amp }}</small></td>
-                        <td><small>{{ content.ahd }}</small></td>
-                        <td><small>{{ content.al }}</small></td>
-                        <td><small>{{ content.remarks }}</small></td>
-                        <td><small>{{ content.status }}</small></td>
-                        <td><small><a class="btn btn-secondary btn-sm" href="#">Update</a>
-                                <a class="btn btn-danger btn-sm" href="#">Delete</a></small></td>
-                    </tr>
-                  {% endfor %}
-                  </tbody>
-            </table>
+                                <thead>
+                                    <tr>
+                                        <th scope="col"><small>Days</small></th>
+                                        <th scope="col"><small>Date</small></th>
+                                        <th scope="col"><small>Amp(UL)</small></th>
+                                        <th scope="col"><small>Amp(LL)</small></th>
+                                        <th scope="col"><small>Amp(Avg)</small></th>
+                                        <th scope="col"><small>Hold(sec)</small></th>
+                                        <th scope="col"><small>Leak</small></th>
+                                        <th scope="col"><small>Remarks</small></th>
+                                        <th scope="col"><small>Status</small></th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for content in data %}
+                                    {% if content.simulation_set.count > 0 %}
+                                        {% for sim in content.simulation_set.all %}
+                                            <a  class="btn btn-success btn-sm" href="{% url 'radonc-simulation-update' sim.simid %}?next={{ request.path|urlencode }}">
+                                                Update Simulation for: {{ sim.icdmainsite.all.0.description }} simulated on {{ sim.simdate|date:"d-m-Y" }}</a>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <tr>
+                                        <th scope="row"><small>Day {{ content.day }}</small></th>
+                                        <td><small>{{ content.date|date:"F d, Y" }}</small></td>
+                                        <td><small>{{ content.ul_amp }}</small></td>
+                                        <td><small>{{ content.ll_amp }}</small></td>
+                                        <td><small>{{ content.average_amp }}</small></td>
+                                        <td><small>{{ content.ahd }}</small></td>
+                                        <td><small>{{ content.al }}</small></td>
+                                        <td><small>{{ content.remarks }}</small></td>
+                                        <td><small>{{ content.status }}</small></td>
+
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                    </div>
             </article>

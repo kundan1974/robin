@@ -1,7 +1,7 @@
 /* Tooltip */
 
 /*TIMLINE CSSS*/
-body{margin-top:20px;}
+
 .timeline-steps {
     display: flex;
     justify-content: start;
@@ -21,25 +21,25 @@ body{margin-top:20px;}
         content: "";
         display: block;
         border-top: .25rem dotted #cfb3f6;
-        width: 3.46rem;
+        width: 12.46rem;
         position: absolute;
-        left: 12.5rem;
+        left: 10.5rem;
         top: .3125rem
     }
     .timeline-steps .timeline-step:not(:first-child):before {
         content: "";
         display: block;
         border-top: .25rem dotted #cfb3f6;
-        width: 3.8125rem;
+        width: 12.8125rem;
         position: absolute;
-        right: 12.5rem;
+        right: 29.5rem;
         top: .3125rem
     }
 }
 
 .timeline-steps .timeline-content {
-    width: 15rem;
-    text-align: center
+    width: 21rem;
+    text-align: left;
 }
 
 .timeline-steps .timeline-content .inner-circle {

@@ -22,12 +22,18 @@
                     {% endif %}
                     <hr>
 {#                    <h5><a class="btn btn-dark" href="#">Back</a></h5>#}
+
+
                     {% if  request.GET.next %}
-                        <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                        {% if request.GET.next == "patientlist" %}
+                            <h5><a class="btn btn-dark" href="{% url 'db_operations' %}">Back</a></h5>
+                        {% elif request.GET.next %}
+                            <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
+                        {% else %}
+                            <h5><a class="btn btn-dark" href="#">Back</a></h5>
+                        {% endif %}
                     {% elif request.GET.regcrn %}
                         <h5><a class="btn btn-dark" href="{% url 'db_operations' request.GET.regcrn %}">Back</a></h5>
-                    {% else %}
-                        <h5><a class="btn btn-dark" href="#">Back</a></h5>
                     {% endif %}
                     <!-- First Section Demographics-->
                     <div class="form-control mb-5">
