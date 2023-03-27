@@ -25,7 +25,7 @@
                             <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-newpresimulation-list' data.0.parent_id.crnumber  %}?mx_display_crnumber={{ data.0.parent_id.crnumber }}">PreSimulation</a><!-- from simulation move to simulation list and then to RT -->
                         {% else %}
                             {% if sim_check %}
-                                <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-simulation-list' data.0.parent_id.crnumber %}">Simulation (update)</a><!-- from simulation move to simulation list and then to RT -->
+                                <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-simulation-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">Simulation (update)</a><!-- from simulation move to simulation list and then to RT -->
                             {% endif %}
                         {% endif %}
 

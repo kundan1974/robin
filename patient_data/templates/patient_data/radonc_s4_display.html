@@ -13,17 +13,17 @@
                     <div><h4>All Radiotherapy details for - Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</h4></div>
                 {% endif %}
                 <div>
-                    {% if request.GET.next %}
-                        <h5><a href="{{ request.GET.next }}" class="btn btn-dark">Back</a></h5>
-                    {% elif request.GET.mx_display %}
+                    {% if request.GET.next == "mx_display" %}
 {#                        {% url 'radonc-careplan-list' data.0.parent_id.pk %}#}
                         <h5><a  class="btn btn-dark" href="{{ request.GET.mx_display }}">Back</a></h5>
+                    {% elif request.GET.next == "patientlist" %}
+                        <h5><a href="{% url 'patient_search' %}" class="btn btn-dark">Back</a></h5>
+                    {% elif request.GET.next %}
+                        <h5><a href="{{ request.GET.next }}" class="btn btn-dark">Back</a></h5>
+                    {% elif request.GET.next_rt %}
+                        <h5><a  class="btn btn-dark" href="{% url 'radonc-careplan-list' crnumber %}">Back</a></h5>
                     {% else %}
-                        {% if request.GET.next_rt %}
                             <h5><a  class="btn btn-dark" href="{% url 'radonc-careplan-list' crnumber %}">Back</a></h5>
-                        {% else %}
-                            <h5><a  class="btn btn-dark" href="{% url 'radonc-careplan-list' crnumber %}">Back</a></h5>
-                        {% endif %}
                     {% endif %}
                 </div>
                 {% for content in data %}

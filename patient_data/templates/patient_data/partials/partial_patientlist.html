@@ -33,7 +33,7 @@
                             <td>{{ patient.reg_date|date:'M d, Y' }}</td>
                             <td><span class="count green">{{ patient.mobile }}</span></td>
                             {% if patient.s4rt_set.count > 0 %}
-                                <td><a href="{% url 'summary' patient.crnumber %}?next={{ request.path|urlencode }}"
+                                <td><a href="{% url 'summary' patient.crnumber %}?next=patientlist"
                                    class="btn btn-dark btn-sm" role="button" aria-pressed="true">View</a></td>
                             {% else %}
                                 <td><span class="red text-light p-1">No RT Details</span></td>
@@ -43,20 +43,20 @@
                                    class="btn btn-outline-success btn-sm" role="button" aria-pressed="true">Registration</a>
                                 {% if patient.simulation_set.count > 0 %}
                                     {% if patient.presimulation_set.count > 0 %}
-                                        <a href="{% url 'radonc-presimulation-list' patient.crnumber %}?next={{ request.path|urlencode }}"
+                                        <a href="{% url 'radonc-presimulation-list' patient.crnumber %}?next=patientlist"
                                                class="btn btn-outline-success btn-sm" role="button" aria-pressed="true">Create/Edit(Sim/PreSim)</a>
                                     {% else %}
-                                        <a href="{% url 'radonc-simulation-list' patient.crnumber %}?next={{ request.path|urlencode }}"
+                                        <a href="{% url 'radonc-simulation-list' patient.crnumber %}?next=patientlist"
                                            class="btn btn-success btn-sm" role="button" aria-pressed="true">Edit Sim (No PreSim)</a>
                                     {% endif %}
 
                                 {% endif %}
                                 {% if patient.s4rt_set.count > 0 %}
-                                    <a href="{% url 'radonc-radiotherapy-list' patient.crnumber %}?next={{ request.path|urlencode }}"
+                                    <a href="{% url 'radonc-radiotherapy-list' patient.crnumber %}?next=patientlist"
                                            class="btn btn-outline-success btn-sm" role="button" aria-pressed="true">Edit RT</a>
                                 {% else %}
                                     {% if patient.simulation_set.count > 0 %}
-                                        <a href="{% url 'radonc-simulation-list' patient.crnumber %}?next={{ request.path|urlencode }}"
+                                        <a href="{% url 'radonc-simulation-list' patient.crnumber %}?next=patientlist"
                                        class="btn btn-outline-danger btn-sm" role="button" aria-pressed="true">Create RT</a>
                                     {% else %}
                                         <a href="#"
@@ -64,11 +64,11 @@
                                     {% endif %}
                                 {% endif %}
                                 {% if patient.s2diagnosis_set.count < 1 %}
-                                     <a href="{% url 'radonc-diagnosis' patient.crnumber %}?next={{ request.path|urlencode }}"
+                                     <a href="{% url 'radonc-diagnosis' patient.crnumber %}?next=patientlist"
                                            class="btn btn-outline-danger btn-sm" role="button" aria-pressed="true">Enter Dx</a>
                                 {% endif %}
                                 {% if patient.s3careplan_set.count < 1 and patient.s2diagnosis_set.count == 1 %}
-                                     <a href="{% url 'radonc-careplan' patient.crnumber patient.s2diagnosis_set.all.first.s2_id %}?next={{ request.path|urlencode }}"
+                                     <a href="{% url 'radonc-careplan' patient.crnumber patient.s2diagnosis_set.all.first.s2_id %}?next=patientlist"
                                            class="btn btn-outline-danger btn-sm" role="button" aria-pressed="true">Enter Mx</a>
                                 {% endif %}
                             </td>

@@ -3,7 +3,9 @@
 {% block content %}
     <div class="container">
         <div class="one">
-            <a href="{% url prev_url %}" class="btn btn-dark">Back</a>
+            {% if request.GET.next == "patientlist" %}
+                <a href="{% url 'patient_search' %}" class="btn btn-dark">Back</a>
+            {% endif %}
             <button id="doPrint" onclick="printCertificate()" class="btn btn-dark">Print</button>
         </div>
         <div id="summery" class="page">

@@ -3942,9 +3942,8 @@ def summary(request, crnumber):
             'modality': modality, 'target': target, 'dose_text': dose_text,
             'duration_text': duration_text, 'ref_to_text': ref_to_text, 'time': time}
     pre_url = request.GET.get('next')
-    prev_url = pre_url.split('/')[2]
-    return render(request, 'patient_data/summary.html', {'data': data,
-                                                         'prev_url': prev_url})
+    # prev_url = pre_url.split('/')[2]
+    return render(request, 'patient_data/summary.html', {'data': data})
 
 
 @login_required

@@ -6,7 +6,7 @@
         <div class="col-md-4">
             <form action="" method="POST" id="searchform">
             {% csrf_token %}
-            <input class="form-control" name="search"
+            <input class="form-control" name="search" id="searhinput"
                    hx-post="{% url "search" %}" hx-target="#search-result" hx-trigger="keyup changed delay:500ms"
                    hx-indicator=".htmx-indicator" placeholder="SEARCH"><br>
             </form>

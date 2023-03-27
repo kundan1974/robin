@@ -542,7 +542,9 @@ MOLECULAR_TYPE = [
     ('BRACA1', 'BRACA1'),
     ('BRACA2', 'BRACA2'),
     ('PDL1', 'PDL1'),
-    ('Ki67', 'Ki67')
+    ('Ki67', 'Ki67'),
+    ('TP53', 'TP53'),
+    ('STK11', 'STK11'),
 ]
 
 MOLECULAR_RESULT = [

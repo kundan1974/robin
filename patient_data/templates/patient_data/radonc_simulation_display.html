@@ -12,7 +12,9 @@
                 <div><h4>All Simulation details for - Mrs. {{ data.0.name }} (CRNumber: {{ data.0.simparent.crnumber }})</h4></div>
             {% endif %}
             <div>
-                {% if request.GET.next %}
+                {% if request.GET.next == "patientlist" %}
+                    <h5><a href="{% url 'patient_search' %}" class="btn btn-dark">Back</a></h5>
+                {% elif request.GET.next %}
                     <h5><a href="{{ request.GET.next }}" class="btn btn-dark">Back</a></h5>
                 {% else %}
                     <h5><a  class="btn btn-dark" href="{% url 'db_operations' data.0.simparent.crnumber %}">Back</a></h5>
