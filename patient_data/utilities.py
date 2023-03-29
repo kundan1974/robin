@@ -1,5 +1,6 @@
 from patient_data.models import S1ParentMain, S3CarePlan, PreSimulation, Simulation, S2Diagnosis, S8FUP, S4RT, \
     S5ChemoProtocol, S6Surgery
+from django.db import connection
 
 
 def db_homestatus(crnumber=None):
@@ -148,3 +149,13 @@ def get_timeline(crnumber):
 
 def getnewsimulation_choices(n):
     pass
+
+
+def raw_query01(query, params):
+    with connection.cursor() as cursor:
+        cursor.execute(query, params)
+        columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]

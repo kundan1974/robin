@@ -14,7 +14,7 @@
                         <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
                     </div>
                     <div class="col-auto">
-                        <h5><a class="btn btn-dark" href="#">Database Operations</a></h5>
+                        <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.parent_id.crnumber %}">Database Operations</a></h5>
                     </div>
                 </div>
             {% else %}
@@ -24,7 +24,7 @@
                         <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
                     </div>
                     <div class="col-auto">
-                        <h5><a class="btn btn-dark" href="#">Database Operations</a></h5>
+                        <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.crnumber %}">Database Operations</a></h5>
                     </div>
                 </div>
             {% endif %}

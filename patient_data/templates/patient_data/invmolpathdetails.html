@@ -20,12 +20,15 @@
                                         {% if request.GET.next %}
                                             <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
                                         {% else %}
-                                            <h5><a class="btn btn-dark" href="#">Back</a></h5>
+                                            {% if patient.s3careplan_set.all.count > 0 %}
+                                                <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.parent_id.crnumber %}">Back</a></h5>
+                                            {% else %}
+                                                <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.parent_id.crnumber %}">Back</a></h5>
+                                            {% endif %}
                                         {% endif %}
-
                                     </div>
                                     <div class="col-auto">
-{#                                        <h5><a class="btn btn-dark" href="{% url 'db_operations' updatecrn %}">Database Operations</a></h5>#}
+                                        <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.parent_id.crnumber %}">Database Operations</a></h5>
                                     </div>
                                 </div>
                         {% else %}
@@ -36,7 +39,15 @@
                                         {% if request.GET.next %}
                                             <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
                                         {% else %}
-                                            <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.crnumber %}">Back</a></h5>
+                                            {% if patient.s3careplan_set.all.count > 0 %}
+                                                <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.crnumber %}">Back</a></h5>
+                                            {% else %}
+                                                {% if patient.s3careplan_set.all.count > 0 %}
+                                                    <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.crnumber %}">Back</a></h5>
+                                                {% else %}
+                                                    <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.crnumber %}">Back</a></h5>
+                                                {% endif %}
+                                            {% endif %}
                                         {% endif %}
                                     </div>
                                     <div class="col-auto">

@@ -20,7 +20,11 @@
                                         {% if request.GET.next %}
                                             <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
                                         {% else %}
-                                            <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.parent_id.crnumber %}">Back</a></h5>
+                                            {% if patient.s3careplan_set.all.count > 0 %}
+                                                <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.parent_id.crnumber %}">Back</a></h5>
+                                            {% else %}
+                                                <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.parent_id.crnumber %}">Back</a></h5>
+                                            {% endif %}
                                         {% endif %}
                                     </div>
                                     <div class="col-auto">
@@ -36,7 +40,11 @@
                                         {% if request.GET.next %}
                                             <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
                                         {% else %}
-                                            <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.crnumber %}">Back</a></h5>
+                                            {% if patient.s3careplan_set.all.count > 0 %}
+                                                <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.crnumber %}">Back</a></h5>
+                                            {% else %}
+                                                <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.crnumber %}">Back</a></h5>
+                                            {% endif %}
                                         {% endif %}
                                     </div>
                                     <div class="col-auto">
@@ -156,6 +164,7 @@
     <script>
         $(document).ready(function() {
             $('#id_biopsy_location').select2();
+            $('#id_biopsy_result').select2();
         });
     </script>
 {% endblock javascript %}

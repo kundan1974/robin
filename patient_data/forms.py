@@ -356,7 +356,7 @@ class S6SurgeryForm(ModelForm):
         exclude = ["s6_id", "last_updated"]
 
         widgets = {
-            'parent_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
             's3_id': forms.NumberInput(attrs={'class': 'form-control'}),
             'sxunit': forms.Select(attrs={'class': 'form-control'}),
             'admissiondate': DateInput(attrs={'class': 'form-control'}),
@@ -374,7 +374,7 @@ class S6HPEForm(ModelForm):
         exclude = ["s6hpe_id", "last_updated"]
 
         widgets = {
-            'parent_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
             's6_id': forms.NumberInput(attrs={'class': 'form-control'}),
             'hpedate': DateInput(attrs={'class': 'form-control'}),
             'hpeno': forms.TextInput(attrs={'class': 'form-control'}),

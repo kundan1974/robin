@@ -29,7 +29,7 @@ from django.utils import timezone
 from django.contrib import messages
 import pandas as pd
 
-from .utilities import db_homestatus, get_timeline
+from .utilities import db_homestatus, get_timeline, raw_query01
 from log2d import Log
 from wsgiref.util import FileWrapper
 
@@ -3968,7 +3968,6 @@ def download_file(request):
 
 def get_second_field_options(request):
     first_field_value = request.POST.get('main_site', '')
-    print(first_field_value)
     if first_field_value:
         icdmain_code_values = first_field_value.split(',')[0][:3]
         codes = first_field_value.split(',')
@@ -3984,6 +3983,7 @@ def get_second_field_options(request):
                   {'options': second_field_options})
 
 
+
 @login_required
 def filter_rt_started(request):
     all_options = ICDMainSites.objects.all().values_list()
@@ -3992,6 +3992,14 @@ def filter_rt_started(request):
         form = FilterRTStarted(request.POST)
         main_site = form.data.get('main_site', "")
         subsite = form.data.get('subsite', "")
+
+        main_site_option = []
+        for i, vals in enumerate(options1):
+            if vals[0] == main_site:
+                main_site_option = options1[i]
+        query = "SELECT parent_id_id, icd_main_topo_id, icd_topo_code_id FROM s2_child_dx WHERE icd_main_topo_id = %s AND icd_topo_code_id = %s"
+        params = [main_site_option[1], subsite]
+        query_res = raw_query01(query, params)
         # s_date = form.data['s_date']
         # f_date = form.data['f_date']
         # intent = form.data['intent']
@@ -4008,8 +4016,10 @@ def filter_rt_started(request):
         #     f_date = None
         if subsite:
             site_id = subsite
+            site = Site.objects.get(pk=site_id)
         else:
             site_id = None
+            site = None
         # print(site_id)
         if main_site:
             main_site_id = ICDMainSites.objects.filter(icd_code=main_site).first().pk
@@ -4032,16 +4042,20 @@ def filter_rt_started(request):
                 's2diagnosis_set__icd_topo_code'
             ).filter(s2diagnosis__icd_topo_code=site_id)
         elif main_site_id:
-            data = S1ParentMain.objects.filter(s2diagnosis__isnull=False).prefetch_related(
-                's2diagnosis_set__icd_main_topo'
-            ).filter(s2diagnosis__icd_main_topo=main_site_id)
+            # data = S1ParentMain.objects.filter(s2diagnosis__isnull=False).prefetch_related(
+            #     's2diagnosis_set__icd_main_topo'
+            # ).filter(s2diagnosis__icd_main_topo=main_site_id)
+            # s2diagnosis_set, s4rt_set, s5chemo_set, s8fup_set
+            data = S2Diagnosis.objects.select_related('parent_id').filter(icd_main_topo=main_site_id)
         else:
             print("No Data to print")
             data = {}
+
         df = pd.DataFrame.from_records(data.values())
         df.to_csv('download.csv')
         return render(request, 'patient_data/filter_rt_started.html',
-                      {'form': form, 'data': data, 'options1': options1})
+                      {'form': form, 'data': data, 'options1': options1,
+                       'main_site_option': main_site_option, 'site': site})
 
     form = FilterRTStarted()
     return render(request, 'patient_data/filter_rt_started.html', {'form': form, 'options1': options1})
@@ -4528,7 +4542,7 @@ def patient_search(request):
     page = request.GET.get('page')
     page_no = int(request.GET.get('page', 1))
     result = 10
-    serial_num = ((int(request.GET.get('page', 1)) - 1) * result + 1) -1
+    serial_num = ((int(request.GET.get('page', 1)) - 1) * result + 1) - 1
 
     paginator = Paginator(res, result)
 

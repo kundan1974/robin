@@ -7,6 +7,10 @@
         <div class="query-container">
 
             <h1>Query</h1>
+            {% if main_site_option %}
+                <p class="text-light">Previous Query was: Main Site: {{ main_site_option.1 }}, Subsite: {{ site }}</p>
+            {% endif %}
+
             <hr>
             <div class="my-form">
                 <form class="row g-3" method="POST">
@@ -19,9 +23,9 @@
                     <select class="form-select form-select-lg mb-3" name="main_site"
                             hx-post="{% url "get_second_field_options" %}" hx-target="#subsite_field" hx-trigger="change">
                         <option value="">--Select Main Site--</option>
-                            {% for option in options1 %}
-                        <option value="{{ option.0 }}">{{ option.1 }}</option>
-                            {% endfor %}
+                        {% for option in options1 %}
+                            <option value="{{ option.0 }}">{{ option.1 }}</option>
+                        {% endfor %}
                     </select>
                     </div>
                     <div id="subsite_field" class="col-6">
@@ -93,20 +97,20 @@
                         <tbody class="table-group-divider">
                             {% for d in data %}
                             <tr class="table-info clickable-row"
-                                data-href="{% url 'summary' d.crnumber %}?next={{ request.path|urlencode }}">
+                                data-href="{% url 'summary' d.parent_id.crnumber %}?next={{ request.path|urlencode }}">
                                 <th scope="row">{{ forloop.counter }}</th>
-                                <td class="col-1">{{ d.crnumber }}</td>
-                                <td class="col-3">{{ d.s2diagnosis_set.first.icd_path_code.hpe }}</td>
-                                <td class="col-1">{{ d.s4rt_set.first.rtdose1 }}</td>
-                                <td class="col-1">{{ d.s4rt_set.first.rtdose2 }}</td>
-                                <td class="col-2">{{ d.s4rt_set.first.tech1 }}</td>
-                                <td class="col-1">{{ d.s5chemo_set.last.cycleno }}</td>
+                                <td class="col-1">{{ d.parent_id.crnumber }}</td>
+                                <td class="col-3">{{ d.icd_path_code.hpe }}</td>
+                                <td class="col-1">{{ d.rt_diagnosis_id.first.rtdose1 }}</td>
+                                <td class="col-1">{{ d.rt_diagnosis_id.first.rtdose2 }}</td>
+                                <td class="col-2">{{ d.rt_diagnosis_id.first.tech1 }}</td>
+                                <td class="col-1">{{ d.parent_id.s5chemodrugs_set.last.cycleno }}</td>
                                 <td class="col-1">{{ d.s8fup_set.last.visitdate|date:"d-m-y" }}</td>
                                 <td class="col-1">{{ d.s8fup_set.last.LRstatus }}</td>
                                 <td class="col-1">{{ d.s8fup_set.last.RRstatus }}</td>
                                 <td class="col-1">{{ d.s8fup_set.last.DMstatus }}</td>
-                                <td class="col-1">{{ d.s8fup_set.last.Death }}</td>
-                                <td class="col-1"><a href="{% url 'summary' d.crnumber %}?next={{ request.path|urlencode }}" class="btn btn-dark btn-sm" role="button" aria-pressed="true">View</a></td>
+                                <td class="col-1">{{ d.s8fup_set.last.Death }}</td>{{ d.parent_id.crnumber }}
+                                <td class="col-1"><a href="{% url 'summary' d.parent_id.crnumber %}?next={{ request.path|urlencode }}" class="btn btn-dark btn-sm" role="button" aria-pressed="true">View</a></td>
                             </tr>
                             {% endfor %}
                         </tbody>

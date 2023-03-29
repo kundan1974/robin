@@ -20,7 +20,11 @@
                                         {% if request.GET.next %}
                                             <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
                                         {% else %}
-                                            <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.parent_id.crnumber %}">Back</a></h5>
+                                            {% if patient.s3careplan_set.all.count > 0 %}
+                                                <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.parent_id.crnumber %}">Back</a></h5>
+                                            {% else %}
+                                                <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.parent_id.crnumber %}">Back</a></h5>
+                                            {% endif %}
                                         {% endif %}
                                     </div>
                                     <div class="col-auto">
@@ -35,7 +39,11 @@
                                         {% if request.GET.next %}
                                             <h5><a class="btn btn-dark" href="{{ request.GET.next }}">Back</a></h5>
                                         {% else %}
-                                            <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.crnumber %}">Back</a></h5>
+                                            {% if patient.s3careplan_set.all.count > 0 %}
+                                                <h5><a class="btn btn-dark" href="{% url 'radonc-careplan-list' patient.crnumber %}">Back</a></h5>
+                                            {% else %}
+                                                <h5><a class="btn btn-dark" href="{% url 'db_operations' patient.crnumber %}">Back</a></h5>
+                                            {% endif %}
                                         {% endif %}
                                     </div>
                                     <div class="col-auto">
@@ -52,7 +60,7 @@
                                         {{ form.parent_id }}
                                     </div>
                                     {% if s8_id %}
-                                        <div class="col-md-2">
+                                        <div class="col-md-2 d-none">
                                             {{ form.s8_id.errors }}
                                             <label class="oncflow-labels" for="{{ form.s8_id.id_for_label }}">FU ID:</label>
                                             {{ form.s8_id }}
