@@ -1360,7 +1360,7 @@ class InvestigationsPath(models.Model):
     path_type = models.CharField(max_length=255, blank=False,
                                  null=True)  # Fine needle aspiration, Ascitic fluid, Pleural Fluid, core needle biopsy, excisional biopsy, etc
     guided_by = models.CharField(max_length=255, blank=True,
-                                 null=True)  # USG, CT, MRI
+                                 null=True)  # USG, CT, MRI, other investigations
     biopsy_date = models.DateField(blank=True, null=True)
     biopsy_location = models.ForeignKey(FMAID, models.CASCADE, blank=True, null=True, db_column='biopsy_location',
                                         to_field='fma_id')
