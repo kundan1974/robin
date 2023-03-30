@@ -97,20 +97,20 @@
                         <tbody class="table-group-divider">
                             {% for d in data %}
                             <tr class="table-info clickable-row"
-                                data-href="{% url 'summary' d.parent_id.crnumber %}?next={{ request.path|urlencode }}">
+                                data-href="{% url 'summary' d.crnumber %}?next={{ request.path|urlencode }}">
                                 <th scope="row">{{ forloop.counter }}</th>
-                                <td class="col-1">{{ d.parent_id.crnumber }}</td>
-                                <td class="col-3">{{ d.icd_path_code.hpe }}</td>
-                                <td class="col-1">{{ d.rt_diagnosis_id.first.rtdose1 }}</td>
-                                <td class="col-1">{{ d.rt_diagnosis_id.first.rtdose2 }}</td>
-                                <td class="col-2">{{ d.rt_diagnosis_id.first.tech1 }}</td>
-                                <td class="col-1">{{ d.parent_id.s5chemodrugs_set.last.cycleno }}</td>
-                                <td class="col-1">{{ d.s8fup_set.last.visitdate|date:"d-m-y" }}</td>
-                                <td class="col-1">{{ d.s8fup_set.last.LRstatus }}</td>
-                                <td class="col-1">{{ d.s8fup_set.last.RRstatus }}</td>
-                                <td class="col-1">{{ d.s8fup_set.last.DMstatus }}</td>
-                                <td class="col-1">{{ d.s8fup_set.last.Death }}</td>{{ d.parent_id.crnumber }}
-                                <td class="col-1"><a href="{% url 'summary' d.parent_id.crnumber %}?next={{ request.path|urlencode }}" class="btn btn-dark btn-sm" role="button" aria-pressed="true">View</a></td>
+                                <td class="col-1">{{ d.crnumber }}</td>
+                                <td class="col-3">{{ d.icd_path_code }}</td>
+                                <td class="col-1">{{ d.rtdose1 }}</td>
+                                <td class="col-1">{{ d.rtdose2 }}</td>
+                                <td class="col-2">{{ d.tech1 }}</td>
+                                <td class="col-1">{{ d.cycleno }}</td>
+                                <td class="col-1">{{ d.visitdate|date:"d-m-y" }}</td>
+                                <td class="col-1">{{ d.LRstatus }}</td>
+                                <td class="col-1">{{ d.RRstatus }}</td>
+                                <td class="col-1">{{ d.DMstatus }}</td>
+                                <td class="col-1">{{ d.Death }}</td>
+                                <td class="col-1"><a href="{% url 'summary' d.crnumber %}?next={{ request.path|urlencode }}" class="btn btn-dark btn-sm" role="button" aria-pressed="true">View</a></td>
                             </tr>
                             {% endfor %}
                         </tbody>

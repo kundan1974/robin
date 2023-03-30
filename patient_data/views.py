@@ -29,6 +29,7 @@ from django.utils import timezone
 from django.contrib import messages
 import pandas as pd
 
+from .mainsite import mainsite_query, mainsite_subsite_query
 from .utilities import db_homestatus, get_timeline, raw_query01
 from log2d import Log
 from wsgiref.util import FileWrapper
@@ -909,10 +910,11 @@ def simulation(request, crnumber=None, s3_id=None, presimid=None):
                     subject='New Simulation Details',
                     body=message,
                     from_email='rgcirtoffice@gmail.com',
-                    to=emails,
+                    to=['kundan25@gmail.com'],
                 )
                 msg.content_subtype = "html"
                 msg.send()
+            print(mail_status)
             messages.success(request,
                              f'Data has been saved for CRNumber: {crn} and is assigned to: {assignedto_user}')
             return redirect('radonc-simulation-list', crn)
@@ -1128,6 +1130,9 @@ class SimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     success_message = "Data Updated Successfully!"
 
     def form_valid(self, form):
+        all_users = User.objects.all()
+        emails = [m.email for m in all_users]
+        print(emails)
         pk = self.kwargs["pk"]
         patient = Simulation.objects.get(pk=pk)
         # assignedto_id = patient.assignedto.id
@@ -1137,6 +1142,16 @@ class SimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         current_user = User.objects.get(id=self.request.user.id)
         form.instance.updated_by = current_user.username
         form.instance.user = patient.user
+        if patient.send_mail:
+            msg = EmailMessage(
+                subject='New Simulation Details',
+                body="TEST MAIL",
+                from_email='rgcirtoffice@gmail.com',
+                to=['kundan25@gmail.com'],
+            )
+            msg.content_subtype = "html"
+            # msg.send()
+            print(msg.send())
 
         return super().form_valid(form)
 
@@ -3997,9 +4012,7 @@ def filter_rt_started(request):
         for i, vals in enumerate(options1):
             if vals[0] == main_site:
                 main_site_option = options1[i]
-        query = "SELECT parent_id_id, icd_main_topo_id, icd_topo_code_id FROM s2_child_dx WHERE icd_main_topo_id = %s AND icd_topo_code_id = %s"
-        params = [main_site_option[1], subsite]
-        query_res = raw_query01(query, params)
+
         # s_date = form.data['s_date']
         # f_date = form.data['f_date']
         # intent = form.data['intent']
@@ -4034,19 +4047,21 @@ def filter_rt_started(request):
             main_site_id = None
 
         if site_id and main_site_id:
-            data = S1ParentMain.objects.filter(s2diagnosis__isnull=False).prefetch_related(
-                's2diagnosis_set__icd_topo_code', 's2diagnosis_set__icd_main_topo'
-            ).filter(s2diagnosis__icd_topo_code=site_id, s2diagnosis__icd_main_topo=main_site_id)
+            data = {}
+            query = mainsite_subsite_query
+            params = [main_site_option[1], site_id]
+            query_res = raw_query01(query, params)
+            data = {}
+
         elif site_id:
             data = S1ParentMain.objects.filter(s2diagnosis__isnull=False).prefetch_related(
                 's2diagnosis_set__icd_topo_code'
             ).filter(s2diagnosis__icd_topo_code=site_id)
         elif main_site_id:
-            # data = S1ParentMain.objects.filter(s2diagnosis__isnull=False).prefetch_related(
-            #     's2diagnosis_set__icd_main_topo'
-            # ).filter(s2diagnosis__icd_main_topo=main_site_id)
-            # s2diagnosis_set, s4rt_set, s5chemo_set, s8fup_set
-            data = S2Diagnosis.objects.select_related('parent_id').filter(icd_main_topo=main_site_id)
+            query = mainsite_query
+            params = [main_site_option[1]]
+            query_res = raw_query01(query, params)
+            data = {}
         else:
             print("No Data to print")
             data = {}
@@ -4054,7 +4069,7 @@ def filter_rt_started(request):
         df = pd.DataFrame.from_records(data.values())
         df.to_csv('download.csv')
         return render(request, 'patient_data/filter_rt_started.html',
-                      {'form': form, 'data': data, 'options1': options1,
+                      {'form': form, 'data': query_res, 'options1': options1,
                        'main_site_option': main_site_option, 'site': site})
 
     form = FilterRTStarted()
