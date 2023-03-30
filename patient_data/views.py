@@ -139,9 +139,9 @@ def index(request):
     # PreSimulation Data
     delta_date_5 = timezone.now() - timezone.timedelta(90)
     full_presimdata = []
-    presimdata = PreSimulation.objects.prefetch_related().filter(day1date__gt=delta_date_5).order_by('-day1date')
+    presimdata = NewPreSimulation.objects.prefetch_related().filter(date__gt=delta_date_5).order_by('-date').all()
     [full_presimdata.append(data) for data in presimdata]
-    presimdata_no = PreSimulation.objects.all().count()
+    presimdata_no = NewPreSimulation.objects.all().count()
     # Simulation recent data
     delta_date_30 = timezone.now() - timezone.timedelta(30)
     recent_simulations = sims.filter(

@@ -311,32 +311,11 @@
                                         <th scope="row">{{ pt.0 }}</th>
                                         <td>{{ data.presimparent.first_name }}</td>
                                         <td>{{ data.presimparent.crnumber }}</td>
-                                          {% if data.day5date %}
-                                              <td>{{ data.day5date|date:"M d, Y" }}</td>
-                                              <td>Day 5</td>
-                                              <td>{{ data.final_status }}</td>
-                                              <td>{{ data.final_remarks }}</td>
-                                          {% elif data.day4date %}
-                                              <td>{{ data.day4date|date:"M d, Y" }}</td>
-                                              <td>Day 4</td>
-                                              <td>{{ data.final_status }}</td>
-                                              <td>{{ data.final_remarks }}</td>
-                                          {% elif data.day3date %}
-                                              <td>{{ data.day3date|date:"M d, Y" }}</td>
-                                              <td>Day 3</td>
-                                              <td>{{ data.final_status }}</td>
-                                              <td>{{ data.final_remarks }}</td>
-                                          {% elif data.day2date %}
-                                              <td>{{ data.day2date|date:"M d, Y" }}</td>
-                                              <td>Day 2</td>
-                                              <td>{{ data.day2status }}</td>
-                                              <td>{{ data.d2remarks }}</td>
-                                          {% elif data.day1date %}
-                                              <td>{{ data.day1date|date:"M d, Y" }}</td>
-                                              <td>Day 1</td>
-                                              <td>{{ data.day1status }}</td>
-                                              <td>{{ data.d1remarks }}</td>
-                                          {% endif %}
+                                        <td>{{ data.date|date:"M d, Y" }}</td>
+                                        <td>{{ data.day }}</td>
+                                        <td>{{ data.day }}</td>
+                                        <td>{{ data.status }}</td>
+                                        <td>{{ data.remarks }}</td>
                                       </tr>
                                     {% endfor %}
                             </tbody>
