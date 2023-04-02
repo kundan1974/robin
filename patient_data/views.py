@@ -3998,7 +3998,6 @@ def get_second_field_options(request):
                   {'options': second_field_options})
 
 
-
 @login_required
 def filter_rt_started(request):
     all_options = ICDMainSites.objects.all().values_list()
@@ -4477,15 +4476,6 @@ def get_final_status(request):
 
 
 @login_required
-def get_presim_buttons(request):
-    finalstatus = request.POST.get('final_status', '')
-    if finalstatus == '0':
-        return HttpResponse('')
-    else:
-        return render(request, 'patient_data/partials/partial_presim_buttons.html')
-
-
-@login_required
 def create_presim(request):
     if request.method == "POST":
         data = request.POST.copy()
@@ -4511,6 +4501,27 @@ def create_presim(request):
                            's3_id': s3_id,
                            'error': error,
                            'form': form})
+
+
+# Duplicating creating new presimulation as above function (create_presim) for direct access from mobiles
+@login_required
+def presim_create(request, crnumber):
+    if request.method == "POST":
+        pass
+
+    else:
+        form = NewPreSimulationForm()
+        context = {'crnumber': crnumber, 'form': form}
+        return render(request, 'patient_data/presim_create.html', context)
+
+
+@login_required
+def get_presim_buttons(request):
+    finalstatus = request.POST.get('final_status', '')
+    if finalstatus == '0':
+        return HttpResponse('')
+    else:
+        return render(request, 'patient_data/partials/partial_presim_buttons.html')
 
 
 @login_required

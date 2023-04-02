@@ -1,0 +1,144 @@
+{% extends 'patient_data/base.html' %}
+
+{% block content %}
+
+     <div class="container">
+    <div class="query-container">
+        <div class="col-md-12">
+            <div><h2>Pre-Simulation DIBH Assessment Form</h2></div>
+            {% if error %}
+                <h5>{{ error }}</h5>
+            {% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                    <div class="form-row justify-content-left g-3">
+                        <div class="col-md-2 mb-3">
+                            {{ form.presimparent.errors }}
+                            <label class="oncflow-labels" for="{{ form.presimparent.id_for_label }}">CR Number:</label>
+                            {{ form.presimparent }}
+                        </div>
+                        <div class="col-md-6 mb-3 d-none">
+                            {{ form.s3_id.errors }}
+                            <label class="oncflow-labels" for="{{ form.s3_id.id_for_label }}">Mx_ID:</label>
+                            {{ form.s3_id }}
+                        </div>
+                    </div>
+                    <div class="row g-2 mt-2">
+                        <div class="col-md-2">
+                            {{ form.date.errors }}
+                            <label class="oncflow-labels" for="{{ form.date.id_for_label }}">Date:</label>
+                            {{ form.date }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form.ul_amp.errors }}
+                            <label class="oncflow-labels" for="{{ form.ul_amp.id_for_label }}">ULAmp(mm):</label>
+                            {{ form.ul_amp }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form.ll_amp.errors }}
+                            <label class="oncflow-labels" for="{{ form.ll_amp.id_for_label }}">LLAmp(mm):</label>
+                            {{ form.ll_amp }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form.average_amp.errors }}
+                            <label class="oncflow-labels" for="{{ form.average_amp.id_for_label }}">AvgAmp(mm):</label>
+                            {{ form.average_amp }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form.ahd.errors }}
+                            <label class="oncflow-labels" for="{{ form.ahd.id_for_label }}">AvgHold(Sec):</label>
+                            {{ form.ahd }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form.al.errors }}
+                            <label class="oncflow-labels mt-4" for="{{ form.al.id_for_label }}">Airleak:</label>
+                            {{ form.al }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.status.errors }}
+                            <label class="oncflow-labels" for="{{ form.status.id_for_label }}">Status:</label>
+                            {{ form.status }}
+                        </div>
+{#                        <div class="col-md-2">#}
+{#                            {{ form.day.errors }}#}
+{#                            <label class="oncflow-labels" for="{{ form.day.id_for_label }}">Day:</label>#}
+{#                            {{ form.day }}#}
+{#                        </div>#}
+                        <div class="col-md-3">
+                            {{ form.assessedby.errors }}
+                            <label class="oncflow-labels" for="{{ form.assessedby.id_for_label }}">Assessed by:</label>
+                            {{ form.assessedby }}
+                        </div>
+                        {% if presim.day %}
+                            <div class="col-md-3">
+                                <label for="day" class="oncflow-labels">Training Day?</label>
+                                <select name="day" id="id_day" class="form-control"
+                                        hx-post="{% url "get-final-status" %}"
+                                        hx-target="#final_status1" hx-trigger="load">
+                                    <option value={{ presim.day }}>Day{{ presim.day }}</option>
+                                    <option value=1>Day1</option>
+                                    <option value=2>Day2</option>
+                                    <option value=3>Day3</option>
+                                    <option value=4>Day4</option>
+                                    <option value=5>Day5</option>
+                                </select>
+                            </div>
+                        {% else %}
+                            <div class="col-md-3">
+                                <label for="day" class="oncflow-labels">Training Day?</label>
+                                <select name="day" id="id_day" class="form-control"
+                                        hx-post="{% url "get-final-status" %}"
+                                        hx-target="#final_status" hx-trigger="change">
+                                    <option value="">--Training Day ?--</option>
+                                    <option value=1>Day1</option>
+                                    <option value=2>Day2</option>
+                                    <option value=3>Day3</option>
+                                    <option value=4>Day4</option>
+                                    <option value=5>Day5</option>
+                                </select>
+                            </div>
+                        {% endif %}
+                        {% if presim.final_status %}
+                            <div class="col-md-3" id="final_status1">
+                                {{ form.final_status.errors }}
+                                <label class="oncflow-labels" for="{{ form.final_status.id_for_label }}">Final Status:</label>
+                                {{ form.final_status }}
+                            </div>
+                        {% else %}
+                            <div class="col-md-3" id="final_status">
+    {#                            {{ form.final_status.errors }}#}
+    {#                            <label class="oncflow-labels" for="{{ form.final_status.id_for_label }}">Final Status:</label>#}
+    {#                            {{ form.final_status }}#}
+                            </div>
+                        {% endif %}
+                        <div class="col-md-12">
+                            {{ form.remarks.errors }}
+                            <label class="oncflow-labels" for="{{ form.remarks.id_for_label }}">Remarks:</label>
+                            {{ form.remarks }}
+                        </div>
+
+                    </div>
+                    <!-- Button Row -->
+                    <div class="d-flex justify-content-start">
+                        <div>
+                            {% if presim %}
+                            <button class="btn btn-dark mt-3" type="submit" name="update"
+                                    hx-post="{% url 'radonc-new-presimulation-update' presim.pk %}"
+                                    hx-target="#presim">Update</button>
+                            {% else %}
+                            <button class="btn btn-dark mt-3" type="submit" name="save"
+                                    hx-post="{% url 'radonc-new-presimulation-create' %}"
+                                    hx-target="#presim">Save</button>
+                            {% endif %}
+                        </div>
+                        <div class="mx-3" id="presimbuttons">
+
+                        </div>
+                    </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

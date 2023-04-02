@@ -214,6 +214,7 @@ urlpatterns = [
     path('filter-rt-started/', views.filter_rt_started, name="filter-rt-started"),
     path('filter-rt-started/download', views.download_file, name="filtered-download"),
     path('checkdata/', views.checkdata, name="checkdata"),
+    path('presim-create/<str:crnumber>/', views.presim_create, name="presim-create")
 
     # TEST URL
 

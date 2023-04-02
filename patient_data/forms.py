@@ -144,6 +144,7 @@ class NewPreSimulationForm(ModelForm):
                   "user", "updated_by"]
         widgets = {
             'presimparent': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
+            's3_id': forms.NumberInput(attrs={'class': 'form-control'}),
             'date': DateInput(attrs={'class': 'form-control'}),
             'day': forms.Select(attrs={'class': 'form-control'}, choices=DIBH_DAYS),
             'ul_amp': forms.NumberInput(attrs={'class': 'form-control'}),
