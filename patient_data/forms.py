@@ -157,6 +157,29 @@ class NewPreSimulationForm(ModelForm):
             'final_status': forms.Select(choices=[], attrs={'class': 'form-control'}),
         }
 
+class NewPreSimulationWithoutCareForm(ModelForm):
+    """
+    Pre Simulation form without Care Plan.
+    """
+    class Meta:
+        model = NewPreSimulation
+        fields = ["presimparent", "date", "day", "ul_amp", "ll_amp", "average_amp",
+                  "ahd", "al", "remarks", "assessedby", "status", "final_status",
+                  "user", "updated_by"]
+        widgets = {
+            'presimparent': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
+            #'s3_id': forms.NumberInput(attrs={'class': 'form-control'}),
+            'date': DateInput(attrs={'class': 'form-control'}),
+            'day': forms.Select(attrs={'class': 'form-control'}, choices=DIBH_DAYS),
+            'ul_amp': forms.NumberInput(attrs={'class': 'form-control'}),
+            'll_amp': forms.NumberInput(attrs={'class': 'form-control'}),
+            'average_amp': forms.NumberInput(attrs={'class': 'form-control'}),
+            'ahd': forms.NumberInput(attrs={'class': 'form-control'}),
+            'remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'assessedby': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            'status': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            'final_status': forms.Select(choices=[], attrs={'class': 'form-control'}),
+        }
 
 class S2DiagnosisForm(ModelForm):
     class Meta:

@@ -24,7 +24,7 @@ from .forms import (S1PatientRegForm, PreSimulationForm, S2DiagnosisForm, S3Care
                     S7AssessmentForm, S6SurgeryForm, S6HPEForm, S5ChemoForm, S8FUPForm, PrimaryDVHForm, PFTDetailsForm,
                     CardiacMarkersForm, FilterRTStarted, InvestigationsImagingForm, PrescriptionForm,
                     InvestigationsPathForm, InvestigationsMolecularForm, InvestigationsLabsForm, LateToxicityForm,
-                    S5ChemoProtocolForm, S5ChemoDrugsForm, S5ChemoDrugsFormSet, AcuteToxicityForm, NewPreSimulationForm)
+                    S5ChemoProtocolForm, S5ChemoDrugsForm, S5ChemoDrugsFormSet, AcuteToxicityForm, NewPreSimulationForm, NewPreSimulationWithoutCareForm)
 from django.utils import timezone
 from django.contrib import messages
 import pandas as pd
@@ -4455,6 +4455,9 @@ def get_presim(request, crnumber, s3_id):
             return redirect('radonc-simulation', crnumber, s3_id)
 
 
+
+
+
 @login_required
 def get_final_status(request):
     training_day = request.POST.get('day', '')
@@ -4513,6 +4516,51 @@ def presim_create(request, crnumber):
         form = NewPreSimulationForm()
         context = {'crnumber': crnumber, 'form': form}
         return render(request, 'patient_data/presim_create.html', context)
+    
+@login_required
+def create_presim_new(request, crnumber):
+    """
+    Creating presimulation without dignosis or careplan.
+    Later on we can attach to with s3_id
+    """
+    if request.method == "POST":
+        form = NewPreSimulationWithoutCareForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form = NewPreSimulationWithoutCareForm()
+            form.fields['presimparent'].initial = crnumber
+            message = "Pre-Simulation added successfully!!!"
+            # Need to decide where to pass
+            return render(request, 'patient_data/new_presim_without_careplan.html', {'form': form,'crnumber': crnumber,'message': message})
+        else:
+            message = form.errors
+            form = NewPreSimulationWithoutCareForm(request.POST)
+            return render(request, 'patient_data/new_presim_without_careplan.html', {'form': form,'crnumber': crnumber,'message': message})
+    else:
+        form = NewPreSimulationWithoutCareForm()
+        form.fields['presimparent'].initial = crnumber
+        return render(request, 'patient_data/new_presim_without_careplan.html', {'form': form,'crnumber': crnumber, 'message':None})
+
+@login_required    
+def link_presim_with_careplan(request, crnumber):
+    """
+    Pre-Simulation link with careplan using Diganosis 
+    """
+    if request.method == "POST":
+        pass
+    else:
+        # Fetching data for all unlinked presim's
+        presims = NewPreSimulation.objects.filter(s3_id__isnull=True, presimparent_id=crnumber)
+
+        # Fetch all care plans based on crnumber
+        careplans = S3CarePlan.objects.filter(parent_id=crnumber)
+
+        # fetch all Diagnosis based on care plan_id
+        diagnosis = S2Diagnosis.objects.filter(parent_id=crnumber)
+
+        # need to join both
+
+        # send to html
 
 
 @login_required
