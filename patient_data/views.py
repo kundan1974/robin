@@ -1254,6 +1254,12 @@ def new_simulation(request, crnumber, s3_id):
     else:
         presim = None
 
+    # Presim with no careplan
+    presim_no_careplan = NewPreSimulation.objects.filter(s3_id__isnull=True, presimparent_id=crnumber)
+
+    # Simulations with no careplan
+    sim_no_careplan = Simulation.objects.filter(s2_id__isnull=True, simparent=crnumber)
+
     # print(f"NEW-SIMULATION{request.POST}")
 
     # if "save" in request.POST:
@@ -1363,7 +1369,7 @@ def new_simulation(request, crnumber, s3_id):
             print(form.errors)
     return render(request, 'patient_data/new_simulation.html', {'cp': cp, 's3_id': s3_id, 'sx': sx,
                                                                 'crnumber': crnumber, 'form': form,
-                                                                'sim': sim, 'presim': presim})
+                                                                'sim': sim, 'presim': presim, 'presim_no_careplan': presim_no_careplan, 'sim_no_careplan': sim_no_careplan})
 
 
 class RadiotherapyCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
@@ -4542,26 +4548,15 @@ def create_presim_new(request, crnumber):
         return render(request, 'patient_data/new_presim_without_careplan.html', {'form': form,'crnumber': crnumber, 'message':None})
 
 @login_required    
-def link_presim_with_careplan(request, crnumber):
+def link_presim_with_careplan(request, presimid, s3_id):
     """
-    Pre-Simulation link with careplan using Diganosis 
+    Pre-Simulation link with careplan.
     """
-    if request.method == "POST":
-        pass
-    else:
-        # Fetching data for all unlinked presim's
-        presims = NewPreSimulation.objects.filter(s3_id__isnull=True, presimparent_id=crnumber)
-
-        # Fetch all care plans based on crnumber
-        careplans = S3CarePlan.objects.filter(parent_id=crnumber)
-
-        # fetch all Diagnosis based on care plan_id
-        diagnosis = S2Diagnosis.objects.filter(parent_id=crnumber)
-
-        # need to join both
-
-        # send to html
-
+    pre_sim = NewPreSimulation.objects.get(presimid=presimid)
+    care_plan = S3CarePlan.objects.get(s3_id=s3_id)
+    pre_sim.s3_id = care_plan
+    pre_sim.save()
+    return HttpResponse(request.GET['next'])
 
 @login_required
 def get_presim_buttons(request):

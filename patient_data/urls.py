@@ -22,7 +22,7 @@ from .views import S1RegUpdateView, S1ListView, PreSimulationUpdateView, PreSimu
     AcuteToxicityCreateView, RTPrescriptionCreateView, RTPrescriptionUpdateView, RTPrescriptionDeleteView, \
     RTInvImgCreateView, RTInvImgUpdateView, RTInvImgDeleteView, RTInvPathlabCreateView, RTInvPathlabUpdateView, \
     RTInvPathlabDeleteView, RTInvLabsCreateView, RTInvLabsUpdateView, RTInvLabsDeleteView, AcuteToxicityUpdateView, \
-    AcuteToxicityDeleteView, SimulationDeleteView, NewPreSimulationListView
+    AcuteToxicityDeleteView, SimulationDeleteView, NewPreSimulationListView, link_presim_with_careplan
 
 urlpatterns = [
     path('', views.index, name='database-index'),
@@ -246,6 +246,7 @@ htmx_urlpatterns = [
     path('get-presim/<crnumber>/<s3_id>', views.get_presim, name='get-presim'),
     path('get-final-status/', views.get_final_status, name='get-final-status'),
     path('get-presim-buttons/', views.get_presim_buttons, name='get-presim-buttons'),
+    path('link-presim-with-careplan/<str:presimid>/<str:s3_id>', views.link_presim_with_careplan, name="link-presim-with-careplan"),
     path('radonc-new-presimulation/create/', views.create_presim,
          name="radonc-new-presimulation-create"),
     path('radonc-new-presimulation/<int:pk>/update/', views.edit_presim,

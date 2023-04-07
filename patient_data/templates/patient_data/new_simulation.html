@@ -44,7 +44,10 @@
                         {% endif %}
                         </div>
                         <div class="col-12 mt-3">
-                            <h5>After adding or editing simulation/presimulation please refresh page to view updated previous details</h5>
+                            <!-- <h5>After adding or editing simulation/presimulation please refresh page to view updated previous details</h5> -->
+                            <div class="alert alert-warning" role="alert">
+                                <b>Note: </b>After adding or editing simulation/presimulation please refresh page to view updated previous details
+                              </div>
                             <a class="btn btn-info" href="{% url 'new-simulation' crnumber cp.pk %}">Refresh</a>
                         </div>
                         <div class="col-12 mt-3">
@@ -122,6 +125,75 @@
                                 </table>
                                 </div>
                                 {% endif %}
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% if presim_no_careplan %}
+                                    <h4>Unlinked Pre-Simulations</h4>
+                                    <p>You can attach those presimulations with selected care plan</p>
+                                    <table class="styled-table">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Actions</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for pre_sim in presim_no_careplan %}
+                                          <tr>
+                                            <th scope="row">{{ pre_sim.date }}</th>
+                                            <!-- <td>Larry</td> -->
+                                            <td>
+                                                <a class="btn btn-sm btn-dark"
+                                                hx-get="{% url 'link-presim-with-careplan' pre_sim.presimid s3_id  %}?next={{ request.path|urlencode }}" %}"
+                                                hx-target="#presim">Link</a>
+                                                <a class="btn btn-sm btn-warning"
+                                                hx-get=""
+                                                hx-target="#presim">Edit</a>
+                                                <a class="btn btn-sm btn-danger" hx-delete="{% url 'radonc-new-presimulation-delete' pre_sim.pk %}"
+                                                hx-confirm="Are you sure? You want to delete this presim details?"
+                                                hx-target="#presim">X</a>
+                                            </td>
+                                          </tr>
+                                          {% endfor %}
+                                        </tbody>
+                                      </table>
+                                      {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    {% if sim_no_careplan %}
+                                    <h4>Unlinked Simulations</h4>
+                                    <p>You can attach those simulations with selected care plan</p>
+                                    <table class="styled-table">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Actions</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for sim in sim_no_careplan %}
+                                          <tr>
+                                            <th scope="row">{{ sim.date }}</th>
+                                            <!-- <td>Larry</td> -->
+                                            <td>
+                                                <a class="btn btn-sm btn-dark"
+                                                hx-get=""
+                                                hx-target="#presim">Link</a>
+                                                <a class="btn btn-sm btn-warning"
+                                                hx-get=""
+                                                hx-target="#presim">Edit</a>
+                                                <a class="btn btn-sm btn-danger" hx-delete="{% url 'radonc-new-presimulation-delete' sim.pk %}"
+                                                hx-confirm="Are you sure? You want to delete this presim details?"
+                                                hx-target="#presim">X</a>
+                                            </td>
+                                          </tr>
+                                          {% endfor %}
+                                        </tbody>
+                                      </table>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
 
