@@ -24,7 +24,7 @@ from .forms import (S1PatientRegForm, PreSimulationForm, S2DiagnosisForm, S3Care
                     S7AssessmentForm, S6SurgeryForm, S6HPEForm, S5ChemoForm, S8FUPForm, PrimaryDVHForm, PFTDetailsForm,
                     CardiacMarkersForm, FilterRTStarted, InvestigationsImagingForm, PrescriptionForm,
                     InvestigationsPathForm, InvestigationsMolecularForm, InvestigationsLabsForm, LateToxicityForm,
-                    S5ChemoProtocolForm, S5ChemoDrugsForm, S5ChemoDrugsFormSet, AcuteToxicityForm, NewPreSimulationForm, NewPreSimulationWithoutCareForm)
+                    S5ChemoProtocolForm, S5ChemoDrugsForm, S5ChemoDrugsFormSet, AcuteToxicityForm, NewPreSimulationForm, NewPreSimulationWithoutCareForm, SimulationWithoutCarePlanForm)
 from django.utils import timezone
 from django.contrib import messages
 import pandas as pd
@@ -1258,7 +1258,7 @@ def new_simulation(request, crnumber, s3_id):
     presim_no_careplan = NewPreSimulation.objects.filter(s3_id__isnull=True, presimparent_id=crnumber)
 
     # Simulations with no careplan
-    sim_no_careplan = Simulation.objects.filter(s2_id__isnull=True, simparent=crnumber)
+    sim_no_careplan = Simulation.objects.filter(s3_id__isnull=True, simparent=crnumber)
 
     # print(f"NEW-SIMULATION{request.POST}")
 
@@ -4547,6 +4547,32 @@ def create_presim_new(request, crnumber):
         form.fields['presimparent'].initial = crnumber
         return render(request, 'patient_data/new_presim_without_careplan.html', {'form': form,'crnumber': crnumber, 'message':None})
 
+
+@login_required
+def create_simulation(request, crnumber):
+    """
+    Creating simulation without dignosis or careplan.
+    Later on we can attach to with s3_id
+    """
+    if request.method == "POST":
+        form = SimulationWithoutCarePlanForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form = SimulationWithoutCarePlanForm()
+            form.fields['simparent'].initial = crnumber
+            message = "Simulation added successfully!!!"
+            # Need to decide where to pass
+            return render(request, 'patient_data/create_simulation_without_careplan.html', {'form': form,'crnumber': crnumber,'message': message})
+        else:
+            message = form.errors
+            form = SimulationWithoutCarePlanForm(request.POST)
+            return render(request, 'patient_data/create_simulation_without_careplan.html', {'form': form,'crnumber': crnumber,'message': message})
+    else:
+        form = SimulationWithoutCarePlanForm()
+        form.fields['simparent'].initial = crnumber
+        return render(request, 'patient_data/create_simulation_without_careplan.html', {'form': form,'crnumber': crnumber, 'message':None})
+
+
 @login_required    
 def link_presim_with_careplan(request, presimid, s3_id):
     """
@@ -4556,6 +4582,18 @@ def link_presim_with_careplan(request, presimid, s3_id):
     care_plan = S3CarePlan.objects.get(s3_id=s3_id)
     pre_sim.s3_id = care_plan
     pre_sim.save()
+    return HttpResponse(request.GET['next'])
+
+@login_required    
+def link_simulation_with_careplan(request, simid, s3_id):
+    """
+    Simulation link with careplan.
+    """
+    sim = Simulation.objects.get(simid=simid)
+    care_plan = S3CarePlan.objects.get(s3_id=s3_id)
+    sim.s3_id = care_plan
+    print(sim)
+    sim.save()
     return HttpResponse(request.GET['next'])
 
 @login_required

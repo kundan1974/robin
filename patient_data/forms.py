@@ -308,6 +308,49 @@ class SimulationForm(ModelForm):
         }
 
 
+class SimulationWithoutCarePlanForm(ModelForm):
+    class Meta:
+        model = Simulation
+        fields = ['simparent', 'presimid', 'name', 'simdate', 'simnotes',
+                  'impdate', 'impnotes', 'initialstatus', 'futureplan', 'site', 'icdmainsite',
+                  'technique', 'intent', 'volumes', 'dosephase1', 'fxphase1', 'dosephase2',
+                  'fxphase2', 'dosephase3', 'fxphase3', 'dosephase4', 'fxphase4', 'totaldose', 'totalfractions',
+                  'assignedto',
+                  'remarks', 'tentativecompletiondate',
+                  'actualcompletiondate', 'as_date', 'donefr', 'user', 'updated_by', 'send_mail']
+        widgets = {
+            'simparent': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'simdate': DateInput(attrs={'class': 'form-control'}),
+            'simnotes': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'impdate': DateInput(attrs={'class': 'form-control'}),
+            'impnotes': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'initialstatus': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            'futureplan': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'site': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            'icdmainsite': forms.SelectMultiple(choices=[], attrs={'class': 'form-control'}),
+            'technique': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            'intent': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            'volumes': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            'dosephase1': forms.NumberInput(attrs={'class': 'form-control'}),
+            'fxphase1': forms.NumberInput(attrs={'class': 'form-control'}),
+            'dosephase2': forms.NumberInput(attrs={'class': 'form-control'}),
+            'fxphase2': forms.NumberInput(attrs={'class': 'form-control'}),
+            'dosephase3': forms.NumberInput(attrs={'class': 'form-control'}),
+            'fxphase3': forms.NumberInput(attrs={'class': 'form-control'}),
+            'dosephase4': forms.NumberInput(attrs={'class': 'form-control'}),
+            'fxphase4': forms.NumberInput(attrs={'class': 'form-control'}),
+            'totaldose': forms.NumberInput(attrs={'class': 'form-control'}),
+            'totalfractions': forms.NumberInput(attrs={'class': 'form-control'}),
+            'assignedto': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            'remarks': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'tentativecompletiondate': DateInput(attrs={'class': 'form-control', 'readonly': True}),
+            'actualcompletiondate': DateInput(attrs={'class': 'form-control'}),
+            'as_date': DateInput(attrs={'class': 'form-control', 'readonly': True}),
+            'donefr': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
+            'presimid': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
+        }
+
 class S4RTForm(ModelForm):
     class Meta:
         model = S4RT

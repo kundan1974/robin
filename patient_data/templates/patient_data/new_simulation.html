@@ -175,17 +175,17 @@
                                         <tbody>
                                             {% for sim in sim_no_careplan %}
                                           <tr>
-                                            <th scope="row">{{ sim.date }}</th>
+                                            <th scope="row">{{ sim.simdate }}</th>
                                             <!-- <td>Larry</td> -->
                                             <td>
                                                 <a class="btn btn-sm btn-dark"
-                                                hx-get=""
+                                                hx-get="{% url 'link-simulation-with-careplan' sim.simid s3_id  %}?next={{ request.path|urlencode }}" %}"
                                                 hx-target="#presim">Link</a>
                                                 <a class="btn btn-sm btn-warning"
                                                 hx-get=""
                                                 hx-target="#presim">Edit</a>
-                                                <a class="btn btn-sm btn-danger" hx-delete="{% url 'radonc-new-presimulation-delete' sim.pk %}"
-                                                hx-confirm="Are you sure? You want to delete this presim details?"
+                                                <a class="btn btn-sm btn-danger" hx-delete=""
+                                                hx-confirm="Are you sure? You want to delete this sim details?"
                                                 hx-target="#presim">X</a>
                                             </td>
                                           </tr>

@@ -22,7 +22,8 @@ from .views import S1RegUpdateView, S1ListView, PreSimulationUpdateView, PreSimu
     AcuteToxicityCreateView, RTPrescriptionCreateView, RTPrescriptionUpdateView, RTPrescriptionDeleteView, \
     RTInvImgCreateView, RTInvImgUpdateView, RTInvImgDeleteView, RTInvPathlabCreateView, RTInvPathlabUpdateView, \
     RTInvPathlabDeleteView, RTInvLabsCreateView, RTInvLabsUpdateView, RTInvLabsDeleteView, AcuteToxicityUpdateView, \
-    AcuteToxicityDeleteView, SimulationDeleteView, NewPreSimulationListView, link_presim_with_careplan
+    AcuteToxicityDeleteView, SimulationDeleteView, NewPreSimulationListView, link_presim_with_careplan, create_simulation, \
+    link_simulation_with_careplan
 
 urlpatterns = [
     path('', views.index, name='database-index'),
@@ -216,6 +217,7 @@ urlpatterns = [
     path('checkdata/', views.checkdata, name="checkdata"),
     path('presim-create/<str:crnumber>/', views.presim_create, name="presim-create"),
     path('create-presim/<str:crnumber>/', views.create_presim_new, name='add-presim'),
+    path('create-simulation/<str:crnumber>/', views.create_simulation, name='add-simulation'),
 
     # TEST URL
 
@@ -247,6 +249,7 @@ htmx_urlpatterns = [
     path('get-final-status/', views.get_final_status, name='get-final-status'),
     path('get-presim-buttons/', views.get_presim_buttons, name='get-presim-buttons'),
     path('link-presim-with-careplan/<str:presimid>/<str:s3_id>', views.link_presim_with_careplan, name="link-presim-with-careplan"),
+    path('link-simulation-with-careplan/<str:simid>/<str:s3_id>', views.link_simulation_with_careplan, name="link-simulation-with-careplan"),
     path('radonc-new-presimulation/create/', views.create_presim,
          name="radonc-new-presimulation-create"),
     path('radonc-new-presimulation/<int:pk>/update/', views.edit_presim,
