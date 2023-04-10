@@ -148,12 +148,12 @@
                                                 <a class="btn btn-sm btn-dark"
                                                 hx-get="{% url 'link-presim-with-careplan' pre_sim.presimid s3_id  %}?next={{ request.path|urlencode }}" %}"
                                                 hx-target="#presim">Link</a>
-                                                <a class="btn btn-sm btn-warning"
-                                                hx-get=""
-                                                hx-target="#presim">Edit</a>
-                                                <a class="btn btn-sm btn-danger" hx-delete="{% url 'radonc-new-presimulation-delete' pre_sim.pk %}"
-                                                hx-confirm="Are you sure? You want to delete this presim details?"
-                                                hx-target="#presim">X</a>
+{#                                                <a class="btn btn-sm btn-warning"#}
+{#                                                hx-get=""#}
+{#                                                hx-target="#presim">Edit</a>#}
+{#                                                <a class="btn btn-sm btn-danger" hx-delete="{% url 'radonc-new-presimulation-delete' pre_sim.pk %}"#}
+{#                                                hx-confirm="Are you sure? You want to delete this presim details?"#}
+{#                                                hx-target="#presim">X</a>#}
                                             </td>
                                           </tr>
                                           {% endfor %}
@@ -179,14 +179,14 @@
                                             <!-- <td>Larry</td> -->
                                             <td>
                                                 <a class="btn btn-sm btn-dark"
-                                                hx-get="{% url 'link-simulation-with-careplan' sim.simid s3_id  %}?next={{ request.path|urlencode }}" %}"
+                                                hx-get="{% url 'link-simulation-with-careplan' sim.simid s3_id  %}?next={{ request.path|urlencode }}"
                                                 hx-target="#presim">Link</a>
-                                                <a class="btn btn-sm btn-warning"
-                                                hx-get=""
-                                                hx-target="#presim">Edit</a>
-                                                <a class="btn btn-sm btn-danger" hx-delete=""
-                                                hx-confirm="Are you sure? You want to delete this sim details?"
-                                                hx-target="#presim">X</a>
+{#                                                <a class="btn btn-sm btn-warning"#}
+{#                                                hx-get="{% url 'radonc-simulation-update' sim.pk %}?next={{ request.path|urlencode }}"#}
+{#                                                hx-target="#presim">Edit</a>#}
+{#                                                <a class="btn btn-sm btn-danger" hx-delete="{% url 'radonc-simulation-delete' sim.pk %}"#}
+{#                                                hx-confirm="Are you sure? You want to delete this sim details?"#}
+{#                                                hx-target="#presim">X</a>#}
                                             </td>
                                           </tr>
                                           {% endfor %}

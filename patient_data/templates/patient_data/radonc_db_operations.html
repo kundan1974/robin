@@ -157,97 +157,53 @@
                     </div>
                 </div>
 
-{#      PreSimulation  #}
-            <div class="container mt-3">
+{#      Quick Link  #}
+                <div class="container mt-3">
                 <div class="accordion mt-3" id="cardiacmarker">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingcardiac">
                             <button class="accordion-button collapsed bar-gradient" type="button" data-bs-toggle="collapse" data-bs-target="#collapsecardiac" aria-expanded="false" aria-controls="collapsecardiac">
-                                <h5 class="text-dark">OPTIONAL MODULES</h5>
+                                <h5 class="text-dark">QUICK LINK MODULES</h5>
                             </button>
                         </h2>
                         <div id="collapsecardiac" class="accordion-collapse collapse" aria-labelledby="headingcardiac" data-bs-parent="#cardiacmarker">
                             <div class="accordion-body">
                                 <div class="row">
                                     <div class="col-md-3">
-                                    {% if presim %}
-                                        <div class="my-card box-shadow box-redius" style="background: #e1f8cb">
-                                    {% else %}
                                         <div class="my-card box-shadow box-redius">
-                                    {% endif %}
-                                        {% if mx and presim %}
-                                          <h4>Pre-Simulation</h4><span class="badge"><a href="{% url 'radonc-careplan-list' res.0.crnumber%}?next={{ request.path|urlencode }}" class="btn btn-sm btn-outline-danger">New(Via Careplan)</a></span>
-                                        {% else %}
-                                          <h4>Pre-Simulation</h4>
-                                        {% endif %}
-                                        <hr>
-                                          <p class="text-dark"><b>OPTIONAL</b></p>
-                                          <p>This information is must for
-                                              Left sided Ca Breast patients undergoing DIBH assessment.<span class="red-highlight text-light">
-                                                  <em>For ongoing DIBH assessment please use Update button below</em></span></p>
-                                          {% if mx and presim %}
-                                          <a href="{% url 'radonc-presimulation-update' presimdetails.pk %}?next={{ request.path|urlencode }}?next={{ request.path|urlencode }}" class="btn my-btn">Update(D1, D2, D3)</a>
-                                          {% elif mx %}
-                                          <a href="{% url 'radonc-careplan-list' res.0.crnumber %}?next={{ request.path|urlencode }}?next={{ request.path|urlencode }}" class="btn my-btn">New(Via Careplan)</a>
-                                          {% elif not res %}
-                                          <a href="{% url 'registration' %}?next={{ request.path|urlencode }}" class="btn btn-dark">Please Register</a>
+                                        <h4>PRE-SIMULATION</h4>
+                                            <hr>
+                                          <p class="text-dark"><b>MUST for Left Breast</b></p>
+                                          <p>DIBH Assessment: Quick entry without diagnosis and careplan.<span class="red-highlight text-light">
+                                                  <em>This should be used in rare situations</em></span></p>
+                                          {% if not res %}
+                                            <a href="{% url 'registration' %}?next={{ request.path|urlencode }}" class="btn btn-dark">Please Register</a>
                                           {% else %}
-                                          <a href="{% url 'registration' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn btn-dark disabled">Enter CarePlan Details</a>
+                                            <a href="{% url 'add-presim' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn btn-success">New(without careplan)</a>
                                           {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                    {% if pft %}
-                                        <div class="my-card box-shadow box-redius" style="background: #e1f8cb">
-                                    {% else %}
                                         <div class="my-card box-shadow box-redius">
-                                    {% endif %}
-                                          <h4>PFT Details</h4>
-                                          <hr>
-                                          <p class="text-dark"><b>OPTIONAL</b></p>
-                                          <p>Here pulmonary function test (PFT) details are required.
-                                              Important for thoracic RT patients<span class="highlight">
-                                              Entry to this module is via Follow up module</span></p>
-                                          {% if res and pft %}
-                                          <a href="#" class="btn my-btn">New</a>
-                                          <a href="#" class="btn my-btn">PFT Details</a>
-                                          {% elif res %}
-                                          <a href="#" class="btn my-btn">New via FollowUp</a>
+                                        <h4>SIMULATION</h4>
+                                            <hr>
+                                          <p class="text-dark"><b>Mandatory</b></p>
+                                          <p>Simulation Details: Quick entry without diagnosis and careplan.<span class="red-highlight text-light">
+                                                  <em>This should be used in rare situations</em></span></p>
+                                          {% if not res %}
+                                            <a href="{% url 'registration' %}?next={{ request.path|urlencode }}" class="btn btn-dark">Please Register</a>
                                           {% else %}
-                                          <a href="#" class="btn btn-dark">Please Register</a>
-                                          {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                    {% if cm %}
-                                        <div class="my-card box-shadow box-redius" style="background: #e1f8cb">
-                                    {% else %}
-                                        <div class="my-card box-shadow box-redius">
-                                    {% endif %}
-                                          <h4>Cardiac Makers</h4>
-                                          <hr>
-                                          <p class="text-dark"><b>OPTIONAL</b></p>
-                                          <p>Enter cardiac markers like TropT, hsCRP, ProBNP here.
-                                              This is important for left sided breast cancer patients.
-                                              <span class="highlight"> Entry to this module is via FollowUp module </span></p>
-                                          {% if res and cm %}
-                                          <a href="#" class="btn my-btn">New</a>
-                                          <a  href="#" class="btn my-btn">Details</a>
-                                          {% elif res %}
-                                          <a href="#" class="btn my-btn">New via Followup</a>
-                                          {% else %}
-                                          <a href="#"
-                                            class="btn btn-dark">Please Register</a>
+                                            <a href="{% url 'add-simulation' res.0.crnumber %}?next={{ request.path|urlencode }}" class="btn btn-success">New(without careplan)</a>
                                           {% endif %}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
-
             </div>
         </div>
     </div>

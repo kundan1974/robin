@@ -4569,7 +4569,9 @@ def create_simulation(request, crnumber):
             return render(request, 'patient_data/create_simulation_without_careplan.html', {'form': form,'crnumber': crnumber,'message': message})
     else:
         form = SimulationWithoutCarePlanForm()
+        patient = S1ParentMain.objects.filter(crnumber=crnumber).first()
         form.fields['simparent'].initial = crnumber
+        form.fields['name'].initial = patient.first_name + " " + patient.last_name
         return render(request, 'patient_data/create_simulation_without_careplan.html', {'form': form,'crnumber': crnumber, 'message':None})
 
 
@@ -4582,7 +4584,7 @@ def link_presim_with_careplan(request, presimid, s3_id):
     care_plan = S3CarePlan.objects.get(s3_id=s3_id)
     pre_sim.s3_id = care_plan
     pre_sim.save()
-    return HttpResponse(request.GET['next'])
+    return HttpResponse("Simulation linked --- PLEASE REFRESH THE PAGE TO SEE UPDATED STATUS")
 
 @login_required    
 def link_simulation_with_careplan(request, simid, s3_id):
@@ -4592,9 +4594,10 @@ def link_simulation_with_careplan(request, simid, s3_id):
     sim = Simulation.objects.get(simid=simid)
     care_plan = S3CarePlan.objects.get(s3_id=s3_id)
     sim.s3_id = care_plan
+    sim.s2_id = care_plan.s2_id
     print(sim)
     sim.save()
-    return HttpResponse(request.GET['next'])
+    return HttpResponse("Simulation linked --- PLEASE REFRESH THE PAGE TO SEE UPDATED STATUS")
 
 @login_required
 def get_presim_buttons(request):
