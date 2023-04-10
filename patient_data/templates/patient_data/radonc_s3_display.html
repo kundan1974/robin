@@ -148,7 +148,7 @@
                                 <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-surgery' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Sx</a>
     {#                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-chemotherapy' content.parent_id.crnumber content.s3_id %}">New Chemo</a>#}
                                 <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-fup1' content.parent_id.crnumber content.s2_id.s2_id content.s3_id %}?next={{ request.path|urlencode }}">Record New Visit</a></h5>
-                                <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-chemoprotocol' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">Record New Chemo-Protocol</a></h5>
+                                <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-chemoprotocol' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">SystemicRx-Module</a></h5>
                                 <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
                             {% else %}
                                 <h6 class="red-highlight p-3 box-redius box-shadow text-light">This treatment course is closed</h6>

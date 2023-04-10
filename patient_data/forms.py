@@ -565,7 +565,9 @@ class S5ChemoProtocolForm(ModelForm):
             'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
             's3_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
             'protocol_date': DateInput(attrs={'class': 'form-control'}),
+            'protocol_end_date': DateInput(attrs={'class': 'form-control'}),
             'chemo_protocol': forms.Select(attrs={'class': 'form-control'}),
+            'chemo_cycles': forms.NumberInput(attrs={'class': 'form-control'}),
             'unit': forms.Select(attrs={'class': 'form-control'}),
             'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
         }

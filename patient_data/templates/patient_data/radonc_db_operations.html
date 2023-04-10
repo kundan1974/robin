@@ -158,7 +158,9 @@
                 </div>
 
 {#      Quick Link  #}
-                <div class="container mt-3">
+                {% if res %}
+                    {% if not mx %}
+                        <div class="container mt-3">
                 <div class="accordion mt-3" id="cardiacmarker">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingcardiac">
@@ -204,6 +206,8 @@
                     </div>
                 </div>
             </div>
+                    {% endif %}
+                {% endif %}
             </div>
         </div>
     </div>

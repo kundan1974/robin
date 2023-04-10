@@ -9,7 +9,7 @@
                     {% csrf_token %}
                     <div class="form-row justify-content-left g-3">
                         {% if update %}
-                            <h1 class="mb-3">Update Chemotherapy Protocol</h1>
+                            <h1 class="mb-3">Update SystemicRx Protocol</h1>
                                 <div class="row">
                                     <div class="col-auto">
                                         {% if request.GET.next %}
@@ -24,7 +24,7 @@
                                     </div>
                                 </div>
                         {% else %}
-                            <h1 class="mb-3">Create Chemotherapy Protocol</h1>
+                            <h1 class="mb-3">Create SystemicRx Protocol</h1>
                             {% with crnumber=123456 %}
                                 <div class="row">
                                     <div class="col-auto">
@@ -39,9 +39,9 @@
                                     </div>
                                     <div class="col-12">
                                         {% if previous_protocol %}
-                                            <p><span class="red-highlight text-light box-redius box-shadow p-1">Protocol Creation Form: Last Chemotherapy Protocol have been copied. Edit it accordigly</span></p>
+                                            <p><span class="red-highlight text-light box-redius box-shadow p-1">Protocol Creation Form: Last SystemicRx Protocol have been copied. Edit it accordigly</span></p>
                                         {% else %}
-                                            <p><span class="green text-dark box-redius box-shadow p-1">No Previous Chemotherapy Protocol Present. Enter First Cycle</span></p>
+                                            <p><span class="green text-dark box-redius box-shadow p-1">No Previous SystemicRx Protocol Present. Enter First Cycle</span></p>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -59,17 +59,27 @@
                                         <label class="oncflow-labels" for="{{ form.s3_id.id_for_label }}">Mx ID:</label>
                                         {{ form.s3_id }}
                                     </div>
-                                    <div class="col-md-2">
-                                        {{ form.protocol_date.errors }}
-                                        <label class="oncflow-labels" for="{{ form.protocol_date.id_for_label }}">Initiation Date:</label>
-                                        {{ form.protocol_date }}
-                                    </div>
-                                    <div class="col-md-8">
+                                     <div class="col-md-8">
                                         {{ form.chemo_protocol.errors }}
-                                        <label class="oncflow-labels" for="{{ form.chemo_protocol.id_for_label }}">Chemotherapy Protocol:</label>
+                                        <label class="oncflow-labels" for="{{ form.chemo_protocol.id_for_label }}">SystemicRx Protocol:</label>
                                         {{ form.chemo_protocol }}
                                     </div>
                                     <div class="col-md-2">
+                                        {{ form.protocol_date.errors }}
+                                        <label class="oncflow-labels" for="{{ form.protocol_date.id_for_label }}">Start Date:</label>
+                                        {{ form.protocol_date }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form.protocol_end_date.errors }}
+                                        <label class="oncflow-labels" for="{{ form.protocol_end_date.id_for_label }}">End Date:</label>
+                                        {{ form.protocol_end_date }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {{ form.chemo_cycles.errors }}
+                                        <label class="oncflow-labels" for="{{ form.chemo_cycles.id_for_label }}">Total Cycles (if applicable):</label>
+                                        {{ form.chemo_cycles }}
+                                    </div>
+                                    <div class="col-md-6">
                                         {{ form.unit.errors }}
                                         <label class="oncflow-labels" for="{{ form.unit.id_for_label }}">Team:</label>
                                         {{ form.unit }}
@@ -99,16 +109,17 @@
                     {% if not update %}
                         {% if previous_protocol %}
                             <table class="styled-table m-1">
-                                <caption><h4>Available Chemotherapy Protocols</h4></caption>
-                                <caption><h5>View or Add chemotherapy details here</h5></caption>
+                                <caption><h4>Available SystemicRx Protocols</h4></caption>
+                                <caption><h5>View or Add SystemicRx details here</h5></caption>
                             <thead>
                                 <tr>
                                 <th>Unit</th>
                                 <th>Protocol</th>
-                                <th>Protocol Date</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Cycles</th>
                                 <th>Notes</th>
                                 <th>Action</th>
-                                <th>Chemo Details</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -117,23 +128,13 @@
                                     <td>{{ content.unit }}</td>
                                     <td>{{ content.chemo_protocol.protocol }}</td>
                                     <td>{{ content.protocol_date|date:"d-m-Y" }}</td>
+                                    <td>{{ content.protocol_end_date|date:"d-m-Y" }}</td>
+                                    <td>{{ content.chemo_cycles }}</td>
                                     <td>{{ content.notes }}</td>
                                     <td>
                                     <a class="btn btn-sm btn-warning" href="{% url 'create-chemodrug' content.parent_id.crnumber content.pk %}?next={{ request.path|urlencode }}">View/Add</a>
                                     <a class="btn btn-sm btn-warning" href="{% url 'radonc-chemoprotocol-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>
                                     <a class="btn btn-sm btn-danger" href="{% url 'radonc-chemoprotocol-delete' content.pk %}">Delete</a>
-                                    </td>
-                                    <td>
-                                        <table class="styled-table m-1">
-                                            <tr>
-                                                <td>Total Cycle</td>
-                                                <td>Last Cycle Date</td>
-                                            </tr>
-                                            <tr>
-                                                <td>{{ content.s5chemodrugs_set.all.last.cycleno }}</td>
-                                                <td>{{ content.s5chemodrugs_set.all.last.chemodate|date:'d-m-Y' }}</td>
-                                            </tr>
-                                        </table>
                                     </td>
                                 </tr>
                                 {% endfor  %}

@@ -428,7 +428,7 @@ class S2Diagnosis(models.Model):
     # icd_topo_code = models.CharField(max_length=254, blank=True, null=True)
     # icd_path = models.CharField(max_length=254, blank=True, null=True)
     # icd_path_code = models.CharField(max_length=254, blank=True, null=True)
-    dx_date = models.DateTimeField(blank=True, null=True)
+    dx_date = models.DateTimeField(blank=False, null=True)
     biopsy_no = models.CharField(max_length=45, blank=True, null=True)
     biopsy = models.CharField(max_length=254, blank=True, null=True)
     biopsy_date = models.DateTimeField(blank=True, null=True)
@@ -1157,9 +1157,11 @@ class S5ChemoProtocol(models.Model):
     s3_id = models.ForeignKey(S3CarePlan, models.CASCADE, blank=False, null=False,
                               db_column="s3_id", to_field="s3_id")
     protocol_date = models.DateTimeField(blank=True, null=True)
+    protocol_end_date = models.DateTimeField(blank=True, null=True)
 
     chemo_protocol = models.ForeignKey(ChemoProtocolNew, models.DO_NOTHING, blank=True, null=True,
                                        db_column='chemo_protocol', to_field='id')
+    chemo_cycles = models.IntegerField(blank=True, null=True)
     unit = models.ForeignKey(Referredby, models.CASCADE, db_column='unit', blank=True, null=True, to_field='refby')
 
     notes = models.TextField(blank=True, null=True)
