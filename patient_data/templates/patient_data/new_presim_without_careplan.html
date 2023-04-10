@@ -17,49 +17,51 @@
             <form method="POST">
                 {% csrf_token %}
                     <div class="form-row justify-content-left g-3">
-                        <div class="col-md-2 mb-3">
-                            {{ form.presimparent.errors }}
-                            <label class="oncflow-labels" for="{{ form.presimparent.id_for_label }}">CR Number:</label>
-                            {{ form.presimparent }}
-                        </div>
-                        <div class="col-md-6 mb-3 d-none">
-                            {{ form.s3_id.errors }}
-                            <label class="oncflow-labels" for="{{ form.s3_id.id_for_label }}">Mx_ID:</label>
-                            {{ form.s3_id }}
+                        <div class="row g-2 mt-2">
+                            <div class="col-md-4 col-sm-4">
+                                {{ form.presimparent.errors }}
+                                <label class="oncflow-labels" for="{{ form.presimparent.id_for_label }}">CR Number:</label>
+                                {{ form.presimparent }}
+                            </div>
+                            <div class="col-md-2 mb-3 d-none">
+                                {{ form.s3_id.errors }}
+                                <label class="oncflow-labels" for="{{ form.s3_id.id_for_label }}">Mx_ID:</label>
+                                {{ form.s3_id }}
+                            </div>
+                            <div class="col-md-4 col-sm-4">
+                                {{ form.date.errors }}
+                                <label class="oncflow-labels" for="{{ form.date.id_for_label }}">Date:</label>
+                                {{ form.date }}
+                            </div>
+                            <div class="col-md-4 col-sm-4 mb-3">
+                                {{ form.al.errors }}
+                                <label class="oncflow-labels mt-4" for="{{ form.al.id_for_label }}">Airleak:</label>
+                                {{ form.al }}
+                            </div>
                         </div>
                     </div>
                     <div class="row g-2 mt-2">
-                        <div class="col-md-2">
-                            {{ form.date.errors }}
-                            <label class="oncflow-labels" for="{{ form.date.id_for_label }}">Date:</label>
-                            {{ form.date }}
-                        </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3 col-sm-6">
                             {{ form.ul_amp.errors }}
                             <label class="oncflow-labels" for="{{ form.ul_amp.id_for_label }}">ULAmp(mm):</label>
                             {{ form.ul_amp }}
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3 col-sm-6">
                             {{ form.ll_amp.errors }}
                             <label class="oncflow-labels" for="{{ form.ll_amp.id_for_label }}">LLAmp(mm):</label>
                             {{ form.ll_amp }}
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3 col-sm-6">
                             {{ form.average_amp.errors }}
                             <label class="oncflow-labels" for="{{ form.average_amp.id_for_label }}">AvgAmp(mm):</label>
                             {{ form.average_amp }}
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3 col-sm-6">
                             {{ form.ahd.errors }}
                             <label class="oncflow-labels" for="{{ form.ahd.id_for_label }}">AvgHold(Sec):</label>
                             {{ form.ahd }}
                         </div>
-                        <div class="col-md-2">
-                            {{ form.al.errors }}
-                            <label class="oncflow-labels mt-4" for="{{ form.al.id_for_label }}">Airleak:</label>
-                            {{ form.al }}
-                        </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-sm-6">
                             {{ form.status.errors }}
                             <label class="oncflow-labels" for="{{ form.status.id_for_label }}">Status:</label>
                             {{ form.status }}
@@ -69,13 +71,13 @@
 {#                            <label class="oncflow-labels" for="{{ form.day.id_for_label }}">Day:</label>#}
 {#                            {{ form.day }}#}
 {#                        </div>#}
-                        <div class="col-md-3">
+                        <div class="col-md-3 col-sm-6">
                             {{ form.assessedby.errors }}
                             <label class="oncflow-labels" for="{{ form.assessedby.id_for_label }}">Assessed by:</label>
                             {{ form.assessedby }}
                         </div>
                         {% if presim.day %}
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-sm-6">
                                 <label for="day" class="oncflow-labels">Training Day?</label>
                                 <select name="day" id="id_day" class="form-control"
                                         hx-post="{% url "get-final-status" %}"
@@ -89,7 +91,7 @@
                                 </select>
                             </div>
                         {% else %}
-                            <div class="col-md-3">
+                            <div class="col-md-3 col-sm-6">
                                 <label for="day" class="oncflow-labels">Training Day?</label>
                                 <select name="day" id="id_day" class="form-control"
                                         hx-post="{% url "get-final-status" %}"
@@ -104,19 +106,19 @@
                             </div>
                         {% endif %}
                         {% if presim.final_status %}
-                            <div class="col-md-3" id="final_status1">
+                            <div class="col-md-3 col-sm-6" id="final_status1">
                                 {{ form.final_status.errors }}
                                 <label class="oncflow-labels" for="{{ form.final_status.id_for_label }}">Final Status:</label>
                                 {{ form.final_status }}
                             </div>
                         {% else %}
-                            <div class="col-md-3" id="final_status">
+                            <div class="col-md-3 col-sm-6" id="final_status">
     {#                            {{ form.final_status.errors }}#}
     {#                            <label class="oncflow-labels" for="{{ form.final_status.id_for_label }}">Final Status:</label>#}
     {#                            {{ form.final_status }}#}
                             </div>
                         {% endif %}
-                        <div class="col-md-12">
+                        <div class="col-md-12 col-sm-12">
                             {{ form.remarks.errors }}
                             <label class="oncflow-labels" for="{{ form.remarks.id_for_label }}">Remarks:</label>
                             {{ form.remarks }}
