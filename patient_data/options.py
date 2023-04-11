@@ -545,6 +545,8 @@ MOLECULAR_TYPE = [
     ('Ki67', 'Ki67'),
     ('TP53', 'TP53'),
     ('STK11', 'STK11'),
+    ('PIK3CA', 'PIK3CA'),
+
 ]
 
 MOLECULAR_RESULT = [
