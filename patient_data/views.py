@@ -267,6 +267,10 @@ def radonc_home(request, crnumber=None):
     except:
         request.session["check"] = 0
         user_sim = 0
+    if mobile(request):
+        is_mobile = True
+    else:
+        is_mobile = False
     if request.method == 'POST':
         form = SearchCRN(request.POST)
         crnumber = form.data.get('s_crnumber')
@@ -280,6 +284,7 @@ def radonc_home(request, crnumber=None):
         status['reg_date'] = reg_date
         status['dxinfo'] = dxinfo
         status['mxinfo'] = mxinfo
+        status['is_mobile'] = is_mobile
 
         return render(request, 'patient_data/radonc_db_operations.html', status)
     else:
@@ -296,10 +301,6 @@ def radonc_home(request, crnumber=None):
             status = db_homestatus()
             status['form'] = form
             status['user_sim'] = user_sim
-            if mobile(request):
-                is_mobile = True
-            else:
-                is_mobile = False
             status['is_mobile'] = is_mobile
             return render(request, 'patient_data/radonc_db_operations.html', status)
 
