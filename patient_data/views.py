@@ -169,8 +169,13 @@ def index(request):
         Q(initialstatus__code__contains="Started")).count()
     user_simulations_no = len(user_simulations)
     crnumber = 123456
+    if mobile(request):
+        is_mobile = True
+    else:
+        is_mobile = False
 
     context = {
+        'is_mobile': is_mobile,
         'lt_breast_no': lt_breast_no,
         'rt_breast_no': rt_breast_no,
         'breast_dibh_no': breast_dibh_no,
@@ -291,6 +296,11 @@ def radonc_home(request, crnumber=None):
             status = db_homestatus()
             status['form'] = form
             status['user_sim'] = user_sim
+            if mobile(request):
+                is_mobile = True
+            else:
+                is_mobile = False
+            status['is_mobile'] = is_mobile
             return render(request, 'patient_data/radonc_db_operations.html', status)
 
 

@@ -8,11 +8,15 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 
 from .models import ModelTrainingStatus
-from .utils.support import handle_processDICOM, load_dashimage, file_upload
+from .utils.support import handle_processDICOM, load_dashimage, file_upload, mobile
 
 
 def main_index(request):
-    return render(request, 'index.html')
+    if mobile(request):
+        context = {'is_mobile': True}
+    else:
+        context = {'is_mobile': False}
+    return render(request, 'index.html', context)
 
 
 @login_required

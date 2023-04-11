@@ -162,11 +162,9 @@ def raw_query01(query, params):
     ]
 
 
-
-
 def mobile(request):
     """Return True if the request comes from a mobile device."""
-    MOBILE_AGENT_RE=re.compile(r".*(iphone|mobile|androidtouch)",re.IGNORECASE)
+    MOBILE_AGENT_RE = re.compile(r".*(iphone|mobile|androidtouch)", re.IGNORECASE)
     if MOBILE_AGENT_RE.match(request.META['HTTP_USER_AGENT']):
         return True
     else:

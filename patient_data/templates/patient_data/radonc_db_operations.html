@@ -23,7 +23,11 @@
 
 {#      Registration#}
             <div class="row mb-3">
-                <div class="col-md-3">
+                {% if is_mobile %}
+                    <div class="col-12">
+                {% else %}
+                    <div class="col-md-3">
+                {% endif %}
                     {% if res %}
                     <div class="my-card box-shadow box-redius" style="background: #ddf8c4;">
                     {% else %}
@@ -72,7 +76,11 @@
                 </div>
 
 {#      Diagnosis#}
-                <div class="col-md-3">
+                {% if is_mobile %}
+                    <div class="col-12">
+                {% else %}
+                    <div class="col-md-3">
+                {% endif %}
                     {% if dx %}
                     <div class="my-card box-shadow box-redius" style="background: #e1f8cb;">
                     {% else %}
@@ -95,7 +103,11 @@
                 </div>
 
 {#      CarePlan#}
-                <div class="col-md-3">
+                {% if is_mobile %}
+                    <div class="col-12">
+                {% else %}
+                    <div class="col-md-3">
+                {% endif %}
                     {% if mx %}
                     <div class="my-card box-shadow box-redius" style="background: #e1f8cb">
                     {% else %}
@@ -120,7 +132,11 @@
                 </div>
 
 {#      Simulation#}
-                <div class="col-md-3">
+                {% if is_mobile %}
+                    <div class="col-12">
+                {% else %}
+                    <div class="col-md-3">
+                {% endif %}
                     {% if sim %}
                     <div class="my-card box-shadow box-redius" style="background: #e1f8cb;">
                     {% else %}
@@ -171,7 +187,11 @@
                         <div id="collapsecardiac" class="accordion-collapse collapse" aria-labelledby="headingcardiac" data-bs-parent="#cardiacmarker">
                             <div class="accordion-body">
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    {% if is_mobile %}
+                                        <div class="col-12">
+                                    {% else %}
+                                        <div class="col-md-3">
+                                    {% endif %}
                                         <div class="my-card box-shadow box-redius">
                                         <h4>PRE-SIMULATION</h4>
                                             <hr>
@@ -185,7 +205,11 @@
                                           {% endif %}
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    {% if is_mobile %}
+                                        <div class="col-12">
+                                    {% else %}
+                                        <div class="col-md-3">
+                                    {% endif %}
                                         <div class="my-card box-shadow box-redius">
                                         <h4>SIMULATION</h4>
                                             <hr>
