@@ -1,6 +1,7 @@
 from patient_data.models import S1ParentMain, S3CarePlan, PreSimulation, Simulation, S2Diagnosis, S8FUP, S4RT, \
     S5ChemoProtocol, S6Surgery
 from django.db import connection
+import re
 
 
 def db_homestatus(crnumber=None):
@@ -159,3 +160,14 @@ def raw_query01(query, params):
         dict(zip(columns, row))
         for row in cursor.fetchall()
     ]
+
+
+
+
+def mobile(request):
+    """Return True if the request comes from a mobile device."""
+    MOBILE_AGENT_RE=re.compile(r".*(iphone|mobile|androidtouch)",re.IGNORECASE)
+    if MOBILE_AGENT_RE.match(request.META['HTTP_USER_AGENT']):
+        return True
+    else:
+        return False

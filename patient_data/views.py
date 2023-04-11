@@ -24,13 +24,14 @@ from .forms import (S1PatientRegForm, PreSimulationForm, S2DiagnosisForm, S3Care
                     S7AssessmentForm, S6SurgeryForm, S6HPEForm, S5ChemoForm, S8FUPForm, PrimaryDVHForm, PFTDetailsForm,
                     CardiacMarkersForm, FilterRTStarted, InvestigationsImagingForm, PrescriptionForm,
                     InvestigationsPathForm, InvestigationsMolecularForm, InvestigationsLabsForm, LateToxicityForm,
-                    S5ChemoProtocolForm, S5ChemoDrugsForm, S5ChemoDrugsFormSet, AcuteToxicityForm, NewPreSimulationForm, NewPreSimulationWithoutCareForm, SimulationWithoutCarePlanForm)
+                    S5ChemoProtocolForm, S5ChemoDrugsForm, S5ChemoDrugsFormSet, AcuteToxicityForm, NewPreSimulationForm,
+                    NewPreSimulationWithoutCareForm, SimulationWithoutCarePlanForm)
 from django.utils import timezone
 from django.contrib import messages
 import pandas as pd
 
 from .mainsite import mainsite_query, mainsite_subsite_query
-from .utilities import db_homestatus, get_timeline, raw_query01
+from .utilities import db_homestatus, get_timeline, raw_query01, mobile
 from log2d import Log
 from wsgiref.util import FileWrapper
 
@@ -1369,7 +1370,9 @@ def new_simulation(request, crnumber, s3_id):
             print(form.errors)
     return render(request, 'patient_data/new_simulation.html', {'cp': cp, 's3_id': s3_id, 'sx': sx,
                                                                 'crnumber': crnumber, 'form': form,
-                                                                'sim': sim, 'presim': presim, 'presim_no_careplan': presim_no_careplan, 'sim_no_careplan': sim_no_careplan})
+                                                                'sim': sim, 'presim': presim,
+                                                                'presim_no_careplan': presim_no_careplan,
+                                                                'sim_no_careplan': sim_no_careplan})
 
 
 class RadiotherapyCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
@@ -4461,9 +4464,6 @@ def get_presim(request, crnumber, s3_id):
             return redirect('radonc-simulation', crnumber, s3_id)
 
 
-
-
-
 @login_required
 def get_final_status(request):
     training_day = request.POST.get('day', '')
@@ -4522,7 +4522,8 @@ def presim_create(request, crnumber):
         form = NewPreSimulationForm()
         context = {'crnumber': crnumber, 'form': form}
         return render(request, 'patient_data/presim_create.html', context)
-    
+
+
 @login_required
 def create_presim_new(request, crnumber):
     """
@@ -4537,15 +4538,18 @@ def create_presim_new(request, crnumber):
             form.fields['presimparent'].initial = crnumber
             message = "Pre-Simulation added successfully!!!"
             # Need to decide where to pass
-            return render(request, 'patient_data/new_presim_without_careplan.html', {'form': form,'crnumber': crnumber,'message': message})
+            return render(request, 'patient_data/new_presim_without_careplan.html',
+                          {'form': form, 'crnumber': crnumber, 'message': message})
         else:
             message = form.errors
             form = NewPreSimulationWithoutCareForm(request.POST)
-            return render(request, 'patient_data/new_presim_without_careplan.html', {'form': form,'crnumber': crnumber,'message': message})
+            return render(request, 'patient_data/new_presim_without_careplan.html',
+                          {'form': form, 'crnumber': crnumber, 'message': message})
     else:
         form = NewPreSimulationWithoutCareForm()
         form.fields['presimparent'].initial = crnumber
-        return render(request, 'patient_data/new_presim_without_careplan.html', {'form': form,'crnumber': crnumber, 'message':None})
+        return render(request, 'patient_data/new_presim_without_careplan.html',
+                      {'form': form, 'crnumber': crnumber, 'message': None})
 
 
 @login_required
@@ -4562,20 +4566,23 @@ def create_simulation(request, crnumber):
             form.fields['simparent'].initial = crnumber
             message = "Simulation added successfully!!!"
             # Need to decide where to pass
-            return render(request, 'patient_data/create_simulation_without_careplan.html', {'form': form,'crnumber': crnumber,'message': message})
+            return render(request, 'patient_data/create_simulation_without_careplan.html',
+                          {'form': form, 'crnumber': crnumber, 'message': message})
         else:
             message = form.errors
             form = SimulationWithoutCarePlanForm(request.POST)
-            return render(request, 'patient_data/create_simulation_without_careplan.html', {'form': form,'crnumber': crnumber,'message': message})
+            return render(request, 'patient_data/create_simulation_without_careplan.html',
+                          {'form': form, 'crnumber': crnumber, 'message': message})
     else:
         form = SimulationWithoutCarePlanForm()
         patient = S1ParentMain.objects.filter(crnumber=crnumber).first()
         form.fields['simparent'].initial = crnumber
         form.fields['name'].initial = patient.first_name + " " + patient.last_name
-        return render(request, 'patient_data/create_simulation_without_careplan.html', {'form': form,'crnumber': crnumber, 'message':None})
+        return render(request, 'patient_data/create_simulation_without_careplan.html',
+                      {'form': form, 'crnumber': crnumber, 'message': None})
 
 
-@login_required    
+@login_required
 def link_presim_with_careplan(request, presimid, s3_id):
     """
     Pre-Simulation link with careplan.
@@ -4586,7 +4593,8 @@ def link_presim_with_careplan(request, presimid, s3_id):
     pre_sim.save()
     return HttpResponse("Simulation linked --- PLEASE REFRESH THE PAGE TO SEE UPDATED STATUS")
 
-@login_required    
+
+@login_required
 def link_simulation_with_careplan(request, simid, s3_id):
     """
     Simulation link with careplan.
@@ -4598,6 +4606,7 @@ def link_simulation_with_careplan(request, simid, s3_id):
     print(sim)
     sim.save()
     return HttpResponse("Simulation linked --- PLEASE REFRESH THE PAGE TO SEE UPDATED STATUS")
+
 
 @login_required
 def get_presim_buttons(request):
@@ -4697,3 +4706,12 @@ def search(request):
 
     context = {'result': res, 'paginator': paginator, 'serial_num': serial_num, 'page_no': page_no}
     return render(request, 'patient_data/partials/partial_patientlist.html', context)
+
+
+@login_required
+def mobile_view(request):
+    if mobile(request):
+        context = {'mobile': True}
+    else:
+        context = {'mobile': False}
+    return render(request, 'patient_data/test.html', context)
