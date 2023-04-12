@@ -16,7 +16,7 @@ def simulationUpdate(sender, instance, created, **kwargs):
     else:
         patient_sim.finalstatus = 0  # treatment ongoing 0
         if patient_sim.initialstatus.status.startswith('Ready'):
-            patient_sim.initialstatus = SimStatus.objects.get(code="Started (" + patient_sim.initialstatus.split('(')[1])
+            patient_sim.initialstatus = SimStatus.objects.get(code="Started (" + patient_sim.initialstatus.status.split('(')[1])
     patient_sim.save()
 
 
