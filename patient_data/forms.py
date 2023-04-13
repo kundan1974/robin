@@ -303,8 +303,8 @@ class SimulationForm(ModelForm):
             'as_date': DateInput(attrs={'class': 'form-control', 'readonly': True}),
             'donefr': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
             'presimid': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
-            's2_id': forms.Select(choices=[], attrs={'class': 'form-control'}),
-            's3_id': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            's2_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
+            's3_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
         }
 
 
@@ -359,7 +359,8 @@ class S4RTForm(ModelForm):
         widgets = {
             'parent_id': forms.TextInput(attrs={'class': 'form-control'}),
             's3_id': forms.NumberInput(attrs={'class': 'form-control', 'hidden': True}),
-            'simid': forms.Select(attrs={'class': 'form-control'}),
+            's2_id': forms.NumberInput(attrs={'class': 'form-control', 'hidden': True}),
+            'simid': forms.NumberInput(attrs={'class': 'form-control'}),
             'rtindication': forms.Select(choices=[], attrs={'class': 'form-control'}),
             'simdate': DateInput(attrs={'class': 'form-control'}),
             'rtsite_main': forms.SelectMultiple(attrs={'class': 'form-control'}),
@@ -989,6 +990,7 @@ class InvestigationsImagingForm(ModelForm):
         widgets = {
             'parent_id': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
             's8_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
+            's7_id': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
             "imaging_date": DateInput(attrs={'class': 'form-control'}),
             "imaging_type": forms.Select(attrs={'class': 'form-control'}),
             "imaging_location": forms.Select(attrs={'class': 'form-control'}),
