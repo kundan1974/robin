@@ -4498,9 +4498,11 @@ def get_final_status(request):
 @login_required
 def create_presim(request):
     if request.method == "POST":
+        current_user = User.objects.get(id=request.user.id)
         data = request.POST.copy()
         form = NewPreSimulationForm(data=data)
         # print(request.POST)
+        form.data['user'] = current_user.pk
         crn = form.data.get('presimparent')
         s3_id = form.data.get('s3_id')
         day = form.data.get('day')
@@ -4509,6 +4511,8 @@ def create_presim(request):
             # messages.success(request,
             #                  f'DIBH assessment details has been saved for CRNumber: {crn} for DAY-{day}')
             presim = NewPreSimulation.objects.filter(s3_id=s3_id)
+            presim_last = presim.last()
+            # presim_last.user = request.GET
             return render(request, 'patient_data/partials/partial_presim_display.html',
                           {'presim': presim,
                            'crnumber': crn,
