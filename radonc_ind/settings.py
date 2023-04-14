@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-m(eb-jzq^37nm+-#9fr9svpj+u_d5&#z*rs0)@!hqp4_a9(*z0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost', '59.144.166.45', '143.110.186.90', 'rgcirc.oncflow.org']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost', '59.144.166.45', '143.110.186.90', 'robin.oncflow.org']
 INTERNAL_IPS = ["127.0.0.1"]
 
 # Application definition
