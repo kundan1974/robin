@@ -94,7 +94,7 @@ WSGI_APPLICATION = 'radonc_ind.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ind_db',
+        'NAME': 'robin_db',
         'HOST': '194.195.117.139',
         'PORT': '3306',
         'USER': 'kundan25',
