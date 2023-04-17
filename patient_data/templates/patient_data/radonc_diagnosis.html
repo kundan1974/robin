@@ -82,26 +82,6 @@
                                         {% include 'patient_data/partials/partial_confirmed_by.html' %}
                                     {% endif %}
                                 </div>
-{#                                <div class="col-md-2">#}
-{#                                    {{ form.biopsy_grade.errors }}#}
-{#                                    <label class="oncflow-labels" for="{{ form.biopsy_grade.id_for_label }}">Biopsy(Grade):</label>#}
-{#                                    {{ form.biopsy_grade }}#}
-{#                                </div>#}
-{#                                <div class="col-md-2">#}
-{#                                    {{ form.biopsy_no.errors }}#}
-{#                                    <label class="oncflow-labels" for="{{ form.biopsy_no.id_for_label }}">Biopsy No:</label>#}
-{#                                    {{ form.biopsy_no }}#}
-{#                                </div>#}
-{#                                <div class="col-md-2">#}
-{#                                    {{ form.biopsy_date.errors }}#}
-{#                                    <label class="oncflow-labels" for="{{ form.biopsy_date.id_for_label }}">Biopsy(Date):</label>#}
-{#                                    {{ form.biopsy_date }}#}
-{#                                </div>#}
-{#                                <div class="col-md-6">#}
-{#                                    {{ form.biopsy.errors }}#}
-{#                                    <label class="oncflow-labels" for="{{ form.biopsy.id_for_label }}">Biopsy(Additional Comments):</label>#}
-{#                                    {{ form.biopsy }}#}
-{#                                </div>#}
                             </div>
                             {# CLINICAL STAGE SECTION#}
                             <div class="row section-even g-2 p-1 mt-2">
@@ -109,11 +89,6 @@
                                     {{ form.parent_id.errors }}
                                     <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CR Number:</label>
                                     {{ form.parent_id }}
-                                </div>
-                                <div class="col-md-2 d-none">
-                                        {{ form.diagnosis.errors }}
-                                        <label class="oncflow-labels" for="{{ form.diagnosis.id_for_label }}">Primary Diagnosis:</label>
-                                        {{ form.diagnosis }}
                                 </div><br>
                                 <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Clinical Stage
                                     <span class="badge text-sm">TNM of primary disease status</span></h4>
@@ -730,11 +705,6 @@
                                 {{ form.parent_id.errors }}
                                 <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CR Number:</label>
                                 {{ form.parent_id }}
-                            </div>
-                            <div class="col-md-2 d-none">
-                                    {{ form.diagnosis.errors }}
-                                    <label class="oncflow-labels" for="{{ form.diagnosis.id_for_label }}">Primary Diagnosis:</label>
-                                    {{ form.diagnosis }}
                             </div><br>
                             <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Clinical Stage
                                 <span class="badge text-sm">TNM of primary disease status</span></h4>

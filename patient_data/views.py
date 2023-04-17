@@ -518,7 +518,6 @@ class DiagnosisCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         current_user = User.objects.get(id=self.request.user.id)
         crnumber = self.kwargs['crnumber']
-
         form.instance.user = current_user
         print(form.errors)
         return super().form_valid(form)
@@ -541,13 +540,12 @@ class DiagnosisCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         context = super(DiagnosisCreateView, self).get_context_data(**kwargs)
         crnumber = self.kwargs['crnumber']
         self.request.session["crnumber"] = crnumber
+        primary_dx = None
         if S2Diagnosis.objects.filter(parent_id=crnumber).exists():
             primary_dx = S2Diagnosis.objects.filter(parent_id=crnumber).first()
             # context['form'].initial['laterality'] = primary_dx.laterality
             context['form'].initial['diagnosis'] = primary_dx.diagnosis
             context['form'].initial['c_ajcc_edition'] = primary_dx.c_ajcc_edition
-        else:
-            primary_dx = None
         context['primary_dx'] = primary_dx
         patient = S1ParentMain.objects.get(crnumber=crnumber)
         context['patient'] = patient
@@ -632,9 +630,10 @@ class DiagnosisUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
             first_dx_update = True
 
 
-        # dx = patient.dx
-        # diagnosis = OurDiagnosis.objects.filter(our_diagnosis=dx).first().pk
-        # context['form'].initial['diagnosis'] = diagnosis
+        dx = patient.diagnosis.our_diagnosis
+        if not first_dx_update:
+            diagnosis = OurDiagnosis.objects.filter(our_diagnosis=dx).first().pk
+            context['form'].initial['diagnosis'] = diagnosis
         context['updatecrn'] = updatecrn
         context['update'] = True
         context['patient'] = patient
