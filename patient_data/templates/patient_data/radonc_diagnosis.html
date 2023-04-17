@@ -3,214 +3,43 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 {% endblock stylesheet %}
 {% block content %}
+
 <div class="container">
     <div class="my-form">
         <form method="POST">
             {% csrf_token %}
             <div class="form-row justify-content-left g-3">
+                {# UPDATE EXISTING DIAGNOSIS #}
                 {% if update %}
                     <h1 class="mb-3">Diagnosis-Status Update Form</h1>
                     {% if request.session.crnumber %}
                         <h5><a class="btn btn-dark" href="{% url 'db_operations' request.session.crnumber %}">Back</a></h5>
                     {% else %}
-                        {% with crnumber=123456 %}
-                        <h5><a class="btn btn-dark" href="{% url 'db_operations' crnumber %}">Back</a></h5>
-                        {% endwith %}
+                        <h5><a class="btn btn-dark" href="{% url 'db_operations' %}">Back</a></h5>
                     {% endif %}
                     <h4 class="mb-3">Name: {{ patient.parent_id.first_name }} {{ patient.parent_id.last_name }} ID: {{ patient.parent_id.crnumber }}</h4>
-                {% else %}
-                    <h1 class="mb-3">New Diagnosis-Status Form</h1>
-                    <hr>
-                    {% if request.session.crnumber %}
-                    <h5><a class="btn btn-dark" href="{% url 'db_operations' request.session.crnumber %}">Back</a></h5>
-                    {% else %}
-                        {% with crnumber=123456 %}
-                         <h5><a class="btn btn-dark" href="{% url 'db_operations' crnumber %}">Back</a></h5>
-                        {% endwith %}
-                    {% endif %}
-                     <h4 class="mb-3">Name: {{ patient.first_name }} {{ patient.last_name }} ID: {{ patient.crnumber }}</h4>
-                {% endif %}
 
-                <div class="form-control mb-2">
-                    {% if primary_dx %}
-    {#                    Primary Diagnosis Table - Non Editable#}
-                        <h4>Primary Diagnosis - Can not be changed</h4>
-                        <table class="styled-table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Diagnosis</th>
-                                    <th scope="col">ICD(Main Site)</th>
-                                    <th scope="col">ICD(Sub Site)</th>
-                                    <th scope="col">HPE</th>
-                                    <th scope="col">cPrimary Stage</th>
-                                    <th scope="col">pPrimary Stage</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{ primary_dx.diagnosis }} - {{ primary_dx.laterality }}</td>
-                                    <td>{{ primary_dx.icd_main_topo }}</td>
-                                    <td>{{ primary_dx.icd_topo_code }}</td>
-                                    <td>{{ primary_dx.icd_path_code }}</td>
-                                    <td>T{{ primary_dx.c_t }} N{{ primary_dx.c_n }} M{{ primary_dx.c_m }}
-                                    StageGroup: {{ primary_dx.c_stage_group }}
-                                    </td>
-                                    <td>pT{{ primary_dx.p_t }} pN{{ primary_dx.p_n }} pM{{ primary_dx.p_m }}
-                                    pStageGroup: {{ primary_dx.p_stage_group }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="col-md-2 d-none">
-                            {{ form.parent_id.errors }}
-                            <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CR Number:</label>
-                            {{ form.parent_id }}
-                        </div>
-                    {% else %}
-{#                    This div is visible if first time diagnosis is entered#}
-                        <h4>Primary Diagnosis - Details</h4>
-                        <div class="row section-odd p-2 g-2">
-                            <div class="col-md-2 d-none">
-                                {{ form.parent_id.errors }}
-                                <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CR Number:</label>
-                                {{ form.parent_id }}
-                            </div>
-                            <div class="col-md-2">
-                                {{ form.laterality.errors }}
-                                <label class="oncflow-labels" for="{{ form.laterality.id_for_label }}">Laterality:</label>
-                                {{ form.laterality }}
-                            </div>
-                            <div class="col-md-2">
-                                {{ form.diagnosis.errors }}
-                                <label class="oncflow-labels" for="{{ form.diagnosis.id_for_label }}">Primary Diagnosis:</label>
-                                {{ form.diagnosis }}
-                            </div>
-                            <div class="col-md-2">
-                                {{ form.icd_main_topo.errors }}
-                                <label class="oncflow-labels" for="{{ form.icd_main_topo.id_for_label }}">ICD(Main Site):</label>
-                                {{ form.icd_main_topo }}
-                            </div>
-                            <div class="col-md-3">
-                                {{ form.icd_topo_code.errors }}
-                                <label class="oncflow-labels" for="{{ form.icd_topo_code.id_for_label }}">ICD(Site Details):</label>
-                                {{ form.icd_topo_code }}
-                            </div>
-                            <div class="col-md-3">
-                                {{ form.icd_path_code.errors }}
-                                <label class="oncflow-labels" for="{{ form.icd_path_code.id_for_label }}">ICD(Patho):</label>
-                                {{ form.icd_path_code }}
-                            </div><br>
-
-                            <h5 class="mt-3">Clinical Stage</h5><hr>
-                            <div class="col-md-2">
-                                {{ form.c_t.errors }}
-                                <label class="oncflow-labels" for="{{ form.c_t.id_for_label }}">cT:</label>
-                                {{ form.c_t }}
-                            </div>
-                            <div class="col-md-2">
-                                {{ form.c_n.errors }}
-                                <label class="oncflow-labels" for="{{ form.c_n.id_for_label }}">cN:</label>
-                                {{ form.c_n }}
-                            </div>
-                            <div class="col-md-2">
-                                {{ form.c_m.errors }}
-                                <label class="oncflow-labels" for="{{ form.c_m.id_for_label }}">cM:</label>
-                                {{ form.c_m }}
-                            </div>
-                            <div class="col-md-3">
-                                {{ form.c_stage_group.errors }}
-                                <label class="oncflow-labels" for="{{ form.c_stage_group.id_for_label }}">Stage Group:</label>
-                                {{ form.c_stage_group }}
-                            </div><br>
-
-                            <h5 class="mt-3">Pathological Stage(If applicable)</h5><hr>
-                            <div class="col-md-2">
-                                {{ form.p_t.errors }}
-                                <label class="oncflow-labels" for="{{ form.p_t.id_for_label }}">pT:</label>
-                                {{ form.p_t }}
-                            </div>
-                            <div class="col-md-2">
-                                {{ form.p_n.errors }}
-                                <label class="oncflow-labels" for="{{ form.p_n.id_for_label }}">pN:</label>
-                                {{ form.p_n }}
-                            </div>
-                            <div class="col-md-2">
-                                {{ form.p_m.errors }}
-                                <label class="oncflow-labels" for="{{ form.p_m.id_for_label }}">pM:</label>
-                                {{ form.p_m }}
-                            </div>
-                            <div class="col-md-3">
-                                {{ form.p_stage_group.errors }}
-                                <label class="oncflow-labels" for="{{ form.p_stage_group.id_for_label }}">pStage Group:</label>
-                                {{ form.p_stage_group }}
-                            </div>
-                            <div class="col-md-3"></div><hr>
-                            <div class="col-md-3 mb-3 mt-3">
-                                {{ form.c_ajcc_edition.errors }}
-                                <label class="oncflow-labels" for="{{ form.c_ajcc_edition.id_for_label }}">Ajcc Edition:</label>
-                                {{ form.c_ajcc_edition }}
-                            </div>
-                    </div>
-                    {% endif %}
-                    {% if primary_dx %}
-                        <div class="row g-2 mt-2 mb-2 ml-2 p-2 section-even">
-                        <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Status: Dynamic Section
-                            <span class="badge text-sm">Can be changed with every new status</span>
-                        </h4>
-                    {% else %}
-                        <div class="row g-2 mt-2 mb-2 ml-2 p-2 section-even">
-                    {% endif %}
-                        <div class="col-md-3">
-                            {{ form.dx_type.errors }}
-                            <label class="oncflow-labels" for="{{ form.dx_type.id_for_label }}">Dx Type(Status):</label>
-                            {{ form.dx_type }}
-                        </div>
-                        <div class="col-md-4">
-                            {{ form.confirmed_by.errors }}
-                            <label class="oncflow-labels" for="{{ form.confirmed_by.id_for_label }}">Diagnosis(Status Confirmed by):</label>
-                            {{ form.confirmed_by }}
-                        </div>
-                        <div class="col-md-4">
-                            {{ form.dx_date.errors }}
-                            <label class="oncflow-labels" for="{{ form.dx_date.id_for_label }}">Diagnosis(Status Date):</label>
-                            {{ form.dx_date }}
-                        </div>
-                        <div class="col-md-2">
-                            {{ form.biopsy_grade.errors }}
-                            <label class="oncflow-labels" for="{{ form.biopsy_grade.id_for_label }}">Biopsy(Grade):</label>
-                            {{ form.biopsy_grade }}
-                        </div>
-                        <div class="col-md-2">
-                            {{ form.biopsy_no.errors }}
-                            <label class="oncflow-labels" for="{{ form.biopsy_no.id_for_label }}">Biopsy No:</label>
-                            {{ form.biopsy_no }}
-                        </div>
-                        <div class="col-md-2">
-                            {{ form.biopsy_date.errors }}
-                            <label class="oncflow-labels" for="{{ form.biopsy_date.id_for_label }}">Biopsy(Date):</label>
-                            {{ form.biopsy_date }}
-                        </div>
-                        <div class="col-md-6">
-                            {{ form.biopsy.errors }}
-                            <label class="oncflow-labels" for="{{ form.biopsy.id_for_label }}">Biopsy(Additional Comments):</label>
-                            {{ form.biopsy }}
-                        </div>
-                            {% if primary_dx %}
-                                <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Stage for changed Diagnosis Status/New Primary
-                                    <span class="badge text-sm">Shown is primary stage of patient - if needed please edit accordingly</span>
+                    {# UPDATE FRESH PRIMARY DIAGNOSIS #}
+                    {% if first_dx_update %}
+                        <h4>Update Diagnosis - Primary Status</h4>
+                            <h6 class="red-highlight box-redius box-shadow text-light p-2">
+                                Any changes here will update the primary diagnosis status</h6>
+                            {# PRIMARY SITE STATUS#}
+                            <div class="row g-2 mt-2 mb-2 ml-2 p-2 section-even">
+                                <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Primary Site:
+                                    <span class="badge text-sm">Details of Primary Site</span>
                                 </h4>
                                 <div class="col-md-2">
                                     {{ form.diagnosis.errors }}
                                     <label class="oncflow-labels" for="{{ form.diagnosis.id_for_label }}">Primary Diagnosis:</label>
                                     {{ form.diagnosis }}
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                     {{ form.laterality.errors }}
                                     <label class="oncflow-labels" for="{{ form.laterality.id_for_label }}">Laterality:</label>
                                     {{ form.laterality }}
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     {{ form.icd_main_topo.errors }}
                                     <label class="oncflow-labels" for="{{ form.icd_main_topo.id_for_label }}">ICD(Main Site):</label>
                                     {{ form.icd_main_topo }}
@@ -224,8 +53,70 @@
                                     {{ form.icd_path_code.errors }}
                                     <label class="oncflow-labels" for="{{ form.icd_path_code.id_for_label }}">ICD(Patho):</label>
                                     {{ form.icd_path_code }}
+                                </div>
+                            </div>
+                            {# DISEASE STATUS#}
+                            <div class="row g-2 mt-2 mb-2 ml-2 p-2 section-even">
+                                <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Disease Status:
+                                    <span class="badge text-sm">Details regarding primary disease status</span>
+                                </h4>
+                                <div class="col-md-3">
+                                    {{ form.dx_type.errors }}
+                                    <label class="oncflow-labels" for="{{ form.dx_type.id_for_label }}">Dx Type(Status):</label>
+                                    {{ form.dx_type }}
+                                </div>
+                                <div class="col-md-4" hx-trigger="change"
+                                     hx-post="{% url 'confirmed_by' dx_id %}"
+                                     hx-target="#biopsysite" hx-swap="innerHTML">
+                                    {{ form.confirmed_by.errors }}
+                                    <label class="oncflow-labels" for="{{ form.confirmed_by.id_for_label }}">Diagnosis(Status Confirmed by):</label>
+                                    {{ form.confirmed_by }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.dx_date.errors }}
+                                    <label class="oncflow-labels" for="{{ form.dx_date.id_for_label }}">Diagnosis(Status Date)*:</label>
+                                    {{ form.dx_date }}
+                                </div>
+                                <div id="biopsysite">
+                                    {% if diagnosis_by_hpe %}
+                                        {% include 'patient_data/partials/partial_confirmed_by.html' %}
+                                    {% endif %}
+                                </div>
+{#                                <div class="col-md-2">#}
+{#                                    {{ form.biopsy_grade.errors }}#}
+{#                                    <label class="oncflow-labels" for="{{ form.biopsy_grade.id_for_label }}">Biopsy(Grade):</label>#}
+{#                                    {{ form.biopsy_grade }}#}
+{#                                </div>#}
+{#                                <div class="col-md-2">#}
+{#                                    {{ form.biopsy_no.errors }}#}
+{#                                    <label class="oncflow-labels" for="{{ form.biopsy_no.id_for_label }}">Biopsy No:</label>#}
+{#                                    {{ form.biopsy_no }}#}
+{#                                </div>#}
+{#                                <div class="col-md-2">#}
+{#                                    {{ form.biopsy_date.errors }}#}
+{#                                    <label class="oncflow-labels" for="{{ form.biopsy_date.id_for_label }}">Biopsy(Date):</label>#}
+{#                                    {{ form.biopsy_date }}#}
+{#                                </div>#}
+{#                                <div class="col-md-6">#}
+{#                                    {{ form.biopsy.errors }}#}
+{#                                    <label class="oncflow-labels" for="{{ form.biopsy.id_for_label }}">Biopsy(Additional Comments):</label>#}
+{#                                    {{ form.biopsy }}#}
+{#                                </div>#}
+                            </div>
+                            {# CLINICAL STAGE SECTION#}
+                            <div class="row section-even g-2 p-1 mt-2">
+                                <div class="col-md-2 d-none">
+                                    {{ form.parent_id.errors }}
+                                    <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CR Number:</label>
+                                    {{ form.parent_id }}
+                                </div>
+                                <div class="col-md-2 d-none">
+                                        {{ form.diagnosis.errors }}
+                                        <label class="oncflow-labels" for="{{ form.diagnosis.id_for_label }}">Primary Diagnosis:</label>
+                                        {{ form.diagnosis }}
                                 </div><br>
-
+                                <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Clinical Stage
+                                    <span class="badge text-sm">TNM of primary disease status</span></h4>
                                 <h5 class="mt-3">Clinical Stage</h5><hr>
                                 <div class="col-md-2">
                                     {{ form.c_t.errors }}
@@ -275,101 +166,720 @@
                                     <label class="oncflow-labels" for="{{ form.c_ajcc_edition.id_for_label }}">Ajcc Edition:</label>
                                     {{ form.c_ajcc_edition }}
                                 </div>
-                            {% endif %}
-                    </div>
+                            </div>
+                            {# MOLECULAR MARKER SECTION#}
+                            <div class="row g-2 mt-2 section-even">
+                                <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Molecular Markers
+                                    <span class="badge text-sm">Markers done for primary disease status</span></h4>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.er.errors }}
+                                    <label class="oncflow-labels" for="{{ form.er.id_for_label }}">ER:</label>
+                                    {{ form.er }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.pr.errors }}
+                                    <label class="oncflow-labels" for="{{ form.pr.id_for_label }}">PR:</label>
+                                    {{ form.pr }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.her2neu.errors }}
+                                    <label class="oncflow-labels" for="{{ form.her2neu.id_for_label }}">HER:</label>
+                                    {{ form.her2neu }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.braca1.errors }}
+                                    <label class="oncflow-labels" for="{{ form.braca1.id_for_label }}">BRACA1:</label>
+                                    {{ form.braca1 }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.braca2.errors }}
+                                    <label class="oncflow-labels" for="{{ form.braca2.id_for_label }}">BRACA2:</label>
+                                    {{ form.braca2 }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.egfr.errors }}
+                                    <label class="oncflow-labels" for="{{ form.egfr.id_for_label }}">EGFR:</label>
+                                    {{ form.egfr }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.alk.errors }}
+                                    <label class="oncflow-labels" for="{{ form.alk.id_for_label }}">ALK:</label>
+                                    {{ form.alk }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.ros.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ros.id_for_label }}">ROS:</label>
+                                    {{ form.ros }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.pdl_1.errors }}
+                                    <label class="oncflow-labels" for="{{ form.pdl_1.id_for_label }}">PDL1:</label>
+                                    {{ form.pdl_1 }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.pdl_1_levels.errors }}
+                                    <label class="oncflow-labels" for="{{ form.pdl_1_levels.id_for_label }}">PDL1(%):</label>
+                                    {{ form.pdl_1_levels }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.braf.errors }}
+                                    <label class="oncflow-labels" for="{{ form.braf.id_for_label }}">BRAF:</label>
+                                    {{ form.braf }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.met.errors }}
+                                    <label class="oncflow-labels" for="{{ form.met.id_for_label }}">MET:</label>
+                                    {{ form.met }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.ret.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ret.id_for_label }}">RET:</label>
+                                    {{ form.ret }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.hpv.errors }}
+                                    <label class="oncflow-labels" for="{{ form.hpv.id_for_label }}">HPV:</label>
+                                    {{ form.hpv }}
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    {{ form.notes.errors }}
+                                    <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                    {{ form.notes }}
+                                </div>
+                            </div>
+                            <div class="form-group mt-2">
+                                <button class="btn btn-dark" type="submit">Update Primary Disease Status</button>
+                            </div>
 
-                    <div class="row g-2 mt-2">
-                        <div class="col-md-2 mb-3">
-                            {{ form.er.errors }}
-                            <label class="oncflow-labels" for="{{ form.er.id_for_label }}">ER:</label>
-                            {{ form.er }}
+                    {# UPDATE RECURRENT/METASTATIC STATUS #}
+                    {% else %}
+                        <h4>Update Diagnosis - Recurrent/Metastatic Status</h4>
+                            {# DISEASE STATUS#}
+                            <div class="row g-2 mt-2 mb-2 ml-2 p-2 section-even">
+                                <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Disease Status:
+                                    <span class="badge text-sm">Details regarding primary disease status</span>
+                                </h4>
+                                <div class="col-md-3">
+                                    {{ form.dx_type.errors }}
+                                    <label class="oncflow-labels" for="{{ form.dx_type.id_for_label }}">Dx Type(Status):</label>
+                                    {{ form.dx_type }}
+                                </div>
+                                <div class="col-md-4" hx-trigger="change"
+                                     hx-post="{% url 'confirmed_by' dx_id %}"
+                                     hx-target="#biopsysite1" hx-swap="innerHTML">
+                                    {{ form.confirmed_by.errors }}
+                                    <label class="oncflow-labels" for="{{ form.confirmed_by.id_for_label }}">Diagnosis(Status Confirmed by):</label>
+                                    {{ form.confirmed_by }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.dx_date.errors }}
+                                    <label class="oncflow-labels" for="{{ form.dx_date.id_for_label }}">Diagnosis(Status Date)*:</label>
+                                    {{ form.dx_date }}
+                                </div>
+                                <div class="row g-2 mb-2 mt-2 p-2" id="biopsysite1" style="background-color: #cec2ee">
+                                    {% if diagnosis_by_hpe %}
+                                        <h5>Biopsy/FNAC/Surgery Site Details (If Applicable)</h5>
+                                        <div class="col-md-2">
+                                            {{ form.laterality.errors }}
+                                            <label class="oncflow-labels" for="{{ form.laterality.id_for_label }}">Laterality:</label>
+                                            {{ form.laterality }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            {{ form.icd_main_topo.errors }}
+                                            <label class="oncflow-labels" for="{{ form.icd_main_topo.id_for_label }}">ICD(Main Site):</label>
+                                            {{ form.icd_main_topo }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.icd_topo_code.errors }}
+                                            <label class="oncflow-labels" for="{{ form.icd_topo_code.id_for_label }}">ICD(Site Details):</label>
+                                            {{ form.icd_topo_code }}
+                                        </div>
+                                        <div class="col-md-3">
+                                            {{ form.icd_path_code.errors }}
+                                            <label class="oncflow-labels" for="{{ form.icd_path_code.id_for_label }}">ICD(Patho):</label>
+                                            {{ form.icd_path_code }}
+                                        </div>
+                                        {% include 'patient_data/partials/partial_confirmed_by.html' %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {# CLINICAL STAGE SECTION#}
+                            <div class="row section-even g-2 p-1 mt-2">
+                                <div class="col-md-2 d-none">
+                                    {{ form.parent_id.errors }}
+                                    <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CR Number:</label>
+                                    {{ form.parent_id }}
+                                </div>
+                                <div class="col-md-2 d-none">
+                                        {{ form.diagnosis.errors }}
+                                        <label class="oncflow-labels" for="{{ form.diagnosis.id_for_label }}">Primary Diagnosis:</label>
+                                        {{ form.diagnosis }}
+                                </div><br>
+                                <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Clinical Stage
+                                    <span class="badge text-sm">TNM of primary disease status</span></h4>
+                                <h5 class="mt-3">Clinical Stage</h5><hr>
+                                <div class="col-md-2">
+                                    {{ form.c_t.errors }}
+                                    <label class="oncflow-labels" for="{{ form.c_t.id_for_label }}">cT:</label>
+                                    {{ form.c_t }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.c_n.errors }}
+                                    <label class="oncflow-labels" for="{{ form.c_n.id_for_label }}">cN:</label>
+                                    {{ form.c_n }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.c_m.errors }}
+                                    <label class="oncflow-labels" for="{{ form.c_m.id_for_label }}">cM:</label>
+                                    {{ form.c_m }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.c_stage_group.errors }}
+                                    <label class="oncflow-labels" for="{{ form.c_stage_group.id_for_label }}">Stage Group:</label>
+                                    {{ form.c_stage_group }}
+                                </div><br>
+
+                                <h5 class="mt-3">Pathological Stage(If applicable)</h5><hr>
+                                <div class="col-md-2">
+                                    {{ form.p_t.errors }}
+                                    <label class="oncflow-labels" for="{{ form.p_t.id_for_label }}">pT:</label>
+                                    {{ form.p_t }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.p_n.errors }}
+                                    <label class="oncflow-labels" for="{{ form.p_n.id_for_label }}">pN:</label>
+                                    {{ form.p_n }}
+                                </div>
+                                <div class="col-md-2">
+                                    {{ form.p_m.errors }}
+                                    <label class="oncflow-labels" for="{{ form.p_m.id_for_label }}">pM:</label>
+                                    {{ form.p_m }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form.p_stage_group.errors }}
+                                    <label class="oncflow-labels" for="{{ form.p_stage_group.id_for_label }}">pStage Group:</label>
+                                    {{ form.p_stage_group }}
+                                </div>
+                                <div class="col-md-3"></div><hr>
+                                <div class="col-md-3 mb-3 mt-3">
+                                    {{ form.c_ajcc_edition.errors }}
+                                    <label class="oncflow-labels" for="{{ form.c_ajcc_edition.id_for_label }}">Ajcc Edition:</label>
+                                    {{ form.c_ajcc_edition }}
+                                </div>
+                            </div>
+                            {# MOLECULAR MARKER SECTION#}
+                            <div class="row g-2 mt-2 section-even">
+                                <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Molecular Markers
+                                    <span class="badge text-sm">Markers done for primary disease status</span></h4>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.er.errors }}
+                                    <label class="oncflow-labels" for="{{ form.er.id_for_label }}">ER:</label>
+                                    {{ form.er }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.pr.errors }}
+                                    <label class="oncflow-labels" for="{{ form.pr.id_for_label }}">PR:</label>
+                                    {{ form.pr }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.her2neu.errors }}
+                                    <label class="oncflow-labels" for="{{ form.her2neu.id_for_label }}">HER:</label>
+                                    {{ form.her2neu }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.braca1.errors }}
+                                    <label class="oncflow-labels" for="{{ form.braca1.id_for_label }}">BRACA1:</label>
+                                    {{ form.braca1 }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.braca2.errors }}
+                                    <label class="oncflow-labels" for="{{ form.braca2.id_for_label }}">BRACA2:</label>
+                                    {{ form.braca2 }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.egfr.errors }}
+                                    <label class="oncflow-labels" for="{{ form.egfr.id_for_label }}">EGFR:</label>
+                                    {{ form.egfr }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.alk.errors }}
+                                    <label class="oncflow-labels" for="{{ form.alk.id_for_label }}">ALK:</label>
+                                    {{ form.alk }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.ros.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ros.id_for_label }}">ROS:</label>
+                                    {{ form.ros }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.pdl_1.errors }}
+                                    <label class="oncflow-labels" for="{{ form.pdl_1.id_for_label }}">PDL1:</label>
+                                    {{ form.pdl_1 }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.pdl_1_levels.errors }}
+                                    <label class="oncflow-labels" for="{{ form.pdl_1_levels.id_for_label }}">PDL1(%):</label>
+                                    {{ form.pdl_1_levels }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.braf.errors }}
+                                    <label class="oncflow-labels" for="{{ form.braf.id_for_label }}">BRAF:</label>
+                                    {{ form.braf }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.met.errors }}
+                                    <label class="oncflow-labels" for="{{ form.met.id_for_label }}">MET:</label>
+                                    {{ form.met }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.ret.errors }}
+                                    <label class="oncflow-labels" for="{{ form.ret.id_for_label }}">RET:</label>
+                                    {{ form.ret }}
+                                </div>
+                                <div class="col-md-2 mb-3">
+                                    {{ form.hpv.errors }}
+                                    <label class="oncflow-labels" for="{{ form.hpv.id_for_label }}">HPV:</label>
+                                    {{ form.hpv }}
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    {{ form.notes.errors }}
+                                    <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                    {{ form.notes }}
+                                </div>
+                            </div>
+                            <div class="form-group mt-2">
+                                <button class="btn btn-dark" type="submit">Create Primary Disease Status</button>
+                            </div>
+                    {% endif %}
+
+
+                {# CREATE NEW DIAGNOSIS #}
+                {% else %}
+                <h1 class="mb-3">New Diagnosis-Status Form</h1>
+                <hr>
+                {% if request.session.crnumber %}
+                <h5><a class="btn btn-dark" href="{% url 'db_operations' request.session.crnumber %}">Back</a></h5>
+                {% else %}
+                     <h5><a class="btn btn-dark" href="{% url 'db_operations' %}">Back</a></h5>
+                {% endif %}
+                 <h4 class="mb-3">Name: {{ patient.first_name }} {{ patient.last_name }} ID: {{ patient.crnumber }}</h4>
+
+                    {% if primary_dx %}
+                        <table class="styled-table">
+                            <caption class="text-dark">Diagnosis(Primary Status)</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Diagnosis</th>
+                                    <th scope="col">ICD(Main Site)</th>
+                                    <th scope="col">ICD(Sub Site)</th>
+                                    <th scope="col">HPE</th>
+                                    <th scope="col">cPrimary Stage</th>
+                                    <th scope="col">pPrimary Stage</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{ primary_dx.diagnosis }} - {{ primary_dx.laterality }}</td>
+                                    <td>{{ primary_dx.icd_main_topo }}</td>
+                                    <td>{{ primary_dx.icd_topo_code }}</td>
+                                    <td>{{ primary_dx.icd_path_code }}</td>
+                                    <td>T{{ primary_dx.c_t }} N{{ primary_dx.c_n }} M{{ primary_dx.c_m }}
+                                    StageGroup: {{ primary_dx.c_stage_group }}
+                                    </td>
+                                    <td>pT{{ primary_dx.p_t }} pN{{ primary_dx.p_n }} pM{{ primary_dx.p_m }}
+                                    pStageGroup: {{ primary_dx.p_stage_group }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h4>Diagnosis - Current Status</h4>
+                        <h6 class="red-highlight box-redius box-shadow text-light p-2">
+                            This is a Recurrent/Metastatic/Second Primary Setting. Please fill details as per the new status of this diagnosis</h6>
+                        {# DYNAMIC SECTION#}
+                        <div class="row g-2 mt-2 mb-2 ml-2 p-2 section-even">
+                            <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Disease Status:
+                                <span class="badge text-sm">Details regarding changed status of diagnosis</span>
+                            </h4>
+                            <div class="col-md-3">
+                                {{ form.dx_type.errors }}
+                                <label class="oncflow-labels" for="{{ form.dx_type.id_for_label }}">Dx Type(Status):</label>
+                                {{ form.dx_type }}
+                            </div>
+                            <div class="col-md-4" hx-trigger="change" hx-post="{% url 'confirmed_by' %}" hx-target="#biopsysite2">
+                                {{ form.confirmed_by.errors }}
+                                <label class="oncflow-labels" for="{{ form.confirmed_by.id_for_label }}">Diagnosis(Status Confirmed by):</label>
+                                {{ form.confirmed_by }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.dx_date.errors }}
+                                <label class="oncflow-labels" for="{{ form.dx_date.id_for_label }}">Diagnosis(Status Date)*:</label>
+                                {{ form.dx_date }}
+                            </div>
+                            <div id="biopsysite2">
+                            </div>
                         </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form.pr.errors }}
-                            <label class="oncflow-labels" for="{{ form.pr.id_for_label }}">PR:</label>
-                            {{ form.pr }}
+                        {# CLINICAL STAGE SECTION#}
+                        <div class="row section-even g-2 p-1 mt-2">
+                            <div class="col-md-2 d-none">
+                                {{ form.parent_id.errors }}
+                                <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CR Number:</label>
+                                {{ form.parent_id }}
+                            </div>
+                            <div class="col-md-2 d-none">
+                                    {{ form.diagnosis.errors }}
+                                    <label class="oncflow-labels" for="{{ form.diagnosis.id_for_label }}">Primary Diagnosis:</label>
+                                    {{ form.diagnosis }}
+                            </div><br>
+                            <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Clinical Stage
+                                <span class="badge text-sm">TNM as per the present status</span></h4>
+                            <h5 class="mt-3">Clinical Stage</h5><hr>
+                            <div class="col-md-2">
+                                {{ form.c_t.errors }}
+                                <label class="oncflow-labels" for="{{ form.c_t.id_for_label }}">cT:</label>
+                                {{ form.c_t }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.c_n.errors }}
+                                <label class="oncflow-labels" for="{{ form.c_n.id_for_label }}">cN:</label>
+                                {{ form.c_n }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.c_m.errors }}
+                                <label class="oncflow-labels" for="{{ form.c_m.id_for_label }}">cM:</label>
+                                {{ form.c_m }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.c_stage_group.errors }}
+                                <label class="oncflow-labels" for="{{ form.c_stage_group.id_for_label }}">Stage Group:</label>
+                                {{ form.c_stage_group }}
+                            </div><br>
+
+                            <h5 class="mt-3">Pathological Stage(If applicable)</h5><hr>
+                            <div class="col-md-2">
+                                {{ form.p_t.errors }}
+                                <label class="oncflow-labels" for="{{ form.p_t.id_for_label }}">pT:</label>
+                                {{ form.p_t }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.p_n.errors }}
+                                <label class="oncflow-labels" for="{{ form.p_n.id_for_label }}">pN:</label>
+                                {{ form.p_n }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.p_m.errors }}
+                                <label class="oncflow-labels" for="{{ form.p_m.id_for_label }}">pM:</label>
+                                {{ form.p_m }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.p_stage_group.errors }}
+                                <label class="oncflow-labels" for="{{ form.p_stage_group.id_for_label }}">pStage Group:</label>
+                                {{ form.p_stage_group }}
+                            </div>
+                            <div class="col-md-3"></div><hr>
+                            <div class="col-md-3 mb-3 mt-3">
+                                {{ form.c_ajcc_edition.errors }}
+                                <label class="oncflow-labels" for="{{ form.c_ajcc_edition.id_for_label }}">Ajcc Edition:</label>
+                                {{ form.c_ajcc_edition }}
+                            </div>
                         </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form.her2neu.errors }}
-                            <label class="oncflow-labels" for="{{ form.her2neu.id_for_label }}">HER:</label>
-                            {{ form.her2neu }}
+                        {# MOLECULAR MARKER SECTION#}
+                        <div class="row g-2 mt-2 section-even">
+                            <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Molecular Markers
+                                <span class="badge text-sm">Markers done for current disease status</span></h4>
+                            <div class="col-md-2 mb-3">
+                                {{ form.er.errors }}
+                                <label class="oncflow-labels" for="{{ form.er.id_for_label }}">ER:</label>
+                                {{ form.er }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.pr.errors }}
+                                <label class="oncflow-labels" for="{{ form.pr.id_for_label }}">PR:</label>
+                                {{ form.pr }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.her2neu.errors }}
+                                <label class="oncflow-labels" for="{{ form.her2neu.id_for_label }}">HER:</label>
+                                {{ form.her2neu }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.braca1.errors }}
+                                <label class="oncflow-labels" for="{{ form.braca1.id_for_label }}">BRACA1:</label>
+                                {{ form.braca1 }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.braca2.errors }}
+                                <label class="oncflow-labels" for="{{ form.braca2.id_for_label }}">BRACA2:</label>
+                                {{ form.braca2 }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.egfr.errors }}
+                                <label class="oncflow-labels" for="{{ form.egfr.id_for_label }}">EGFR:</label>
+                                {{ form.egfr }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.alk.errors }}
+                                <label class="oncflow-labels" for="{{ form.alk.id_for_label }}">ALK:</label>
+                                {{ form.alk }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.ros.errors }}
+                                <label class="oncflow-labels" for="{{ form.ros.id_for_label }}">ROS:</label>
+                                {{ form.ros }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.pdl_1.errors }}
+                                <label class="oncflow-labels" for="{{ form.pdl_1.id_for_label }}">PDL1:</label>
+                                {{ form.pdl_1 }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.pdl_1_levels.errors }}
+                                <label class="oncflow-labels" for="{{ form.pdl_1_levels.id_for_label }}">PDL1(%):</label>
+                                {{ form.pdl_1_levels }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.braf.errors }}
+                                <label class="oncflow-labels" for="{{ form.braf.id_for_label }}">BRAF:</label>
+                                {{ form.braf }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.met.errors }}
+                                <label class="oncflow-labels" for="{{ form.met.id_for_label }}">MET:</label>
+                                {{ form.met }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.ret.errors }}
+                                <label class="oncflow-labels" for="{{ form.ret.id_for_label }}">RET:</label>
+                                {{ form.ret }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.hpv.errors }}
+                                <label class="oncflow-labels" for="{{ form.hpv.id_for_label }}">HPV:</label>
+                                {{ form.hpv }}
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                {{ form.notes.errors }}
+                                <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                {{ form.notes }}
+                            </div>
                         </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form.braca1.errors }}
-                            <label class="oncflow-labels" for="{{ form.braca1.id_for_label }}">BRACA1:</label>
-                            {{ form.braca1 }}
+                        <div class="form-group mt-2">
+                            <button class="btn btn-dark" type="submit">Create New Status</button>
                         </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form.braca2.errors }}
-                            <label class="oncflow-labels" for="{{ form.braca2.id_for_label }}">BRACA2:</label>
-                            {{ form.braca2 }}
+
+                    {% else %}
+                        <h4>Diagnosis - Primary Status</h4>
+                        <h6 class="red-highlight box-redius box-shadow text-light p-2">
+                            This is a Primary Setting. Please fill details as per the primary diagnosis status</h6>
+{#                            PRIMARY SITE STATUS#}
+                        <div class="row g-2 mt-2 mb-2 ml-2 p-2 section-even">
+                            <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Primary Site:
+                                <span class="badge text-sm">Details of Primary Site</span>
+                            </h4>
+                            <div class="col-md-2">
+                                {{ form.diagnosis.errors }}
+                                <label class="oncflow-labels" for="{{ form.diagnosis.id_for_label }}">Primary Diagnosis:</label>
+                                {{ form.diagnosis }}
+                            </div>
+                            <div class="col-md-1">
+                                {{ form.laterality.errors }}
+                                <label class="oncflow-labels" for="{{ form.laterality.id_for_label }}">Laterality:</label>
+                                {{ form.laterality }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.icd_main_topo.errors }}
+                                <label class="oncflow-labels" for="{{ form.icd_main_topo.id_for_label }}">ICD(Main Site):</label>
+                                {{ form.icd_main_topo }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.icd_topo_code.errors }}
+                                <label class="oncflow-labels" for="{{ form.icd_topo_code.id_for_label }}">ICD(Site Details):</label>
+                                {{ form.icd_topo_code }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.icd_path_code.errors }}
+                                <label class="oncflow-labels" for="{{ form.icd_path_code.id_for_label }}">ICD(Patho):</label>
+                                {{ form.icd_path_code }}
+                            </div>
                         </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form.egfr.errors }}
-                            <label class="oncflow-labels" for="{{ form.egfr.id_for_label }}">EGFR:</label>
-                            {{ form.egfr }}
+{#                            DISEASE STATUS#}
+                        <div class="row g-2 mt-2 mb-2 ml-2 p-2 section-even">
+                            <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Disease Status:
+                                <span class="badge text-sm">Details regarding primary disease status</span>
+                            </h4>
+                            <div class="col-md-3">
+                                {{ form.dx_type.errors }}
+                                <label class="oncflow-labels" for="{{ form.dx_type.id_for_label }}">Dx Type(Status):</label>
+                                {{ form.dx_type }}
+                            </div>
+                            <div class="col-md-4" hx-trigger="change" hx-post="{% url 'confirmed_by' %}" hx-target="#biopsysite3">
+                                {{ form.confirmed_by.errors }}
+                                <label class="oncflow-labels" for="{{ form.confirmed_by.id_for_label }}">Diagnosis(Status Confirmed by):</label>
+                                {{ form.confirmed_by }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.dx_date.errors }}
+                                <label class="oncflow-labels" for="{{ form.dx_date.id_for_label }}">Diagnosis(Status Date)*:</label>
+                                {{ form.dx_date }}
+                            </div>
+                            <div id="biopsysite3"></div>
                         </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form.alk.errors }}
-                            <label class="oncflow-labels" for="{{ form.alk.id_for_label }}">ALK:</label>
-                            {{ form.alk }}
+{#                        CLINICAL STAGE SECTION#}
+                        <div class="row section-even g-2 p-1 mt-2">
+                            <div class="col-md-2 d-none">
+                                {{ form.parent_id.errors }}
+                                <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CR Number:</label>
+                                {{ form.parent_id }}
+                            </div>
+                            <div class="col-md-2 d-none">
+                                    {{ form.diagnosis.errors }}
+                                    <label class="oncflow-labels" for="{{ form.diagnosis.id_for_label }}">Primary Diagnosis:</label>
+                                    {{ form.diagnosis }}
+                            </div><br>
+                            <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Clinical Stage
+                                <span class="badge text-sm">TNM of primary disease status</span></h4>
+                            <h5 class="mt-3">Clinical Stage</h5><hr>
+                            <div class="col-md-2">
+                                {{ form.c_t.errors }}
+                                <label class="oncflow-labels" for="{{ form.c_t.id_for_label }}">cT:</label>
+                                {{ form.c_t }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.c_n.errors }}
+                                <label class="oncflow-labels" for="{{ form.c_n.id_for_label }}">cN:</label>
+                                {{ form.c_n }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.c_m.errors }}
+                                <label class="oncflow-labels" for="{{ form.c_m.id_for_label }}">cM:</label>
+                                {{ form.c_m }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.c_stage_group.errors }}
+                                <label class="oncflow-labels" for="{{ form.c_stage_group.id_for_label }}">Stage Group:</label>
+                                {{ form.c_stage_group }}
+                            </div><br>
+
+                            <h5 class="mt-3">Pathological Stage(If applicable)</h5><hr>
+                            <div class="col-md-2">
+                                {{ form.p_t.errors }}
+                                <label class="oncflow-labels" for="{{ form.p_t.id_for_label }}">pT:</label>
+                                {{ form.p_t }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.p_n.errors }}
+                                <label class="oncflow-labels" for="{{ form.p_n.id_for_label }}">pN:</label>
+                                {{ form.p_n }}
+                            </div>
+                            <div class="col-md-2">
+                                {{ form.p_m.errors }}
+                                <label class="oncflow-labels" for="{{ form.p_m.id_for_label }}">pM:</label>
+                                {{ form.p_m }}
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.p_stage_group.errors }}
+                                <label class="oncflow-labels" for="{{ form.p_stage_group.id_for_label }}">pStage Group:</label>
+                                {{ form.p_stage_group }}
+                            </div>
+                            <div class="col-md-3"></div><hr>
+                            <div class="col-md-3 mb-3 mt-3">
+                                {{ form.c_ajcc_edition.errors }}
+                                <label class="oncflow-labels" for="{{ form.c_ajcc_edition.id_for_label }}">Ajcc Edition:</label>
+                                {{ form.c_ajcc_edition }}
+                            </div>
                         </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form.ros.errors }}
-                            <label class="oncflow-labels" for="{{ form.ros.id_for_label }}">ROS:</label>
-                            {{ form.ros }}
+{#                        MOLECULAR MARKER SECTION#}
+                        <div class="row g-2 mt-2 section-even">
+                            <h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Molecular Markers
+                                <span class="badge text-sm">Markers done for primary disease status</span></h4>
+                            <div class="col-md-2 mb-3">
+                                {{ form.er.errors }}
+                                <label class="oncflow-labels" for="{{ form.er.id_for_label }}">ER:</label>
+                                {{ form.er }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.pr.errors }}
+                                <label class="oncflow-labels" for="{{ form.pr.id_for_label }}">PR:</label>
+                                {{ form.pr }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.her2neu.errors }}
+                                <label class="oncflow-labels" for="{{ form.her2neu.id_for_label }}">HER:</label>
+                                {{ form.her2neu }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.braca1.errors }}
+                                <label class="oncflow-labels" for="{{ form.braca1.id_for_label }}">BRACA1:</label>
+                                {{ form.braca1 }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.braca2.errors }}
+                                <label class="oncflow-labels" for="{{ form.braca2.id_for_label }}">BRACA2:</label>
+                                {{ form.braca2 }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.egfr.errors }}
+                                <label class="oncflow-labels" for="{{ form.egfr.id_for_label }}">EGFR:</label>
+                                {{ form.egfr }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.alk.errors }}
+                                <label class="oncflow-labels" for="{{ form.alk.id_for_label }}">ALK:</label>
+                                {{ form.alk }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.ros.errors }}
+                                <label class="oncflow-labels" for="{{ form.ros.id_for_label }}">ROS:</label>
+                                {{ form.ros }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.pdl_1.errors }}
+                                <label class="oncflow-labels" for="{{ form.pdl_1.id_for_label }}">PDL1:</label>
+                                {{ form.pdl_1 }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.pdl_1_levels.errors }}
+                                <label class="oncflow-labels" for="{{ form.pdl_1_levels.id_for_label }}">PDL1(%):</label>
+                                {{ form.pdl_1_levels }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.braf.errors }}
+                                <label class="oncflow-labels" for="{{ form.braf.id_for_label }}">BRAF:</label>
+                                {{ form.braf }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.met.errors }}
+                                <label class="oncflow-labels" for="{{ form.met.id_for_label }}">MET:</label>
+                                {{ form.met }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.ret.errors }}
+                                <label class="oncflow-labels" for="{{ form.ret.id_for_label }}">RET:</label>
+                                {{ form.ret }}
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                {{ form.hpv.errors }}
+                                <label class="oncflow-labels" for="{{ form.hpv.id_for_label }}">HPV:</label>
+                                {{ form.hpv }}
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                {{ form.notes.errors }}
+                                <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
+                                {{ form.notes }}
+                            </div>
                         </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form.pdl_1.errors }}
-                            <label class="oncflow-labels" for="{{ form.pdl_1.id_for_label }}">PDL1:</label>
-                            {{ form.pdl_1 }}
+                        <div class="form-group mt-2">
+                            <button class="btn btn-dark" type="submit">Create Primary Disease Status</button>
                         </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form.pdl_1_levels.errors }}
-                            <label class="oncflow-labels" for="{{ form.pdl_1_levels.id_for_label }}">PDL1(%):</label>
-                            {{ form.pdl_1_levels }}
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form.braf.errors }}
-                            <label class="oncflow-labels" for="{{ form.braf.id_for_label }}">BRAF:</label>
-                            {{ form.braf }}
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form.met.errors }}
-                            <label class="oncflow-labels" for="{{ form.met.id_for_label }}">MET:</label>
-                            {{ form.met }}
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form.ret.errors }}
-                            <label class="oncflow-labels" for="{{ form.ret.id_for_label }}">RET:</label>
-                            {{ form.ret }}
-                        </div>
-                        <div class="col-md-2 mb-3">
-                            {{ form.hpv.errors }}
-                            <label class="oncflow-labels" for="{{ form.hpv.id_for_label }}">HPV:</label>
-                            {{ form.hpv }}
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            {{ form.notes.errors }}
-                            <label class="oncflow-labels" for="{{ form.notes.id_for_label }}">Notes:</label>
-                            {{ form.notes }}
-                        </div>
-                </div>
-            </div>
-            <!-- Button Row -->
-            {% if update %}
-                <div class="form-group mt-2">
-                    <button class="btn btn-dark" type="submit">Update</button>
-                </div>
-            {% else %}
-                <div class="form-group mt-2">
-                    <button class="btn btn-dark" type="submit">Save</button>
-                </div>
-            {% endif %}
+
+                    {% endif %}
+
+                {% endif %}
             </div>
         </form>
     </div>
 </div>
+
 {% endblock content %}
 {% block javascript %}
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
@@ -380,5 +890,5 @@
             $('#id_icd_path_code').select2();
             $('#id_icd_main_topo').select2();
         });
-    </script> 
+    </script>
 {% endblock javascript %}

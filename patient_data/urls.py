@@ -22,7 +22,8 @@ from .views import S1RegUpdateView, S1ListView, PreSimulationUpdateView, PreSimu
     AcuteToxicityCreateView, RTPrescriptionCreateView, RTPrescriptionUpdateView, RTPrescriptionDeleteView, \
     RTInvImgCreateView, RTInvImgUpdateView, RTInvImgDeleteView, RTInvPathlabCreateView, RTInvPathlabUpdateView, \
     RTInvPathlabDeleteView, RTInvLabsCreateView, RTInvLabsUpdateView, RTInvLabsDeleteView, AcuteToxicityUpdateView, \
-    AcuteToxicityDeleteView, SimulationDeleteView, NewPreSimulationListView, link_presim_with_careplan, create_simulation, \
+    AcuteToxicityDeleteView, SimulationDeleteView, NewPreSimulationListView, link_presim_with_careplan, \
+    create_simulation, \
     link_simulation_with_careplan
 
 urlpatterns = [
@@ -47,7 +48,6 @@ urlpatterns = [
 
     path('radonc-newpresimulation/<str:crnumber>/list/', NewPreSimulationListView.as_view(),
          name="radonc-newpresimulation-list"),
-
 
     # path('presim2sim/<int:crnumber>/', views.proceed2sim, name="proceed2sim"),
     path('radonc-diagnosis/', DiagnosisCreateView.as_view(), name="radonc-diagnosis"),
@@ -110,7 +110,6 @@ urlpatterns = [
     path('radonc-chemoprotocol/<int:pk>/delete', ChemoProtocolDeleteView.as_view(),
          name="radonc-chemoprotocol-delete"),
 
-
     # ASSESSMENT
     path('radonc-ass/<int:s4_id>/', AssCreateView.as_view(), name="radonc-ass"),
     path('radonc-ass/<int:s4_id>/list/', AssListView.as_view(), name="radonc-ass-list"),
@@ -167,7 +166,6 @@ urlpatterns = [
     path('latetox/<int:pk>/update/', LateToxUpdateView.as_view(), name="latetox-update"),
     path('latetox/<int:pk>/delete/', LateToxDeleteView.as_view(), name="latetox-delete"),
 
-
     # PRESCRIPTION
     path('prescription/<str:crnumber>/', PrescriptionCreateView.as_view(), name="prescription1"),
     path('prescription/<str:crnumber>/<int:s8_id>/', PrescriptionCreateView.as_view(), name="prescription2"),
@@ -184,13 +182,12 @@ urlpatterns = [
     path('acute-toxicity-update/<int:pk>/', AcuteToxicityUpdateView.as_view(), name='acute-toxicity-update'),
     path('acute-toxicity-delete/<int:pk>/', AcuteToxicityDeleteView.as_view(), name='acute-toxicity-delete'),
 
-
     # PRIMARY-DVH
     path('radonc-primarydvh/<int:s4_id>/', PrimaryDVHCreateView.as_view(), name="radonc-primarydvh"),
     # path('radonc-primarydvh/<int:s4_id>/list/', PrimaryDVHListView1.as_view(), name="radonc-primarydvh-list"),
     # path('radonc-primarydvh/<int:pk>/update/', PrimaryDVHUpdateView1.as_view(), name="radonc-primarydvh-update"),
 
-    #PFT
+    # PFT
     path('radonc-pftdetails/<str:crnumber>/<int:s8_id>/', PFTDetailsCreateView.as_view(), name="radonc-pftdetails"),
     path('radonc-pftdetails/<str:crnumber>/list/', PFTDetailsListView.as_view(), name="radonc-pftdetails-list"),
     path('radonc-pftdetails/<int:pk>/update/', PFTDetailsUpdateView.as_view(), name="radonc-pftdetails-update"),
@@ -222,7 +219,6 @@ urlpatterns = [
 
     # TEST URL
 
-
 ]
 
 htmx_urlpatterns = [
@@ -230,7 +226,8 @@ htmx_urlpatterns = [
     path('deletedvh/<int:pk>', views.deletedvh, name="deletedvh"),
     path('updatedvh/<int:pk>', views.updatedvh, name="updatedvh"),
     path('get_second_field_options/', views.get_second_field_options, name='get_second_field_options'),
-    path('acute_tox_second_field_options/', views.acute_tox_second_field_options, name='acute_tox_second_field_options'),
+    path('acute_tox_second_field_options/', views.acute_tox_second_field_options,
+         name='acute_tox_second_field_options'),
 
     path('showprescription/<int:s8_id>', views.showprescription, name="showprescription"),
     path('rtshowprescription/<int:s7_id>', views.rtshowprescription, name="rtshowprescription"),
@@ -249,8 +246,10 @@ htmx_urlpatterns = [
     path('get-presim/<crnumber>/<s3_id>', views.get_presim, name='get-presim'),
     path('get-final-status/', views.get_final_status, name='get-final-status'),
     path('get-presim-buttons/', views.get_presim_buttons, name='get-presim-buttons'),
-    path('link-presim-with-careplan/<str:presimid>/<str:s3_id>', views.link_presim_with_careplan, name="link-presim-with-careplan"),
-    path('link-simulation-with-careplan/<str:simid>/<str:s3_id>', views.link_simulation_with_careplan, name="link-simulation-with-careplan"),
+    path('link-presim-with-careplan/<str:presimid>/<str:s3_id>', views.link_presim_with_careplan,
+         name="link-presim-with-careplan"),
+    path('link-simulation-with-careplan/<str:simid>/<str:s3_id>', views.link_simulation_with_careplan,
+         name="link-simulation-with-careplan"),
     path('radonc-new-presimulation/create/', views.create_presim,
          name="radonc-new-presimulation-create"),
     path('radonc-new-presimulation/<int:pk>/update/', views.edit_presim,
@@ -259,6 +258,8 @@ htmx_urlpatterns = [
          name="radonc-new-presimulation-delete"),
     path('patient-search/', views.patient_search, name="patient_search"),
     path('patient-search/search/', views.search, name="search"),
+    path('confirmed_by/<int:dx_id>/', views.confirmed_by, name="confirmed_by"),
+    path('confirmed_by/', views.confirmed_by, name="confirmed_by"),
 ]
 
 urlpatterns += htmx_urlpatterns

@@ -206,6 +206,7 @@ class S2DiagnosisForm(ModelForm):
             'confirmed_by': forms.Select(choices=[("NA", "NA"),
                                                   ("FNAC", "FNAC"),
                                                   ("Biopsy", "Biopsy"),
+                                                  ("Surgery", "Surgery"),
                                                   ("Imaging", "Imaging")], attrs={'class': 'form-control'}),
             'c_t': forms.Select(choices=[], attrs={'class': 'form-control'}),
             'c_n': forms.Select(choices=[], attrs={'class': 'form-control'}),

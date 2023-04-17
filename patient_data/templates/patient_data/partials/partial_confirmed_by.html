@@ -1,0 +1,148 @@
+<div class="row g-2 mb-2 mt-2 p-2" style="background-color: #cec2ee">
+{#{{ primary_dx }}#}
+{#{{ new_dx }}#}
+{#{{ first_dx }}#}
+    {% if primary_dx and new_dx %}
+        <h5>Biopsy/FNAC/Surgery Site Details (If Applicable)</h5>
+        <div class="col-md-2">
+            {{ form.laterality.errors }}
+            <label class="oncflow-labels" for="{{ form.laterality.id_for_label }}">Laterality:</label>
+            {{ form.laterality }}
+        </div>
+        <div class="col-md-4">
+            {{ form.icd_main_topo.errors }}
+            <label class="oncflow-labels" for="{{ form.icd_main_topo.id_for_label }}">ICD(Main Site):</label>
+            {{ form.icd_main_topo }}
+        </div>
+        <div class="col-md-3">
+            {{ form.icd_topo_code.errors }}
+            <label class="oncflow-labels" for="{{ form.icd_topo_code.id_for_label }}">ICD(Site Details):</label>
+            {{ form.icd_topo_code }}
+        </div>
+        <div class="col-md-3">
+            {{ form.icd_path_code.errors }}
+            <label class="oncflow-labels" for="{{ form.icd_path_code.id_for_label }}">ICD(Patho):</label>
+            {{ form.icd_path_code }}
+        </div>
+        <div class="col-md-2">
+            {{ form.biopsy_grade.errors }}
+            <label class="oncflow-labels" for="{{ form.biopsy_grade.id_for_label }}">Biopsy(Grade):</label>
+            {{ form.biopsy_grade }}
+        </div>
+        <div class="col-md-2">
+            {{ form.biopsy_no.errors }}
+            <label class="oncflow-labels" for="{{ form.biopsy_no.id_for_label }}">Biopsy No:</label>
+            {{ form.biopsy_no }}
+        </div>
+        <div class="col-md-2">
+            {{ form.biopsy_date.errors }}
+            <label class="oncflow-labels" for="{{ form.biopsy_date.id_for_label }}">Biopsy(Date):</label>
+            {{ form.biopsy_date }}
+        </div>
+        <div class="col-md-6">
+            {{ form.biopsy.errors }}
+            <label class="oncflow-labels" for="{{ form.biopsy.id_for_label }}">Biopsy(Additional Comments):</label>
+            {{ form.biopsy }}
+        </div>
+    {% elif primary_dx and first_dx %}
+        <div class="col-md-2">
+            {{ form.biopsy_grade.errors }}
+            <label class="oncflow-labels" for="{{ form.biopsy_grade.id_for_label }}">Biopsy(Grade):</label>
+            {{ form.biopsy_grade }}
+        </div>
+        <div class="col-md-2">
+            {{ form.biopsy_no.errors }}
+            <label class="oncflow-labels" for="{{ form.biopsy_no.id_for_label }}">Biopsy No:</label>
+            {{ form.biopsy_no }}
+        </div>
+        <div class="col-md-2">
+            {{ form.biopsy_date.errors }}
+            <label class="oncflow-labels" for="{{ form.biopsy_date.id_for_label }}">Biopsy(Date):</label>
+            {{ form.biopsy_date }}
+        </div>
+        <div class="col-md-6">
+            {{ form.biopsy.errors }}
+            <label class="oncflow-labels" for="{{ form.biopsy.id_for_label }}">Biopsy(Additional Comments):</label>
+            {{ form.biopsy }}
+        </div>
+    {% elif primary_dx %}
+         <h5>Biopsy/FNAC/Surgery Site Details (If Applicable)</h5>
+        <div class="col-md-2">
+            {{ form.laterality.errors }}
+            <label class="oncflow-labels" for="{{ form.laterality.id_for_label }}">Laterality:</label>
+            {{ form.laterality }}
+        </div>
+        <div class="col-md-4">
+            {{ form.icd_main_topo.errors }}
+            <label class="oncflow-labels" for="{{ form.icd_main_topo.id_for_label }}">ICD(Main Site):</label>
+            {{ form.icd_main_topo }}
+        </div>
+        <div class="col-md-3">
+            {{ form.icd_topo_code.errors }}
+            <label class="oncflow-labels" for="{{ form.icd_topo_code.id_for_label }}">ICD(Site Details):</label>
+            {{ form.icd_topo_code }}
+        </div>
+        <div class="col-md-3">
+            {{ form.icd_path_code.errors }}
+            <label class="oncflow-labels" for="{{ form.icd_path_code.id_for_label }}">ICD(Patho):</label>
+            {{ form.icd_path_code }}
+        </div>
+        <div class="col-md-2">
+            {{ form.biopsy_grade.errors }}
+            <label class="oncflow-labels" for="{{ form.biopsy_grade.id_for_label }}">Biopsy(Grade):</label>
+            {{ form.biopsy_grade }}
+        </div>
+        <div class="col-md-2">
+            {{ form.biopsy_no.errors }}
+            <label class="oncflow-labels" for="{{ form.biopsy_no.id_for_label }}">Biopsy No:</label>
+            {{ form.biopsy_no }}
+        </div>
+        <div class="col-md-2">
+            {{ form.biopsy_date.errors }}
+            <label class="oncflow-labels" for="{{ form.biopsy_date.id_for_label }}">Biopsy(Date):</label>
+            {{ form.biopsy_date }}
+        </div>
+        <div class="col-md-6">
+            {{ form.biopsy.errors }}
+            <label class="oncflow-labels" for="{{ form.biopsy.id_for_label }}">Biopsy(Additional Comments):</label>
+            {{ form.biopsy }}
+        </div>
+    {% else %}
+        <div class="col-md-2">
+        {{ form.biopsy_grade.errors }}
+        <label class="oncflow-labels" for="{{ form.biopsy_grade.id_for_label }}">Biopsy(Grade):</label>
+        {{ form.biopsy_grade }}
+        </div>
+        <div class="col-md-2">
+            {{ form.biopsy_no.errors }}
+            <label class="oncflow-labels" for="{{ form.biopsy_no.id_for_label }}">Biopsy No:</label>
+            {{ form.biopsy_no }}
+        </div>
+        <div class="col-md-2">
+            {{ form.biopsy_date.errors }}
+            <label class="oncflow-labels" for="{{ form.biopsy_date.id_for_label }}">Biopsy(Date):</label>
+            {{ form.biopsy_date }}
+        </div>
+        <div class="col-md-6">
+            {{ form.biopsy.errors }}
+            <label class="oncflow-labels" for="{{ form.biopsy.id_for_label }}">Biopsy(Additional Comments):</label>
+            {{ form.biopsy }}
+        </div>
+    {% endif %}
+
+</div>
+{% if primary_dx and first_dx %}
+    <div></div>
+{% else %}
+    {% block javascript %}
+        <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#id_icd_topo_code').select2();
+                $('#id_icd_path_code').select2();
+                $('#id_icd_main_topo').select2();
+            });
+        </script>
+    {% endblock javascript %}
+{% endif %}

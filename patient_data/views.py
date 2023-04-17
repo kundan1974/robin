@@ -126,12 +126,15 @@ def index(request):
     # Cardiac Markers details
     delta_date_18 = timezone.now() - timezone.timedelta(18)
     full_cm_data = []
-    cmdata = CardiacMarkers.objects.all()
+    cmdata = CardiacMarkers.objects.all().select_related()
     [full_cm_data.append(data) for data in cmdata]
     cmdata_no = len(full_cm_data)
     due_for_test = cmdata.filter(date__lte=delta_date_18)
     try:
-        due_for_test1 = due_for_test.annotate(date2=F('simpk__tentativecompletiondate'))
+        # due_for_test1 = due_for_test.annotate(date2=F('simpk__tentativecompletiondate'))
+        due_for_test1 = due_for_test.annotate(
+            date2=ExpressionWrapper(F('rtstartdate') + timezone.timedelta(22), output_field=DateTimeField())
+        )
         due_for_test = due_for_test1.annotate(
             date3=ExpressionWrapper(F('date2') + timezone.timedelta(90), output_field=DateTimeField())
         )
@@ -540,21 +543,9 @@ class DiagnosisCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         self.request.session["crnumber"] = crnumber
         if S2Diagnosis.objects.filter(parent_id=crnumber).exists():
             primary_dx = S2Diagnosis.objects.filter(parent_id=crnumber).first()
-            context['form'].initial['laterality'] = primary_dx.laterality
+            # context['form'].initial['laterality'] = primary_dx.laterality
             context['form'].initial['diagnosis'] = primary_dx.diagnosis
-            context['form'].initial['icd_main_topo'] = primary_dx.icd_main_topo
-            context['form'].initial['icd_main_topo'] = primary_dx.icd_main_topo
-            context['form'].initial['icd_topo_code'] = primary_dx.icd_topo_code
-            context['form'].initial['icd_path_code'] = primary_dx.icd_path_code
-            context['form'].initial['c_t'] = primary_dx.c_t
-            context['form'].initial['c_n'] = primary_dx.c_n
-            context['form'].initial['c_m'] = primary_dx.c_m
-            context['form'].initial['c_stage_group'] = primary_dx.c_stage_group
             context['form'].initial['c_ajcc_edition'] = primary_dx.c_ajcc_edition
-            context['form'].initial['p_t'] = primary_dx.p_t
-            context['form'].initial['p_n'] = primary_dx.p_n
-            context['form'].initial['p_m'] = primary_dx.p_m
-            context['form'].initial['p_stage_group'] = primary_dx.p_stage_group
         else:
             primary_dx = None
         context['primary_dx'] = primary_dx
@@ -626,13 +617,30 @@ class DiagnosisUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         pk = self.kwargs["pk"]
         patient = S2Diagnosis.objects.get(pk=pk)
         # primary_dx = S2Diagnosis.objects.filter(parent_id=patient.parent_id).first()
+        if patient.confirmed_by != "Imaging":
+            diagnosis_by_hpe = True
+        else:
+            diagnosis_by_hpe = False
         updatecrn = patient.parent_id.crnumber
+        if S2Diagnosis.objects.filter(parent_id=updatecrn).count() > 1:
+            first_dx = S2Diagnosis.objects.filter(parent_id=updatecrn).first()
+            if first_dx.pk == pk:
+                first_dx_update = True
+            else:
+                first_dx_update = False
+        else:
+            first_dx_update = True
+
+
         # dx = patient.dx
         # diagnosis = OurDiagnosis.objects.filter(our_diagnosis=dx).first().pk
         # context['form'].initial['diagnosis'] = diagnosis
         context['updatecrn'] = updatecrn
         context['update'] = True
         context['patient'] = patient
+        context['first_dx_update'] = first_dx_update
+        context['diagnosis_by_hpe'] = diagnosis_by_hpe
+        context['dx_id'] = pk
         # context['primary_dx'] = primary_dx
         return context
 
@@ -4730,3 +4738,35 @@ def mobile_view(request):
     else:
         context = {'mobile': False}
     return render(request, 'patient_data/test.html', context)
+
+
+@login_required
+def confirmed_by(request, dx_id=None):
+    crnumber = request.POST['parent_id']
+    first_dx = False
+    primary_dx = False
+    if dx_id:
+        new_dx = False
+    else:
+        new_dx = True
+    try:
+        if S2Diagnosis.objects.filter(parent_id=crnumber).exists():
+            primary_dx = True
+            # primary_dx_no = S2Diagnosis.objects.filter(parent_id=crnumber).count()
+            first_dx = S2Diagnosis.objects.filter(parent_id=crnumber).first()
+            if first_dx.pk == dx_id:
+                first_dx = True
+            else:
+                first_dx = False
+    except:
+        first_dx = False
+    if (request.POST['confirmed_by'] == "Imaging") or (request.POST['confirmed_by'] == "NA"):
+        return HttpResponse("")
+    else:
+        try:
+            diagnosis = S2Diagnosis.objects.get(pk=dx_id)
+            form = S2DiagnosisForm(instance=diagnosis)
+        except:
+            form = S2DiagnosisForm()
+        context = {'form': form, 'first_dx': first_dx, 'primary_dx': primary_dx, 'new_dx': new_dx, 'dx_id': dx_id}
+        return render(request, 'patient_data/partials/partial_confirmed_by.html', context)

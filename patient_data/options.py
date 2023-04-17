@@ -486,6 +486,8 @@ CP_CHOICES = [('', ''),
               ('Consolidation', 'Consolidation'),
               ('Sequential', 'Sequential'),
               ('Concurrent', 'Concurrent'),
+              ('Concurrent-Adjuvant', 'Concurrent-Adjuvant'),
+              ('Neoadjuvant-Adjuvant', 'Neoadjuvant-Adjuvant'),
               ('Prophylactic', 'Prophylactic'),
               ('Not Planned', 'Not Planned'),
               ]

@@ -249,8 +249,7 @@
                                                     <th scope="col">#</th>
                                                     <th scope="col">Name</th>
                                                     <th scope="col">CR Number</th>
-                                                    <th scope="col">Sim Date</th>
-                                                    <th scope="col">Status</th>
+                                                    <th scope="col">RT Started</th>
                                                     <th scope="col">Marker Date</th>
                                                     <th scope="col">Tropl</th>
                                                     <th scope="col">hsCRP</th>
@@ -264,15 +263,14 @@
                                                 {% for data in cm_data %}
                                                 <tr>
                                                   <th scope="row">{{ pt.0 }}</th>
-                                                  <td>{{ data.simpk.name }}</td>
+                                                  <td>{{ data.parent_id.first_name }}</td>
                                                   <td>{{ data.parent_id.crnumber }}</td>
-                                                  <td>{{ data.simpk.simdate|date:"M d, Y" }}</td>
-                                                  <td>{{ data.simpk.initialstatus }}</td>
+                                                  <td>{{ data.rtstartdate|date:"M d, Y" }}</td>
                                                   <td>{{ data.date|date:"M d, Y" }}</td>
                                                   <td>{{ data.trop_i }}</td>
                                                   <td>{{ data.hs_crp }}</td>
                                                   <td>{{ data.nt_probnp }}</td>
-                                                  <td>{{ data.simpk.tentativecompletiondate|date:"M d, Y" }}</td>
+                                                  <td>{{ data.date2|date:"M d, Y" }}</td>
                                                   <td>{{ data.date3|date:"M d, Y" }}</td>
                                                 </tr>
                                               {% endfor %}
