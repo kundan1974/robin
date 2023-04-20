@@ -89,6 +89,17 @@ tfx.addEventListener('focusout', () => {
     }
 })
 
+document.body.addEventListener('click', () => {
+    let impdate = document.getElementById('id_impdate');
+    let newdate = new Date(impdate.value)
+    if (Number(tfx.value) === 1){
+        document.getElementById('id_tentativecompletiondate').value = document.getElementById('id_impdate').value
+    }else{
+        let check_date = addWorkDays(newdate,Number(tfx.value-1))
+        document.getElementById('id_tentativecompletiondate').value = check_date
+    }
+});
+
 //https://stackoverflow.com/questions/37069186/calculate-working-days-between-two-dates-in-javascript-excepts-holidays
 let workingDaysBetweenDates = (d0, d1) => {
   /* Two working days and an sunday (not working day) */

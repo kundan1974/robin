@@ -397,7 +397,10 @@ drugs_choices = [
     ('Hifenac SR', 'Hifenac SR'),
     ('DomStal', 'DomStal'),
     ('chymoral Forte', 'chymoral Forte'),
-    ('Montair LC', 'Montair LC')
+    ('Montair LC', 'Montair LC'),
+    ('Redotil', 'Redotil'),
+    ('Hexigel', 'Hexigel'),
+    ('Nerveheal', 'Nerveheal'),
 ]
 
 RT_LATE_TOXICITY = [

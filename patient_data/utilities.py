@@ -94,6 +94,7 @@ def get_timeline(crnumber):
         reg_date = regdetails.reg_date
     else:
         reg_date = None
+        regdetails = None
     if S2Diagnosis.objects.filter(parent_id=crnumber).exists():
         dxdetails = S2Diagnosis.objects.filter(parent_id=crnumber).all()
         dxinfo = []
@@ -110,7 +111,56 @@ def get_timeline(crnumber):
                 path_code = dx.icd_path_code.hpe
             else:
                 path_code = None
-            dxinfo.append((dx.dx_date.date(), main_topo, dx_type, path_code))
+            if dx.c_t:
+                cT = dx.c_t
+            else:
+                cT = None
+            if dx.c_n:
+                cN = dx.c_n
+            else:
+                cN = None
+            if dx.c_m:
+                cM = dx.c_m
+            else:
+                cM = None
+            if dx.c_stage_group:
+                stage = dx.c_stage_group
+            else:
+                stage = None
+            if dx.er:
+                ER = dx.er
+            else:
+                ER = None
+            if dx.pr:
+                PR = dx.pr
+            else:
+                PR = None
+            if dx.her2neu:
+                HER2Neu = dx.her2neu
+            else:
+                HER2Neu = None
+            if dx.egfr:
+                EGFR = dx.egfr
+            else:
+                EGFR = None
+            if dx.alk:
+                ALK = dx.alk
+            else:
+                ALK = None
+            if dx.ros:
+                ROS = dx.ros
+            else:
+                ROS = None
+            if dx.pdl_1:
+                PDL1 = dx.pdl_1
+            else:
+                PDL1 = dx.pdl_1
+            if dx.pdl_1_levels:
+                PDL1Levels = dx.pdl_1_levels
+            else:
+                PDL1Levels = dx.pdl_1_levels
+            dxinfo.append((dx.dx_date.date(), main_topo, dx_type, path_code, cT, cN, cM, stage, ER, PR, HER2Neu,
+                           EGFR, ALK, ROS, PDL1, PDL1Levels))
     else:
         dxinfo = None
 
@@ -145,7 +195,7 @@ def get_timeline(crnumber):
     if S8FUP.objects.filter(parent_id=crnumber).all():
         fupdetails = S6Surgery.objects.filter(parent_id=crnumber).all()
 
-    return reg_date, dxinfo, mxinfo
+    return regdetails, reg_date, dxinfo, mxinfo
 
 
 def getnewsimulation_choices(n):

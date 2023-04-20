@@ -15,8 +15,13 @@
                 <div class="timeline-step">
                     <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2003">
                         <div class="inner-circle"></div>
-                        <p class="h6 mt-3 mb-1">{{ reg_date|date:'d-m-Y' }}</p>
-                        <p class="h6 text-muted mb-0 mb-lg-0">First Visit</p>
+                        {% if regdetails %}
+                            <p class="h6 mt-3 mb-1">First Visit: {{ reg_date|date:'d-m-Y' }}</p>
+                            <p class="h6 mt-3 mb-1">Name: {{ regdetails.first_name }} Age: {{ regdetails.age }}</p>
+                            <p class="h6 text-muted mb-0 mb-lg-0">{{ regdetails.city }}</p>
+                            <p class="h6 text-muted mb-0 mb-lg-0">Mobile: {{ regdetails.mobile }}</p>
+                            <p class="h6 text-muted mb-0 mb-lg-0">Email: {{ regdetails.email }}</p>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="timeline-step">
@@ -28,11 +33,75 @@
                                 <p class="h6 mt-3 mb-1">
                                     <small>{{ content.0|date:'d-m-Y' }}</small></p>
                                 <p class="h6 mb-0 mb-lg-0">
-                                    <small>Diagnossis: {{ content.1}}, <b>{{ content.2 }}</b></small></p>
+                                    <small>Diagnosis: {{ content.1}}, <b>{{ content.2 }}</b></small></p>
+                                {% if content.4 %}
+                                    cT{{ content.4 }}
+                                {% endif %}
+                                {% if content.5 %}
+                                    cN{{ content.5 }}
+                                {% endif %}
+                                {% if content.6 %}
+                                    cM{{ content.6 }}
+                                {% endif %}
+                                {% if content.7 %}
+                                    {{ content.7 }}
+                                {% endif %}
+                                {% if content.8 %}
+                                    {% if content.8 == "Yes" %}
+                                        <small>ER +ve, </small>
+                                    {% else %}
+                                        <small>ER -ve, </small>
+                                    {% endif %}
+                                {% endif %}
+                                {% if content.9 %}
+                                    {% if content.9 == "Yes" %}
+                                        <small>PR +ve, </small>
+                                    {% else %}
+                                        <small>PR -ve, </small>
+                                    {% endif %}
+                                {% endif %}
+                                {% if content.10 %}
+                                    {% if content.10 == "Yes" %}
+                                        <small>Her2Neu +ve, </small>
+                                    {% else %}
+                                        <small>Her2Neu -ve, </small>
+                                    {% endif %}
+                                {% endif %}
+                                {% if content.11 %}
+                                    {% if content.11 == "Yes" %}
+                                        <small>EGFR +ve, </small>
+                                    {% else %}
+                                        <small>EGFR -ve, </small>
+                                    {% endif %}
+                                {% endif %}
+                                {% if content.12 %}
+                                    {% if content.12 == "Yes" %}
+                                        <small>ALK +ve, </small>
+                                    {% else %}
+                                        <small>ALK -ve, </small>
+                                    {% endif %}
+                                {% endif %}
+                                {% if content.13 %}
+                                    {% if content.13 == "Yes" %}
+                                        <small>ROS +ve, </small>
+                                    {% else %}
+                                        <small>ROS -ve, </small>
+                                    {% endif %}
+                                {% endif %}
+                                {% if content.14 %}
+                                    {% if content.14 == "Yes" %}
+                                        <small>PDL1 +ve, </small>
+                                    {% else %}
+                                        <small>PDL1 -ve, </small>
+                                    {% endif %}
+                                {% endif %}
+                                {% if content.15 %}
+                                    <small>PDL1 Levels: {{ content.15 }}%, </small>
+                                {% endif %}
                                 </div>
                             {% else %}
                                 <p class="h6 mt-3 mb-1"><small>{{ content.0|date:'d-m-Y' }}</small></p>
-                                <p class="h6 text-muted mb-0 mb-lg-0"><small>Diagnossis: {{ content.1}}, <b>{{ content.2 }}</b></small></p>
+                                <p class="h6 text-muted mb-0 mb-lg-0"><small>Diagnosis: {{ content.1}}, <b>{{ content.2 }}</b></small></p>
                                 <hr>
                             {% endif %}
 
@@ -46,9 +115,9 @@
                             {% for mx in mxinfo %}
                                 {% if forloop.last %}
                                     <div class="red-highlight box-redius box-shadow p-2 text-light mt-2">
-                                        <p class="h6 mt-3"><small>Start: {{ mx.0|date:'d-m-Y' }}
+                                        <p class="h6 mt-3"><small>Mx Start: {{ mx.0|date:'d-m-Y' }}
                                         {% if not mx.1 %}
-                                            End: Management continued
+                                            Mx End: Management continued
                                         {% else %}
                                             End: {{ mx.1|date:'d-m-Y' }}
                                         {% endif %}
@@ -57,7 +126,19 @@
                                             {% if mx.2 != "Not Planned" %}
                                                 <b>Surgery({{ mx.2 }})</b> -
                                                 {% for sx in mx.9 %}
-                                                    <br><span class="small green mt-2 mb-2">{{ sx.sxdate|date:'d-m-Y' }}
+                                                     pT{{ sx.s6hpe_set.all.first.pt }} pN{{ sx.s6hpe_set.all.first.pn }} pM{{ sx.s6hpe_set.all.first.pm }}
+                                                            p{{ sx.s6hpe_set.all.first.pstagegroup }}
+                                                    <br><span class="small green text-dark mt-2 mb-2">{{ sx.sxdate|date:'d-m-Y' }}
+                                                        -- {% for surgery in sx.sxtype.all %}
+                                                            {{ surgery }}
+                                                        {% endfor %}
+                                                    </span>
+                                                {% endfor %}
+                                            {% else %}
+                                                <b>Surgery({{ mx.2 }})</b> -
+                                                {% for sx in mx.9 %}
+                                                    <br><span class="small green text-dark mt-2 mb-2">Unplanned
+                                                    {{ sx.sxdate|date:'d-m-Y' }}
                                                         -- {% for surgery in sx.sxtype.all %}
                                                             {{ surgery }}
                                                         {% endfor %}
@@ -67,7 +148,44 @@
                                             {% if mx.3 != "Not Planned" %}
                                                 <b>Radiotherapy({{ mx.3 }})</b> -
                                                 {% for rt in mx.8 %}
-                                                    <br><span class="small green mt-2 mb-2">{{ rt.rtdose1 }}Gy/{{ rt.rtdosefr1|floatformat }} fx by{{ rt.tech1 }} technique</span>
+                                                    {{ rt.simid.donefr }} / {{ rt.simid.totalfractions }} Fx Done
+                                                    <br><span class="small green text-dark mt-2 mb-2">
+                                                    {{ rt.rtdose1 }}Gy/{{ rt.rtdosefr1|floatformat }} fx by {{ rt.tech1 }} technique
+                                                {% if rt.rtdose2 %}
+                                                    followed by {{ rt.rtdose2 }}Gy/{{ rt.rtdosefr1|floatformat }} fx
+                                                {% endif %}
+                                                {% if rt.rtstartdate %}
+                                                    RT Start: {{ rt.rtstartdate|date:"d-m-Y" }}
+                                                {% else %}
+                                                    RT not Started
+                                                {% endif %}
+                                                {% if rt.rtfinishdate %}
+                                                    RT End: {{ rt.rtfinishdate|date:"d-m-Y" }}
+                                                {% else %}
+                                                    RT Ongoing
+                                                {% endif %}
+                                                </span>
+                                                {% endfor %}
+                                            {% else %}
+                                                <b>Radiotherapy({{ mx.3 }})</b> -
+                                                {% for rt in mx.8 %}
+                                                    {{ rt.simid.donefr }} / {{ rt.simid.totalfractions }} Fx Done
+                                                    <br><span class="small green text-dark mt-2 mb-2">UNPLANNED:
+                                                    {{ rt.rtdose1 }}Gy/{{ rt.rtdosefr1|floatformat }} fx by {{ rt.tech1 }} technique
+                                                {% if rt.rtdose2 %}
+                                                    followed by {{ rt.rtdose2 }}Gy/{{ rt.rtdosefr1|floatformat }} fx
+                                                {% endif %}
+                                                {% if rt.rtstartdate %}
+                                                    RT Start: {{ rt.rtstartdate|date:"d-m-Y" }}
+                                                {% else %}
+                                                    RT not Started
+                                                {% endif %}
+                                                {% if rt.rtfinishdate %}
+                                                    RT End: {{ rt.rtfinishdate|date:"d-m-Y" }}
+                                                {% else %}
+                                                    RT Ongoing
+                                                {% endif %}
+                                                </span>
                                                 {% endfor %}
                                             {% endif %}
                                             {% if mx.4 != "Not Planned" %}

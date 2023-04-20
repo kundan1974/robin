@@ -283,7 +283,8 @@ def radonc_home(request, crnumber=None):
         status['form'] = form
         status['user_sim'] = user_sim
 
-        reg_date, dxinfo, mxinfo = get_timeline(crnumber)
+        regdetails, reg_date, dxinfo, mxinfo = get_timeline(crnumber)
+        status['regdetails'] = regdetails
         status['reg_date'] = reg_date
         status['dxinfo'] = dxinfo
         status['mxinfo'] = mxinfo
@@ -629,11 +630,13 @@ class DiagnosisUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         else:
             first_dx_update = True
 
-
-        dx = patient.diagnosis.our_diagnosis
-        if not first_dx_update:
-            diagnosis = OurDiagnosis.objects.filter(our_diagnosis=dx).first().pk
-            context['form'].initial['diagnosis'] = diagnosis
+        try:
+            dx = patient.diagnosis.our_diagnosis
+            if not first_dx_update:
+                diagnosis = OurDiagnosis.objects.filter(our_diagnosis=dx).first().pk
+                context['form'].initial['diagnosis'] = diagnosis
+        except AttributeError:
+            pass
         context['updatecrn'] = updatecrn
         context['update'] = True
         context['patient'] = patient
@@ -933,7 +936,7 @@ def simulation(request, crnumber=None, s3_id=None, presimid=None):
                 )
                 msg.content_subtype = "html"
                 msg.send()
-            print(mail_status)
+            # print(mail_status)
             messages.success(request,
                              f'Data has been saved for CRNumber: {crn} and is assigned to: {assignedto_user}')
             return redirect('radonc-simulation-list', crn)
@@ -941,6 +944,46 @@ def simulation(request, crnumber=None, s3_id=None, presimid=None):
             print(form.errors)
 
     else:
+        initialstatus = "Simulation"
+        simdate = timezone.now().date()
+        icdmainsite = ""
+        site = ""
+        technique = ""
+        intent = ""
+        dosephase1 = ""
+        fxphase1 = ""
+        dosephase2 = ""
+        fxphase2 = ""
+        volumes = ""
+        if s3_id:
+            patient_cp = S3CarePlan.objects.select_related().get(pk=s3_id)
+            if patient_cp.s2_id.diagnosis.our_diagnosis == "Breast" and patient_cp.radiotherapy == "Adjuvant":
+                dosephase1 = 42.5
+                fxphase1 = 16
+                if patient_cp.s2_id.laterality == "Right":
+                    icdmainsite = 73124
+                    site = "Right Breast"
+                    technique = "IMRT-FIF"
+                    intent = "Adjuvant"
+                if patient_cp.surgery:
+                    patient_sx = S6Surgery.objects.select_related().filter(s3_id=s3_id).first()
+                    patient_hpe = S6HPE.objects.select_related().filter(s6_id=patient_sx.pk).first()
+                    if patient_sx.sxtype:
+                        for surgery in patient_sx.sxtype.all():
+                            if surgery.surgery.startswith("Lumpectomy"):
+                                if patient_hpe.hpegrade.code == "Grade3" or patient_cp.parent_id.age < 50:
+                                    dosephase2 = 10
+                                    fxphase2 = 4
+                                if patient_hpe.nodesp/patient_hpe.nodesr >= 0.5:
+                                    volumes = "B-SCF-AX1,2,3-IMC"
+                                else:
+                                    volumes = "B-SCF-AX3"
+                            else:
+                                if patient_hpe.nodesp/patient_hpe.nodesr >= 0.5:
+                                    volumes = "CW-SCF-AX1,2,3-IMC"
+                                else:
+                                    volumes = "CW-SCF-AX3"
+
         presimstatus = False
         utc = pytz.UTC
         end_date = utc.localize(datetime.datetime.today())
@@ -951,7 +994,15 @@ def simulation(request, crnumber=None, s3_id=None, presimid=None):
         error_msg = ""
         error_status = False
         if crnumber:
-            patient = S1ParentMain.objects.filter(crnumber=crnumber).first()
+            if not dosephase1:
+                dosephase1 = 0
+            if not dosephase2:
+                dosephase2 = 0
+            if not fxphase1:
+                fxphase1 = 0
+            if not fxphase2:
+                fxphase2 = 0
+            patient = S1ParentMain.objects.select_related().filter(crnumber=crnumber).first()
             if patient.last_name:
                 name = patient.first_name + " " + patient.last_name
             else:
@@ -963,23 +1014,51 @@ def simulation(request, crnumber=None, s3_id=None, presimid=None):
                 if pat_presim.final_status is None or pat_presim.final_status == "":
                     error_msg = "Final Status not mentioned in presimulation module. Pleaase complete it and then proceed"
                     error_status = True
+                icdmainsite = 73125
+                site = "Left Breast"
+                intent = "Adjuvant"
                 form = SimulationForm(initial={'simparent': crnumber,
                                                'name': name,
                                                's3_id': mx_details.s3_id,
                                                's2_id': s2_id,
                                                'presimid': presimid,
-                                               'technique': pat_presim.final_status})
+                                               'technique': pat_presim.final_status,
+                                               'simdate': simdate,
+                                               'initialstatus': initialstatus,
+                                               'site': icdmainsite,
+                                               'icdmainsite': site,
+                                               'intent': intent,
+                                               'dosephase1': dosephase1,
+                                               'fxphase1': fxphase1,
+                                               'dosephase2': dosephase2,
+                                               'fxphase2': fxphase2,
+                                               'totaldose': dosephase1 + dosephase2,
+                                               'totalfractions': fxphase1 + fxphase2,
+                                               'volumes': volumes
+                                               })
 
             else:
                 form = SimulationForm(initial={'simparent': crnumber,
                                                'name': name,
                                                's3_id': mx_details.s3_id,
-                                               's2_id': s2_id})
+                                               's2_id': s2_id,
+                                               'simdate': simdate,
+                                               'initialstatus': initialstatus,
+                                               'site': site,
+                                               'icdmainsite': icdmainsite,
+                                               'technique': technique,
+                                               'intent': intent,
+                                               'dosephase1': dosephase1,
+                                               'fxphase1': fxphase1,
+                                               'dosephase2': dosephase2,
+                                               'fxphase2': fxphase2,
+                                               'totaldose': dosephase1 + dosephase2,
+                                               'totalfractions': fxphase1 + fxphase2,
+                                               'volumes': volumes
+                                               })
 
         else:
             form = SimulationForm()
-
-        print(request.GET)
 
         # return render(request, 'patient_data/radonc_simulation.html', {'form': form, 'presimstatus': presimstatus,
         #                                                                'error_msg': error_msg,
@@ -1062,6 +1141,45 @@ def simulation2(request, crnumber=None, s3_id=None, presimid=None):
             print(form.errors)
 
     else:
+        initialstatus = "Simulation"
+        simdate = timezone.now().date()
+        icdmainsite = ""
+        site = ""
+        technique = ""
+        intent = ""
+        dosephase1 = ""
+        fxphase1 = ""
+        dosephase2 = ""
+        fxphase2 = ""
+        volumes = ""
+        if s3_id:
+            patient_cp = S3CarePlan.objects.select_related().get(pk=s3_id)
+            if patient_cp.s2_id.diagnosis.our_diagnosis == "Breast" and patient_cp.radiotherapy == "Adjuvant":
+                dosephase1 = 42.5
+                fxphase1 = 16
+                if patient_cp.s2_id.laterality == "Right":
+                    icdmainsite = 73124
+                    site = "Right Breast"
+                    technique = "IMRT-FIF"
+                    intent = "Adjuvant"
+                if patient_cp.surgery:
+                    patient_sx = S6Surgery.objects.select_related().filter(s3_id=s3_id).first()
+                    patient_hpe = S6HPE.objects.select_related().filter(s6_id=patient_sx.pk).first()
+                    if patient_sx.sxtype:
+                        for surgery in patient_sx.sxtype.all():
+                            if surgery.surgery.startswith("Lumpectomy"):
+                                if patient_hpe.hpegrade.code == "Grade3" or patient_cp.parent_id.age < 50:
+                                    dosephase2 = 10
+                                    fxphase2 = 4
+                                if patient_hpe.nodesp / patient_hpe.nodesr >= 0.5:
+                                    volumes = "B-SCF-AX1,2,3-IMC"
+                                else:
+                                    volumes = "B-SCF-AX3"
+                            else:
+                                if patient_hpe.nodesp / patient_hpe.nodesr >= 0.5:
+                                    volumes = "CW-SCF-AX1,2,3-IMC"
+                                else:
+                                    volumes = "CW-SCF-AX3"
         presimstatus = False
         utc = pytz.UTC
         end_date = utc.localize(datetime.datetime.today())
@@ -1072,6 +1190,14 @@ def simulation2(request, crnumber=None, s3_id=None, presimid=None):
         error_msg = ""
         error_status = False
         if crnumber:
+            if not dosephase1:
+                dosephase1 = 0
+            if not dosephase2:
+                dosephase2 = 0
+            if not fxphase1:
+                fxphase1 = 0
+            if not fxphase2:
+                fxphase2 = 0
             patient = S1ParentMain.objects.filter(crnumber=crnumber).first()
             if patient.last_name:
                 name = patient.first_name + " " + patient.last_name
@@ -1084,18 +1210,48 @@ def simulation2(request, crnumber=None, s3_id=None, presimid=None):
                 if pat_presim.final_status is None or pat_presim.final_status == "":
                     error_msg = "Final Status not mentioned in presimulation module. Pleaase complete it and then proceed"
                     error_status = True
+                icdmainsite = 73125
+                site = "Left Breast"
+                intent = "Adjuvant"
                 form = SimulationForm(initial={'simparent': crnumber,
                                                'name': name,
                                                's3_id': mx_details.s3_id,
                                                's2_id': s2_id,
                                                'presimid': presimid,
-                                               'technique': pat_presim.final_status})
+                                               'technique': pat_presim.final_status,
+                                               'simdate': simdate,
+                                               'initialstatus': initialstatus,
+                                               'site': icdmainsite,
+                                               'icdmainsite': site,
+                                               'intent': intent,
+                                               'dosephase1': dosephase1,
+                                               'fxphase1': fxphase1,
+                                               'dosephase2': dosephase2,
+                                               'fxphase2': fxphase2,
+                                               'totaldose': dosephase1 + dosephase2,
+                                               'totalfractions': fxphase1 + fxphase2,
+                                               'volumes': volumes
+                                               })
 
             else:
                 form = SimulationForm(initial={'simparent': crnumber,
                                                'name': name,
                                                's3_id': mx_details.s3_id,
-                                               's2_id': s2_id})
+                                               's2_id': s2_id,
+                                               'simdate': simdate,
+                                               'initialstatus': initialstatus,
+                                               'site': site,
+                                               'icdmainsite': icdmainsite,
+                                               'technique': technique,
+                                               'intent': intent,
+                                               'dosephase1': dosephase1,
+                                               'fxphase1': fxphase1,
+                                               'dosephase2': dosephase2,
+                                               'fxphase2': fxphase2,
+                                               'totaldose': dosephase1 + dosephase2,
+                                               'totalfractions': fxphase1 + fxphase2,
+                                               'volumes': volumes
+                                               })
 
         else:
             form = SimulationForm()
@@ -4599,7 +4755,10 @@ def create_simulation(request, crnumber):
         form = SimulationWithoutCarePlanForm()
         patient = S1ParentMain.objects.filter(crnumber=crnumber).first()
         form.fields['simparent'].initial = crnumber
-        form.fields['name'].initial = patient.first_name + " " + patient.last_name
+        if patient.last_name:
+            form.fields['name'].initial = patient.first_name + " " + patient.last_name
+        else:
+            form.fields['name'].initial = patient.first_name
         return render(request, 'patient_data/create_simulation_without_careplan.html',
                       {'form': form, 'crnumber': crnumber, 'message': None})
 
