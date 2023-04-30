@@ -44,8 +44,14 @@
                                     <small class="text-dark"><b>Diagnosis Date: </b>: {{ content.dx_date|date:"F d, Y" }}</small><br>
                                     <small class="text-dark"><b>HPE(ICD): </b>: {{ content.icd_path_code }}</small><br>
                                     <small class="text-dark"><b>Site(ICD): </b>: {{ content.icd_topo_code }}</small><br>
-                                    <small class="text-dark"><b>TNM(ICD): </b>: T{{ content.c_t }}N{{ content.c_n }}M{{ content.c_m }}</small><br>
-                                    <small class="text-dark"><b>Stage(AJCC): </b>: {{ content.c_stage_group }}</small><br>
+                                    {% if content.t_new %}
+                                    <small class="text-dark"><b>TNM(ICD): </b>: T{{ content.t_new }}N{{ content.n_new }}M{{ content.m_new }}</small><br>
+                                    <small class="text-dark"><b>Stage(AJCC): </b>: {{ content.stage_new }}</small><br>
+                                    {% endif %}
+                                    {% if content.p_t_new %}
+                                    <small class="text-dark"><b>pTNM(ICD): </b>: T{{ content.p_t_new }}N{{ content.p_n_new }}M{{ content.p_m_new }}</small><br>
+                                    <small class="text-dark"><b>pStage(AJCC): </b>: {{ content.p_stage_new }}</small><br>
+                                    {% endif %}
                                 </div>
                            </div>
                         </article>
