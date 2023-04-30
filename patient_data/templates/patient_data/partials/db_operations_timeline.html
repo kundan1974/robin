@@ -152,17 +152,18 @@
                                                     <br><span class="small green text-dark mt-2 mb-2">
                                                     {{ rt.rtdose1 }}Gy/{{ rt.rtdosefr1|floatformat }} fx by {{ rt.tech1 }} technique
                                                 {% if rt.rtdose2 %}
-                                                    followed by {{ rt.rtdose2 }}Gy/{{ rt.rtdosefr1|floatformat }} fx
+                                                    followed by {{ rt.rtdose2 }}Gy/{{ rt.rtdosefr2|floatformat }} fx
                                                 {% endif %}
                                                 {% if rt.rtstartdate %}
-                                                    RT Start: {{ rt.rtstartdate|date:"d-m-Y" }}
+                                                    , RT Start: {{ rt.rtstartdate|date:"d-m-Y" }}, RT Machine: {{ rt.rtmachine.rtmachines }}
                                                 {% else %}
-                                                    RT not Started
+                                                    , RT Status: RT not Started
                                                 {% endif %}
                                                 {% if rt.rtfinishdate %}
-                                                    RT End: {{ rt.rtfinishdate|date:"d-m-Y" }}
+                                                    , RT Status: RT End: {{ rt.rtfinishdate|date:"d-m-Y" }}
                                                 {% else %}
-                                                    RT Ongoing
+                                                    , RT Status: RT Ongoing <br>
+                                                    RT Volumes: {{ rt.simid.volumes.volume }}
                                                 {% endif %}
                                                 </span>
                                                 {% endfor %}
@@ -172,30 +173,34 @@
                                                     {{ rt.simid.donefr }} / {{ rt.simid.totalfractions }} Fx Done
                                                     <br><span class="small green text-dark mt-2 mb-2">UNPLANNED:
                                                     {{ rt.rtdose1 }}Gy/{{ rt.rtdosefr1|floatformat }} fx by {{ rt.tech1 }} technique
-                                                {% if rt.rtdose2 %}
-                                                    followed by {{ rt.rtdose2 }}Gy/{{ rt.rtdosefr1|floatformat }} fx
-                                                {% endif %}
-                                                {% if rt.rtstartdate %}
-                                                    RT Start: {{ rt.rtstartdate|date:"d-m-Y" }}
-                                                {% else %}
-                                                    RT not Started
-                                                {% endif %}
-                                                {% if rt.rtfinishdate %}
-                                                    RT End: {{ rt.rtfinishdate|date:"d-m-Y" }}
-                                                {% else %}
-                                                    RT Ongoing
-                                                {% endif %}
-                                                </span>
+                                                    {% if rt.rtdose2 %}
+                                                        followed by {{ rt.rtdose2 }}Gy/{{ rt.rtdosefr2|floatformat }} fx
+                                                    {% endif %}
+                                                    {% if rt.rtstartdate %}
+                                                        RT Start: {{ rt.rtstartdate|date:"d-m-Y" }}
+                                                    {% else %}
+                                                        RT not Started
+                                                    {% endif %}
+                                                    {% if rt.rtfinishdate %}
+                                                        RT End: {{ rt.rtfinishdate|date:"d-m-Y" }}
+                                                    {% else %}
+                                                        RT Ongoing
+                                                    {% endif %}
+                                                    </span>
                                                 {% endfor %}
                                             {% endif %}
                                             {% if mx.4 != "Not Planned" %}
                                                 <b>Chemotherapy({{ mx.4 }})</b>,
+                                                {% for chemo in mx.11 %}
+                                                    <span class="small green text-dark mt-2 mb-2">Protocol: {{ chemo.chemo_protocol.code }}, Cycles: {{ chemo.chemo_cycles }},
+                                                        Unit: {{ chemo.unit.refby }}</span>
+                                                {% endfor %}
                                             {% endif %}
                                             {% if mx.5 != "Not Planned" %}
                                                 <b>Targeted({{ mx.5 }})</b>,
                                             {% endif %}
                                             {% if mx.6 != "Not Planned" %}
-                                                <b>Hormone({{ mx.6 }})</b>,
+                                                <br><b>Hormone({{ mx.6 }})</b>,
                                             {% endif %}
                                             {% if mx.7 != "Not Planned" %}
                                                 Immunotherapy({{ mx.7 }}),

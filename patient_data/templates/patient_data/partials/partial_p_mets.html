@@ -1,0 +1,39 @@
+{{ form.p_mets_site.errors }}
+<label class="oncflow-labels" for="{{ form.p_mets_site.id_for_label }}">Metastatic Sites:</label>
+{% if not mets %}
+    <label><span class="badge red">if Updating: All metastatic sites removed. Refresh the page if you don't intend to do so</span></label>
+    <label><span class="badge red">if New Status: This is Non-Metastatic Disease</span></label>
+{% else %}
+    {{ form.p_mets_site }}
+{% endif %}
+<div class="col-md-3 mt-3">
+    {{ form.p_stage_new.errors }}
+    <label class="oncflow-labels" for="{{ form.p_stage_new.id_for_label }}">pStage Group:</label>
+    {{ form.p_stage_new }}
+    {% if stage_message %}
+        <span class="green badge text-dark">{{ stage_message }}</span>
+        {% if message_er %}
+            <span class="green badge text-dark">{{ message_er }}</span>
+        {% endif %}
+        {% if message_pr %}
+            <span class="green badge text-dark">{{ message_pr }}</span>
+        {% endif %}
+        {% if message_her %}
+            <span class="green badge text-dark">{{ message_her }}</span>
+        {% endif %}
+        {% if message_grade %}
+            <span class="green badge text-dark">{{ message_grade }}</span>
+        {% endif %}
+        {% if anatomical_stage_message %}
+            <span class="gradient-mini badge text-light">Anatomical Stage: {{ anatomical_stage_message }}</span>
+        {% endif %}
+    {% endif %}
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#id_p_mets_site').select2();
+    });
+</script>

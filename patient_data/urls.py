@@ -215,7 +215,7 @@ urlpatterns = [
     path('presim-create/<str:crnumber>/', views.presim_create, name="presim-create"),
     path('create-presim/<str:crnumber>/', views.create_presim_new, name='add-presim'),
     path('create-simulation/<str:crnumber>/', views.create_simulation, name='add-simulation'),
-    path('test', views.mobile_view, name='test')
+    path('test', views.test, name='test')
 
     # TEST URL
 
@@ -260,6 +260,10 @@ htmx_urlpatterns = [
     path('patient-search/search/', views.search, name="search"),
     path('confirmed_by/<int:dx_id>/', views.confirmed_by, name="confirmed_by"),
     path('confirmed_by/', views.confirmed_by, name="confirmed_by"),
+    path('get_tnm/', views.custom_tnm, name="get_tnm"),
+    path('get_tnm/<new_primary>/', views.custom_tnm, name="get_tnm"),
+    path('get_mets/', views.get_mets, name="get_mets"),
+    path('get_p_mets/', views.get_p_mets, name="get_p_mets"),
 ]
 
 urlpatterns += htmx_urlpatterns

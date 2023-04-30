@@ -17,8 +17,28 @@
                     </div>
                     <div class="row">
                         <h2 class="mb-3">Simulation Radiotherapy Module <span class="badge green">({{ crnumber }})</span></h2>
-                        <h5 class="mb-3">Diagnosis: {{ cp.s2_id.laterality }} {{ cp.s2_id.icd_main_topo.site }}
+                        <h5 class="mb-3">Diagnosis:
+                            Primary - {{ cp.parent_id.s2diagnosis_set.all.first.icd_topo_code }}
+                            {{ cp.parent_id.s2diagnosis_set.all.first.icd_path_code.hpe }}<br>
+                            Current Status:
+                            {% if cp.s2_id.dx_type %}
+                                {{ cp.s2_id.dx_type }}
+                            {% endif %}
+                            {% if cp.s2_id.confirmed_by == "Biopsy" or cp.s2_id.confirmed_by == "FNAC" or cp.s2_id.confirmed_by == "Surgery" %}
+                                confirmed by {{ cp.s2_id.confirmed_by }}
+                                {% if cp.s2_id.laterality %}
+                                    {{ cp.s2_id.laterality }}
+                                {% endif %}
+                                {% if cp.s2_id.icd_main_topo %}
+                                    {{ cp.s2_id.icd_main_topo.site }}
+                                {% endif %}
+                            {% else %}
+                                Confirmed by {{ cp.s2_id.confirmed_by }}
+                            {% endif %}
+
+                            {% if cp.s2_id.icd_path_code %}
                             <span class="badge red">{{ cp.s2_id.icd_path_code.hpe }} ({{ cp.s2_id.biopsy_date|date:"d-m-Y" }})</span>
+                            {% endif %}
                         </h5>
                         <div class="col-12 my-card box-redius box-shadow">
                         {% if sx %}
@@ -57,7 +77,7 @@
                                     <table class="styled-table m-1">
                                     <thead>
                                         <tr>
-                                            <th>Previous Simulations</th>
+                                            <th>Simulations</th>
                                             <th>Date</th>
                                             <th>Action</th>
                                         </tr>

@@ -5,7 +5,7 @@ from django.forms.formsets import formset_factory
 from .models import S1ParentMain, Comorbidity, PreSimulation, S2Diagnosis, S3CarePlan, Simulation, S4RT, S7Assessment, \
     S6Surgery, S6HPE, S5Chemo, S8FUP, PrimaryDVH, PFTDetails, CardiacMarkers, Site, RTTech, StudyGroup, ICDMainSites, \
     InvestigationsImaging, Prescription, InvestigationsPath, InvestigationsMolecular, InvestigationsLabs, LateToxicity, \
-    S5ChemoProtocol, S5ChemoDrugs, CTCV5, AcuteToxicity, NewPreSimulation
+    S5ChemoProtocol, S5ChemoDrugs, CTCV5, AcuteToxicity, NewPreSimulation, GenDrugs, StageGroup
 
 from .options import (GENDER, YES_NO, SMOKE_FREQ, SMOKE_DUR, PS, INTENT_CHOICES, CP_CHOICES,
                       DOC_TYPE_CHOICES, RT_LATE_TOXICITY, visit_choices, deathcause_choices,
@@ -20,6 +20,7 @@ tox_system_choices = []
 for value in CTCV5.objects.values_list('system', flat=True).distinct():
     tox_system_choices.append(("", ""))
     tox_system_choices.append((value, value))
+
 
 # Created class to use date time picker
 # https://stackoverflow.com/questions/3367091/whats-the-cleanest-simplest-to-get-running-datepicker-in-django
@@ -157,10 +158,12 @@ class NewPreSimulationForm(ModelForm):
             'final_status': forms.Select(choices=[], attrs={'class': 'form-control'}),
         }
 
+
 class NewPreSimulationWithoutCareForm(ModelForm):
     """
     Pre Simulation form without Care Plan.
     """
+
     class Meta:
         model = NewPreSimulation
         fields = ["presimparent", "date", "day", "ul_amp", "ll_amp", "average_amp",
@@ -168,7 +171,7 @@ class NewPreSimulationWithoutCareForm(ModelForm):
                   "user", "updated_by"]
         widgets = {
             'presimparent': forms.TextInput(attrs={'class': 'form-control', 'readonly': True}),
-            #'s3_id': forms.NumberInput(attrs={'class': 'form-control'}),
+            # 's3_id': forms.NumberInput(attrs={'class': 'form-control'}),
             'date': DateInput(attrs={'class': 'form-control'}),
             'day': forms.Select(attrs={'class': 'form-control'}, choices=DIBH_DAYS),
             'ul_amp': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -181,7 +184,40 @@ class NewPreSimulationWithoutCareForm(ModelForm):
             'final_status': forms.Select(choices=[], attrs={'class': 'form-control'}),
         }
 
+
 class S2DiagnosisForm(ModelForm):
+    # def __init__(self, *args, **kwargs):
+    #     super(S2DiagnosisForm, self).__init__(*args, **kwargs)
+    #     Stage, pStage = [("", "")], [("", "")]
+    #     for value in StageGroup.objects.all().values():
+    #         Stage.append((value["code"], value["code"]))
+    #         pStage.append((value["code"], value["code"]))
+    #     self.fields['stage_new'] = forms.ChoiceField(choices=Stage, required=False,
+    #                                                  widget=forms.Select(
+    #                                                      attrs={'class': 'myselect form-control'}))
+    #     self.fields['p_stage_new'] = forms.ChoiceField(choices=pStage, required=False,
+    #                                                  widget=forms.Select(
+    #                                                      attrs={'class': 'myselect form-control'}))
+    #
+    #     self.fields['t_new'] = forms.ChoiceField(choices=[], required=False,
+    #                                              widget=forms.Select(
+    #                                                  attrs={'class': 'myselect form-control'}))
+    #     self.fields['n_new'] = forms.ChoiceField(choices=[], required=False,
+    #                                              widget=forms.Select(
+    #                                                  attrs={'class': 'myselect form-control'}))
+    #     self.fields['m_new'] = forms.ChoiceField(choices=[], required=False,
+    #                                              widget=forms.Select(
+    #                                                  attrs={'class': 'myselect form-control'}))
+    #     self.fields['p_t_new'] = forms.ChoiceField(choices=[], required=False,
+    #                                                widget=forms.Select(
+    #                                                    attrs={'class': 'myselect form-control'}))
+    #     self.fields['p_n_new'] = forms.ChoiceField(choices=[], required=False,
+    #                                                widget=forms.Select(
+    #                                                    attrs={'class': 'myselect form-control'}))
+    #     self.fields['p_m_new'] = forms.ChoiceField(choices=[], required=False,
+    #                                                widget=forms.Select(
+    #                                                    attrs={'class': 'myselect form-control'}))
+
     class Meta:
         model = S2Diagnosis
         fields = "__all__"
@@ -208,14 +244,28 @@ class S2DiagnosisForm(ModelForm):
                                                   ("Biopsy", "Biopsy"),
                                                   ("Surgery", "Surgery"),
                                                   ("Imaging", "Imaging")], attrs={'class': 'form-control'}),
-            'c_t': forms.Select(choices=[], attrs={'class': 'form-control'}),
-            'c_n': forms.Select(choices=[], attrs={'class': 'form-control'}),
-            'c_m': forms.Select(choices=[], attrs={'class': 'form-control'}),
-            'c_stage_group': forms.Select(choices=[], attrs={'class': 'form-control'}),
-            'p_t': forms.Select(choices=[], attrs={'class': 'form-control'}),
-            'p_n': forms.Select(choices=[], attrs={'class': 'form-control'}),
-            'p_m': forms.Select(choices=[], attrs={'class': 'form-control'}),
-            'p_stage_group': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            # 'c_t': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            # 'c_n': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            # 'c_m': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            # 'c_stage_group': forms.Select(choices=[], attrs={'class': 'form-control'}),
+
+            # 't_new': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            # 'n_new': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            # 'm_new': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            'mets_site': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            # 'stage_new': forms.Select(choices=[], attrs={'class': 'form-control'}),
+
+            # 'p_t': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            # 'p_n': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            # 'p_m': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            # 'p_stage_group': forms.Select(choices=[], attrs={'class': 'form-control'}),
+
+            # 'p_t_new': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            # 'p_n_new': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            # 'p_m_new': forms.Select(choices=[], attrs={'class': 'form-control'}),
+            'p_mets_site': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            # 'p_stage_new': forms.Select(choices=[], attrs={'class': 'form-control'}),
+
             'c_ajcc_edition': forms.Select(choices=[], attrs={'class': 'form-control'}),
             'er': forms.Select(choices=YES_NO, attrs={'class': 'form-control'}),
             'pr': forms.Select(choices=YES_NO, attrs={'class': 'form-control'}),
@@ -351,6 +401,7 @@ class SimulationWithoutCarePlanForm(ModelForm):
             'donefr': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
             'presimid': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
         }
+
 
 class S4RTForm(ModelForm):
     class Meta:
@@ -775,7 +826,6 @@ class S7AssessmentForm(ModelForm):
 
 
 class AcuteToxicityForm(forms.ModelForm):
-
     # tox_system = forms.ModelChoiceField(queryset=CTCV5.objects.values_list('system', flat=True).distinct(),
     #                                     widget=forms.Select(attrs={'class': 'form-control'}))
     class Meta:
@@ -1004,6 +1054,11 @@ class InvestigationsImagingForm(ModelForm):
 
 
 class PrescriptionForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(PrescriptionForm, self).__init__(*args, **kwargs)
+        self.fields['drug_name'] = forms.ModelChoiceField(queryset=GenDrugs.objects.all(),
+                                                          widget=forms.Select(attrs={'class': 'form-control'}))
+
     class Meta:
         model = Prescription
         fields = "__all__"
@@ -1016,7 +1071,6 @@ class PrescriptionForm(ModelForm):
             "symptoms": forms.TextInput(attrs={'class': 'form-control'}),
             "symptoms_type": forms.Select(attrs={'class': 'form-control'}, choices=symp_type_choices),
             "symp_duration": forms.NumberInput(attrs={'class': 'form-control'}),
-            "drug_name": forms.Select(attrs={'class': 'form-control'}, choices=drugs_choices),
             "dosage": forms.TextInput(attrs={'class': 'form-control'}),
             "unit": forms.Select(attrs={'class': 'form-control'}, choices=unit_choices),
             "route": forms.Select(attrs={'class': 'form-control'}, choices=route_choices),

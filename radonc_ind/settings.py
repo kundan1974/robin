@@ -16,6 +16,7 @@ import os
 import channels_redis.core
 import django.contrib.staticfiles.finders
 import django_plotly_dash.finders
+from datetime import timedelta
 import pymysql
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -31,6 +32,7 @@ SECRET_KEY = 'django-insecure-m(eb-jzq^37nm+-#9fr9svpj+u_d5&#z*rs0)@!hqp4_a9(*z0
 DEBUG = True
 
 ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost', '59.144.166.45', '143.110.186.90', 'robin.oncflow.org']
+# ALLOWED_HOSTS = ['*']
 INTERNAL_IPS = ["127.0.0.1"]
 
 # Application definition
@@ -52,6 +54,10 @@ INSTALLED_APPS = [
     'channels',
     'channels_redis',
     'debug_toolbar',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'apis',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -64,6 +70,23 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
+# CORS_ORIGIN_WHITELIST = ('*')
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=180),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=365),
+}
 
 ROOT_URLCONF = 'radonc_ind.urls'
 

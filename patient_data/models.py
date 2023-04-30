@@ -377,6 +377,297 @@ class CTCV5(models.Model):
         return f'{self.term}'
 
 
+class GenDrugs(models.Model):
+    drug = models.CharField(max_length=255, unique=True, blank=False, null=False)
+    composition = models.CharField(max_length=255, blank=False, null=True)
+
+    class Meta:
+        db_table = 'gen_drugs'
+
+    def __str__(self):
+        return f'{self.drug} - {self.composition}'
+
+
+class TNM(models.Model):
+    site = models.CharField(max_length=150, blank=False, null=False)
+    c_tx = models.CharField(max_length=500, blank=True, null=True)
+    c_t0 = models.CharField(max_length=150, blank=True, null=True)
+    c_tis_dcis = models.CharField(max_length=250, blank=True, null=True)
+    c_tis_pagets = models.TextField(blank=True, null=True)
+    c_t1 = models.TextField(blank=True, null=True)
+    c_t1mi = models.TextField(blank=True, null=True)
+    c_t1a = models.TextField(blank=True, null=True)
+    c_t1a1 = models.TextField(blank=True, null=True)
+    c_t1a2 = models.TextField(blank=True, null=True)
+    c_t1b = models.TextField(blank=True, null=True)
+    c_t1b1 = models.TextField(blank=True, null=True)
+    c_t1b2 = models.TextField(blank=True, null=True)
+    c_t1b3 = models.TextField(blank=True, null=True)
+    c_t1c = models.TextField(blank=True, null=True)
+    c_t1d = models.TextField(blank=True, null=True)
+    c_t2 = models.TextField(blank=True, null=True)
+    c_t2a = models.TextField(blank=True, null=True)
+    c_t2a1 = models.TextField(blank=True, null=True)
+    c_t2a2 = models.TextField(blank=True, null=True)
+    c_t2b = models.TextField(blank=True, null=True)
+    c_t2c = models.TextField(blank=True, null=True)
+    c_t2d = models.TextField(blank=True, null=True)
+    c_t3 = models.TextField(blank=True, null=True)
+    c_t3a = models.TextField(blank=True, null=True)
+    c_t3b = models.TextField(blank=True, null=True)
+    c_t3c = models.TextField(blank=True, null=True)
+    c_t3c1 = models.TextField(blank=True, null=True)
+    c_t3c2 = models.TextField(blank=True, null=True)
+    c_t3d = models.TextField(blank=True, null=True)
+    c_t4 = models.TextField(blank=True, null=True)
+    c_t4a = models.TextField(blank=True, null=True)
+    c_t4b = models.TextField(blank=True, null=True)
+    c_t4c = models.TextField(blank=True, null=True)
+    c_t4d = models.TextField(blank=True, null=True)
+    c_nx = models.TextField(blank=True, null=True)
+    c_n0 = models.TextField(blank=True, null=True)
+    c_n1 = models.TextField(blank=True, null=True)
+    c_n1mi = models.TextField(blank=True, null=True)
+    c_n1a = models.TextField(blank=True, null=True)
+    c_n1b = models.TextField(blank=True, null=True)
+    c_n1c = models.TextField(blank=True, null=True)
+    c_n1d = models.TextField(blank=True, null=True)
+    c_n2 = models.TextField(blank=True, null=True)
+    c_n2a = models.TextField(blank=True, null=True)
+    c_n2b = models.TextField(blank=True, null=True)
+    c_n2c = models.TextField(blank=True, null=True)
+    c_n2d = models.TextField(blank=True, null=True)
+    c_n3 = models.TextField(blank=True, null=True)
+    c_n3a = models.TextField(blank=True, null=True)
+    c_n3b = models.TextField(blank=True, null=True)
+    c_n3c = models.TextField(blank=True, null=True)
+    c_n3d = models.TextField(blank=True, null=True)
+    c_m0 = models.TextField(blank=True, null=True)
+    c_m0_iplus = models.TextField(blank=True, null=True)
+    c_m1 = models.TextField(blank=True, null=True)
+    c_m1a = models.TextField(blank=True, null=True)
+    c_m1b = models.TextField(blank=True, null=True)
+    c_m1c = models.TextField(blank=True, null=True)
+
+    p_tx = models.CharField(max_length=500, blank=True, null=True)
+    p_t0 = models.CharField(max_length=150, blank=True, null=True)
+    p_tis_dcis = models.CharField(max_length=250, blank=True, null=True)
+    p_tis_pagets = models.TextField(blank=True, null=True)
+    p_t1 = models.TextField(blank=True, null=True)
+    p_t1mi = models.TextField(blank=True, null=True)
+    p_t1a = models.TextField(blank=True, null=True)
+    p_t1a1 = models.TextField(blank=True, null=True)
+    p_t1a2 = models.TextField(blank=True, null=True)
+    p_t1b = models.TextField(blank=True, null=True)
+    p_t1b1 = models.TextField(blank=True, null=True)
+    p_t1b2 = models.TextField(blank=True, null=True)
+    p_t1b3 = models.TextField(blank=True, null=True)
+    p_t1c = models.TextField(blank=True, null=True)
+    p_t1d = models.TextField(blank=True, null=True)
+    p_t2 = models.TextField(blank=True, null=True)
+    p_t2a = models.TextField(blank=True, null=True)
+    p_t2a1 = models.TextField(blank=True, null=True)
+    p_t2a2 = models.TextField(blank=True, null=True)
+    p_t2b = models.TextField(blank=True, null=True)
+    p_t2c = models.TextField(blank=True, null=True)
+    p_t2d = models.TextField(blank=True, null=True)
+    p_t3 = models.TextField(blank=True, null=True)
+    p_t3a = models.TextField(blank=True, null=True)
+    p_t3b = models.TextField(blank=True, null=True)
+    p_t3c = models.TextField(blank=True, null=True)
+    p_t3c1 = models.TextField(blank=True, null=True)
+    p_t3c2 = models.TextField(blank=True, null=True)
+    p_t3d = models.TextField(blank=True, null=True)
+    p_t4 = models.TextField(blank=True, null=True)
+    p_t4a = models.TextField(blank=True, null=True)
+    p_t4b = models.TextField(blank=True, null=True)
+    p_t4c = models.TextField(blank=True, null=True)
+    p_t4d = models.TextField(blank=True, null=True)
+    p_nx = models.TextField(blank=True, null=True)
+    p_n0 = models.TextField(blank=True, null=True)
+    p_n0_iplus = models.TextField(blank=True, null=True)
+    p_n0_molplus = models.TextField(blank=True, null=True)
+    p_n1 = models.TextField(blank=True, null=True)
+    p_n1mi = models.TextField(blank=True, null=True)
+    p_n1a = models.TextField(blank=True, null=True)
+    p_n1b = models.TextField(blank=True, null=True)
+    p_n1c = models.TextField(blank=True, null=True)
+    p_n1d = models.TextField(blank=True, null=True)
+    p_n2 = models.TextField(blank=True, null=True)
+    p_n2a = models.TextField(blank=True, null=True)
+    p_n2b = models.TextField(blank=True, null=True)
+    p_n2c = models.TextField(blank=True, null=True)
+    p_n2d = models.TextField(blank=True, null=True)
+    p_n3 = models.TextField(blank=True, null=True)
+    p_n3a = models.TextField(blank=True, null=True)
+    p_n3b = models.TextField(blank=True, null=True)
+    p_n3c = models.TextField(blank=True, null=True)
+    p_n3d = models.TextField(blank=True, null=True)
+    p_n_sn = models.TextField(blank=True, null=True)
+    p_m0 = models.TextField(blank=True, null=True)
+    p_m1 = models.TextField(blank=True, null=True)
+    p_m1a = models.TextField(blank=True, null=True)
+    p_m1b = models.TextField(blank=True, null=True)
+    p_m1c = models.TextField(blank=True, null=True)
+    limited_stage = models.TextField(blank=True, null=True)
+    extensive_stage = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'tnm'
+
+    def __str__(self):
+        return f'{self.site}'
+
+
+class BreastGroupTNM(models.Model):
+    site = models.CharField(max_length=100, blank=False, null=False)
+    staging_type = models.CharField(max_length=100, blank=False, null=False)
+    t = models.CharField(max_length=50, blank=False, null=False)
+    n = models.CharField(max_length=50, blank=False, null=False)
+    m = models.CharField(max_length=50, blank=False, null=False)
+    grade = models.CharField(max_length=50, blank=True, null=True)
+    her2neu = models.CharField(max_length=50, blank=True, null=True)
+    er = models.CharField(max_length=50, blank=True, null=True)
+    pr = models.CharField(max_length=50, blank=True, null=True)
+    location = models.CharField(max_length=100, blank=True, null=True)
+    stage = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        db_table = 'tnm_breast_group'
+
+    def __str__(self):
+        return f'{self.t} {self.n} {self.m} {self.stage}'
+
+
+class STSGroupTNM(models.Model):
+    staging_type = models.CharField(max_length=100, blank=False, null=False)
+    t = models.CharField(max_length=50, blank=False, null=False)
+    n = models.CharField(max_length=50, blank=False, null=False)
+    m = models.CharField(max_length=50, blank=False, null=False)
+    grade = models.CharField(max_length=50, blank=True, null=True)
+    stage = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        db_table = 'tnm_sts_group'
+
+    def __str__(self):
+        return f'{self.t} {self.n} {self.m} {self.stage}'
+
+
+class NSCLCGroupTNM(models.Model):
+    staging_type = models.CharField(max_length=100, blank=False, null=False)
+    t = models.CharField(max_length=50, blank=False, null=False)
+    n = models.CharField(max_length=50, blank=False, null=False)
+    m = models.CharField(max_length=50, blank=False, null=False)
+    stage = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        db_table = 'tnm_nsclc_group'
+
+    def __str__(self):
+        return f'{self.t} {self.n} {self.m} {self.stage}'
+
+
+class OralGroupTNM(models.Model):
+    staging_type = models.CharField(max_length=100, blank=False, null=False)
+    t = models.CharField(max_length=50, blank=False, null=False)
+    n = models.CharField(max_length=50, blank=False, null=False)
+    m = models.CharField(max_length=50, blank=False, null=False)
+    stage = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        db_table = 'tnm_oral_group'
+
+    def __str__(self):
+        return f'{self.t} {self.n} {self.m} {self.stage}'
+
+
+class NasoGroupTNM(models.Model):
+    staging_type = models.CharField(max_length=100, blank=False, null=False)
+    t = models.CharField(max_length=50, blank=False, null=False)
+    n = models.CharField(max_length=50, blank=False, null=False)
+    m = models.CharField(max_length=50, blank=False, null=False)
+    stage = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        db_table = 'tnm_naso_group'
+
+    def __str__(self):
+        return f'{self.t} {self.n} {self.m} {self.stage}'
+
+
+class OroHpvNegGroupTNM(models.Model):
+    staging_type = models.CharField(max_length=100, blank=False, null=False)
+    t = models.CharField(max_length=50, blank=False, null=False)
+    n = models.CharField(max_length=50, blank=False, null=False)
+    m = models.CharField(max_length=50, blank=False, null=False)
+    stage = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        db_table = 'tnm_orohypo_hpvneg_group'
+
+    def __str__(self):
+        return f'{self.t} {self.n} {self.m} {self.stage}'
+
+
+class OroHpvPosGroupTNM(models.Model):
+    staging_type = models.CharField(max_length=100, blank=False, null=False)
+    t = models.CharField(max_length=50, blank=False, null=False)
+    n = models.CharField(max_length=50, blank=False, null=False)
+    m = models.CharField(max_length=50, blank=False, null=False)
+    stage = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        db_table = 'tnm_oro_hpvpos_group'
+
+    def __str__(self):
+        return f'{self.t} {self.n} {self.m} {self.stage}'
+
+
+class LarynxGroupTNM(models.Model):
+    staging_type = models.CharField(max_length=100, blank=False, null=False)
+    t = models.CharField(max_length=50, blank=False, null=False)
+    n = models.CharField(max_length=50, blank=False, null=False)
+    m = models.CharField(max_length=50, blank=False, null=False)
+    stage = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        db_table = 'tnm_larynx_group'
+
+    def __str__(self):
+        return f'{self.t} {self.n} {self.m} {self.stage}'
+
+
+class PNSGroupTNM(models.Model):
+    staging_type = models.CharField(max_length=100, blank=False, null=False)
+    t = models.CharField(max_length=50, blank=False, null=False)
+    n = models.CharField(max_length=50, blank=False, null=False)
+    m = models.CharField(max_length=50, blank=False, null=False)
+    stage = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        db_table = 'tnm_pns_group'
+
+    def __str__(self):
+        return f'{self.t} {self.n} {self.m} {self.stage}'
+
+
+class EsoGroupTNM(models.Model):
+    staging_type = models.CharField(max_length=100, blank=False, null=False)
+    t = models.CharField(max_length=50, blank=False, null=False)
+    n = models.CharField(max_length=50, blank=False, null=False)
+    m = models.CharField(max_length=50, blank=False, null=False)
+    grade = models.CharField(max_length=50, blank=True, null=True)
+    location = models.CharField(max_length=50, blank=True, null=True)
+    stage = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        db_table = 'tnm_eso_group'
+
+    def __str__(self):
+        return f'{self.t} {self.n} {self.m} {self.stage}'
+
+
 # Models for Radiation Oncology Database
 
 class S1ParentMain(models.Model):
@@ -438,11 +729,22 @@ class S2Diagnosis(models.Model):
     c_n = models.ForeignKey(ClinN, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
     c_m = models.ForeignKey(ClinM, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
     c_stage_group = models.ForeignKey(StageGroup, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
+    t_new = models.CharField(max_length=500, blank=True, null=True)
+    n_new = models.CharField(max_length=500, blank=True, null=True)
+    m_new = models.CharField(max_length=500, blank=True, null=True)
+    mets_site = models.ManyToManyField(FMAID, blank=True, related_name="mets_site")
+    stage_new = models.CharField(max_length=50, blank=True, null=True)
+    p_t_new = models.CharField(max_length=500, blank=True, null=True)
+    p_n_new = models.CharField(max_length=500, blank=True, null=True)
+    p_m_new = models.CharField(max_length=500, blank=True, null=True)
+    p_mets_site = models.ManyToManyField(FMAID, blank=True, related_name="p_mets_site")
+    p_stage_new = models.CharField(max_length=50, blank=True, null=True)
 
     p_t = models.ForeignKey(ClinT, null=True, blank=True, on_delete=models.DO_NOTHING, related_name="path_t")  # FK
     p_n = models.ForeignKey(ClinN, null=True, blank=True, on_delete=models.DO_NOTHING, related_name="path_n")  # FK
     p_m = models.ForeignKey(ClinM, null=True, blank=True, on_delete=models.DO_NOTHING, related_name="path_m")  # FK
-    p_stage_group = models.ForeignKey(StageGroup, null=True, blank=True, on_delete=models.DO_NOTHING, related_name="path_stage_group")  # FK
+    p_stage_group = models.ForeignKey(StageGroup, null=True, blank=True, on_delete=models.DO_NOTHING,
+                                      related_name="path_stage_group")  # FK
 
     c_ajcc_edition = models.ForeignKey(AjccEdition, null=True, blank=True, on_delete=models.DO_NOTHING)  # FK
     er = models.CharField(max_length=45, blank=True, null=True)
@@ -925,7 +1227,7 @@ class S7Assessment(models.Model):
     rxunit5 = models.CharField(max_length=10, blank=True, null=True)
     rxunit6 = models.CharField(max_length=10, blank=True, null=True)
 
-    fxdone = models.IntegerField(blank=True, null=True)
+    fxdone = models.IntegerField(blank=False, null=True)
     intervention1 = models.CharField(max_length=45, blank=True, null=True)
     intervention2 = models.CharField(max_length=45, blank=True, null=True)
     intervention3 = models.CharField(max_length=45, blank=True, null=True)

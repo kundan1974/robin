@@ -133,6 +133,8 @@
 </div>
 {% if primary_dx and first_dx %}
     <div></div>
+{% elif not primary_dx and new_dx  %}
+    <div></div>
 {% else %}
     {% block javascript %}
         <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>

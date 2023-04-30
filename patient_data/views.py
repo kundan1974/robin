@@ -1,5 +1,7 @@
 import pytz
 import datetime
+
+from django import forms
 from django.contrib import messages
 from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -31,7 +33,7 @@ from django.contrib import messages
 import pandas as pd
 
 from .mainsite import mainsite_query, mainsite_subsite_query
-from .utilities import db_homestatus, get_timeline, raw_query01, mobile
+from .utilities import db_homestatus, get_timeline, raw_query01, mobile, get_tnm, get_stagegroup
 from log2d import Log
 from wsgiref.util import FileWrapper
 
@@ -51,7 +53,8 @@ from .models import (Comorbidity, OurDiagnosis, HPE, Site,
                      StrNameClassifierImage, StrNameClassifierDose, StrNameClassifierCustom, DVHParameters, PFTDetails,
                      CardiacMarkers, ICDMainSites, InvestigationsImaging, ImageLocation, ImagingResult, ImagingType,
                      LabName, Prescription, InvestigationsPath, InvestigationsMolecular, InvestigationsLabs,
-                     LateToxicity, S5ChemoProtocol, S5ChemoDrugs, AcuteToxicity, CTCV5, NewPreSimulation, RTTech)
+                     LateToxicity, S5ChemoProtocol, S5ChemoDrugs, AcuteToxicity, CTCV5, NewPreSimulation, RTTech,
+                     GenDrugs, TNM, ClinT, ClinN, ClinM, StageGroup, BreastGroupTNM)
 
 
 # Simulation, PreSimulation, S2Diagnosis, S3CarePlan, S4RT,
@@ -537,21 +540,88 @@ class DiagnosisCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             return reverse_lazy("radonc-patientlist")
         return reverse_lazy("db_operations", kwargs={"crnumber": crn})
 
+    # def get_form(self, form_class=form_class):
+    #     T, N, M = get_tnm()
+    #     form = super().get_form(form_class)
+    #     form.fields['t_new'] = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'class': 'form-control'}))
+    #     form.fields['n_new'] = forms.ChoiceField(choices=N, widget=forms.Select(attrs={'class': 'form-control'}))
+    #     form.fields['m_new'] = forms.ChoiceField(choices=M, widget=forms.Select(attrs={'class': 'form-control'}))
+    #     form.fields['stage_new'] = forms.ChoiceField(choices=[], widget=forms.Select(attrs={'class': 'form-control'}))
+    #     form.fields['t_new'].choices = T
+    #     form.fields['n_new'].choices = N
+    #     form.fields['m_new'].choices = M
+    #     form.fields['stage_new'].choices = []
+    #     return form
+
     def get_context_data(self, **kwargs):
         context = super(DiagnosisCreateView, self).get_context_data(**kwargs)
         crnumber = self.kwargs['crnumber']
         self.request.session["crnumber"] = crnumber
+        T, N, M, Stage = [("", "")], [("", "")], [("", "")], [("", "")]
+        pT, pN, pM, pStage = [("", "")], [("", "")], [("", "")], [("", "")]
+        for value in ClinT.objects.all().values():
+            T.append((value["code"], value["code"]))
+            pT.append((value["code"], value["code"]))
+        for value in ClinN.objects.all().values():
+            N.append((value["code"], value["code"]))
+            pN.append((value["code"], value["code"]))
+        for value in ClinM.objects.all().values():
+            M.append((value["code"], value["code"]))
+            pM.append((value["code"], value["code"]))
+        for value in StageGroup.objects.all().values():
+            Stage.append((value["code"], value["code"]))
+            pStage.append((value["code"], value["code"]))
         primary_dx = None
+
+        class DiagnosisForm(S2DiagnosisForm):
+            def __init__(self, *args, **kwargs):
+                super(DiagnosisForm, self).__init__(*args, **kwargs)
+                # self.fields['s3_dx_id'].queryset = S2Diagnosis.objects.filter(parent_id=111111)
+                self.fields['t_new'] = forms.ChoiceField(choices=[], required=False,
+                                                         widget=forms.Select(attrs={'class': 'myselect form-control'}))
+                self.fields['n_new'] = forms.ChoiceField(choices=[], required=False,
+                                                         widget=forms.Select(attrs={'class': 'myselect form-control'}))
+                self.fields['m_new'] = forms.ChoiceField(choices=[], required=False,
+                                                         widget=forms.Select(attrs={'class': 'myselect form-control'}))
+                self.fields['stage_new'] = forms.ChoiceField(choices=[], required=False,
+                                                             widget=forms.Select(
+                                                                 attrs={'class': 'myselect form-control'}))
+                self.fields['p_t_new'] = forms.ChoiceField(choices=[], required=False,
+                                                           widget=forms.Select(
+                                                               attrs={'class': 'myselect form-control'}))
+                self.fields['p_n_new'] = forms.ChoiceField(choices=[], required=False,
+                                                           widget=forms.Select(
+                                                               attrs={'class': 'myselect form-control'}))
+                self.fields['p_m_new'] = forms.ChoiceField(choices=[], required=False,
+                                                           widget=forms.Select(
+                                                               attrs={'class': 'myselect form-control'}))
+                self.fields['p_stage_new'] = forms.ChoiceField(choices=[], required=False,
+                                                               widget=forms.Select(
+                                                                   attrs={'class': 'myselect form-control'}))
+
+        form = DiagnosisForm()
+        context['form'] = form
         if S2Diagnosis.objects.filter(parent_id=crnumber).exists():
             primary_dx = S2Diagnosis.objects.filter(parent_id=crnumber).first()
             # context['form'].initial['laterality'] = primary_dx.laterality
             context['form'].initial['diagnosis'] = primary_dx.diagnosis
             context['form'].initial['c_ajcc_edition'] = primary_dx.c_ajcc_edition
+            T, N, M, pT, pN, pM = get_tnm(site=primary_dx.diagnosis.our_diagnosis)
         context['primary_dx'] = primary_dx
         patient = S1ParentMain.objects.get(crnumber=crnumber)
         context['patient'] = patient
         context['crnumber'] = crnumber
         context['form'].initial['parent_id'] = crnumber
+        form = context['form']
+        form.fields['t_new'].choices = T
+        form.fields['n_new'].choices = N
+        form.fields['m_new'].choices = M
+        form.fields['stage_new'].choices = Stage
+        form.fields['p_t_new'].choices = pT
+        form.fields['p_n_new'].choices = pN
+        form.fields['p_m_new'].choices = pM
+        form.fields['p_stage_new'].choices = pStage
+        context['form'] = form
 
         return context
 
@@ -599,6 +669,7 @@ class DiagnosisUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         patient = S2Diagnosis.objects.get(pk=pk)
         current_user = User.objects.get(id=self.request.user.id)
         # form.instance.updated_by = current_user.username
+        # print(form.data)
         form.instance.user = patient.user
         return super().form_valid(form)
 
@@ -630,21 +701,112 @@ class DiagnosisUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         else:
             first_dx_update = True
 
+        class DiagnosisForm(S2DiagnosisForm):
+            def __init__(self, *args, **kwargs):
+                super(DiagnosisForm, self).__init__(*args, **kwargs)
+
+                if patient.diagnosis.our_diagnosis in ["Breast", "Lung", "Esophagus"]:
+                    T, N, M, pT, pN, pM = get_tnm(site=patient.diagnosis.our_diagnosis)
+                    Stage, pStage = [("", "")], [("", "")]
+                    for value in StageGroup.objects.all().values():
+                        Stage.append((value["code"], value["code"]))
+                        pStage.append((value["code"], value["code"]))
+
+                else:
+                    T, N, M, Stage = [("", "")], [("", "")], [("", "")], [("", "")]
+                    pT, pN, pM, pStage = [("", "")], [("", "")], [("", "")], [("", "")]
+                    for value in ClinT.objects.all().values():
+                        T.append((value["code"], value["code"]))
+                        pT.append((value["code"], value["code"]))
+                    for value in ClinN.objects.all().values():
+                        N.append((value["code"], value["code"]))
+                        pN.append((value["code"], value["code"]))
+                    for value in ClinM.objects.all().values():
+                        M.append((value["code"], value["code"]))
+                        pM.append((value["code"], value["code"]))
+                    for value in StageGroup.objects.all().values():
+                        Stage.append((value["code"], value["code"]))
+                        pStage.append((value["code"], value["code"]))
+
+                # self.fields['s3_dx_id'].queryset = S2Diagnosis.objects.filter(parent_id=111111)
+
+                self.fields['t_new'] = forms.ChoiceField(choices=T, required=False,
+                                                         widget=forms.Select(attrs={'class': 'myselect form-control'}))
+                self.fields['n_new'] = forms.ChoiceField(choices=N, required=False,
+                                                         widget=forms.Select(attrs={'class': 'myselect form-control'}))
+                self.fields['m_new'] = forms.ChoiceField(choices=M, required=False,
+                                                         widget=forms.Select(attrs={'class': 'myselect form-control'}))
+                self.fields['stage_new'] = forms.ChoiceField(choices=Stage, required=False,
+                                                             widget=forms.Select(
+                                                                 attrs={'class': 'myselect form-control'}))
+                self.fields['p_t_new'] = forms.ChoiceField(choices=pT, required=False,
+                                                           widget=forms.Select(
+                                                               attrs={'class': 'myselect form-control'}))
+                self.fields['p_n_new'] = forms.ChoiceField(choices=pN, required=False,
+                                                           widget=forms.Select(
+                                                               attrs={'class': 'myselect form-control'}))
+                self.fields['p_m_new'] = forms.ChoiceField(choices=pM, required=False,
+                                                           widget=forms.Select(
+                                                               attrs={'class': 'myselect form-control'}))
+                self.fields['p_stage_new'] = forms.ChoiceField(choices=pStage, required=False,
+                                                               widget=forms.Select(
+                                                                   attrs={'class': 'myselect form-control'}))
+
+        form = DiagnosisForm(instance=patient)
+        second_malig = False
+        # form.fields["t_new"].choices = T
+        # form.fields["n_new"].choices = N
+        # form.fields["m_new"].choices = M
+        # form.fields["stage_new"].choices = Stage
+        # form.fields["p_t_new"].choices = pT
+        # form.fields["p_n_new"].choices = pN
+        # form.fields["p_m_new"].choices = pM
+        # form.fields["p_stage_new"].choices = pStage
+        context['form'] = form
         try:
             dx = patient.diagnosis.our_diagnosis
+            if patient.dx_type.code == "Second Malignancy":
+                second_malig = True
+            else:
+                second_malig = False
             if not first_dx_update:
                 diagnosis = OurDiagnosis.objects.filter(our_diagnosis=dx).first().pk
                 context['form'].initial['diagnosis'] = diagnosis
         except AttributeError:
             pass
+        if patient.m_new == "0":
+            mets = False
+        elif patient.m_new == "":
+            mets = False
+        elif patient.m_new is None:
+            mets = False
+        else:
+            mets = True
+        if patient.p_m_new == "0":
+            p_mets = False
+        elif patient.p_m_new == "":
+            p_mets = False
+        elif patient.p_m_new is None:
+            p_mets = False
+        else:
+            p_mets = True
         context['updatecrn'] = updatecrn
         context['update'] = True
         context['patient'] = patient
         context['first_dx_update'] = first_dx_update
         context['diagnosis_by_hpe'] = diagnosis_by_hpe
+        context['second_malig'] = second_malig
+        context['mets'] = mets
+        context['p_mets'] = p_mets
         context['dx_id'] = pk
+        # print(patient.p_m_new)
         # context['primary_dx'] = primary_dx
         return context
+
+    # def form_invalid(self, form):
+    #     print(form.data)
+    #     print(form.errors)
+    #     return form.errors
 
 
 # CAREPLAN
@@ -705,7 +867,7 @@ class CareplanListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(CareplanListView, self).get_context_data(**kwargs)
         pk = self.kwargs["crnumber"]
-        patient_mx = S1ParentMain.objects.get(crnumber=pk)
+        patient_mx = S1ParentMain.objects.select_related().get(crnumber=pk)
         oldpresim = False
         context['patient_mx'] = patient_mx
 
@@ -792,7 +954,7 @@ class CareplanListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        return S3CarePlan.objects.filter(parent_id=self.kwargs['crnumber'])
+        return S3CarePlan.objects.select_related().filter(parent_id=self.kwargs['crnumber'])
 
 
 class CarePlanUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
@@ -865,7 +1027,7 @@ class CarePlanUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         context['update'] = True
         context['patient'] = patient
         context['form'] = form
-        print(context['data'])
+        # print(context['data'])
 
         return context
 
@@ -967,22 +1129,27 @@ def simulation(request, crnumber=None, s3_id=None, presimid=None):
                     intent = "Adjuvant"
                 if patient_cp.surgery:
                     patient_sx = S6Surgery.objects.select_related().filter(s3_id=s3_id).first()
-                    patient_hpe = S6HPE.objects.select_related().filter(s6_id=patient_sx.pk).first()
-                    if patient_sx.sxtype:
+                    try:
+                        patient_hpe = S6HPE.objects.select_related().filter(s6_id=patient_sx.pk).first()
+                    except:
+                        patient_hpe = None
+                    if patient_sx:
                         for surgery in patient_sx.sxtype.all():
                             if surgery.surgery.startswith("Lumpectomy"):
-                                if patient_hpe.hpegrade.code == "Grade3" or patient_cp.parent_id.age < 50:
-                                    dosephase2 = 10
-                                    fxphase2 = 4
-                                if patient_hpe.nodesp/patient_hpe.nodesr >= 0.5:
-                                    volumes = "B-SCF-AX1,2,3-IMC"
-                                else:
-                                    volumes = "B-SCF-AX3"
+                                if patient_hpe:
+                                    if patient_hpe.hpegrade.code == "Grade3" or patient_cp.parent_id.age < 50:
+                                        dosephase2 = 10
+                                        fxphase2 = 4
+                                    if patient_hpe.nodesp / patient_hpe.nodesr >= 0.5:
+                                        volumes = "B-SCF-AX1,2,3-IMC"
+                                    else:
+                                        volumes = "B-SCF-AX3"
                             else:
-                                if patient_hpe.nodesp/patient_hpe.nodesr >= 0.5:
-                                    volumes = "CW-SCF-AX1,2,3-IMC"
-                                else:
-                                    volumes = "CW-SCF-AX3"
+                                if patient_hpe:
+                                    if patient_hpe.nodesp / patient_hpe.nodesr >= 0.5:
+                                        volumes = "CW-SCF-AX1,2,3-IMC"
+                                    else:
+                                        volumes = "CW-SCF-AX3"
 
         presimstatus = False
         utc = pytz.UTC
@@ -1167,19 +1334,21 @@ def simulation2(request, crnumber=None, s3_id=None, presimid=None):
                     patient_hpe = S6HPE.objects.select_related().filter(s6_id=patient_sx.pk).first()
                     if patient_sx.sxtype:
                         for surgery in patient_sx.sxtype.all():
-                            if surgery.surgery.startswith("Lumpectomy"):
-                                if patient_hpe.hpegrade.code == "Grade3" or patient_cp.parent_id.age < 50:
-                                    dosephase2 = 10
-                                    fxphase2 = 4
-                                if patient_hpe.nodesp / patient_hpe.nodesr >= 0.5:
-                                    volumes = "B-SCF-AX1,2,3-IMC"
-                                else:
-                                    volumes = "B-SCF-AX3"
+                            if patient_hpe:
+                                if surgery.surgery.startswith("Lumpectomy"):
+                                    if patient_hpe.hpegrade.code == "Grade3" or patient_cp.parent_id.age < 50:
+                                        dosephase2 = 10
+                                        fxphase2 = 4
+                                    if patient_hpe.nodesp / patient_hpe.nodesr >= 0.5:
+                                        volumes = "B-SCF-AX1,2,3-IMC"
+                                    else:
+                                        volumes = "B-SCF-AX3"
                             else:
-                                if patient_hpe.nodesp / patient_hpe.nodesr >= 0.5:
-                                    volumes = "CW-SCF-AX1,2,3-IMC"
-                                else:
-                                    volumes = "CW-SCF-AX3"
+                                if patient_hpe:
+                                    if patient_hpe.nodesp / patient_hpe.nodesr >= 0.5:
+                                        volumes = "CW-SCF-AX1,2,3-IMC"
+                                    else:
+                                        volumes = "CW-SCF-AX3"
         presimstatus = False
         utc = pytz.UTC
         end_date = utc.localize(datetime.datetime.today())
@@ -1307,7 +1476,7 @@ class SimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         all_users = User.objects.all()
         emails = [m.email for m in all_users]
-        print(emails)
+        # print(emails)
         pk = self.kwargs["pk"]
         patient = Simulation.objects.get(pk=pk)
         # assignedto_id = patient.assignedto.id
@@ -1326,7 +1495,7 @@ class SimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
             )
             msg.content_subtype = "html"
             # msg.send()
-            print(msg.send())
+            # print(msg.send())
 
         return super().form_valid(form)
 
@@ -2413,6 +2582,10 @@ class RTPrescriptionUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateVi
         pk = self.kwargs["pk"]
         patient = Prescription.objects.get(pk=pk)
         updatecrn = patient.parent_id.crnumber
+        drug = patient.drug_name.split(" ")[0]
+        drug_name = GenDrugs.objects.filter(drug=drug).first()
+
+        context['form'].initial['drug_name'] = drug_name
         context['updatecrn'] = updatecrn
         context['update'] = True
         context['patient'] = patient
@@ -2781,7 +2954,7 @@ class AcuteToxicityCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateVie
     def form_invalid(self, form):
         # print(form.data)
         print(form.errors)
-        print(self.request.POST)
+        # print(self.request.POST)
         return form.errors
 
 
@@ -3106,7 +3279,7 @@ class InvImgUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         pk = self.kwargs["pk"]
         patient = InvestigationsImaging.objects.get(pk=pk)
-        print(patient)
+        # print(patient)
         crn = patient.parent_id.crnumber
         fu_id = patient.s8_id.s8_id
         # patient = PatientDiagnosis.objects.get(pk=pk)
@@ -3222,6 +3395,10 @@ class PrescriptionUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView
         pk = self.kwargs["pk"]
         patient = Prescription.objects.get(pk=pk)
         updatecrn = patient.parent_id.crnumber
+        drug = patient.drug_name.split(" ")[0]
+        drug_name = GenDrugs.objects.filter(drug=drug).first()
+
+        context['form'].initial['drug_name'] = drug_name
         context['updatecrn'] = updatecrn
         context['update'] = True
         context['patient'] = patient
@@ -4245,7 +4422,7 @@ def filter_rt_started(request):
             query_res = raw_query01(query, params)
             data = {}
         else:
-            print("No Data to print")
+            # print("No Data to print")
             data = {}
 
         df = pd.DataFrame.from_records(data.values())
@@ -4455,9 +4632,13 @@ def rtupdateprescription(request, pk):
             return render(request, 'patient_data/partials/partial_prescription.html', {'errors': form_errors,
                                                                                        'fudata': ass,
                                                                                        's7_id': s7_id})
-
     prescription = Prescription.objects.get(pk=pk)
+
     form = PrescriptionForm(instance=prescription)
+    drug = prescription.drug_name.split(" ")[0]
+    drug_name = GenDrugs.objects.filter(drug=drug).first()
+
+    form.initial['drug_name'] = drug_name
     updatecrn = prescription.s7_id.parent_id.crnumber
     s7_id = prescription.s7_id.s7_id
     prescription_id = prescription.pk
@@ -4681,7 +4862,7 @@ def create_presim(request):
                            'crnumber': crn,
                            's3_id': s3_id})
         else:
-            print(form.errors)
+            # print(form.errors)
             error = form.errors
             return render(request, 'patient_data/partials/partial_new_presim.html',
                           {'crnumber': crn,
@@ -4784,7 +4965,7 @@ def link_simulation_with_careplan(request, simid, s3_id):
     care_plan = S3CarePlan.objects.get(s3_id=s3_id)
     sim.s3_id = care_plan
     sim.s2_id = care_plan.s2_id
-    print(sim)
+    # print(sim)
     sim.save()
     return HttpResponse("Simulation linked --- PLEASE REFRESH THE PAGE TO SEE UPDATED STATUS")
 
@@ -4803,7 +4984,7 @@ def edit_presim(request, pk):
     presim = NewPreSimulation.objects.get(pk=pk)
     all_presim = NewPreSimulation.objects.filter(s3_id=presim.s3_id.s3_id).all()
     form = NewPreSimulationForm(request.POST or None, instance=presim)
-    print(request.POST)
+    # print(request.POST)
     if request.method == "POST":
         if form.is_valid():
             presim = form.save()
@@ -4928,3 +5109,149 @@ def confirmed_by(request, dx_id=None):
             form = S2DiagnosisForm()
         context = {'form': form, 'first_dx': first_dx, 'primary_dx': primary_dx, 'new_dx': new_dx, 'dx_id': dx_id}
         return render(request, 'patient_data/partials/partial_confirmed_by.html', context)
+
+
+@login_required
+def custom_tnm(request, new_primary=False):
+    T, N, M, Stage = [("", "")], [("", "")], [("", "")], [("", "")]
+    pT, pN, pM, pStage = [("", "")], [("", "")], [("", "")], [("", "")]
+
+    for value in ClinT.objects.all().values():
+        T.append((value["code"], value["code"]))
+        pT.append((value["code"], value["code"]))
+    for value in ClinN.objects.all().values():
+        N.append((value["code"], value["code"]))
+        pN.append((value["code"], value["code"]))
+    for value in ClinM.objects.all().values():
+        M.append((value["code"], value["code"]))
+        pM.append((value["code"], value["code"]))
+    for value in StageGroup.objects.all().values():
+        Stage.append((value["code"], value["code"]))
+        pStage.append((value["code"], value["code"]))
+    if request.POST:
+        if new_primary:
+            primary_diagnosis = int(request.POST['diagnosis'])
+            if primary_diagnosis == 10:
+                T, N, M, pT, pN, pM = get_tnm(site="Lung")
+            if primary_diagnosis == 12:
+                T, N, M, pT, pN, pM = get_tnm()
+            if primary_diagnosis == 13:
+                T, N, M, pT, pN, pM = get_tnm(site="Esophagus")
+
+            class DiagnosisForm(S2DiagnosisForm):
+                def __init__(self, *args, **kwargs):
+                    super(DiagnosisForm, self).__init__(*args, **kwargs)
+                    # self.fields['s3_dx_id'].queryset = S2Diagnosis.objects.filter(parent_id=111111)
+                    self.fields['t_new'] = forms.ChoiceField(choices=[], required=False,
+                                                             widget=forms.Select(
+                                                                 attrs={'class': 'myselect form-control'}))
+                    self.fields['n_new'] = forms.ChoiceField(choices=[], required=False,
+                                                             widget=forms.Select(
+                                                                 attrs={'class': 'myselect form-control'}))
+                    self.fields['m_new'] = forms.ChoiceField(choices=[], required=False,
+                                                             widget=forms.Select(
+                                                                 attrs={'class': 'myselect form-control'}))
+                    self.fields['stage_new'] = forms.ChoiceField(choices=[], required=False,
+                                                                 widget=forms.Select(
+                                                                     attrs={'class': 'myselect form-control'}))
+                    self.fields['p_t_new'] = forms.ChoiceField(choices=[], required=False,
+                                                               widget=forms.Select(
+                                                                   attrs={'class': 'myselect form-control'}))
+                    self.fields['p_n_new'] = forms.ChoiceField(choices=[], required=False,
+                                                               widget=forms.Select(
+                                                                   attrs={'class': 'myselect form-control'}))
+                    self.fields['p_m_new'] = forms.ChoiceField(choices=[], required=False,
+                                                               widget=forms.Select(
+                                                                   attrs={'class': 'myselect form-control'}))
+                    self.fields['p_stage_new'] = forms.ChoiceField(choices=[], required=False,
+                                                                   widget=forms.Select(
+                                                                       attrs={'class': 'myselect form-control'}))
+
+            form = DiagnosisForm()
+            form.fields["t_new"].choices = T
+            form.fields["n_new"].choices = N
+            form.fields["m_new"].choices = M
+            form.fields["stage_new"].choices = Stage
+            form.fields["p_t_new"].choices = pT
+            form.fields["p_n_new"].choices = pN
+            form.fields["p_m_new"].choices = pM
+            form.fields["p_stage_new"].choices = pStage
+            form.fields['diagnosis'].initial = request.POST['diagnosis']
+            context = {'form': form, 'new_primary': new_primary}
+            return render(request, 'patient_data/partials/partial_tnm.html', context)
+
+
+        else:
+            dx_type = request.POST['dx_type']
+            if dx_type:
+                if dx_type == "Second Malignancy":
+                    new_primary = True
+                primary_diagnosis = int(request.POST['diagnosis'])
+                if primary_diagnosis == 10:
+                    T, N, M, pT, pN, pM = get_tnm(site="Lung")
+                if primary_diagnosis == 12:
+                    T, N, M, pT, pN, pM = get_tnm()
+                if primary_diagnosis == 13:
+                    T, N, M, pT, pN, pM = get_tnm(site="Esophagus")
+
+                class DiagnosisForm(S2DiagnosisForm):
+                    def __init__(self, *args, **kwargs):
+                        super(DiagnosisForm, self).__init__(*args, **kwargs)
+                        # self.fields['s3_dx_id'].queryset = S2Diagnosis.objects.filter(parent_id=111111)
+                        self.fields['t_new'] = forms.ChoiceField(choices=[], required=False,
+                                                                 widget=forms.Select(
+                                                                     attrs={'class': 'myselect form-control'}))
+                        self.fields['n_new'] = forms.ChoiceField(choices=[], required=False,
+                                                                 widget=forms.Select(
+                                                                     attrs={'class': 'myselect form-control'}))
+                        self.fields['m_new'] = forms.ChoiceField(choices=[], required=False,
+                                                                 widget=forms.Select(
+                                                                     attrs={'class': 'myselect form-control'}))
+                        self.fields['stage_new'] = forms.ChoiceField(choices=[], required=False,
+                                                                     widget=forms.Select(
+                                                                         attrs={'class': 'myselect form-control'}))
+                        self.fields['p_t_new'] = forms.ChoiceField(choices=[], required=False,
+                                                                   widget=forms.Select(
+                                                                       attrs={'class': 'myselect form-control'}))
+                        self.fields['p_n_new'] = forms.ChoiceField(choices=[], required=False,
+                                                                   widget=forms.Select(
+                                                                       attrs={'class': 'myselect form-control'}))
+                        self.fields['p_m_new'] = forms.ChoiceField(choices=[], required=False,
+                                                                   widget=forms.Select(
+                                                                       attrs={'class': 'myselect form-control'}))
+                        self.fields['p_stage_new'] = forms.ChoiceField(choices=[], required=False,
+                                                                       widget=forms.Select(
+                                                                           attrs={'class': 'myselect form-control'}))
+
+                form = DiagnosisForm()
+                form.fields["t_new"].choices = T
+                form.fields["n_new"].choices = N
+                form.fields["m_new"].choices = M
+                form.fields["stage_new"].choices = Stage
+                form.fields["p_t_new"].choices = pT
+                form.fields["p_n_new"].choices = pN
+                form.fields["p_m_new"].choices = pM
+                form.fields["p_stage_new"].choices = pStage
+            else:
+                form = None
+            context = {'form': form, 'new_primary': new_primary}
+        return render(request, 'patient_data/partials/partial_tnm.html', context)
+
+
+@login_required
+def get_mets(request):
+    context = get_stagegroup(request=request)
+    return render(request, 'patient_data/partials/partial_mets.html', context)
+
+
+@login_required
+def get_p_mets(request):
+    context = get_stagegroup(request=request, pathologic=True)
+    return render(request, 'patient_data/partials/partial_p_mets.html', context)
+
+
+@login_required
+def test(request):
+    T, N, M = get_tnm()
+    # print(M)
+    return HttpResponse("Test")

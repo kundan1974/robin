@@ -1,0 +1,97 @@
+<h4 class="box-shadow box-redius gradient-mini p-3 text-danger">Clinical Stage
+                                    <span class="badge text-sm">TNM as per the present status</span></h4>
+{% if new_primary %}
+    <h5>New Primary - Details</h5><hr>
+    <div class="col-md-3 mb-2" hx-trigger="change" hx-post="{% url 'get_tnm' new_primary %}" hx-target="#tnm">
+        {{ form.diagnosis.errors }}
+        <label class="oncflow-labels" for="{{ form.diagnosis.id_for_label }}">Diagnosis:</label>
+        {{ form.diagnosis }}
+    </div>
+    <div class="col-md-2">
+        {{ form.laterality.errors }}
+        <label class="oncflow-labels" for="{{ form.laterality.id_for_label }}">Laterality:</label>
+        {{ form.laterality }}
+    </div>
+    <div class="col-md-4">
+        {{ form.icd_main_topo.errors }}
+        <label class="oncflow-labels" for="{{ form.icd_main_topo.id_for_label }}">ICD(Main Site):</label>
+        {{ form.icd_main_topo }}
+    </div>
+    <div class="col-md-3">
+        {{ form.icd_topo_code.errors }}
+        <label class="oncflow-labels" for="{{ form.icd_topo_code.id_for_label }}">ICD(Site Details):</label>
+        {{ form.icd_topo_code }}
+    </div>
+    <div class="col-md-6">
+        {{ form.icd_path_code.errors }}
+        <label class="oncflow-labels" for="{{ form.icd_path_code.id_for_label }}">ICD(Patho):</label>
+        {{ form.icd_path_code }}
+    </div>
+{% endif %}
+
+<h5 class="mt-2">Clinical Stage</h5><hr>
+
+<div class="col-md-4">
+    {{ form.t_new.errors }}
+    <label class="oncflow-labels" for="{{ form.t_new.id_for_label }}">cT:</label>
+    {{ form.t_new }}
+</div>
+<div class="col-md-4">
+    {{ form.n_new.errors }}
+    <label class="oncflow-labels" for="{{ form.n_new.id_for_label }}">cN:</label>
+    {{ form.n_new }}
+</div>
+<div class="col-md-4"
+     hx-trigger="change"
+     hx-trigger-unchanged
+     hx-target="#c_mets1"
+     hx-post="{% url 'get_mets' %}">
+    {{ form.m_new.errors }}
+    <label class="oncflow-labels" for="{{ form.m_new.id_for_label }}">cM:</label>
+    {{ form.m_new }}
+</div>
+<div class="col-md-9 mt-3" id="c_mets1">
+    {% if mets %}
+        {{ form.mets_site.errors }}
+            <label class="oncflow-labels" for="{{ form.mets_site.id_for_label }}">Metastatic Sites:</label>
+        {{ form.mets_site }}
+    {% endif %}
+</div>
+<div class="col-md-4 mt-2">
+    {{ form.stage_new.errors }}
+    <label class="oncflow-labels" for="{{ form.stage_new.id_for_label }}">Stage Group:</label>
+    {{ form.stage_new }}
+</div>
+<div class="col-md-4 mt-2"></div>
+
+<h5 class="mt-3">Pathological Stage(If applicable)</h5><hr>
+<div class="col-md-4">
+    {{ form.p_t_new.errors }}
+    <label class="oncflow-labels" for="{{ form.p_t_new.id_for_label }}">pT:</label>
+    {{ form.p_t_new }}
+</div>
+<div class="col-md-4">
+    {{ form.p_n_new.errors }}
+    <label class="oncflow-labels" for="{{ form.p_n_new.id_for_label }}">pN:</label>
+    {{ form.p_n_new }}
+</div>
+<div class="col-md-4" hx-trigger="change"
+     hx-target="#p_mets1"
+     hx-post="{% url 'get_p_mets' %}">
+    {{ form.p_m_new.errors }}
+    <label class="oncflow-labels" for="{{ form.p_m_new.id_for_label }}">pM:</label>
+    {{ form.p_m_new }}
+</div>
+<div class="col-md-9 mt-3" id="p_mets1">
+    {% if mets %}
+        {{ form.p_mets_site.errors }}
+            <label class="oncflow-labels" for="{{ form.p_mets_site.id_for_label }}">Metastatic Sites:</label>
+        {{ form.p_mets_site }}
+    {% endif %}
+</div>
+<div class="col-md-4 mt-2">
+    {{ form.p_stage_new.errors }}
+    <label class="oncflow-labels" for="{{ form.p_stage_new.id_for_label }}">pStage Group:</label>
+    {{ form.p_stage_new }}
+</div>
+<div class="col-md-4 mt-2"></div>

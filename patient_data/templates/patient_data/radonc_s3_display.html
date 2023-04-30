@@ -6,43 +6,43 @@
         {# Middle Space #}
         <div class="col-md-10">
             <div class="my-form">
-            {% if data.0.parent_id.gender == 'Male' %}
-                <div><h4 class="">All Treatment Course details for - <span class="text-light gradient-highlight p-2 box-redius">Mr. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</span></h4></div>
+            {% if patient_mx.gender == 'Male' %}
+                <div><h4 class="">All Treatment Course details for - <span class="text-light gradient-highlight p-2 box-redius">Mr. {{ patient_mx.first_name }} (CRNumber: {{ patient_mx.crnumber }})</span></h4></div>
             {% else %}
-                <div><h4 class="">All Treatment Course details for - <span class="text-light gradient-highlight p-2 box-redius">Mrs. {{ data.0.parent_id.first_name }} (CRNumber: {{ data.0.parent_id.crnumber }})</span></h4></div>
+                <div><h4 class="">All Treatment Course details for - <span class="text-light gradient-highlight p-2 box-redius">Mrs. {{ patient_mx.first_name }} (CRNumber: {{ patient_mx.crnumber }})</span></h4></div>
             {% endif %}
             <hr>
 {#            TOP LEVEL BUTTONS#}
                 <div>
                     {% if data.0.parent_id.crnumber %}
-                        <h5><a  class="btn btn-dark" href="{% url 'db_operations' data.0.parent_id.crnumber %}">Back</a></h5>
+                        <h5><a  class="btn btn-dark" href="{% url 'db_operations' patient_mx.crnumber %}">Back</a></h5>
                     {% else %}
                         <h5><a  class="btn btn-dark" href="{% url 'db_operations' %}">Back</a></h5>
                     {% endif %}
 
 
                         {% if presim_check %}
-                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-newpresimulation-list' data.0.parent_id.crnumber  %}?mx_display_crnumber={{ data.0.parent_id.crnumber }}">PreSimulation</a><!-- from simulation move to simulation list and then to RT -->
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-newpresimulation-list' patient_mx.crnumber  %}?mx_display_crnumber={{ data.0.parent_id.crnumber }}">PreSimulation</a><!-- from simulation move to simulation list and then to RT -->
                         {% else %}
                             {% if sim_check %}
-                                <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-simulation-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">Simulation (update)</a><!-- from simulation move to simulation list and then to RT -->
+                                <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-simulation-list' patient_mx.crnumber %}?next={{ request.path|urlencode }}">Simulation (update)</a><!-- from simulation move to simulation list and then to RT -->
                             {% endif %}
                         {% endif %}
 
                         {% if rt_check %}
-                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-radiotherapy-list' data.0.parent_id.crnumber %}?mx_display={{ request.path|urlencode }}">RT Details</a>
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-radiotherapy-list' patient_mx.crnumber %}?mx_display={{ request.path|urlencode }}">RT Details</a>
                         {% endif %}
                         {% if dvh_check %}
                             <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="#">DVH Details</a>
                         {% endif %}
                         {% if sx_check %}
-                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-surgery-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">Sx Details</a><!-- from Sx move to Sx list and then to relevant HPE -->
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-surgery-list' patient_mx.crnumber %}?next={{ request.path|urlencode }}">Sx Details</a><!-- from Sx move to Sx list and then to relevant HPE -->
                         {% endif %}
                         {% if hpe_check %}
-                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-hpe-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">HPE Details</a><!-- HPE list with options of updating -->
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-hpe-list' patient_mx.crnumber %}?next={{ request.path|urlencode }}">HPE Details</a><!-- HPE list with options of updating -->
                         {% endif %}
                         {% if chemo_check %}
-                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-chemotherapy-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">Chemo Details</a><!-- from Chemo move to Chemo List -->
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-chemotherapy-list' patient_mx.crnumber %}?next={{ request.path|urlencode }}">Chemo Details</a><!-- from Chemo move to Chemo List -->
                         {% endif %}
                         {% if ass_check %}
                             {% for pat_rt in patient_mx.s4rt_set.all %}
@@ -53,13 +53,13 @@
                             {% endfor %}
                         {% endif %}
                         {% if fu_check %}
-                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-fup-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">OPD Visits</a><!-- from Followup move to followup list -->
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-fup-list' patient_mx.crnumber %}?next={{ request.path|urlencode }}">OPD Visits</a><!-- from Followup move to followup list -->
                         {% endif %}
                         {% if pft_check %}
-                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-pftdetails-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">PFT Details</a><!-- from Followup move to followup list -->
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-pftdetails-list' patient_mx.crnumber %}?next={{ request.path|urlencode }}">PFT Details</a><!-- from Followup move to followup list -->
                         {% endif %}
                         {% if cm_check %}
-                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-cardiacmarkers-list' data.0.parent_id.crnumber %}?next={{ request.path|urlencode }}">CardiacMarkers Details</a><!-- from Followup move to followup list -->
+                            <a class="btn btn-primary btn-sm mt-1 mb-1 rounded" href="{% url 'radonc-cardiacmarkers-list' patient_mx.crnumber %}?next={{ request.path|urlencode }}">CardiacMarkers Details</a><!-- from Followup move to followup list -->
                         {% endif %}
                     </div>
 
@@ -114,13 +114,26 @@
               </div>
                 {% for content in data %}
                     <div class="mt-3 lh-base">
-                        <h5>Laterality: <span style="font-weight: lighter; color: rgb(84, 82, 82);">{{ content.s2_id.laterality }}</span></h5>
-                        <h5>Site(Main Site):
-                            <span style="font-weight: lighter; color: rgb(84, 82, 82);">{{ content.s2_id.icd_main_topo }}</span>
-                            <span style="font-weight: lighter; color: rgb(217,47,47);"><b>Status</b>:{{ content.s2_id.dx_type }}</span>
-                        </h5>
-                        <h5>SubSite: <span style="font-weight: lighter; color: rgb(84, 82, 82);">{{ content.s2_id.icd_topo_code }}</span></h5>
-                        <h5>Histopathology: <span style="font-weight: lighter; color: rgb(84, 82, 82);">{{ content.s2_id.icd_path_code }}</span></h5>
+                         <h5>Primary: <span style="font-weight: lighter; color: rgb(84, 82, 82);">
+                             {{ patient_mx.s2diagnosis_set.all.first.icd_topo_code }}
+                             {{ patient_mx.s2diagnosis_set.all.first.icd_path_code.hpe }}
+                         </span></h5>
+                        <h5>Current Status: <span style="font-weight: lighter; color: rgb(217,47,47);"><b>Status</b>:{{ content.s2_id.dx_type }}</span></h5>
+                        {% if content.s2_id.confirmed_by == "Biopsy" or content.s2_id.confirmed_by == "FNAC" or content.s2_id.confirmed_by == "Surgery" %}
+                            <h5>Confirmed by:
+                                <span style="font-weight: lighter; color: rgb(84, 82, 82);">
+                                    {{ content.s2_id.confirmed_by }} from
+                                    {{ content.s2_id.laterality }}
+                                    {{ content.s2_id.icd_topo_code }} ({{ content.s2_id.icd_path_code }})
+                                </span>
+                            </h5>
+                        {% else %}
+                            <h5>Confirmed by:
+                                <span style="font-weight: lighter; color: rgb(84, 82, 82);">
+                                    Imaging
+                                </span>
+                            </h5>
+                        {% endif %}
                         <!-- <h4 class=""><span class="text-dark">Laterality: </span>{{ content.s2_id.laterality }}</h4>
                         <h4 class=""><span class="text-dark">Site(Main Site): </span>{{ content.s2_id.icd_main_topo }}</h4>
                         <h4 class=""><span class="text-dark">SubSite: </span>{{ content.s2_id.icd_topo_code }}</h4>
@@ -144,11 +157,11 @@
 {#                            {% else %}#}
 {#                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-simulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Simulation</a>#}
 {#                            {% endif %}#}
-                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'new-simulation' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">Sim-RT Module</a>
-                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-surgery' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Sx</a>
+                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'new-simulation' patient_mx.crnumber content.s3_id %}?next={{ request.path|urlencode }}">Sim-RT Module</a>
+                                <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-surgery' patient_mx.crnumber content.s3_id %}?next={{ request.path|urlencode }}">New Sx</a>
     {#                            <a class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-chemotherapy' content.parent_id.crnumber content.s3_id %}">New Chemo</a>#}
-                                <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-fup1' content.parent_id.crnumber content.s2_id.s2_id content.s3_id %}?next={{ request.path|urlencode }}">Record New Visit</a></h5>
-                                <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-chemoprotocol' content.parent_id.crnumber content.s3_id %}?next={{ request.path|urlencode }}">SystemicRx-Module</a></h5>
+                                <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-fup1' patient_mx.crnumber content.s2_id.s2_id content.s3_id %}?next={{ request.path|urlencode }}">Record New Visit</a></h5>
+                                <a  class="btn btn-info btn-sm mt-1 mb-1" href="{% url 'radonc-chemoprotocol' patient_mx.crnumber content.s3_id %}?next={{ request.path|urlencode }}">SystemicRx-Module</a></h5>
                                 <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
                             {% else %}
                                 <h6 class="red-highlight p-3 box-redius box-shadow text-light">This treatment course is closed</h6>

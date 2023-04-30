@@ -534,3 +534,12 @@ td {
 .tabs__radio:checked + .tabs__label + .tabs__content {
   display: initial;
 }
+
+
+.myselect {
+  height: auto;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow: scroll;
+}
+
