@@ -94,10 +94,15 @@ def db_homestatus(crnumber=None):
 def get_timeline(crnumber):
     if S1ParentMain.objects.filter(crnumber=crnumber).exists():
         regdetails = S1ParentMain.objects.filter(crnumber=crnumber).last()
+        if regdetails.height and regdetails.weight:
+            bsa = 0.007184 * (float(regdetails.height) ** 0.725) * (float(regdetails.weight) ** 0.425)
+        else:
+            bsa = None
         reg_date = regdetails.reg_date
     else:
         reg_date = None
         regdetails = None
+        bsa = None
     if S2Diagnosis.objects.filter(parent_id=crnumber).exists():
         dxdetails = S2Diagnosis.objects.filter(parent_id=crnumber).all()
         dxinfo = []
@@ -213,7 +218,7 @@ def get_timeline(crnumber):
     if S8FUP.objects.filter(parent_id=crnumber).all():
         fupdetails = S6Surgery.objects.filter(parent_id=crnumber).all()
 
-    return regdetails, reg_date, dxinfo, mxinfo
+    return regdetails, reg_date, dxinfo, mxinfo, bsa
 
 
 def getnewsimulation_choices(n):
@@ -389,12 +394,14 @@ def get_stagegroup(request, pathologic=False):
             # print(T, N, M)
             if dx == "12":
                 stage = BreastGroupTNM.objects.filter(staging_type=type, t=T, n=N, m=M, grade=grade, her2neu=her2neu,
-                                                  er=er, pr=pr).first()
+                                                      er=er, pr=pr).first()
             elif dx == "13":
                 if N == "_n3" and M == "_m0":
-                    stage = EsoGroupTNM.objects.filter(staging_type="Anatomical", n=N, m=M, grade="NA", location="NA").first()
+                    stage = EsoGroupTNM.objects.filter(staging_type="Anatomical", n=N, m=M, grade="NA",
+                                                       location="NA").first()
                 else:
-                    stage = EsoGroupTNM.objects.filter(staging_type="Anatomical", t=T, n=N, m=M, grade="NA", location="NA").first()
+                    stage = EsoGroupTNM.objects.filter(staging_type="Anatomical", t=T, n=N, m=M, grade="NA",
+                                                       location="NA").first()
                 message_er = None
                 message_pr = None
                 message_her = None

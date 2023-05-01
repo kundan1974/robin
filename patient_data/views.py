@@ -286,11 +286,12 @@ def radonc_home(request, crnumber=None):
         status['form'] = form
         status['user_sim'] = user_sim
 
-        regdetails, reg_date, dxinfo, mxinfo = get_timeline(crnumber)
+        regdetails, reg_date, dxinfo, mxinfo, bsa = get_timeline(crnumber)
         status['regdetails'] = regdetails
         status['reg_date'] = reg_date
         status['dxinfo'] = dxinfo
         status['mxinfo'] = mxinfo
+        status['bsa'] = bsa
         status['is_mobile'] = is_mobile
 
         return render(request, 'patient_data/radonc_db_operations.html', status)
