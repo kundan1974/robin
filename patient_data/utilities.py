@@ -1,6 +1,7 @@
 from patient_data.forms import S2DiagnosisForm
 from patient_data.models import S1ParentMain, S3CarePlan, PreSimulation, Simulation, S2Diagnosis, S8FUP, S4RT, \
-    S5ChemoProtocol, S6Surgery, TNM, BreastGroupTNM, StageGroup, EsoGroupTNM, NSCLCGroupTNM
+    S5ChemoProtocol, S6Surgery, TNM, BreastGroupTNM, StageGroup, EsoGroupTNM, NSCLCGroupTNM, LarynxGroupTNM, \
+    OralGroupTNM
 from django import forms
 from django.db import connection
 import re
@@ -403,6 +404,26 @@ def get_stagegroup(request, pathologic=False):
                     stage = NSCLCGroupTNM.objects.filter(staging_type="Pathological", t=T, n=N, m=M).first()
                 else:
                     stage = NSCLCGroupTNM.objects.filter(staging_type="Anatomical", t=T, n=N, m=M).first()
+                message_er = None
+                message_pr = None
+                message_her = None
+                message_grade = None
+
+            elif dx == "35" or dx == "45" or dx == "46":
+                if pathologic:
+                    stage = LarynxGroupTNM.objects.filter(staging_type="Pathological", t=T, n=N, m=M).first()
+                else:
+                    stage = LarynxGroupTNM.objects.filter(staging_type="Anatomical", t=T, n=N, m=M).first()
+                message_er = None
+                message_pr = None
+                message_her = None
+                message_grade = None
+
+            elif dx == "3":
+                if pathologic:
+                    stage = OralGroupTNM.objects.filter(staging_type="Pathological", t=T, n=N, m=M).first()
+                else:
+                    stage = OralGroupTNM.objects.filter(staging_type="Anatomical", t=T, n=N, m=M).first()
                 message_er = None
                 message_pr = None
                 message_her = None

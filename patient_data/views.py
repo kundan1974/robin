@@ -5137,6 +5137,14 @@ def custom_tnm(request, new_primary=False):
                 T, N, M, pT, pN, pM = get_tnm()
             if primary_diagnosis == 13:
                 T, N, M, pT, pN, pM = get_tnm(site="Esophagus")
+            if primary_diagnosis == 35:
+                T, N, M, pT, pN, pM = get_tnm(site="Larynx-Supraglottis")
+            if primary_diagnosis == 45:
+                T, N, M, pT, pN, pM = get_tnm(site="Larynx-Glottis")
+            if primary_diagnosis == 46:
+                T, N, M, pT, pN, pM = get_tnm(site="Larynx-Subglottis")
+            if primary_diagnosis == 3:
+                T, N, M, pT, pN, pM = get_tnm(site="Oral-Cavity")
 
             class DiagnosisForm(S2DiagnosisForm):
                 def __init__(self, *args, **kwargs):
@@ -5193,6 +5201,14 @@ def custom_tnm(request, new_primary=False):
                     T, N, M, pT, pN, pM = get_tnm()
                 if primary_diagnosis == 13:
                     T, N, M, pT, pN, pM = get_tnm(site="Esophagus")
+                if primary_diagnosis == 35:
+                    T, N, M, pT, pN, pM = get_tnm(site="Larynx-Supraglottis")
+                if primary_diagnosis == 45:
+                    T, N, M, pT, pN, pM = get_tnm(site="Larynx-Glottis")
+                if primary_diagnosis == 46:
+                    T, N, M, pT, pN, pM = get_tnm(site="Larynx-Subglottis")
+                if primary_diagnosis == 3:
+                    T, N, M, pT, pN, pM = get_tnm(site="Oral-Cavity")
 
                 class DiagnosisForm(S2DiagnosisForm):
                     def __init__(self, *args, **kwargs):
