@@ -23,6 +23,11 @@
     </div>
 </div>
 {% endblock content %}
+{% block javascript %}
+    <script>
+        localStorage.setItem('formSubmitted', 'false');
+    </script>
+{% endblock %}
 {#This java script will not work because we are using htmx#}
 {#{% block javascript %}#}
 {#    <script type="text/javascript">#}

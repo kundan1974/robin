@@ -142,3 +142,8 @@
 </div>
 
 {% endblock content %}
+{% block javascript %}
+    <script>
+        localStorage.setItem('formSubmitted', 'false');
+    </script>
+{% endblock %}

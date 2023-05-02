@@ -2,3 +2,8 @@
 {% block content %}
 <h2>Success!</h2><hr>
 {% endblock %}
+{% block javascript %}
+    <script>
+        localStorage.setItem('formSubmitted', 'false');
+    </script>
+{% endblock %}

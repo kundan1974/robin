@@ -13,4 +13,9 @@
     {# Right Space #}
     <div class="col-md-1"></div>
 </div>
-{% endblock %}s
+{% endblock %}
+{% block javascript %}
+    <script>
+        localStorage.setItem('formSubmitted', 'false');
+    </script>
+{% endblock %}
