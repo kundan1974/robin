@@ -4,16 +4,16 @@
         <div class="container" id="data_operations">
             <h3 class="text-dark">Radiation Oncology Data Entry Module</h3><hr>
             <div class="my-form">
-                <form method="POST">
+                <form method="POST" id="search-db-operations">
                 {% csrf_token %}
                     <div class="mb-3">
-                        <label for="id_crnumber" style="font-weight: bold;" class="form-label">CR Number</label>
+                        <label for="id_s_crnumber" style="font-weight: bold;" class="form-label">CR Number</label>
                         {{ form.s_crnumber }}
                         {{form.s_crnumber.errors }}
                     </div>
                     <div class="mb-3">
-                        <label for="submit" class="form-label"></label>
-                        <button type="submit" class="btn btn-dark" name="submit">Submit</button>
+                        <label for="submit1" class="form-label"></label>
+                        <button type="submit" class="btn btn-dark" name="submit1">Submit</button>
                     </div>
                 </form>
                 {% if crnumber %}
@@ -237,4 +237,24 @@
     </div>
 
 {% endblock %}
+{% block javascript %}
+    <script>
+    function submitForm() {
+    // Check if the form has already been submitted
+    if (localStorage.getItem('formSubmitted') === 'true') {
+        return;
+    }
 
+    var crumber = document.getElementById("id_s_crnumber").value;
+    if (crumber !== '') {
+        var form = document.getElementById("search-db-operations");
+        form.submit();
+        localStorage.setItem('formSubmitted', 'true');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    submitForm();
+});
+    </script>
+{% endblock %}

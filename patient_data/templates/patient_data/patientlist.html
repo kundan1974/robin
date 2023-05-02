@@ -31,7 +31,10 @@
                                     <th scope="row">{{ forloop.counter }}
                             {% endif %}
 
-                                <td>{{ patient.first_name }} {{ patient.last_name }}</td>
+                                <td><a href="{% url 'db_operations' patient.crnumber %}"
+                                       class="btn btn-dark btn-sm" role="button" aria-pressed="true">
+                                    {{ patient.first_name }} {{ patient.last_name }}</a>
+                                </td>
                                 <td><span class="count yellow">{{ patient.crnumber }}</span></td>
                                 <td>{{ patient.reg_date|date:'M d, Y' }}</td>
                                 <td><span class="count green">{{ patient.mobile }}</span></td>
