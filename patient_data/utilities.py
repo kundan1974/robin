@@ -103,10 +103,27 @@ def get_timeline(crnumber):
         reg_date = None
         regdetails = None
         bsa = None
+    secondary = False
+    new_primary = False
+    primary_hpe = False
     if S2Diagnosis.objects.filter(parent_id=crnumber).exists():
         dxdetails = S2Diagnosis.objects.filter(parent_id=crnumber).all()
         dxinfo = []
-        for dx in dxdetails:
+        for num, dx in enumerate(dxdetails):
+            if num == 1:
+                if dx.icd_path_code:
+                    primary_hpe = dx.icd_path_code.hpe
+                else:
+                    primary_hpe = None
+            if dx.diagnosis:
+                if dx.dx_type != "Second Malignancy":
+                    primary = dx.diagnosis.our_diagnosis
+                else:
+                    primary = None
+                    secondary = True
+                    new_primary = dx.diagnosis.our_diagnosis
+            else:
+                primary = None
             if dx.icd_topo_code:
                 main_topo = dx.icd_topo_code.site
             else:
@@ -176,7 +193,7 @@ def get_timeline(crnumber):
             else:
                 PDL1Levels = dx.pdl_1_levels
             dxinfo.append((dx.dx_date.date(), main_topo, dx_type, path_code, cT, cN, cM, stage, ER, PR, HER2Neu,
-                           EGFR, ALK, ROS, PDL1, PDL1Levels))
+                           EGFR, ALK, ROS, PDL1, PDL1Levels, primary_hpe, primary, secondary, new_primary))
     else:
         dxinfo = None
 

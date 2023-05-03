@@ -17,7 +17,9 @@
                         <div class="inner-circle"></div>
                         {% if regdetails %}
                             <p class="h6 mt-3 mb-1">First Visit: {{ reg_date|date:'d-m-Y' }}</p>
-                            <p class="h6 mt-3 mb-1">Name: {{ regdetails.first_name }} Age: {{ regdetails.age }}</p>
+                            <p class="h6 mt-3 mb-1">Name: {{ regdetails.first_name }}
+                                {% if regdetails.last_name %}{{ regdetails.last_name }}{% endif %}
+                                Age: {{ regdetails.age }}</p>
                             {% if bsa %}
                                 <p class="h6 text-muted mb-0 mb-lg-0">BSA: {{ bsa|floatformat:2 }} &#13217;</p>
                             {% else %}
@@ -38,7 +40,11 @@
                                 <p class="h6 mt-3 mb-1">
                                     <small>{{ content.0|date:'d-m-Y' }}</small></p>
                                 <p class="h6 mb-0 mb-lg-0">
-                                    <small>Diagnosis: {{ content.1}}, <b>{{ content.2 }}</b></small></p>
+                                    {% if not secondary %}
+                                    <small>Diagnosis: {{ content.17}} ({{ content.3 }}), <b>{{ content.2 }}</b></small></p>
+                                    {% else %}
+                                        <small>Diagnosis: {{ content.17}} ({{ content.16 }}), <b>{{ content.2 }}</b></small></p>
+                                    {% endif %}
                                 {% if content.4 %}
                                     cT{{ content.4 }}
                                 {% endif %}
@@ -106,7 +112,11 @@
                                 </div>
                             {% else %}
                                 <p class="h6 mt-3 mb-1"><small>{{ content.0|date:'d-m-Y' }}</small></p>
-                                <p class="h6 text-muted mb-0 mb-lg-0"><small>Diagnosis: {{ content.1}}, <b>{{ content.2 }}</b></small></p>
+                                {% if not secondary %}
+                                    <small>Diagnosis: {{ content.17}} ({{ content.3 }}), <b>{{ content.2 }}</b></small></p>
+                                {% else %}
+                                    <small>Diagnosis: {{ content.17}} ({{ content.16 }}), <b>{{ content.2 }}</b></small></p>
+                                {% endif %}
                                 <hr>
                             {% endif %}
 
