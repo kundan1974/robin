@@ -4898,8 +4898,7 @@ def create_presim_new(request, crnumber):
             form.fields['presimparent'].initial = crnumber
             message = "Pre-Simulation added successfully!!!"
             # Need to decide where to pass
-            return render(request, 'patient_data/new_presim_without_careplan.html',
-                          {'form': form, 'crnumber': crnumber, 'message': message})
+            return redirect("db_operations", crnumber=crnumber)
         else:
             message = form.errors
             form = NewPreSimulationWithoutCareForm(request.POST)
@@ -4926,8 +4925,7 @@ def create_simulation(request, crnumber):
             form.fields['simparent'].initial = crnumber
             message = "Simulation added successfully!!!"
             # Need to decide where to pass
-            return render(request, 'patient_data/create_simulation_without_careplan.html',
-                          {'form': form, 'crnumber': crnumber, 'message': message})
+            return redirect("db_operations", crnumber=crnumber)
         else:
             message = form.errors
             form = SimulationWithoutCarePlanForm(request.POST)
