@@ -130,6 +130,17 @@
                             {% for mx in mxinfo %}
                                 {% if forloop.last %}
                                     <div class="red-highlight box-redius box-shadow p-2 text-light mt-2">
+                                        {% if mx.12 %}<br>
+                                            {% for sim in mx.12 %}
+                                                {% if not sim.s4rt_set.exist %}
+                                                    <a class="blink green box-redius p-1 g-1"
+                                                       href="{% url 'radonc-radiotherapy' sim.simparent_id sim.simid %}"
+                                                       style="text-decoration: none">
+                                                        RT Implementation Today
+                                                    </a><br>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
                                         <p class="h6 mt-3"><small>Mx Start: {{ mx.0|date:'d-m-Y' }}
                                         {% if not mx.1 %}
                                             Mx End: Management continued

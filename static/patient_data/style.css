@@ -543,3 +543,12 @@ td {
   overflow: scroll;
 }
 
+.blink {
+          animation: blinker 1.5s linear infinite;
+          color: #090909;
+}
+@keyframes blinker {
+    75% {
+        opacity: 0;
+    }
+}

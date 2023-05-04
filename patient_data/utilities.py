@@ -5,6 +5,7 @@ from patient_data.models import S1ParentMain, S3CarePlan, PreSimulation, Simulat
 from django import forms
 from django.db import connection
 import re
+from django.utils import timezone
 
 
 def db_homestatus(crnumber=None):
@@ -205,10 +206,14 @@ def get_timeline(crnumber):
             rtinfo = []
             cheminfo = []
             sxinfo = []
+            todaysim = []
 
             # Getting Radiation details
+            # delta = timezone.timedelta(days=4)
             if mx.sim_careplan_id.all():
                 for sim in mx.sim_careplan_id.all():
+                    if sim.impdate.date() == timezone.now().date():
+                        todaysim.append(sim)
                     siminfo.append(sim)
             if mx.s5chemoprotocol_set.all():
                 for chemo in mx.s5chemoprotocol_set.all():
@@ -221,7 +226,7 @@ def get_timeline(crnumber):
                     sxinfo.append(sx)
 
             mxinfo.append((mx.startdate, mx.enddate, mx.surgery, mx.radiotherapy, mx.chemotherapy, mx.targettherapy,
-                           mx.hormone, mx.immunotherapy, rtinfo, sxinfo, siminfo, cheminfo))
+                           mx.hormone, mx.immunotherapy, rtinfo, sxinfo, siminfo, cheminfo, todaysim))
             # print(f"CHECK: RT info for {mx.s3_id}--{rtinfo}")
             # Todo same to be done for chemo, followup as done for radiotherapy above
     else:
