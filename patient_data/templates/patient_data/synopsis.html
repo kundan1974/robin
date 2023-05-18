@@ -1,0 +1,59 @@
+{% extends 'patient_data/base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="my-form">
+            <div class="row">
+                <div class="col-12">
+                    <label for="myText"><b>Patient Synopsis</b></label>
+                    <textarea class="mt-3 col-12" rows="20" id="myText">
+                        {{ reg.crnumber }} {{ reg.first_name }} {{ reg.last_name }}
+                            {% for dx in diagnosis %}
+                                {% for mx in dx.s3careplan_set.all %}
+                                    {% for sim in mx.sim_careplan_id.all %}
+                                        {{ dx.laterality }}
+                                        {{ dx.diagnosis }}
+                                        {{ dx.icd_main_topo }}
+                                        {{ dx.icd_topo_code }}
+                                        {{ dx.icd_path_code }}
+                                        {{ mx.startdate }}
+                                        {{ mx.enddate }}
+                                        {{ mx.intent }}
+                                        {{ mx.radiotherapy }}
+                                        {{ mx.chemotherapy }}
+                                        {{ mx.surgery }}
+                                        {{ sim.simdate }}
+                                        {{ sim.impdate }}
+                                        {{ sim.initialstatus.code }}
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endfor %}
+{#                            {% for mx in mxdetails %}#}
+{#                                {% for m in mx %}#}
+{#                                {{ m.startdate }}#}
+{#                                {{ m.enddate }}#}
+{#                                {{ m.intent }}#}
+{#                                {{ m.radiotherapy }}#}
+{#                                {{ m.chemotherapy }}#}
+{#                                {{ m.surgery }}#}
+{#                                {% endfor %}#}
+{#                            {% endfor %}#}
+                    </textarea>
+                    <button class="btn btn-success" onclick="copyContent()">Copy!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script>
+      let text = document.getElementById('myText').innerHTML;
+      const copyContent = async () => {
+        try {
+          await navigator.clipboard.writeText(text);
+          console.log('Content copied to clipboard');
+        } catch (err) {
+          console.error('Failed to copy: ', err);
+        }
+      }
+    </script>
+{% endblock javascript %}
