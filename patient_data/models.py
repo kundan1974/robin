@@ -668,6 +668,20 @@ class EsoGroupTNM(models.Model):
         return f'{self.t} {self.n} {self.m} {self.stage}'
 
 
+class RCCGroupTNM(models.Model):
+    staging_type = models.CharField(max_length=100, blank=False, null=False)
+    t = models.CharField(max_length=50, blank=False, null=False)
+    n = models.CharField(max_length=50, blank=False, null=False)
+    m = models.CharField(max_length=50, blank=False, null=False)
+    stage = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        db_table = 'tnm_rcc_group'
+
+    def __str__(self):
+        return f'{self.t} {self.n} {self.m} {self.stage}'
+
+
 # Models for Radiation Oncology Database
 
 class S1ParentMain(models.Model):

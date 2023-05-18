@@ -7,6 +7,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
     mobile = models.IntegerField(null=True)
+    expotoken = models.CharField(max_length=256, null=True, blank=True)
     validate = models.IntegerField(default=0)
 
     def __str__(self):
