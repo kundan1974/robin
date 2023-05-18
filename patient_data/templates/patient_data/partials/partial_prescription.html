@@ -49,13 +49,14 @@
 
     <table class="table">
         <thead>
-            <tr>
+            <tr><th scope="col">Sno.</th>
                 <th scope="col">Symptoms</th>
                 <th scope="col">Severity</th>
                 <th scope="col">Drug</th>
                 <th scope="col">Route</th>
-                <th scope="col">frequency</th>
+                <th scope="col">Frequency</th>
                 <th scope="col">Duration</th>
+                <th scope="col">Remarks</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -68,7 +69,8 @@
                 <td>{{ data.drug_name }} {{ data.dosage }} {{ data.unit }}</td>
                 <td>{{ data.route }}</td>
                 <td>{{ data.frequency }}</td>
-                <td>{{ data.duration }}</td>
+                <td>{{ data.duration }} Days</td>
+                <td>{{ data.notes }}</td>
                 <td class="justify-content-between align-items-center">
                     {% if s8_id %}
                     <span class="badge bg-danger" style="cursor: pointer"

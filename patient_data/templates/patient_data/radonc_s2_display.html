@@ -23,7 +23,11 @@
                         <article class="media content-section data-container mt-3 mb-5">
                            <div class="media-body">
                                 <div class="article-title">
-                                    <h4>{{ content.diagnosis }}</h4>
+                                    {% if not content.diagnosis %}
+                                        <h4>{{ content.icd_topo_code  }}</h4>
+                                    {% else %}
+                                        <h4>{{ content.diagnosis }}</h4>
+                                    {% endif %}
                                     <h5><small class="text-danger"><b>Diagnosis Status: </b>: {{ content.dx_type }}</small><br></h5>
                                     <div>
                                         <a class="btn btn-dark" href="{% url 'radonc-diagnosis-update' content.pk %}?next={{ request.path|urlencode }}">Update</a>

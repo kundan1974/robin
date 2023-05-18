@@ -2,3 +2,8 @@
 {% block content %}
 <h2>ERROR!</h2><hr>
 {% endblock content %}
+{% block javascript %}
+    <script>
+        localStorage.setItem('formSubmitted', 'false');
+    </script>
+{% endblock %}

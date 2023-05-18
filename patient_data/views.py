@@ -603,7 +603,7 @@ class DiagnosisCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         form = DiagnosisForm()
         context['form'] = form
         if S2Diagnosis.objects.filter(parent_id=crnumber).exists():
-            primary_dx = S2Diagnosis.objects.filter(parent_id=crnumber).first()
+            primary_dx = S2Diagnosis.objects.filter(parent_id=crnumber).last()
             # context['form'].initial['laterality'] = primary_dx.laterality
             context['form'].initial['diagnosis'] = primary_dx.diagnosis
             context['form'].initial['c_ajcc_edition'] = primary_dx.c_ajcc_edition
@@ -706,7 +706,9 @@ class DiagnosisUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
             def __init__(self, *args, **kwargs):
                 super(DiagnosisForm, self).__init__(*args, **kwargs)
 
-                if patient.diagnosis.our_diagnosis in ["Breast", "Lung", "Esophagus"]:
+                if patient.diagnosis.our_diagnosis in ["Breast", "Lung", "Esophagus", "Larynx-Supraglottis",
+                                                       "Larynx-Glottis", "Larynx-Subglottis", "Oral-Cavity",
+                                                       "Renal Cell Ca"]:
                     T, N, M, pT, pN, pM = get_tnm(site=patient.diagnosis.our_diagnosis)
                     Stage, pStage = [("", "")], [("", "")]
                     for value in StageGroup.objects.all().values():
@@ -1118,39 +1120,42 @@ def simulation(request, crnumber=None, s3_id=None, presimid=None):
         dosephase2 = ""
         fxphase2 = ""
         volumes = ""
-        if s3_id:
-            patient_cp = S3CarePlan.objects.select_related().get(pk=s3_id)
-            if patient_cp.s2_id.diagnosis.our_diagnosis == "Breast" and patient_cp.radiotherapy == "Adjuvant":
-                dosephase1 = 42.5
-                fxphase1 = 16
-                if patient_cp.s2_id.laterality == "Right":
-                    icdmainsite = 73124
-                    site = "Right Breast"
-                    technique = "IMRT-FIF"
-                    intent = "Adjuvant"
-                if patient_cp.surgery:
-                    patient_sx = S6Surgery.objects.select_related().filter(s3_id=s3_id).first()
-                    try:
-                        patient_hpe = S6HPE.objects.select_related().filter(s6_id=patient_sx.pk).first()
-                    except:
-                        patient_hpe = None
-                    if patient_sx:
-                        for surgery in patient_sx.sxtype.all():
-                            if surgery.surgery.startswith("Lumpectomy"):
-                                if patient_hpe:
-                                    if patient_hpe.hpegrade.code == "Grade3" or patient_cp.parent_id.age < 50:
-                                        dosephase2 = 10
-                                        fxphase2 = 4
-                                    if patient_hpe.nodesp / patient_hpe.nodesr >= 0.5:
-                                        volumes = "B-SCF-AX1,2,3-IMC"
-                                    else:
-                                        volumes = "B-SCF-AX3"
-                            else:
-                                if patient_hpe:
-                                    if patient_hpe.nodesp / patient_hpe.nodesr >= 0.5:
-                                        volumes = "CW-SCF-AX1,2,3-IMC"
-                                    else:
-                                        volumes = "CW-SCF-AX3"
+        try:
+            if s3_id:
+                patient_cp = S3CarePlan.objects.select_related().get(pk=s3_id)
+                if patient_cp.s2_id.diagnosis.our_diagnosis == "Breast" and patient_cp.radiotherapy == "Adjuvant":
+                    dosephase1 = 42.5
+                    fxphase1 = 16
+                    if patient_cp.s2_id.laterality == "Right":
+                        icdmainsite = 73124
+                        site = "Right Breast"
+                        technique = "IMRT-FIF"
+                        intent = "Adjuvant"
+                    if patient_cp.surgery:
+                        patient_sx = S6Surgery.objects.select_related().filter(s3_id=s3_id).first()
+                        try:
+                            patient_hpe = S6HPE.objects.select_related().filter(s6_id=patient_sx.pk).first()
+                        except:
+                            patient_hpe = None
+                        if patient_sx:
+                            for surgery in patient_sx.sxtype.all():
+                                if surgery.surgery.startswith("Lumpectomy"):
+                                    if patient_hpe:
+                                        if patient_hpe.hpegrade.code == "Grade3" or patient_cp.parent_id.age < 50:
+                                            dosephase2 = 10
+                                            fxphase2 = 4
+                                        if patient_hpe.nodesp / patient_hpe.nodesr >= 0.5:
+                                            volumes = "B-SCF-AX1,2,3-IMC"
+                                        else:
+                                            volumes = "B-SCF-AX3"
+                                else:
+                                    if patient_hpe:
+                                        if patient_hpe.nodesp / patient_hpe.nodesr >= 0.5:
+                                            volumes = "CW-SCF-AX1,2,3-IMC"
+                                        else:
+                                            volumes = "CW-SCF-AX3"
+        except:
+            pass
 
         presimstatus = False
         utc = pytz.UTC
@@ -5144,6 +5149,8 @@ def custom_tnm(request, new_primary=False):
                 T, N, M, pT, pN, pM = get_tnm(site="Larynx-Subglottis")
             if primary_diagnosis == 3:
                 T, N, M, pT, pN, pM = get_tnm(site="Oral-Cavity")
+            if primary_diagnosis == 23:
+                T, N, M, pT, pN, pM = get_tnm(site="Renal Cell Ca")
 
             class DiagnosisForm(S2DiagnosisForm):
                 def __init__(self, *args, **kwargs):
@@ -5208,6 +5215,8 @@ def custom_tnm(request, new_primary=False):
                     T, N, M, pT, pN, pM = get_tnm(site="Larynx-Subglottis")
                 if primary_diagnosis == 3:
                     T, N, M, pT, pN, pM = get_tnm(site="Oral-Cavity")
+                if primary_diagnosis == 23:
+                    T, N, M, pT, pN, pM = get_tnm(site="Renal Cell Ca")
 
                 class DiagnosisForm(S2DiagnosisForm):
                     def __init__(self, *args, **kwargs):
@@ -5266,7 +5275,19 @@ def get_p_mets(request):
 
 
 @login_required
-def test(request):
-    T, N, M = get_tnm()
-    # print(M)
-    return HttpResponse("Test")
+def test(request, crnumber):
+    reg_details = S1ParentMain.objects.filter(crnumber=crnumber).select_related().first()
+    dxdetails = reg_details.s2diagnosis_set.all().select_related("diagnosis", "dx_type",
+                                                                   "icd_main_topo", "icd_topo_code",
+                                                                   "icd_path_code", "biopsy_grade",
+                                                                   "c_t", "c_n", "c_m", "p_t", "p_n", "p_m",
+                                                                   "p_stage_group", "c_stage_group",
+                                                                   "c_ajcc_edition").prefetch_related("mets_site")
+
+    # mx = []
+    # for dx in dxdetails:
+    #     mxdetails = dx.s3careplan_set.all().all().prefetch_related("studyprotocol")
+    #     mx.append(mxdetails)
+
+    context = {"reg": reg_details, 'diagnosis': dxdetails,}
+    return render(request, 'patient_data/synopsis.html', context)

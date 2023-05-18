@@ -1,7 +1,7 @@
 from patient_data.forms import S2DiagnosisForm
 from patient_data.models import S1ParentMain, S3CarePlan, PreSimulation, Simulation, S2Diagnosis, S8FUP, S4RT, \
     S5ChemoProtocol, S6Surgery, TNM, BreastGroupTNM, StageGroup, EsoGroupTNM, NSCLCGroupTNM, LarynxGroupTNM, \
-    OralGroupTNM
+    OralGroupTNM, RCCGroupTNM
 from django import forms
 from django.db import connection
 import re
@@ -352,6 +352,7 @@ def get_stagegroup(request, pathologic=False):
             type = "Clinical Prognostic"
             m_status = request.POST['m_new']
             T, N = '_t' + request.POST['t_new'], '_n' + request.POST['n_new']
+        print(T,N,m_status)
         if m_status == "0":
             # class DiagnosisForm(S2DiagnosisForm):
             #     def __init__(self, *args, **kwargs):
@@ -453,6 +454,38 @@ def get_stagegroup(request, pathologic=False):
                     stage = OralGroupTNM.objects.filter(staging_type="Pathological", t=T, n=N, m=M).first()
                 else:
                     stage = OralGroupTNM.objects.filter(staging_type="Anatomical", t=T, n=N, m=M).first()
+                message_er = None
+                message_pr = None
+                message_her = None
+                message_grade = None
+
+            elif dx == "23":
+                if "_t0" in T:
+                    T = "_t0"
+                elif "_t1" in T:
+                    T = "_t1"
+                elif "_t2" in T:
+                    T = "_t2"
+                elif "_t3" in T:
+                    T = "_t3"
+                elif "_t4" in T:
+                    T = "_t4"
+                else:
+                    T = None
+                if "_n1mi" in N or "_n0" in N:
+                    N = N
+                elif "_n1" in N:
+                    N = "_n1"
+                elif "_n2" in N:
+                    N = "_n2"
+                elif "_n3" in N:
+                    N = "_n3"
+                else:
+                    N = None
+                if pathologic:
+                    stage = RCCGroupTNM.objects.filter(staging_type="Pathological", t=T, n=N, m=M).first()
+                else:
+                    stage = RCCGroupTNM.objects.filter(staging_type="Anatomical", t=T, n=N, m=M).first()
                 message_er = None
                 message_pr = None
                 message_her = None

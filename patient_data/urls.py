@@ -215,7 +215,7 @@ urlpatterns = [
     path('presim-create/<str:crnumber>/', views.presim_create, name="presim-create"),
     path('create-presim/<str:crnumber>/', views.create_presim_new, name='add-presim'),
     path('create-simulation/<str:crnumber>/', views.create_simulation, name='add-simulation'),
-    path('test', views.test, name='test')
+    path('test/<str:crnumber>/', views.test, name='test')
 
     # TEST URL
 
