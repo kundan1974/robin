@@ -5,7 +5,7 @@ from django import forms
 from django.contrib import messages
 from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ObjectDoesNotExist
@@ -21,6 +21,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, CreateView, ListView, DeleteView, FormView
+from django.contrib.admin.views.decorators import staff_member_required
 
 from .forms import (S1PatientRegForm, PreSimulationForm, S2DiagnosisForm, S3CarePlanForm, SimulationForm, S4RTForm,
                     S7AssessmentForm, S6SurgeryForm, S6HPEForm, S5ChemoForm, S8FUPForm, PrimaryDVHForm, PFTDetailsForm,
@@ -314,6 +315,7 @@ def radonc_home(request, crnumber=None):
 
 
 @login_required
+@staff_member_required
 def s1registration(request, crnumber=123456):
     """
     Patient Registratation
@@ -341,7 +343,7 @@ def s1registration(request, crnumber=123456):
                                                                       'crnumber': crnumber})
 
 
-class S1RegUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+class S1RegUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = S1ParentMain
     form_class = modelform_factory(S1ParentMain, S1PatientRegForm)
     template_name = "patient_data/patient_registration.html"
@@ -361,6 +363,13 @@ class S1RegUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         patient = S1ParentMain.objects.get(pk=pk)
         # patient = PatientDiagnosis.objects.get(pk=pk)
         return reverse_lazy("db_operations", kwargs={"crnumber": patient.crnumber})
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
     # def get_queryset(self):
     #     return S1ParentMain.objects.filter(pk=self.kwargs['pk'])
@@ -394,7 +403,8 @@ class S1ListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
 
 
 # PRESIMULATION
-
+@login_required
+@staff_member_required
 def presimulation(request, crnumber=None, s3_id=None):
     if request.method == "POST":
         # Getting current user
@@ -437,7 +447,7 @@ class PreSimulationListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
         return PreSimulation.objects.filter(presimparent=self.kwargs['crnumber'])
 
 
-class PreSimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+class PreSimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = PreSimulation
     form_class = modelform_factory(PreSimulation, PreSimulationForm)
     template_name = "patient_data/radonc_presimulation.html"
@@ -468,13 +478,20 @@ class PreSimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateVie
         context['update'] = True
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
     def form_invalid(self, form):
         pk = self.kwargs["pk"]
         print(form.errors)
         return reverse_lazy("radonc-presimulation-update", kwargs={"pk": pk})
 
 
-class PreSimulationDeleteView(LoginRequiredMixin, DeleteView):
+class PreSimulationDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = PreSimulation
     template_name = "patient_data/radonc_presimulation_confirm_delete.html"
 
@@ -500,11 +517,25 @@ class PreSimulationDeleteView(LoginRequiredMixin, DeleteView):
         messages.success(self.request, f"Patient's ({crn}) presimulation detail got deleted")
         return render(request, 'patient_data/error.html')
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class NewPreSimulationListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class NewPreSimulationListView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = NewPreSimulation
     template_name = 'patient_data/radonc_newpresimulation_display.html'  # <app>/<model>_<view type>.html
     context_object_name = 'data'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
     def get_queryset(self):
         return NewPreSimulation.objects.filter(presimparent=self.kwargs['crnumber'])
@@ -512,7 +543,7 @@ class NewPreSimulationListView(SuccessMessageMixin, LoginRequiredMixin, ListView
 
 # DIAGNOSIS
 
-class DiagnosisCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class DiagnosisCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = S2Diagnosis
     form_class = modelform_factory(S2Diagnosis, S2DiagnosisForm)
     template_name = "patient_data/radonc_diagnosis.html"
@@ -626,6 +657,12 @@ class DiagnosisCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
     # def form_invalid(self, form):
     #     # print(form.data)
     #     print(form.errors)
@@ -658,7 +695,7 @@ class DiagnosisListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
         return context
 
 
-class DiagnosisUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+class DiagnosisUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = S2Diagnosis
     form_class = modelform_factory(S2Diagnosis, S2DiagnosisForm)
     template_name = "patient_data/radonc_diagnosis.html"
@@ -806,6 +843,12 @@ class DiagnosisUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         # context['primary_dx'] = primary_dx
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
     # def form_invalid(self, form):
     #     print(form.data)
     #     print(form.errors)
@@ -813,7 +856,7 @@ class DiagnosisUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
 
 
 # CAREPLAN
-class CareplanCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class CareplanCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = S3CarePlan
     form_class = modelform_factory(S3CarePlan, S3CarePlanForm)
     template_name = "patient_data/radonc_careplan.html"
@@ -856,6 +899,12 @@ class CareplanCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
     # def form_invalid(self, form):
     #     # print(form.data)
     #     print(form.errors)
@@ -960,7 +1009,7 @@ class CareplanListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
         return S3CarePlan.objects.select_related().filter(parent_id=self.kwargs['crnumber'])
 
 
-class CarePlanUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+class CarePlanUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = S3CarePlan
     form_class = modelform_factory(S3CarePlan, S3CarePlanForm)
     template_name = "patient_data/radonc_careplan.html"
@@ -1034,8 +1083,17 @@ class CarePlanUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
 
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
 
 # SIMULATION VIEWS
+@login_required
+@staff_member_required
 def simulation(request, crnumber=None, s3_id=None, presimid=None):
     if request.method == "POST":
         # Getting emails of all the users
@@ -1242,6 +1300,8 @@ def simulation(request, crnumber=None, s3_id=None, presimid=None):
                        'error_status': error_status})
 
 
+@login_required
+@staff_member_required
 def simulation2(request, crnumber=None, s3_id=None, presimid=None):
     if request.method == "POST":
         # Getting emails of all the users
@@ -1472,7 +1532,7 @@ class SimulationListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
         return context
 
 
-class SimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+class SimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Simulation
     form_class = modelform_factory(Simulation, SimulationForm)
     template_name = "patient_data/radonc_simulation.html"
@@ -1553,6 +1613,13 @@ class SimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         context['presimstatus'] = presimstatus
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
     def form_invalid(self, form):
         # print(form.data)
         print(f'This is the ERROR{form.errors}')
@@ -1560,7 +1627,7 @@ class SimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         return form.errors
 
 
-class SimulationDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
+class SimulationDeleteView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Simulation
     template_name = "patient_data/radonc_simulation_confirm_delete.html"
 
@@ -1589,8 +1656,17 @@ class SimulationDeleteView(SuccessMessageMixin, LoginRequiredMixin, DeleteView):
         return redirect("new-simulation", crn, s3_id)
         # return render(request, 'patient_data/error.html')
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
 
 # NEW SIMULATION VIEWS
+@login_required
+@staff_member_required
 def new_simulation(request, crnumber, s3_id):
     cp = S3CarePlan.objects.get(pk=s3_id)
     sx = cp.s6surgery_set.all()
@@ -1724,7 +1800,7 @@ def new_simulation(request, crnumber, s3_id):
                                                                 'sim_no_careplan': sim_no_careplan})
 
 
-class RadiotherapyCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class RadiotherapyCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = S4RT
     form_class = modelform_factory(S4RT, S4RTForm)
     template_name = "patient_data/radonc_radiotherapy.html"
@@ -1819,6 +1895,13 @@ class RadiotherapyCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView
             context['form'].initial['modality4'] = "Photons"
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
     def form_invalid(self, form):
         # print(form.data)
         print(form.errors)
@@ -1848,7 +1931,7 @@ class RadiotherapyListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
         return S4RT.objects.filter(parent_id=self.kwargs['crnumber'])
 
 
-class RadiotherapyUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+class RadiotherapyUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = S4RT
     form_class = modelform_factory(S4RT, S4RTForm)
     template_name = "patient_data/radonc_radiotherapy.html"
@@ -1887,6 +1970,13 @@ class RadiotherapyUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView
         else:
             return reverse_lazy("radonc-database-home", kwargs={"crnumber": crn})
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
     def get_context_data(self, **kwargs):
         context = super(RadiotherapyUpdateView, self).get_context_data(**kwargs)
         pk = self.kwargs["pk"]
@@ -1922,7 +2012,7 @@ class RadiotherapyUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView
 
 
 # DVH Details
-class PrimaryDVHCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class PrimaryDVHCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = PrimaryDVH
     form_class = modelform_factory(PrimaryDVH, PrimaryDVHForm)
     template_name = "patient_data/primarydvh.html"
@@ -1956,6 +2046,13 @@ class PrimaryDVHCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
     def form_invalid(self, form):
         # print(form.data)
         print(form.errors)
@@ -1963,7 +2060,7 @@ class PrimaryDVHCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
 
 # SURGERY
-class SurgeryCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class SurgeryCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = S6Surgery
     form_class = modelform_factory(S6Surgery, S6SurgeryForm)
     template_name = "patient_data/radonc_surgery.html"
@@ -2005,6 +2102,13 @@ class SurgeryCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
     def form_invalid(self, form):
         # print(form.data)
         print(form.errors)
@@ -2045,7 +2149,7 @@ class SurgeryListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
         return S6Surgery.objects.filter(parent_id=self.kwargs['crnumber'])
 
 
-class SurgeryUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+class SurgeryUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = S6Surgery
     form_class = modelform_factory(S6Surgery, S6SurgeryForm)
     template_name = "patient_data/radonc_surgery.html"
@@ -2082,10 +2186,16 @@ class SurgeryUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         context['patient'] = patient
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
 
 # HPE Details
-
-class HPECreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class HPECreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = S6HPE
     form_class = modelform_factory(S6HPE, S6HPEForm)
     template_name = "patient_data/radonc_hpe.html"
@@ -2134,6 +2244,13 @@ class HPECreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
 
 class HPEListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
     model = S6HPE
@@ -2144,7 +2261,7 @@ class HPEListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
         return S6HPE.objects.filter(parent_id=self.kwargs['crnumber'])
 
 
-class HPEUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+class HPEUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = S6HPE
     form_class = modelform_factory(S6HPE, S6HPEForm)
     template_name = "patient_data/radonc_hpe.html"
@@ -2181,10 +2298,17 @@ class HPEUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         context['patient'] = patient
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
 
 # CHEMOTHERAPY
 
-class ChemotherapyCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class ChemotherapyCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = S5Chemo
     form_class = modelform_factory(S5Chemo, S5ChemoForm)
     template_name = "patient_data/radonc_chemotherapy.html"
@@ -2237,6 +2361,13 @@ class ChemotherapyCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
 
 class ChemotherapyListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
     model = S5Chemo
@@ -2247,7 +2378,7 @@ class ChemotherapyListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
         return S5Chemo.objects.filter(parent_id=self.kwargs['crnumber'])
 
 
-class ChemotherapyUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+class ChemotherapyUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = S5Chemo
     form_class = modelform_factory(S5Chemo, S5ChemoForm)
     template_name = "patient_data/radonc_chemotherapy.html"
@@ -2284,9 +2415,23 @@ class ChemotherapyUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView
         context['patient'] = patient
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class ChemotherapyDeleteView(LoginRequiredMixin, DeleteView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class ChemotherapyDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = S5Chemo
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -2295,7 +2440,7 @@ class ChemotherapyDeleteView(LoginRequiredMixin, DeleteView):
 
 
 # NEW CHEMOTHERAPY VIEWS
-class ChemoProtocolCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class ChemoProtocolCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = S5ChemoProtocol
     form_class = modelform_factory(S5ChemoProtocol, S5ChemoProtocolForm)
     template_name = "patient_data/chemo_protocol_module.html"
@@ -2347,8 +2492,15 @@ class ChemoProtocolCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateVie
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class ChemoProtocolUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class ChemoProtocolUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = S5ChemoProtocol
     form_class = modelform_factory(S5ChemoProtocol, S5ChemoProtocolForm)
     template_name = "patient_data/chemo_protocol_module.html"
@@ -2381,9 +2533,23 @@ class ChemoProtocolUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateVie
         context['patient'] = patient
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class ChemoProtocolDeleteView(LoginRequiredMixin, DeleteView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class ChemoProtocolDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = S5ChemoProtocol
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -2393,7 +2559,7 @@ class ChemoProtocolDeleteView(LoginRequiredMixin, DeleteView):
 
 
 # ASSESSMENT Details
-class AssCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class AssCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = S7Assessment
     form_class = modelform_factory(S7Assessment, S7AssessmentForm)
     template_name = "patient_data/radonc_assessment.html"
@@ -2451,6 +2617,13 @@ class AssCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         messages.warning(self.request, error)
         return redirect('radonc-ass', s4_id)
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
 
 class AssListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
     model = S7Assessment
@@ -2461,7 +2634,7 @@ class AssListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
         return S7Assessment.objects.filter(s4_id=self.kwargs['s4_id'])
 
 
-class AssUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+class AssUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = S7Assessment
     form_class = modelform_factory(S7Assessment, S7AssessmentForm)
     template_name = "patient_data/radonc_assessment.html"
@@ -2505,9 +2678,16 @@ class AssUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         context['s7_id'] = pk
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
 
 # RT ASSESSMENT PRESCRIPTION VIEWS
-class RTPrescriptionCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class RTPrescriptionCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Prescription
     form_class = modelform_factory(Prescription, PrescriptionForm)
     template_name = "patient_data/prescription.html"
@@ -2560,8 +2740,15 @@ class RTPrescriptionCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateVi
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class RTPrescriptionUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class RTPrescriptionUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Prescription
     form_class = modelform_factory(Prescription, PrescriptionForm)
     template_name = "patient_data/prescription.html"
@@ -2598,9 +2785,23 @@ class RTPrescriptionUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateVi
         context['s7_id'] = patient.s7_id.s7_id
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class RTPrescriptionDeleteView(LoginRequiredMixin, DeleteView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class RTPrescriptionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Prescription
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -2610,7 +2811,7 @@ class RTPrescriptionDeleteView(LoginRequiredMixin, DeleteView):
 
 # RT ASSESSMENT IMAGING VIEWS
 
-class RTInvImgCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class RTInvImgCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = InvestigationsImaging
     form_class = modelform_factory(InvestigationsImaging, InvestigationsImagingForm)
     template_name = "patient_data/invimgdetails.html"
@@ -2663,8 +2864,15 @@ class RTInvImgCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class RTInvImgUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class RTInvImgUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = InvestigationsImaging
     form_class = modelform_factory(InvestigationsImaging, InvestigationsImagingForm)
     template_name = "patient_data/invimgdetails.html"
@@ -2697,8 +2905,15 @@ class RTInvImgUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         context['s7_id'] = patient.s7_id.s7_id
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class RTInvImgDeleteView(LoginRequiredMixin, DeleteView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class RTInvImgDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = InvestigationsImaging
 
     def get_success_url(self):
@@ -2706,9 +2921,16 @@ class RTInvImgDeleteView(LoginRequiredMixin, DeleteView):
         patient = InvestigationsImaging.objects.get(pk=pk)
         return reverse_lazy("radonc-ass-update", kwargs={"pk": patient.s7_id.s7_id})
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
 
 # RT INVESTIGATION PATHLAB DETAILS
-class RTInvPathlabCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class RTInvPathlabCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = InvestigationsPath
     form_class = modelform_factory(InvestigationsPath, InvestigationsPathForm)
     template_name = "patient_data/invpathdetails.html"
@@ -2760,8 +2982,15 @@ class RTInvPathlabCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class RTInvPathlabUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class RTInvPathlabUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = InvestigationsPath
     form_class = modelform_factory(InvestigationsPath, InvestigationsPathForm)
     template_name = "patient_data/invpathdetails.html"
@@ -2796,9 +3025,23 @@ class RTInvPathlabUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView
         context['s7_id'] = patient.s7_id.s7_id
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class RTInvPathlabDeleteView(LoginRequiredMixin, DeleteView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class RTInvPathlabDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = InvestigationsPath
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -2807,7 +3050,7 @@ class RTInvPathlabDeleteView(LoginRequiredMixin, DeleteView):
 
 
 # RT INVESTIGATION BASIC LAB DETAILS
-class RTInvLabsCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class RTInvLabsCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = InvestigationsLabs
     form_class = modelform_factory(InvestigationsLabs, InvestigationsLabsForm)
     template_name = "patient_data/invlabdetails.html"
@@ -2859,8 +3102,15 @@ class RTInvLabsCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class RTInvLabsUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class RTInvLabsUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = InvestigationsLabs
     form_class = modelform_factory(InvestigationsLabs, InvestigationsLabsForm)
     template_name = "patient_data/invlabdetails.html"
@@ -2892,9 +3142,23 @@ class RTInvLabsUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         context['s7_id'] = patient.s7_id.s7_id
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class RTInvLabsDeleteView(LoginRequiredMixin, DeleteView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class RTInvLabsDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = InvestigationsLabs
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -2904,7 +3168,7 @@ class RTInvLabsDeleteView(LoginRequiredMixin, DeleteView):
 
 # ACUTE TOXICITY VIEW
 
-class AcuteToxicityCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class AcuteToxicityCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = AcuteToxicity
     form_class = modelform_factory(AcuteToxicity, AcuteToxicityForm)
     template_name = 'patient_data/acute_toxicity.html'
@@ -2963,8 +3227,15 @@ class AcuteToxicityCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateVie
         # print(self.request.POST)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class AcuteToxicityUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class AcuteToxicityUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = AcuteToxicity
     form_class = modelform_factory(AcuteToxicity, AcuteToxicityForm)
     template_name = 'patient_data/acute_toxicity.html'
@@ -3005,9 +3276,23 @@ class AcuteToxicityUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateVie
         # context['form'].initial['tox_system'] = patient.tox_system
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class AcuteToxicityDeleteView(LoginRequiredMixin, DeleteView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class AcuteToxicityDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = AcuteToxicity
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -3024,7 +3309,7 @@ class AcuteToxicityDeleteView(LoginRequiredMixin, DeleteView):
 
 # FOLLOW-UP Details
 
-class FUPCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class FUPCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = S8FUP
     form_class = modelform_factory(S8FUP, S8FUPForm)
     template_name = "patient_data/radonc_followup.html"
@@ -3124,17 +3409,38 @@ class FUPCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class FUPListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class FUPListView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = S8FUP
     template_name = 'patient_data/radonc_s8_display.html'  # <app>/<model>_<view type>.html
     context_object_name = 'data'
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
     def get_queryset(self):
         return S8FUP.objects.filter(parent_id=self.kwargs['crnumber'])
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class FUPUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class FUPUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = S8FUP
     form_class = modelform_factory(S8FUP, S8FUPForm)
     template_name = "patient_data/radonc_followup.html"
@@ -3208,9 +3514,16 @@ class FUPUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
             context['form'].fields['DMstatus'].disabled = True
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
 
 # INVESTIGATION IMAGING DETAILS
-class InvImgCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class InvImgCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = InvestigationsImaging
     form_class = modelform_factory(InvestigationsImaging, InvestigationsImagingForm)
     template_name = "patient_data/invimgdetails.html"
@@ -3266,8 +3579,15 @@ class InvImgCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class InvImgUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class InvImgUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = InvestigationsImaging
     form_class = modelform_factory(InvestigationsImaging, InvestigationsImagingForm)
     template_name = "patient_data/invimgdetails.html"
@@ -3304,9 +3624,23 @@ class InvImgUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         context['patient'] = patient
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class InvImgDeleteView(LoginRequiredMixin, DeleteView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class InvImgDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = InvestigationsImaging
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -3315,7 +3649,7 @@ class InvImgDeleteView(LoginRequiredMixin, DeleteView):
 
 
 # PRESCRIPTION DETAILS
-class PrescriptionCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class PrescriptionCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Prescription
     form_class = modelform_factory(Prescription, PrescriptionForm)
     template_name = "patient_data/prescription.html"
@@ -3371,8 +3705,15 @@ class PrescriptionCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class PrescriptionUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class PrescriptionUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Prescription
     form_class = modelform_factory(Prescription, PrescriptionForm)
     template_name = "patient_data/prescription.html"
@@ -3411,9 +3752,23 @@ class PrescriptionUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView
         context['s8_id'] = patient.s8_id.s8_id
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class PrescriptionDeleteView(LoginRequiredMixin, DeleteView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class PrescriptionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Prescription
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -3422,7 +3777,7 @@ class PrescriptionDeleteView(LoginRequiredMixin, DeleteView):
 
 
 # INVESTIGATION PATHLAB DETAILS
-class InvPathlabCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class InvPathlabCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = InvestigationsPath
     form_class = modelform_factory(InvestigationsPath, InvestigationsPathForm)
     template_name = "patient_data/invpathdetails.html"
@@ -3486,8 +3841,15 @@ class InvPathlabCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class InvPathlabUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class InvPathlabUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = InvestigationsPath
     form_class = modelform_factory(InvestigationsPath, InvestigationsPathForm)
     template_name = "patient_data/invpathdetails.html"
@@ -3541,9 +3903,23 @@ class InvPathlabUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         context['s8_id'] = patient.s8_id.s8_id
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class InvPathlabDeleteView(LoginRequiredMixin, DeleteView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class InvPathlabDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = InvestigationsPath
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -3552,7 +3928,7 @@ class InvPathlabDeleteView(LoginRequiredMixin, DeleteView):
 
 
 # INVESTIGATION MOL PATHLAB DETAILS
-class InvMolPathlabCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class InvMolPathlabCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = InvestigationsMolecular
     form_class = modelform_factory(InvestigationsMolecular, InvestigationsMolecularForm)
     template_name = "patient_data/invmolpathdetails.html"
@@ -3611,8 +3987,15 @@ class InvMolPathlabCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateVie
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class InvMolPathlabUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class InvMolPathlabUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = InvestigationsMolecular
     form_class = modelform_factory(InvestigationsMolecular, InvestigationsMolecularForm)
     template_name = "patient_data/invmolpathdetails.html"
@@ -3653,9 +4036,23 @@ class InvMolPathlabUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateVie
             context['s7_id'] = patient.s8_path_id.s7_id.s7_id
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class InvMolPathlabDeleteView(LoginRequiredMixin, DeleteView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class InvMolPathlabDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = InvestigationsMolecular
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -3667,7 +4064,7 @@ class InvMolPathlabDeleteView(LoginRequiredMixin, DeleteView):
 
 
 # INVESTIGATION BASIC LAB DETAILS
-class InvLabsCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class InvLabsCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = InvestigationsLabs
     form_class = modelform_factory(InvestigationsLabs, InvestigationsLabsForm)
     template_name = "patient_data/invlabdetails.html"
@@ -3718,8 +4115,15 @@ class InvLabsCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class InvLabsUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class InvLabsUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = InvestigationsLabs
     form_class = modelform_factory(InvestigationsLabs, InvestigationsLabsForm)
     template_name = "patient_data/invlabdetails.html"
@@ -3751,9 +4155,23 @@ class InvLabsUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         context['s8_id'] = patient.s8_id.s8_id
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class InvLabsDeleteView(LoginRequiredMixin, DeleteView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class InvLabsDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = InvestigationsLabs
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -3762,7 +4180,7 @@ class InvLabsDeleteView(LoginRequiredMixin, DeleteView):
 
 
 # LATE TOXICITY DETAILS
-class LateToxCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class LateToxCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = LateToxicity
     form_class = modelform_factory(LateToxicity, LateToxicityForm)
     template_name = "patient_data/latetoxdetails.html"
@@ -3811,8 +4229,15 @@ class LateToxCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class LateToxUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class LateToxUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = LateToxicity
     form_class = modelform_factory(LateToxicity, LateToxicityForm)
     template_name = "patient_data/latetoxdetails.html"
@@ -3844,9 +4269,23 @@ class LateToxUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
         context['s8_id'] = patient.s8_id.s8_id
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class LateToxDeleteView(LoginRequiredMixin, DeleteView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class LateToxDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = LateToxicity
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -3855,7 +4294,7 @@ class LateToxDeleteView(LoginRequiredMixin, DeleteView):
 
 
 # PFT Details
-class PFTDetailsCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class PFTDetailsCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = PFTDetails
     form_class = modelform_factory(PFTDetails, PFTDetailsForm)
     template_name = "patient_data/pftdetails.html"
@@ -3902,6 +4341,13 @@ class PFTDetailsCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
 
 class PFTDetailsListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
     model = PFTDetails
@@ -3912,7 +4358,7 @@ class PFTDetailsListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
         return PFTDetails.objects.filter(parent_id=self.kwargs['crnumber'])
 
 
-class PFTDetailsUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+class PFTDetailsUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = PFTDetails
     form_class = modelform_factory(PFTDetails, PFTDetailsForm)
     template_name = "patient_data/pftdetails.html"
@@ -3950,9 +4396,23 @@ class PFTDetailsUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
 
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
 
-class PFTDetailsDeleteView(LoginRequiredMixin, DeleteView):
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
+
+class PFTDetailsDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = PFTDetails
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
     def get_success_url(self):
         pk = self.kwargs["pk"]
@@ -3962,7 +4422,7 @@ class PFTDetailsDeleteView(LoginRequiredMixin, DeleteView):
 
 # Cardiac Markers
 
-class CardiacMarkersCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+class CardiacMarkersCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = CardiacMarkers
     form_class = modelform_factory(CardiacMarkers, CardiacMarkersForm)
     template_name = "patient_data/cardiacmarkers.html"
@@ -4009,6 +4469,13 @@ class CardiacMarkersCreateView(SuccessMessageMixin, LoginRequiredMixin, CreateVi
         print(form.errors)
         return form.errors
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
+
 
 class CardiacMarkersListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
     model = CardiacMarkers
@@ -4019,7 +4486,7 @@ class CardiacMarkersListView(SuccessMessageMixin, LoginRequiredMixin, ListView):
         return CardiacMarkers.objects.filter(parent_id=self.kwargs['crnumber'])
 
 
-class CardiacMarkersUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+class CardiacMarkersUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = CardiacMarkers
     form_class = modelform_factory(CardiacMarkers, CardiacMarkersForm)
     template_name = "patient_data/cardiacmarkers.html"
@@ -4057,6 +4524,12 @@ class CardiacMarkersUpdateView(SuccessMessageMixin, LoginRequiredMixin, UpdateVi
 
         return context
 
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def handle_no_permission(self):
+        """ Do whatever you want here if the user doesn't pass the test """
+        return HttpResponse('You do not have permission for this operation')
 
 class CardiacMarkersDeleteView(LoginRequiredMixin, DeleteView):
     model = CardiacMarkers
@@ -4068,11 +4541,13 @@ class CardiacMarkersDeleteView(LoginRequiredMixin, DeleteView):
 
 
 @login_required
+@staff_member_required
 def simflow(request):
     return render(request, 'patient_data/simulation_flow.html')
 
 
 @login_required
+@staff_member_required()
 def simflowzoom(request):
     return render(request, 'patient_data/simulation_flow_zoom.html')
 
@@ -4093,6 +4568,7 @@ def overview(request):
 
 
 @login_required
+@staff_member_required
 def summary(request, crnumber):
     name = ""
     fixed_text = ""
@@ -4333,6 +4809,7 @@ def dbstats(request):
 
 
 @login_required
+@staff_member_required()
 def download_file(request):
     # get the file path
     file_path = 'download.csv'
@@ -4346,7 +4823,8 @@ def download_file(request):
 
     return response
 
-
+@login_required
+@staff_member_required
 def get_second_field_options(request):
     first_field_value = request.POST.get('main_site', '')
     if first_field_value:
@@ -4365,6 +4843,7 @@ def get_second_field_options(request):
 
 
 @login_required
+@staff_member_required
 def filter_rt_started(request):
     all_options = ICDMainSites.objects.all().values_list()
     options1 = [(instance[2], instance[1]) for instance in all_options]
@@ -4442,6 +4921,7 @@ def filter_rt_started(request):
 
 
 @login_required
+@staff_member_required
 def checkdata(request):
     return render(request, 'patient_data/check_data.html')
 
@@ -4449,6 +4929,7 @@ def checkdata(request):
 # FUNCTIONS FOR HTMX
 
 @login_required
+@staff_member_required
 def showdvh(request, s4_id):
     rt = S4RT.objects.get(pk=s4_id)
     if request.method == "POST":
@@ -4473,6 +4954,7 @@ def showdvh(request, s4_id):
 
 
 @login_required
+@staff_member_required
 def deletedvh(request, pk):
     dvh = PrimaryDVH.objects.get(pk=pk)
     rtid = dvh.s4_id.s4_id
@@ -4487,6 +4969,7 @@ def deletedvh(request, pk):
 
 
 @login_required
+@staff_member_required
 def updatedvh(request, pk):
     if request.method == "POST":
         # fetch the object related to passed id
@@ -4522,6 +5005,7 @@ def updatedvh(request, pk):
 
 
 @login_required
+@staff_member_required
 def showprescription(request, s8_id):
     fu = S8FUP.objects.get(pk=s8_id)
     if request.method == "POST":
@@ -4578,6 +5062,7 @@ def rtshowprescription(request, s7_id):
 
 
 @login_required
+@staff_member_required
 def updateprescription(request, pk):
     if request.method == "POST":
         # fetch the object related to passed id
@@ -4616,7 +5101,8 @@ def updateprescription(request, pk):
 
     return render(request, 'patient_data/partials/partial_updateprescription.html', context)
 
-
+@login_required
+@staff_member_required
 def rtupdateprescription(request, pk):
     if request.method == "POST":
         # fetch the object related to passed id
@@ -4660,6 +5146,7 @@ def rtupdateprescription(request, pk):
 
 
 @login_required
+@staff_member_required
 def deleteprescription(request, pk):
     prescription = Prescription.objects.get(pk=pk)
     s8_id = prescription.s8_id.s8_id
@@ -4675,6 +5162,7 @@ def deleteprescription(request, pk):
 
 
 @login_required
+@staff_member_required
 def rtdeleteprescription(request, pk):
     prescription = Prescription.objects.get(pk=pk)
     s7_id = prescription.s7_id.s7_id
@@ -4691,6 +5179,7 @@ def rtdeleteprescription(request, pk):
 
 # NEW CHEMOTHERAPY FORMSET BASED VIEW
 @login_required
+@staff_member_required()
 def create_chemodrug(request, crnumber, pk):
     protocol = S5ChemoProtocol.objects.get(pk=pk)
     patient = S1ParentMain.objects.get(crnumber=crnumber)
@@ -4720,6 +5209,7 @@ def create_chemodrug(request, crnumber, pk):
 
 
 @login_required
+@staff_member_required
 def create_chemodrug_form(request, crnumber, s5_protocol_id):
     patient = S1ParentMain.objects.get(crnumber=crnumber)
     last_patient_chemo = S5ChemoDrugs.objects.filter(parent_id=crnumber).last()
@@ -4741,6 +5231,7 @@ def create_chemodrug_form(request, crnumber, s5_protocol_id):
 
 
 @login_required
+@staff_member_required
 def drug_detail(request, pk):
     drug = S5ChemoDrugs.objects.get(pk=pk)
     context = {
@@ -4751,6 +5242,7 @@ def drug_detail(request, pk):
 
 
 @login_required
+@staff_member_required
 def update_chemodrug(request, pk):
     drug = S5ChemoDrugs.objects.get(pk=pk)
     form = S5ChemoDrugsForm(request.POST or None, instance=drug)
@@ -4772,6 +5264,7 @@ def update_chemodrug(request, pk):
 
 
 @login_required
+@staff_member_required
 def drug_delete(request, pk):
     drug = S5ChemoDrugs.objects.get(pk=pk)
     drug.delete()
@@ -4780,6 +5273,7 @@ def drug_delete(request, pk):
 
 
 @login_required
+@staff_member_required
 def acute_tox_second_field_options(request):
     first_field_value = request.POST.get('tox_system', '')
     if first_field_value:
@@ -4796,6 +5290,7 @@ def acute_tox_second_field_options(request):
 
 
 @login_required
+@staff_member_required
 def display_tox(request):
     first_field_value = request.POST.get('tox_term', '')
     tox = CTCV5.objects.get(pk=first_field_value)
@@ -4806,6 +5301,7 @@ def display_tox(request):
 
 
 @login_required
+@staff_member_required
 def get_presim(request, crnumber, s3_id):
     field_dibh = request.POST.get('dibh', '')
     if field_dibh == '0':
@@ -4826,6 +5322,7 @@ def get_presim(request, crnumber, s3_id):
 
 
 @login_required
+@staff_member_required
 def get_final_status(request):
     training_day = request.POST.get('day', '')
     form = NewPreSimulationForm()
@@ -4846,6 +5343,7 @@ def get_final_status(request):
 
 
 @login_required
+@staff_member_required
 def create_presim(request):
     if request.method == "POST":
         current_user = User.objects.get(id=request.user.id)
@@ -4879,6 +5377,7 @@ def create_presim(request):
 
 # Duplicating creating new presimulation as above function (create_presim) for direct access from mobiles
 @login_required
+@staff_member_required
 def presim_create(request, crnumber):
     if request.method == "POST":
         pass
@@ -4890,6 +5389,7 @@ def presim_create(request, crnumber):
 
 
 @login_required
+@staff_member_required
 def create_presim_new(request, crnumber):
     """
     Creating presimulation without dignosis or careplan.
@@ -4917,6 +5417,7 @@ def create_presim_new(request, crnumber):
 
 
 @login_required
+@staff_member_required
 def create_simulation(request, crnumber):
     """
     Creating simulation without dignosis or careplan.
@@ -4949,6 +5450,7 @@ def create_simulation(request, crnumber):
 
 
 @login_required
+@staff_member_required
 def link_presim_with_careplan(request, presimid, s3_id):
     """
     Pre-Simulation link with careplan.
@@ -4961,6 +5463,7 @@ def link_presim_with_careplan(request, presimid, s3_id):
 
 
 @login_required
+@staff_member_required
 def link_simulation_with_careplan(request, simid, s3_id):
     """
     Simulation link with careplan.
@@ -4975,6 +5478,7 @@ def link_simulation_with_careplan(request, simid, s3_id):
 
 
 @login_required
+@staff_member_required
 def get_presim_buttons(request):
     finalstatus = request.POST.get('final_status', '')
     if finalstatus == '0':
@@ -4984,6 +5488,7 @@ def get_presim_buttons(request):
 
 
 @login_required
+@staff_member_required
 def edit_presim(request, pk):
     presim = NewPreSimulation.objects.get(pk=pk)
     all_presim = NewPreSimulation.objects.filter(s3_id=presim.s3_id.s3_id).all()
@@ -5005,6 +5510,7 @@ def edit_presim(request, pk):
 
 
 @login_required
+@staff_member_required
 def delete_presim(request, pk):
     presim = NewPreSimulation.objects.get(pk=pk)
     all_presim = NewPreSimulation.objects.filter(s3_id=presim.s3_id.s3_id).all
@@ -5022,6 +5528,7 @@ def delete_presim(request, pk):
 
 
 @login_required
+@staff_member_required
 def patient_search(request):
     res = S1ParentMain.objects.all()
     page = request.GET.get('page')
@@ -5278,16 +5785,16 @@ def get_p_mets(request):
 def test(request, crnumber):
     reg_details = S1ParentMain.objects.filter(crnumber=crnumber).select_related().first()
     dxdetails = reg_details.s2diagnosis_set.all().select_related("diagnosis", "dx_type",
-                                                                   "icd_main_topo", "icd_topo_code",
-                                                                   "icd_path_code", "biopsy_grade",
-                                                                   "c_t", "c_n", "c_m", "p_t", "p_n", "p_m",
-                                                                   "p_stage_group", "c_stage_group",
-                                                                   "c_ajcc_edition").prefetch_related("mets_site")
+                                                                 "icd_main_topo", "icd_topo_code",
+                                                                 "icd_path_code", "biopsy_grade",
+                                                                 "c_t", "c_n", "c_m", "p_t", "p_n", "p_m",
+                                                                 "p_stage_group", "c_stage_group",
+                                                                 "c_ajcc_edition").prefetch_related("mets_site")
 
     # mx = []
     # for dx in dxdetails:
     #     mxdetails = dx.s3careplan_set.all().all().prefetch_related("studyprotocol")
     #     mx.append(mxdetails)
 
-    context = {"reg": reg_details, 'diagnosis': dxdetails,}
+    context = {"reg": reg_details, 'diagnosis': dxdetails, }
     return render(request, 'patient_data/synopsis.html', context)

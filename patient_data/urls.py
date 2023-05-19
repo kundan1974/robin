@@ -58,7 +58,6 @@ urlpatterns = [
     path('radonc-careplan/<str:crnumber>/<int:s2_id>', CareplanCreateView.as_view(), name="radonc-careplan"),
     path('radonc-careplan/<str:crnumber>/list/', CareplanListView.as_view(), name="radonc-careplan-list"),
     path('radonc-careplan/<int:pk>/update/', CarePlanUpdateView.as_view(), name="radonc-careplan-update"),
-    # path('radonc-simulation/', views.simulation, name="radonc-simulation"),
 
     # SIMULATION
     path('radonc-simulation/<str:crnumber>/<int:s3_id>/', views.simulation, name="radonc-simulation"),
