@@ -1,5 +1,6 @@
 from importlib.resources import path
 import dash_bootstrap_components.themes
+import numpy
 from dash import dcc, html
 from django_plotly_dash import DjangoDash
 from pkg_resources import to_filename
@@ -99,16 +100,28 @@ def get_df():
     # TODO create options for second phase
     # Creating a new dataframe by adding each row for other phases of rt plans
     data_list = []
-    users = {
-        1: "Dr Kundan S Chufal",
-        4: "Dr Irfan Ahmad",
-        5: "Arti Shukla",
-        6: "Dr Rahul",
-        7: "Dr Ismail",
-        10: "Preetha"
-    }
+    users1 = User.objects.all().values()
+    users = {}
+    for u in users1:
+        users[u.get('id')] = u.get('username')
+    # users = {
+    #     1: "Dr Kundan S Chufal",
+    #     4: "Dr Irfan Ahmad",
+    #     5: "Arti Shukla",
+    #     6: "Dr Rahul",
+    #     7: "Dr Ismail",
+    #     10: "Preetha"
+    # }
     for row in records_df1.itertuples(index=False):
         assignedto = users.get(row.assignedto_id)
+        if not assignedto:
+            assignedto = "Not Assigned"
+        if pd.isna(row.totalfractions):
+            PlannedFractions = "Data Not avialable"
+        else:
+            PlannedFractions = row.totalfractions
+
+
         if pd.isna(row.donefr):
             remaining_fr_total = row.totalfractions
             remaining_fr_ph1 = row.fxphase1
@@ -163,7 +176,7 @@ def get_df():
                      "Phase3 Dose": row.dosephase3,
                      "Phase3 Fractions": row.fxphase3,
                      "Total Dose": row.totaldose,
-                     "Planned Fractions": row.totalfractions,
+                     "Planned Fractions": PlannedFractions,
                      "Done Fractions": row.donefr,
                      "Assessment Date": row.as_date,
                      "Total Fractions Remaining": remaining_fr_total,
