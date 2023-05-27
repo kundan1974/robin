@@ -1,6 +1,5 @@
 from importlib.resources import path
 import dash_bootstrap_components.themes
-import numpy
 from dash import dcc, html
 from django_plotly_dash import DjangoDash
 from pkg_resources import to_filename
@@ -120,8 +119,6 @@ def get_df():
             PlannedFractions = "Data Not avialable"
         else:
             PlannedFractions = row.totalfractions
-
-
         if pd.isna(row.donefr):
             remaining_fr_total = row.totalfractions
             remaining_fr_ph1 = row.fxphase1

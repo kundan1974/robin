@@ -638,7 +638,10 @@ class DiagnosisCreateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTes
             # context['form'].initial['laterality'] = primary_dx.laterality
             context['form'].initial['diagnosis'] = primary_dx.diagnosis
             context['form'].initial['c_ajcc_edition'] = primary_dx.c_ajcc_edition
-            T, N, M, pT, pN, pM = get_tnm(site=primary_dx.diagnosis.our_diagnosis)
+            try:
+                T, N, M, pT, pN, pM = get_tnm(site=primary_dx.diagnosis.our_diagnosis)
+            except:
+                pass
         context['primary_dx'] = primary_dx
         patient = S1ParentMain.objects.get(crnumber=crnumber)
         context['patient'] = patient
