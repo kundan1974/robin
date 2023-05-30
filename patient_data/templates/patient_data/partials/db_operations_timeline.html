@@ -176,7 +176,10 @@
                                                 {% for rt in mx.8 %}
                                                     {{ rt.simid.donefr }} / {{ rt.simid.totalfractions }} Fx Done<br>
                                                     {% if rt.simid.initialstatus.code|first in "Started" %}
-                                                        <a class="btn btn-sm btn-warning mt-2 mb-2" href="{% url 'radonc-ass-list' rt.pk %}">Enter Assessment</a>
+                                                        {% if rt.s7assessment_set.all.count > 0 %}
+                                                            <a class="btn btn-sm btn-warning mt-2 mb-2" href="{% url 'radonc-ass-list' rt.pk %}">Previous Assessments</a>
+                                                        {% endif %}
+                                                        <a class="btn btn-sm btn-warning mt-2 mb-2" href="{% url 'radonc-ass' rt.pk %}">Enter Assessment</a>
                                                     {% endif %}
                                                     <br><span class="small green text-dark mt-2 mb-2">
                                                     {{ rt.rtdose1 }}Gy/{{ rt.rtdosefr1|floatformat }} fx by {{ rt.tech1 }} technique
@@ -216,8 +219,11 @@
                                                         RT Ongoing
                                                     {% endif %}
                                                     </span><br>
-                                                    {% if rt.simid.initialstatus.code|first in "Started" %}
-                                                        <a class=" me-2 btn btn-sm btn-success" href="{% url 'radonc-ass-list' rt.pk %}">Enter Assessment</a>
+                                                     {% if rt.simid.initialstatus.code|first in "Started" %}
+                                                        {% if rt.s7assessment_set.all.count > 0 %}
+                                                            <a class="btn btn-sm btn-warning mt-2 mb-2" href="{% url 'radonc-ass-list' rt.pk %}">Previous Assessments</a>
+                                                        {% endif %}
+                                                        <a class="btn btn-sm btn-warning mt-2 mb-2" href="{% url 'radonc-ass' rt.pk %}">Enter Assessment</a>
                                                     {% endif %}
                                                 {% endfor %}
                                             {% endif %}
