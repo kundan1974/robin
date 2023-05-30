@@ -130,6 +130,14 @@
                             {% for mx in mxinfo %}
                                 {% if forloop.last %}
                                     <div class="red-highlight box-redius box-shadow p-2 text-light mt-2">
+                                        {% if not mx.13.enddate %}
+                                            <a class="btn btn-sm btn-dark mt-2 mb-2" href="{% url 'radonc-fup1' mx.13.parent_id.crnumber mx.13.s2_id.pk mx.13.pk %}">Record Visit</a>
+                                            <a class="btn btn-sm btn-dark mt-2 mb-2" href="{% url 'radonc-fup-list' mx.13.parent_id.crnumber %}">All Visits</a>
+                                        {% else %}
+                                            <b>CARE PLAN CLOSED - Create new status and new careplan!</b>
+                                            <a class="btn btn-sm btn-dark mt-2 mb-2" href="{% url 'radonc-fup-list' mx.13.parent_id.crnumber %}">All Visits</a>
+                                        {% endif %}
+
                                         {% if mx.12 %}<br>
                                             {% for sim in mx.12 %}
                                                 {% if not sim.s4rt_set.exist %}
@@ -175,11 +183,24 @@
                                                 <b>Radiotherapy({{ mx.3 }})</b> -
                                                 {% for rt in mx.8 %}
                                                     {{ rt.simid.donefr }} / {{ rt.simid.totalfractions }} Fx Done<br>
-                                                    {% if rt.simid.initialstatus.code|first in "Started" %}
+                                                     {% if rt.simid.initialstatus.code|first in "Started" %}
                                                         {% if rt.s7assessment_set.all.count > 0 %}
-                                                            <a class="btn btn-sm btn-warning mt-2 mb-2" href="{% url 'radonc-ass-list' rt.pk %}">Previous Assessments</a>
+                                                            <a class="btn btn-sm btn-dark mt-2 mb-2" href="{% url 'radonc-ass-list' rt.pk %}">Previous Assessments</a>
                                                         {% endif %}
-                                                        <a class="btn btn-sm btn-warning mt-2 mb-2" href="{% url 'radonc-ass' rt.pk %}">Enter Assessment</a>
+                                                        <a class="btn btn-sm btn-dark mt-2 mb-2" href="{% url 'radonc-ass' rt.pk %}">Enter Assessment</a>
+                                                    {% endif %}
+                                                    {% if rt.simid.initialstatus.code|first in "Completed" %}
+                                                        {% for key, value in rtdelta.items %}
+                                                            {% if key == rt.pk and value == "ass" %}
+                                                                {% if rt.s7assessment_set.all.count > 0 %}
+                                                                    <a class="btn btn-sm btn-dark mt-2 mb-2" href="{% url 'radonc-ass-list' rt.pk %}">Previous Assessments</a>
+                                                                {% endif %}
+                                                                <a class="btn btn-sm btn-dark mt-2 mb-2" href="{% url 'radonc-ass' rt.pk %}">Enter Assessment</a>
+                                                            {% endif %}
+                                                            {% if key == rt.pk and value == "fup" %}
+                                                                <a class="btn btn-sm btn-dark disabled mt-2 mb-2" href="{% url 'radonc-ass' rt.pk %}">Post RT > 3 months</a>
+                                                            {% endif %}
+                                                        {% endfor %}
                                                     {% endif %}
                                                     <br><span class="small green text-dark mt-2 mb-2">
                                                     {{ rt.rtdose1 }}Gy/{{ rt.rtdosefr1|floatformat }} fx by {{ rt.tech1 }} technique
@@ -203,6 +224,25 @@
                                                 <b>Radiotherapy({{ mx.3 }})</b> -
                                                 {% for rt in mx.8 %}
                                                     {{ rt.simid.donefr }} / {{ rt.simid.totalfractions }} Fx Done
+                                                    {% if rt.simid.initialstatus.code|first in "Started" %}
+                                                        {% if rt.s7assessment_set.all.count > 0 %}
+                                                            <a class="btn btn-sm btn-dark mt-2 mb-2" href="{% url 'radonc-ass-list' rt.pk %}">Previous Assessments</a>
+                                                        {% endif %}
+                                                        <a class="btn btn-sm btn-dark mt-2 mb-2" href="{% url 'radonc-ass' rt.pk %}">Enter Assessment</a>
+                                                    {% endif %}
+                                                    {% if rt.simid.initialstatus.code|first in "Completed" %}
+                                                        {% for key, value in rtdelta.items %}
+                                                            {% if key == rt.pk and value == "ass" %}
+                                                                {% if rt.s7assessment_set.all.count > 0 %}
+                                                                    <a class="btn btn-sm btn-dark mt-2 mb-2" href="{% url 'radonc-ass-list' rt.pk %}">Previous Assessments</a>
+                                                                {% endif %}
+                                                                <a class="btn btn-sm btn-dark mt-2 mb-2" href="{% url 'radonc-ass' rt.pk %}">Enter Assessment</a>
+                                                            {% endif %}
+                                                            {% if key == rt.pk and value == "fup" %}
+                                                                <a class="btn btn-sm btn-dark disabled mt-2 mb-2" href="{% url 'radonc-ass' rt.pk %}">Post RT > 3 months</a>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
                                                     <br><span class="small green text-dark mt-2 mb-2">UNPLANNED:
                                                     {{ rt.rtdose1 }}Gy/{{ rt.rtdosefr1|floatformat }} fx by {{ rt.tech1 }} technique
                                                     {% if rt.rtdose2 %}
@@ -219,12 +259,6 @@
                                                         RT Ongoing
                                                     {% endif %}
                                                     </span><br>
-                                                     {% if rt.simid.initialstatus.code|first in "Started" %}
-                                                        {% if rt.s7assessment_set.all.count > 0 %}
-                                                            <a class="btn btn-sm btn-warning mt-2 mb-2" href="{% url 'radonc-ass-list' rt.pk %}">Previous Assessments</a>
-                                                        {% endif %}
-                                                        <a class="btn btn-sm btn-warning mt-2 mb-2" href="{% url 'radonc-ass' rt.pk %}">Enter Assessment</a>
-                                                    {% endif %}
                                                 {% endfor %}
                                             {% endif %}
                                             {% if mx.4 != "Not Planned" %}

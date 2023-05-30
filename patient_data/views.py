@@ -288,12 +288,26 @@ def radonc_home(request, crnumber=None):
         status['user_sim'] = user_sim
 
         regdetails, reg_date, dxinfo, mxinfo, bsa = get_timeline(crnumber)
+        rtdelta = {}
+        if mxinfo:
+            for mx in mxinfo:
+                for rt in mx[8]:
+                    delta = timezone.timedelta(90)
+                    curr_date = timezone.now()
+                    if rt.rtstartdate and not rt.rtfinishdate:
+                        rtdelta[rt.pk] = "ass"
+                    elif rt.rtstartdate and rt.rtfinishdate:
+                        if curr_date <= rt.rtfinishdate + delta:
+                            rtdelta[rt.pk] = "ass"
+                        else:
+                            rtdelta[rt.pk] = "fup"
         status['regdetails'] = regdetails
         status['reg_date'] = reg_date
         status['dxinfo'] = dxinfo
         status['mxinfo'] = mxinfo
         status['bsa'] = bsa
         status['is_mobile'] = is_mobile
+        status['rtdelta'] = rtdelta
 
         return render(request, 'patient_data/radonc_db_operations.html', status)
     else:
@@ -314,6 +328,9 @@ def radonc_home(request, crnumber=None):
             return render(request, 'patient_data/radonc_db_operations.html', status)
 
 
+# staff membership required for updating or creating a data
+# https://stackoverflow.com/questions/59630997/correct-implementation-of-userpassestestmixin-or-accessmixin-in-class-based-view
+# https://stackoverflow.com/questions/5833184/django-is-staff-permission-decorator
 @login_required
 @staff_member_required
 def s1registration(request, crnumber=123456):
@@ -1157,8 +1174,8 @@ def simulation(request, crnumber=None, s3_id=None, presimid=None):
                 msg = EmailMessage(
                     subject='New Simulation Details',
                     body=message,
-                    from_email='admin@medpylabs.in',
-                    to=emails,
+                    from_email='rgcirtoffice@gmail.com',
+                    to=['kundan25@gmail.com'],
                 )
                 msg.content_subtype = "html"
                 msg.send()
@@ -1365,7 +1382,7 @@ def simulation2(request, crnumber=None, s3_id=None, presimid=None):
                 msg = EmailMessage(
                     subject='New Simulation Details',
                     body=message,
-                    from_email='admin@medpylabs.in',
+                    from_email='rgcirtoffice@gmail.com',
                     to=emails,
                 )
                 msg.content_subtype = "html"
@@ -1559,8 +1576,8 @@ class SimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTe
             msg = EmailMessage(
                 subject='New Simulation Details',
                 body="TEST MAIL",
-                from_email='admin@medpylabs.in',
-                to=emails,
+                from_email='rgcirtoffice@gmail.com',
+                to=['kundan25@gmail.com'],
             )
             msg.content_subtype = "html"
             # msg.send()
@@ -1783,7 +1800,7 @@ def new_simulation(request, crnumber, s3_id):
                 msg = EmailMessage(
                     subject='New Simulation Details',
                     body=message,
-                    from_email='admin@medpylabs.in',
+                    from_email='rgcirtoffice@gmail.com',
                     to=emails,
                 )
                 msg.content_subtype = "html"
@@ -4534,6 +4551,7 @@ class CardiacMarkersUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPass
         """ Do whatever you want here if the user doesn't pass the test """
         return HttpResponse('You do not have permission for this operation')
 
+
 class CardiacMarkersDeleteView(LoginRequiredMixin, DeleteView):
     model = CardiacMarkers
 
@@ -4826,6 +4844,7 @@ def download_file(request):
 
     return response
 
+
 @login_required
 @staff_member_required
 def get_second_field_options(request):
@@ -5103,6 +5122,7 @@ def updateprescription(request, pk):
     }
 
     return render(request, 'patient_data/partials/partial_updateprescription.html', context)
+
 
 @login_required
 @staff_member_required

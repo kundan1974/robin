@@ -230,7 +230,7 @@ def get_timeline(crnumber):
                     sxinfo.append(sx)
 
             mxinfo.append((mx.startdate, mx.enddate, mx.surgery, mx.radiotherapy, mx.chemotherapy, mx.targettherapy,
-                           mx.hormone, mx.immunotherapy, rtinfo, sxinfo, siminfo, cheminfo, todaysim))
+                           mx.hormone, mx.immunotherapy, rtinfo, sxinfo, siminfo, cheminfo, todaysim, mx))
             # print(f"CHECK: RT info for {mx.s3_id}--{rtinfo}")
             # Todo same to be done for chemo, followup as done for radiotherapy above
     else:
@@ -243,7 +243,6 @@ def get_timeline(crnumber):
         sxdetails = S6Surgery.objects.filter(parent_id=crnumber).all()
     if S8FUP.objects.filter(parent_id=crnumber).all():
         fupdetails = S6Surgery.objects.filter(parent_id=crnumber).all()
-
     return regdetails, reg_date, dxinfo, mxinfo, bsa
 
 

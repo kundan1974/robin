@@ -1096,6 +1096,7 @@ class S7Assessment(models.Model):
     s4_id = models.ForeignKey(S4RT, models.CASCADE, to_field='s4_id',
                               db_column='s4_id', blank=False, null=False)
     as_date = models.DateTimeField(blank=False, null=False)
+    next_date = models.DateTimeField(blank=True, null=True)
     txstatus = models.CharField(max_length=45, blank=True, null=True)
     ecog = models.CharField(max_length=45, blank=True, null=True)
     weight = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)

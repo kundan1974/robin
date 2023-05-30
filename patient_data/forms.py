@@ -665,6 +665,7 @@ class S7AssessmentForm(ModelForm):
             's4_id': forms.Select(attrs={'class': 'form-control', 'readonly': True}),
             'simid': forms.NumberInput(attrs={'class': 'form-control', 'readonly': True}),
             'as_date': DateInput(attrs={'class': 'form-control'}),
+            'next_date': DateInput(attrs={'class': 'form-control'}),
             'txstatus': forms.Select(attrs={'class': 'form-control'}, choices=txstatus_choices),
             'ecog': forms.Select(attrs={'class': 'form-control'}, choices=PS),
             'weight': forms.NumberInput(attrs={'class': 'form-control'}),

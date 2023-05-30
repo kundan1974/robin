@@ -463,19 +463,22 @@
                 <div class="form-row justify-content-left g-3">
                     <div class="form-control">
                             <div class="row g-2 mt-2 p-1" style="background: #cfb3f6">
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     {{ form.as_date.errors }}
                                     <label class="oncflow-labels" for="{{ form.as_date.id_for_label }}">Date:</label>
                                     {{ form.as_date }}
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
+                                    {{ form.next_date.errors }}
+                                    <label class="oncflow-labels" for="{{ form.next_date.id_for_label }}">NextDate:</label>
+                                    {{ form.next_date }}
                                 </div>
                                 <div class="col-md-2">
                                     {{ form.parent_id.errors }}
                                     <label class="oncflow-labels" for="{{ form.parent_id.id_for_label }}">CRN:</label>
                                     {{ form.parent_id }}
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2 d-none">
                                     {{ form.s4_id.errors }}
                                     <label class="oncflow-labels" for="{{ form.s4_id.id_for_label }}">RT ID:</label>
                                     {{ form.s4_id }}
