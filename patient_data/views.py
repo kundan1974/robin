@@ -1157,8 +1157,8 @@ def simulation(request, crnumber=None, s3_id=None, presimid=None):
                 msg = EmailMessage(
                     subject='New Simulation Details',
                     body=message,
-                    from_email='rgcirtoffice@gmail.com',
-                    to=['kundan25@gmail.com'],
+                    from_email='admin@medpylabs.in',
+                    to=emails,
                 )
                 msg.content_subtype = "html"
                 msg.send()
@@ -1365,7 +1365,7 @@ def simulation2(request, crnumber=None, s3_id=None, presimid=None):
                 msg = EmailMessage(
                     subject='New Simulation Details',
                     body=message,
-                    from_email='rgcirtoffice@gmail.com',
+                    from_email='admin@medpylabs.in',
                     to=emails,
                 )
                 msg.content_subtype = "html"
@@ -1559,8 +1559,8 @@ class SimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTe
             msg = EmailMessage(
                 subject='New Simulation Details',
                 body="TEST MAIL",
-                from_email='rgcirtoffice@gmail.com',
-                to=['kundan25@gmail.com'],
+                from_email='admin@medpylabs.in',
+                to=emails,
             )
             msg.content_subtype = "html"
             # msg.send()
@@ -1783,7 +1783,7 @@ def new_simulation(request, crnumber, s3_id):
                 msg = EmailMessage(
                     subject='New Simulation Details',
                     body=message,
-                    from_email='rgcirtoffice@gmail.com',
+                    from_email='admin@medpylabs.in',
                     to=emails,
                 )
                 msg.content_subtype = "html"

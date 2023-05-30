@@ -240,5 +240,5 @@ EMAIL_PORT = '587'
 EMAIL_USE_TLS = True
 #EMAIL_HOST_USER = os.environ.get('MAIL_USERNAME')
 #EMAIL_HOST_PASSWORD = os.environ.get('MAIL_PASSWORD')
-EMAIL_HOST_USER = 'rgcirtoffice@gmail.com'
-EMAIL_HOST_PASSWORD = 'ncthjnwyfdfrwyyl'
+EMAIL_HOST_USER = 'admin@medpylabs.in'
+EMAIL_HOST_PASSWORD = 'ndfsittesqvpunod'
