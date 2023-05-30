@@ -41,9 +41,9 @@
                                     <small>{{ content.0|date:'d-m-Y' }}</small></p>
                                 <p class="h6 mb-0 mb-lg-0">
                                     {% if not secondary %}
-                                    <small>Diagnosis: {{ content.17}} ({{ content.3 }}), <b>{{ content.2 }}</b></small></p>
+                                    <small>Diagnosis: {% if content.20 %}{{ content.20}} {% endif %} {{ content.17}} ({{ content.3 }}), <b>{{ content.2 }}</b></small></p>
                                     {% else %}
-                                        <small>Diagnosis: {{ content.17}} ({{ content.16 }}), <b>{{ content.2 }}</b></small></p>
+                                        <small>Diagnosis: {% if content.20 %}{{ content.20}} {% endif %} {{ content.20}} {{ content.17}} ({{ content.16 }}), <b>{{ content.2 }}</b></small></p>
                                     {% endif %}
                                 {% if content.4 %}
                                     cT{{ content.4 }}
@@ -174,7 +174,10 @@
                                             {% if mx.3 != "Not Planned" %}
                                                 <b>Radiotherapy({{ mx.3 }})</b> -
                                                 {% for rt in mx.8 %}
-                                                    {{ rt.simid.donefr }} / {{ rt.simid.totalfractions }} Fx Done
+                                                    {{ rt.simid.donefr }} / {{ rt.simid.totalfractions }} Fx Done<br>
+                                                    {% if rt.simid.initialstatus.code|first in "Started" %}
+                                                        <a class="btn btn-sm btn-warning mt-2 mb-2" href="{% url 'radonc-ass-list' rt.pk %}">Enter Assessment</a>
+                                                    {% endif %}
                                                     <br><span class="small green text-dark mt-2 mb-2">
                                                     {{ rt.rtdose1 }}Gy/{{ rt.rtdosefr1|floatformat }} fx by {{ rt.tech1 }} technique
                                                 {% if rt.rtdose2 %}
@@ -188,7 +191,7 @@
                                                 {% if rt.rtfinishdate %}
                                                     , RT Status: RT End: {{ rt.rtfinishdate|date:"d-m-Y" }}
                                                 {% else %}
-                                                    , RT Status: RT Ongoing <br>
+                                                    , RT Status: RT Ongoing, <br>
                                                     RT Volumes: {{ rt.simid.volumes.volume }}
                                                 {% endif %}
                                                 </span>
@@ -212,7 +215,10 @@
                                                     {% else %}
                                                         RT Ongoing
                                                     {% endif %}
-                                                    </span>
+                                                    </span><br>
+                                                    {% if rt.simid.initialstatus.code|first in "Started" %}
+                                                        <a class=" me-2 btn btn-sm btn-success" href="{% url 'radonc-ass-list' rt.pk %}">Enter Assessment</a>
+                                                    {% endif %}
                                                 {% endfor %}
                                             {% endif %}
                                             {% if mx.4 != "Not Planned" %}

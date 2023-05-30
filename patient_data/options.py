@@ -480,6 +480,7 @@ INTENT_CHOICES = [
     ('Palliative', 'Palliative')]
 
 CP_CHOICES = [('', ''),
+              ('Decision Pending', 'Decision Pending'),
               ('Primary', 'Primary'),
               ('Salvage', 'Salvage'),
               ('Neoadjuvant', 'Neoadjuvant'),

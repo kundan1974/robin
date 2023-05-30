@@ -193,8 +193,12 @@ def get_timeline(crnumber):
                 PDL1Levels = dx.pdl_1_levels
             else:
                 PDL1Levels = dx.pdl_1_levels
+            if dx.laterality:
+                lat = dx.laterality
+            else:
+                lat = None
             dxinfo.append((dx.dx_date.date(), main_topo, dx_type, path_code, cT, cN, cM, stage, ER, PR, HER2Neu,
-                           EGFR, ALK, ROS, PDL1, PDL1Levels, primary_hpe, primary, secondary, new_primary))
+                           EGFR, ALK, ROS, PDL1, PDL1Levels, primary_hpe, primary, secondary, new_primary, lat))
     else:
         dxinfo = None
 
