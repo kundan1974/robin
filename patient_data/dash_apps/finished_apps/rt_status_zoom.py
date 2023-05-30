@@ -4,6 +4,7 @@ import plotly.express as px
 from dash import Input, Output, State
 import dash_bootstrap_components as dbc
 from .simulation_flow import get_df
+import pandas as pd
 
 CONTENT_STYLE = {
     "margin-left": "2rem",
@@ -18,6 +19,10 @@ def fig02(records_df):
         new_df = records_df[mask]
         new_df.sort_values(by='Done Fractions', inplace=True, ascending=False)
         patient_no = len(new_df)
+        new_df['Planned Fractions'] = pd.to_numeric(new_df['Planned Fractions'])
+        new_df['Done Fractions'] = pd.to_numeric(new_df['Done Fractions'])
+        new_df['Phase1 Fractions'] = pd.to_numeric(new_df['Phase1 Fractions'])
+        new_df.set_index("Name")
         fig = px.bar(new_df, y='Name', x=['Done Fractions', 'Phase1 Fractions', 'Planned Fractions'], height=800,
                      width=1000,
                      barmode='overlay', orientation='h',
