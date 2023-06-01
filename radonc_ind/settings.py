@@ -242,3 +242,7 @@ EMAIL_USE_TLS = True
 #EMAIL_HOST_PASSWORD = os.environ.get('MAIL_PASSWORD')
 EMAIL_HOST_USER = 'admin@medpylabs.in'
 EMAIL_HOST_PASSWORD = 'ndfsittesqvpunod'
+
+CUSTOM_HOST = "http://robin.oncflow.org/"
+
+# medpy password - ndfsittesqvpunod
