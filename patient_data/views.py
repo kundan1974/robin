@@ -258,15 +258,48 @@ def index1(request):
 # db_operations view
 @login_required
 def radonc_home(request, crnumber=None):
-    # presim = False
-    # sim = False
-    # dx = False
-    # mx = False
-    # rt = False
-    # pft = False
-    # cm = False
-    # res = False
-    # presimdetails = None
+    all_ass = S7Assessment.objects.prefetch_related().filter(next_date__date=timezone.now().date()).all()
+    all_fup = S8FUP.objects.prefetch_related().filter(Nextvisit__date=timezone.now().date())
+    assessments = [ass.parent_id for ass in all_ass]
+    folloups = [fu.parent_id for fu in all_fup]
+    # Creating sets so that there is no duplication
+    appointments = set(assessments)
+    for fu in folloups:
+        appointments.add(fu)
+    appointments = list(appointments)
+    completed_list = []
+
+    for app in appointments:
+        for a in app.s7assessment_set.all():
+            if a:
+                if a.as_date.date() == timezone.now().date():
+                    appointments.remove(app)
+                    if app not in completed_list:
+                        completed_list.append(app)
+        for a in app.s8fup_set.all():
+            if a:
+                if a.visitdate.date() == timezone.now().date():
+                    appointments.remove(app)
+                    if app not in completed_list:
+                        completed_list.append(app)
+    updated_pt = S1ParentMain.objects.filter(last_updated__date=timezone.now().date()).all()
+    updated = [c for c in updated_pt]
+    updated = set(updated)
+    updated_dx = S2Diagnosis.objects.prefetch_related().filter(last_updated__date=timezone.now().date()).all()
+    [updated.add(up.parent_id) for up in updated_dx]
+    updated_mx = S3CarePlan.objects.prefetch_related().filter(last_updated__date=timezone.now().date()).all()
+    [updated.add(up.parent_id) for up in updated_mx]
+    updated_sim = Simulation.objects.prefetch_related().filter(last_updated__date=timezone.now().date()).all()
+    [updated.add(up.simparent) for up in updated_sim]
+    updated_ass = S7Assessment.objects.prefetch_related().filter(last_updated__date=timezone.now().date()).all()
+    [updated.add(up.parent_id) for up in updated_ass]
+    updated_fup = S8FUP.objects.prefetch_related().filter(last_updated__date=timezone.now().date()).all()
+    [updated.add(up.parent_id) for up in updated_fup]
+
+    updated = list(updated)
+    # appointments.add(folloups)
+    # print(f"Todays Appointments: {assessments}")
+    # print(f"Todays Completed: {updated}")
 
     try:
         user_sim = Simulation.objects.filter(assignedto=request.user.pk, initialstatus="Simulation").count()
@@ -301,6 +334,7 @@ def radonc_home(request, crnumber=None):
                             rtdelta[rt.pk] = "ass"
                         else:
                             rtdelta[rt.pk] = "fup"
+
         status['regdetails'] = regdetails
         status['reg_date'] = reg_date
         status['dxinfo'] = dxinfo
@@ -308,6 +342,9 @@ def radonc_home(request, crnumber=None):
         status['bsa'] = bsa
         status['is_mobile'] = is_mobile
         status['rtdelta'] = rtdelta
+        status['appointments'] = appointments
+        status['completed_list'] = completed_list
+        status['updated'] = updated
 
         return render(request, 'patient_data/radonc_db_operations.html', status)
     else:
@@ -318,6 +355,9 @@ def radonc_home(request, crnumber=None):
             status = db_homestatus(crnumber)
             status['form'] = form
             status['user_sim'] = user_sim
+            status['appointments'] = appointments
+            status['completed_list'] = completed_list
+            status['updated'] = updated
             return render(request, 'patient_data/radonc_db_operations.html', status)
         else:
             form = SearchCRN()
@@ -325,6 +365,9 @@ def radonc_home(request, crnumber=None):
             status['form'] = form
             status['user_sim'] = user_sim
             status['is_mobile'] = is_mobile
+            status['appointments'] = appointments
+            status['completed_list'] = completed_list
+            status['updated'] = updated
             return render(request, 'patient_data/radonc_db_operations.html', status)
 
 
@@ -378,6 +421,8 @@ class S1RegUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMix
     def get_success_url(self):
         pk = self.kwargs["pk"]
         patient = S1ParentMain.objects.get(pk=pk)
+        patient.last_updated = timezone.now()
+        patient.save()
         # patient = PatientDiagnosis.objects.get(pk=pk)
         return reverse_lazy("db_operations", kwargs={"crnumber": patient.crnumber})
 
@@ -482,6 +527,8 @@ class PreSimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPasse
     def get_success_url(self):
         pk = self.kwargs["pk"]
         patient = PreSimulation.objects.get(pk=pk)
+        patient.last_updated = timezone.now()
+        patient.save()
         crn = patient.presimparent.crnumber
         # patient = PatientDiagnosis.objects.get(pk=pk)
         return reverse_lazy("radonc-presimulation-list", kwargs={"crnumber": crn})
@@ -737,6 +784,8 @@ class DiagnosisUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTes
         crn = patient.parent_id.crnumber
         # patient = PatientDiagnosis.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
+
         patient.save()
         return reverse_lazy("radonc-diagnosis-list", kwargs={"crnumber": crn})
 
@@ -1053,6 +1102,7 @@ class CarePlanUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTest
         crn = patient.parent_id.crnumber
         # patient = PatientDiagnosis.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         if self.request.POST.get('careplan'):
             return reverse_lazy("radonc-careplan-list", kwargs={"crnumber": crn})
@@ -1588,6 +1638,8 @@ class SimulationUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTe
     def get_success_url(self):
         pk = self.kwargs["pk"]
         patient = Simulation.objects.get(pk=pk)
+        patient.last_updated = timezone.now()
+        patient.save()
         try:
             rt = patient.s4rt_set.get(simid_id=pk)
             simstatus = patient.initialstatus
@@ -1972,6 +2024,7 @@ class RadiotherapyUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPasses
         crn = patient.parent_id.crnumber
         # patient = PatientDiagnosis.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         patient = S4RT.objects.get(pk=pk)
         if patient.rtstatus.code == patient.simid.initialstatus.status:
@@ -2190,6 +2243,7 @@ class SurgeryUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestM
         crn = patient.parent_id.crnumber
         # patient = PatientDiagnosis.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-surgery-list", kwargs={"crnumber": crn})
 
@@ -2302,6 +2356,7 @@ class HPEUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin
         crn = patient.parent_id.crnumber
         # patient = PatientDiagnosis.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-hpe-list", kwargs={"crnumber": crn})
 
@@ -2419,6 +2474,7 @@ class ChemotherapyUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPasses
         crn = patient.parent_id.crnumber
         # patient = PatientDiagnosis.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-chemotherapy-list", kwargs={"crnumber": crn})
 
@@ -2538,6 +2594,7 @@ class ChemoProtocolUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPasse
         patient = S5ChemoProtocol.objects.get(pk=pk)
         crn = patient.parent_id.crnumber
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-chemoprotocol", kwargs={"crnumber": crn,
                                                             's3_id': patient.s3_id.s3_id})
@@ -2673,8 +2730,9 @@ class AssUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin
         pk = self.kwargs["pk"]
         patient = S7Assessment.objects.get(pk=pk)
         # patient = PatientDiagnosis.objects.get(pk=pk)
-        # patient.updated_by = self.request.user.username
-        # patient.save()
+        patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
+        patient.save()
         # sim_details = Simulation.objects.get(pk=patient.s4_id.simid.simid)
         # sim_details.donefr = self.request.POST['fxdone']
         # sim_details.as_date = self.request.POST['as_date']
@@ -2787,6 +2845,7 @@ class RTPrescriptionUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPass
         pk = self.kwargs["pk"]
         patient = Prescription.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-ass-update", kwargs={"pk": self.request.POST['s7_id']})
 
@@ -2911,6 +2970,7 @@ class RTInvImgUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTest
         pk = self.kwargs["pk"]
         patient = InvestigationsImaging.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-ass-update", kwargs={"pk": self.request.POST['s7_id']})
 
@@ -3031,6 +3091,7 @@ class RTInvPathlabUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPasses
         crn = patient.parent_id.crnumber
         # patient = PatientDiagnosis.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-ass-update", kwargs={"pk": self.request.POST['s7_id']})
 
@@ -3147,6 +3208,7 @@ class RTInvLabsUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTes
         patient = InvestigationsLabs.objects.get(pk=pk)
         crn = patient.parent_id.crnumber
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-ass-update", kwargs={"pk": self.request.POST['s7_id']})
 
@@ -3277,6 +3339,7 @@ class AcuteToxicityUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPasse
         pk = self.kwargs["pk"]
         patient = AcuteToxicity.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-ass-update", kwargs={"pk": self.request.POST['s7_id']})
 
@@ -3481,6 +3544,7 @@ class FUPUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMixin
         crn = patient.parent_id.crnumber
         # patient = PatientDiagnosis.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         if 'to_imaging' in self.request.POST:
             return reverse_lazy("inv-imaging2", kwargs={"crnumber": crn, "s8_id": pk})
@@ -3630,6 +3694,7 @@ class InvImgUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestMi
         fu_id = patient.s8_id.s8_id
         # patient = PatientDiagnosis.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-fup-update", kwargs={"pk": fu_id})
 
@@ -3754,6 +3819,7 @@ class PrescriptionUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPasses
         crn = patient.parent_id.crnumber
         # patient = PatientDiagnosis.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-fup-update", kwargs={"pk": self.request.POST['s8_id']})
 
@@ -3890,6 +3956,7 @@ class InvPathlabUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTe
         crn = patient.parent_id.crnumber
         # patient = PatientDiagnosis.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-fup-update", kwargs={"pk": self.request.POST['s8_id']})
 
@@ -4032,6 +4099,7 @@ class InvMolPathlabUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPasse
         pk = self.kwargs["pk"]
         patient = InvestigationsMolecular.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         if patient.s8_path_id.s8_id:
             s8_id = patient.s8_path_id.s8_id.s8_id
@@ -4160,6 +4228,7 @@ class InvLabsUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestM
         patient = InvestigationsLabs.objects.get(pk=pk)
         crn = patient.parent_id.crnumber
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-fup-update", kwargs={"pk": self.request.POST['s8_id']})
 
@@ -4274,6 +4343,7 @@ class LateToxUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTestM
         patient = LateToxicity.objects.get(pk=pk)
         crn = patient.parent_id.crnumber
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-fup-update", kwargs={"pk": self.request.POST['s8_id']})
 
@@ -4399,6 +4469,7 @@ class PFTDetailsUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPassesTe
         crn = patient.parent_id.crnumber
         # patient = PatientDiagnosis.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-pftdetails-list", kwargs={"crnumber": crn})
 
@@ -4527,6 +4598,7 @@ class CardiacMarkersUpdateView(SuccessMessageMixin, LoginRequiredMixin, UserPass
         crn = patient.parent_id.crnumber
         # patient = PatientDiagnosis.objects.get(pk=pk)
         patient.updated_by = self.request.user.username
+        patient.last_updated = timezone.now()
         patient.save()
         return reverse_lazy("radonc-cardiacmarkers-list", kwargs={"crnumber": crn})
 

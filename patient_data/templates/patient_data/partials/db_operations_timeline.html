@@ -140,11 +140,14 @@
 
                                         {% if mx.12 %}<br>
                                             {% for sim in mx.12 %}
-                                                {% if not sim.s4rt_set.exist %}
+                                                 {% if sim.s4rt_set.all.count > 0  %}
+                                                    RT Details Exist - <a class="btn btn-sm btn-success" href="{% url 'radonc-radiotherapy-list' sim.simparent_id %}">Update RT</a>
+                                                   <a class="btn btn-sm btn-success" href="{% url 'radonc-simulation-update' sim.pk %}">Update Sim</a>
+                                                {% else %}
                                                     <a class="blink green box-redius p-1 g-1"
                                                        href="{% url 'radonc-radiotherapy' sim.simparent_id sim.simid %}"
                                                        style="text-decoration: none">
-                                                        RT Implementation Today
+                                                        Implementation Today
                                                     </a><br>
                                                 {% endif %}
                                             {% endfor %}
