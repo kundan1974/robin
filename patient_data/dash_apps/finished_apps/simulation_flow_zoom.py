@@ -130,7 +130,7 @@ def refresh_button_clicked(n_clicks, jsonified_data):
     n_clicks = 0
     if jsonified_data:
         new_df = pd.read_json(jsonified_data, orient='split')
-        new_df["SimDate"] = new_df["SimDate"].astype('datetime64[ns]')
+        new_df["SimDate"] = new_df["SimDate"].astype('datetime64[ns]', errors='ignore')
         # new_df["Implementation Date"] = new_df["Implementation Date"].astype('datetime64[ns]')
         new_df["Implementation Date"] = new_df["Implementation Date"]
         new_df["Assessment Date"] = new_df["Assessment Date"].astype('datetime64[ns]')
