@@ -273,13 +273,20 @@ def radonc_home(request, crnumber=None):
         for a in app.s7assessment_set.all():
             if a:
                 if a.as_date.date() == timezone.now().date():
-                    appointments.remove(app)
+                    try:
+                        appointments.remove(app)
+                    except ValueError:
+                        pass
+
                     if app not in completed_list:
                         completed_list.append(app)
         for a in app.s8fup_set.all():
             if a:
                 if a.visitdate.date() == timezone.now().date():
-                    appointments.remove(app)
+                    try:
+                        appointments.remove(app)
+                    except ValueError:
+                        pass
                     if app not in completed_list:
                         completed_list.append(app)
     updated_pt = S1ParentMain.objects.filter(last_updated__date=timezone.now().date()).all()
