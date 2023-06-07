@@ -261,34 +261,37 @@ def radonc_home(request, crnumber=None):
     all_ass = S7Assessment.objects.prefetch_related().filter(next_date__date=timezone.now().date()).all()
     all_fup = S8FUP.objects.prefetch_related().filter(Nextvisit__date=timezone.now().date())
     assessments = [ass.parent_id for ass in all_ass]
-    folloups = [fu.parent_id for fu in all_fup]
+    followups = [fu.parent_id for fu in all_fup]
+    new_list = assessments + followups
     # Creating sets so that there is no duplication
-    appointments = set(assessments)
-    for fu in folloups:
-        appointments.add(fu)
+    appointments = set(new_list)
     appointments = list(appointments)
     completed_list = []
 
     for app in appointments:
         for a in app.s7assessment_set.all():
             if a:
+                # print(f"Assessment: {a.as_date, a.parent_id.crnumber}")
                 if a.as_date.date() == timezone.now().date():
                     try:
-                        appointments.remove(app)
+                        if app not in completed_list:
+                            completed_list.append(app)
                     except ValueError:
                         pass
-
-                    if app not in completed_list:
-                        completed_list.append(app)
+    for app in appointments:
         for a in app.s8fup_set.all():
             if a:
+                # print(f"Followup: {a.visitdate, a.parent_id.crnumber}")
                 if a.visitdate.date() == timezone.now().date():
                     try:
-                        appointments.remove(app)
+                        if app not in completed_list:
+                            completed_list.append(app)
                     except ValueError:
                         pass
-                    if app not in completed_list:
-                        completed_list.append(app)
+    # print(completed_list)
+    for pat in completed_list:
+        if pat in appointments:
+            appointments.remove(pat)
     updated_pt = S1ParentMain.objects.filter(last_updated__date=timezone.now().date()).all()
     updated = [c for c in updated_pt]
     updated = set(updated)
