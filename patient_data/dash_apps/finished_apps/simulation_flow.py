@@ -18,7 +18,6 @@ log_datetime = Log('simflow_getdb', to_file=True, path='./logs')
 now = timezone.now()
 Log.simflow_getdb.info(f"Todays Date: {now}")
 
-
 sim_choices = SimStatus.objects.all()
 choices = []
 for choice in sim_choices:
@@ -32,6 +31,7 @@ CONTENT_STYLE = {
 content = html.Div(id="page-content",
                    children=["Initial"],
                    style=CONTENT_STYLE)
+
 
 def fig01(records_df):
     diff = datetime.timedelta(14)
@@ -187,13 +187,14 @@ def get_df():
     # Creating a new dataframe with boost phase as a separate row
     new_df = pd.DataFrame(data_list)
     try:
-        df = new_df[new_df["Phase2 Imp Date"].notna()]
+        df = new_df[new_df["Phase2 Imp Date"].notna()].copy()
         phase2impdate = df["Phase2 Imp Date"].to_list()
         df.loc[:, "Implementation Date"] = phase2impdate
         df.loc[:, "Status"] = "Boost"
         df.loc[:, "RT Volumes"] = "Boost Volume"
         df.loc[:, "Planned Fractions"] = df["Phase2 Fractions"]
-        new_df = new_df.append(df)
+        # new_df = new_df.append(df)
+        new_df = pd.concat([new_df, df])
     except:
         pass
     return new_df
@@ -222,7 +223,6 @@ def refresh_button_clicked(n_clicks):
     else:
         fig = fig01(get_df())
     return fig
-
 
 # @app.callback(
 #     Output('intermediate-value', 'data'),
