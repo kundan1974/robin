@@ -26,16 +26,22 @@ def send_push_notification(expo_push_token, msg):
 
 def send_push_notifications_to_all(msg):
     """
-        Profile model require
+    Send push notification to all users
     """
-    # S1: fetch all user whose having expotoken (expotoken, user_id)
-    # S2 Call send_push_notofications_to_user in for loop passing above parameters (expotoken, user_id)
+    
+    users_with_expo = Profile.objects.filter(expotoken__isnull=False).values_list('expotoken', flat=True)
+    
+    for expo_token in users_with_expo:
+        send_push_notification(expo_token, msg)
+
 
 def send_push_notofications_to_user(msg,  user_id = "", expo_token = "" ):
     """
-    pass
+    
     """
-    # S1 Get expotoken for specificed user_id
-    # call send_push_notification
+    if user_id and msg:
+        user_with_expo = Profile.objects.filter(user_id=user_id).values_list('expotoken', flat=True)
+        send_push_notification(user_with_expo[0], msg)
+    
 
 
